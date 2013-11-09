@@ -1,4 +1,10 @@
 <?php
+namespace Bitrix24;
+require_once("bitrix24exception.php");
+require_once("classes/bitrix24entity.php");
+require_once("classes/tasks.php");
+require_once("classes/sonetgroup.php");
+
 class Bitrix24
 {
 	/**
@@ -47,6 +53,11 @@ class Bitrix24
 	 * @var array
 	 */
 	protected $rawRequest = null;
+
+	/**
+	 * @var array, contain all api-method parameters, vill be available after call method
+	 */
+	protected $methodParameters = null;
 
 	/**
 	 * request info data structure акщь curl_getinfo function
@@ -271,6 +282,15 @@ class Bitrix24
 	}
 
 	/**
+	 * Return additional parameters of last api-call. Data available after you try to call method call
+	 * @return array | null
+	 */
+	public function getMethodParameters()
+	{
+		return $this->methodParameters;
+	}
+
+	/**
 	 * Execute a request API to Bitrix24 using cURL
 	 * @param string $url
 	 * @param array $additionalParameters
@@ -352,6 +372,7 @@ class Bitrix24
 		}
 		$url = 'https://'.$this->domain.'/rest/'.$methodName;
 		$additionalParameters['auth'] = $this->accessToken;
+		$this->methodParameters = $additionalParameters;
 		$requestResult = $this->executeRequest($url, $additionalParameters);
 		// handling bitrix24 api-level errors
 		if (array_key_exists('error', $requestResult))
@@ -457,4 +478,73 @@ class Bitrix24
 		}
 		return $isTokenExpire;
 	}// end of isTokenExpire
+
+	/**
+	 * Get list of all methods available for current application
+	 * @param array | null $applicationScope
+	 * @param bool $isFull
+	 * @return array
+	 * @throws Bitrix24Exception
+	 */
+	public function getАvailableMethoods($applicationScope = array(), $isFull=false)
+	{
+		$accessToken = $this->getAccessToken();
+		$domain = $this->getDomain();
+
+		if(is_null($domain))
+		{
+			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
+		}
+		elseif(is_null($accessToken))
+		{
+			throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
+		}
+
+		$showAll = '';
+		if(TRUE === $isFull)
+		{
+			$showAll = '&full=true';
+		}
+		$scope='';
+		if(is_null($applicationScope))
+		{
+			$scope = '&scope';
+		}
+		elseif(count(array_unique($applicationScope)) > 0)
+		{
+			$scope = '&scope='.implode(',', array_map('urlencode', array_unique($applicationScope)));
+		}
+		$url = 'https://'.$domain."/rest/methods.json?auth=".$accessToken.$showAll.$scope;
+		$requestResult = $this->executeRequest($url);
+		return $requestResult;
+	}
+
+	/**
+	 * get list of scope for current application from bitrix24 api
+	 * @param bool $isFull
+	 * @throws Bitrix24Exception
+	 * @return array
+	 */
+	public function getScope($isFull=false)
+	{
+		$accessToken = $this->getAccessToken();
+		$domain = $this->getDomain();
+
+		if(is_null($domain))
+		{
+			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
+		}
+		elseif(is_null($accessToken))
+		{
+			throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
+		}
+		$showAll = '';
+		if(TRUE === $isFull)
+		{
+			$showAll = '&full=true';
+		}
+		$url = 'https://'.$domain."/rest/scope.json?auth=".$accessToken.$showAll;
+		$requestResult = $this->executeRequest($url);
+		return $requestResult;
+	}
 }
