@@ -3,6 +3,7 @@ namespace Bitrix24;
 require_once("bitrix24exception.php");
 require_once("classes/bitrix24entity.php");
 require_once("classes/tasks.php");
+require_once("classes/task.php");
 require_once("classes/sonetgroup.php");
 
 class Bitrix24
@@ -356,7 +357,7 @@ class Bitrix24
 	 * @throws Bitrix24Exception
 	 * @return array
 	 */
-	public function call($methodName,  array $additionalParameters)
+	public function call($methodName, array $additionalParameters = array())
 	{
 		if(is_null($this->getDomain()))
 		{
