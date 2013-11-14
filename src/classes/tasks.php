@@ -2,11 +2,10 @@
 namespace Bitrix24\Task;
 use Bitrix24\Bitrix24Entity;
 
-
 class TaskItems extends Bitrix24Entity
 {
 	/**
-	 * Get list of Task items. If array $NAV_PARAMS not set method will return all tasks from filter
+	 * Get list of Task items. If array $NAV_PARAMS set to NULL method will return all tasks from filter
 	 * without 50 task per page limit
 	 * @link http://dev.1c-bitrix.ru/rest_help/tasks/task/items/getlist.php
 	 * @param array $ORDER - order of task items
@@ -15,7 +14,7 @@ class TaskItems extends Bitrix24Entity
 	 * @param array | null $NAV_PARAMS
 	 * @return array
 	 */
-	public function getList($ORDER = array(), $FILTER = array(), $TASKDATA = array(), $NAV_PARAMS)
+	public function getList($ORDER = array(), $FILTER = array(), $TASKDATA = array(), $NAV_PARAMS = array())
 	{
 		$fullResult = $this->client->call(
 			'task.items.getlist',
@@ -26,7 +25,8 @@ class TaskItems extends Bitrix24Entity
 				array('NAV_PARAMS'=> $NAV_PARAMS)
 			)
 		);
-		if(!array_key_exists('nPageSize',$NAV_PARAMS) && (!array_key_exists('iNumPage', $NAV_PARAMS)))
+
+		if(is_null($NAV_PARAMS))
 		{
 			if(self::ITEMS_PER_PAGE_LIMIT <= $fullResult['total'])
 			{
