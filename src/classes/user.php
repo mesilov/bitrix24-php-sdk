@@ -28,4 +28,24 @@ class User extends Bitrix24Entity
 		$result = $this->client->call('user.fields');
 		return $result;
 	}
+
+	/**
+	 * Get list of users
+	 * @link http://dev.1c-bitrix.ru/rest_help/users/user_get.php
+	 * @throws Bitrix24Exception
+	 * @param $SORT - field name to sort by them
+	 * @param $ORDER - sort direction? must be set to ASC or DESC
+	 * @param $FILTER - list of fields user entity to filter result
+	 * @return array
+	 */
+	public function get($SORT, $ORDER, $FILTER)
+	{
+		$result = $this->client->call('user.get',
+			array(
+				'SORT' => $SORT,
+				'ORDER' => $ORDER,
+				'FILTER'=> $FILTER)
+		);
+		return $result;
+	}
 }
