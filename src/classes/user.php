@@ -6,6 +6,18 @@ use Bitrix24\Bitrix24Exception;
 class User extends Bitrix24Entity
 {
 	/**
+	 * Check is current user admin
+	 * @link http://dev.1c-bitrix.ru/rest_help/general/user_admin.php
+	 * @throws Bitrix24Exception
+	 * @return boolean
+	 */
+	public function admin()
+	{
+		$result = $this->client->call('user.admin');
+		return $result['result'];
+	}
+
+	/**
 	 * Get information about current user by his auth information
 	 * @link http://dev.1c-bitrix.ru/rest_help/users/user_current.php
 	 * @throws Bitrix24Exception
