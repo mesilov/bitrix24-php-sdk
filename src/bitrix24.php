@@ -78,6 +78,11 @@ class Bitrix24
 	protected $rawResponse = null;
 
 	/**
+	 * @var string redirect URI from application settings
+	 */
+	protected $redirectUri = null;
+
+	/**
 	 * Create a object to work with Bitrix24 REST API service
 	 * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
 	 * @throws Bitrix24Exception
@@ -96,6 +101,33 @@ class Bitrix24
 		$this->isSaveRawResponse = $isSaveRawResponse;
 	}
 
+	/**
+	 * Set redirect URI
+	 * @param string $redirectUri
+	 * @throws Bitrix24Exception
+	 * @return true;
+	 */
+	public function setRedirectUri($redirectUri)
+	{
+		if(!empty($redirectUri))
+		{
+			$this->redirectUri = $redirectUri;
+			return true;
+		}
+		else
+		{
+			throw new Bitrix24Exception('redirect URI not set');
+		}
+	}
+
+	/**
+	 * Get redirect URI
+	 * @return string | null
+	 */
+	public function getRedirectUri()
+	{
+		return $this->redirectUri;
+	}
 	/**
 	 * Set access token
 	 * @param string $accessToken
@@ -420,6 +452,7 @@ class Bitrix24
 		$applicationSecret = $this->getApplicationSecret();
 		$refreshToken = $this->getRefreshToken();
 		$applicationScope = $this->getApplicationScope();
+		$redirectUri = $this->getRedirectUri();
 
 		if(is_null($domain))
 		{
@@ -441,13 +474,18 @@ class Bitrix24
 		{
 			throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
 		}
+		elseif(is_null($redirectUri))
+		{
+			throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
+		}
 
 		$url = 'https://'.$domain."/oauth/token/".
 			"?client_id=".urlencode($applicationId).
 			"&grant_type=refresh_token".
 			"&client_secret=".$applicationSecret.
 			"&refresh_token=".$refreshToken.
-			'&scope='.implode(',', array_map('urlencode', array_unique($applicationScope)));
+			'&scope='.implode(',', array_map('urlencode', array_unique($applicationScope))).
+			'&redirect_uri='.urlencode($redirectUri);
 		$requestResult = $this->executeRequest($url);
 		return $requestResult;
 	}
