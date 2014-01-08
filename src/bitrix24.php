@@ -83,6 +83,11 @@ class Bitrix24
 	protected $redirectUri = null;
 
 	/**
+	 * @var string portal GUID
+	 */
+	protected $memberId = null;
+
+	/**
 	 * Create a object to work with Bitrix24 REST API service
 	 * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
 	 * @throws Bitrix24Exception
@@ -99,6 +104,44 @@ class Bitrix24
 			throw new Bitrix24Exception('isSaveRawResponse flag must be boolean');
 		}
 		$this->isSaveRawResponse = $isSaveRawResponse;
+	}
+
+	/**
+	 * Get a random string to sign protected api-call. Use salt for argument "state" in secure api-call
+	 * random string is a result of mt_rand function
+	 * @return int
+	 */
+	public function getSecuritySignSalt()
+	{
+		return mt_rand();
+	}
+
+	/**
+	 * Set member ID — portal GUID
+	 * @param string $memberId
+	 * @throws Bitrix24Exception
+	 * @return true;
+	 */
+	public function setMemberId($memberId)
+	{
+		if(!empty($memberId))
+		{
+			$this->memberId = $memberId;
+			return true;
+		}
+		else
+		{
+			throw new Bitrix24Exception('memberId URI not set');
+		}
+	}
+
+	/**
+	 * Get memeber ID
+	 * @return string | null
+	 */
+	public function getMemberId()
+	{
+		return $this->memberId;
 	}
 
 	/**
@@ -402,12 +445,21 @@ class Bitrix24
 		}
 		if(0 == strlen($methodName))
 		{
-			throw new Bitrix24Exception('access token not found, you must call setAccessToken method before');
+			throw new Bitrix24Exception('method name not found, you must set method name');
 		}
 		$url = 'https://'.$this->domain.'/rest/'.$methodName;
 		$additionalParameters['auth'] = $this->accessToken;
+		// save method parameters for debug
 		$this->methodParameters = $additionalParameters;
+		// is secure api-call?
+		$isSecureCall = false;
+		if(array_key_exists('state', $additionalParameters))
+		{
+			$isSecureCall = true;
+		}
+
 		$requestResult = $this->executeRequest($url, $additionalParameters);
+
 		// handling bitrix24 api-level errors
 		if (array_key_exists('error', $requestResult))
 		{
@@ -421,6 +473,57 @@ class Bitrix24
 			}
 			$errorMsg = $errName.$errDescription.'in call: [ '.$methodName.' ]';
 			throw new Bitrix24ApiException($errorMsg);
+		}
+
+		// handling security sign for secure api-call
+		if($isSecureCall)
+		{
+			if(array_key_exists('signature', $requestResult))
+			{
+				// check signature structure
+				if (strpos($requestResult['signature'], '.') === false)
+				{
+					throw new Bitrix24SecurityException('security signature is corrupted');
+				}
+				if(is_null($this->getMemberId()))
+				{
+					throw new Bitrix24Exception('member-id not found, you must call setMemberId method before');
+				}
+				if(is_null($this->getApplicationSecret()))
+				{
+					throw new Bitrix24Exception('application secret not found, you must call setApplicationSecret method before');
+				}
+				// prepare
+				$key = md5($this->getMemberId().$this->getApplicationSecret());
+				$delimiterPosition = strrpos($requestResult['signature'], '.');
+				$dataToDecode = substr($requestResult['signature'], 0, $delimiterPosition);
+				$signature = base64_decode(substr($requestResult['signature'], $delimiterPosition + 1));
+				// compare signatures
+				$hash = hash_hmac('sha256', $dataToDecode, $key, true);
+				if ($hash !== $signature)
+				{
+					throw new Bitrix24SecurityException('security signatures not same, bad request');
+				}
+				// decode
+				$arClearData = json_decode(base64_decode($dataToDecode), true);
+				// handling json_decode errors
+				$jsonErrorCode = json_last_error();
+				if(is_null($arClearData) && (JSON_ERROR_NONE != $jsonErrorCode))
+				{
+					/**
+					 * @todo add function json_last_error_msg()
+					 */
+					$errorMsg = 'fatal error in function json_decode.'.PHP_EOL.'Error code: '.$jsonErrorCode.PHP_EOL;
+					throw new Bitrix24Exception($errorMsg);
+				}
+				// merge dirty and clear data
+				unset($arClearData['state']);
+				$requestResult ["result"] = array_merge($requestResult ["result"], $arClearData);
+			}
+			else
+			{
+				throw new Bitrix24SecurityException('security signature in api-response not found');
+			}
 		}
 		return $requestResult;
 	}

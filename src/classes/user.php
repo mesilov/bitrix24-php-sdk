@@ -18,14 +18,14 @@ class User extends Bitrix24Entity
 	}
 
 	/**
-	 * Get information about current user by his auth information
+	 * Get information about current user by his auth information. This method will be use security sign automatically
 	 * @link http://dev.1c-bitrix.ru/rest_help/users/user_current.php
 	 * @throws Bitrix24Exception
 	 * @return array
 	 */
 	public function current()
 	{
-		$result = $this->client->call('user.current');
+		$result = $this->client->call('user.current', array('state' => $this->client->getSecuritySignSalt()));
 		return $result;
 	}
 
