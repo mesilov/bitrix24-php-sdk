@@ -1,4 +1,4 @@
-bitrix24-php-sdk
+bitrix24-php-sdk (unofficial)
 ================
 
 A powerfull PHP library for the Bitrix24 REST API
