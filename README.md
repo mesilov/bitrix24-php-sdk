@@ -5,7 +5,6 @@ A powerfull PHP library for the Bitrix24 REST API
 
 [Bitrix24 API documentation](http://dev.1c-bitrix.ru/rest_help/)
 ## Example ##
-## Installation ##
 ``` php
 // init lib
 $obB24App = new \Bitrix24\Bitrix24();
@@ -23,6 +22,7 @@ $obB24App->setRefreshToken($arParams['REFRESH_ID']);
 $obB24User = new \Bitrix24\User\User($obB24App);
 $arCurrentB24User = $obB24User->current();
 ```
+## Installation ##
 ## Support ##
 email: <mesilov.maxim@gmail.com>  
 vk: [mesilov.maxim](https://vk.com/mesilov.maxim)  
