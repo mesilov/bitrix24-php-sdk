@@ -4,6 +4,7 @@ require_once("bitrix24exception.php");
 require_once("classes/bitrix24entity.php");
 require_once("classes/tasks.php");
 require_once("classes/task.php");
+require_once("classes/lead.php");
 require_once("classes/sonetgroup.php");
 require_once("classes/user.php");
 
@@ -131,7 +132,7 @@ class Bitrix24
 		}
 		else
 		{
-			throw new Bitrix24Exception('memberId URI not set');
+			throw new Bitrix24Exception('memberId is empty');
 		}
 	}
 
