@@ -1,0 +1,22 @@
+{
+    "name": "mesilov/bitrix24-php-sdk",
+    "description": "A powerfull PHP library for the Bitrix24 REST API",
+    "keywords": ["Bitrix24", "PHP", "REST", "API"],
+    "type": "library",
+    "homepage": "https://github.com/mesilov/bitrix24-php-sdk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maxim Mesilov",
+            "homepage": "https://github.com/mesilov/"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.0",
+        "ext-json": "*",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "classmap": ["src/"]
+    }
+}
