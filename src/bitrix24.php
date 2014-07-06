@@ -5,8 +5,10 @@ require_once("classes/bitrix24entity.php");
 require_once("classes/tasks.php");
 require_once("classes/task.php");
 require_once("classes/lead.php");
+require_once("classes/contact.php");
 require_once("classes/sonetgroup.php");
 require_once("classes/user.php");
+require_once("classes/events.php");
 
 class Bitrix24
 {
