@@ -16,7 +16,7 @@ abstract class Bitrix24Entity
 	/**
 	 * @param $client Bitrix24
 	 */
-	public function __construct($client)
+	public function __construct(Bitrix24 $client)
 	{
 		$this->client = $client;
 	}
