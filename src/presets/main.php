@@ -18,4 +18,7 @@ class Main
 	 * order direction field — descending
 	 */
 	const ORDER_BY_DESC = 'DESC';
+
+	const TOTAL ='total';
+	const RESULT = 'result';
 }
