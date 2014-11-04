@@ -45,9 +45,20 @@ class Contact extends Bitrix24Entity
 		return $fullResult;
 	}
 
+	/**
+	 * Get contact by identifier
+	 * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_get.php
+	 * @param integer $bitrix24UserId contact identifier
+	 * @return array
+	 * @throws Bitrix24Exception
+	 */
 	public function get($bitrix24UserId)
 	{
-
+		$fullResult = $this->client->call(
+			'crm.contact.get',
+			array('id' => $bitrix24UserId)
+		);
+		return $fullResult;
 	}
 
 	/**
