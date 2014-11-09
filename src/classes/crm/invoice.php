@@ -26,6 +26,36 @@ class Invoice extends Bitrix24Entity
     }
 
     /**
+     * get invoice by id
+     * @var $invoiceId integer invoice identifier
+     * @link http://dev.1c-bitrix.ru/rest_help/crm/invoice/crm_invoice_get.php
+     * @return array
+     */
+    public function get($invoiceId)
+    {
+        $fullResult = $this->client->call(
+            'crm.invoice.get',
+            array('id' => $invoiceId)
+        );
+        return $fullResult;
+    }
+
+    /**
+     * delete invoice by id
+     * @var $invoiceId integer invoice identifier
+     * @link http://dev.1c-bitrix.ru/rest_help/crm/invoice/crm_invoice_delete.php
+     * @return array
+     */
+    public function delete($invoiceId)
+    {
+        $fullResult = $this->client->call(
+            'crm.invoice.delete',
+            array('id' => $invoiceId)
+        );
+        return $fullResult;
+    }
+
+    /**
      * Add a new invoice to CRM
      * @param array $fields array of fields
      * @link http://dev.1c-bitrix.ru/rest_help/crm/invoice/crm_invoice_add.php
