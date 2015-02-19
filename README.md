@@ -5,6 +5,9 @@ bitrix24-php-sdk (unofficial)
 A powerfull PHP library for the Bitrix24 REST API
 
 [Bitrix24 API documentation](http://dev.1c-bitrix.ru/rest_help/)
+## Requirements
+
+PHP 5.3 or above
 ## Example ##
 ``` php
 // init lib
