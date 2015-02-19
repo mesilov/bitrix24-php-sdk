@@ -6,6 +6,21 @@ class Lead extends Bitrix24Entity
 {
 	/**
 	 * Get list of lead items.
+	 * @link http://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_get.php
+	 * @param integer $leadId - lead id
+	 * @return array
+	 */
+	public function get($leadId)
+	{
+		$fullResult = $this->client->call(
+			'crm.lead.get',
+			array('id' => $leadId)
+		);
+		return $fullResult;
+	}
+
+	/**
+	 * Get list of lead items.
 	 * @link http://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_list.php
 	 * @param array $order - order of task items
 	 * @param array $filter - filter array
