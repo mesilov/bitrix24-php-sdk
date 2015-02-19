@@ -24,7 +24,7 @@ $obB24User = new \Bitrix24\User\User($obB24App);
 $arCurrentB24User = $obB24User->current();
 ```
 ## Installation ##
-Add "mesilov/bitrix24-php-sdk": "dev-master" to composer.json of your application. Or clone repo to your project.
+Add `"mesilov/bitrix24-php-sdk": "dev-master"` to `composer.json` of your application. Or clone repo to your project.
 ## Support ##
 email: <mesilov.maxim@gmail.com>  
 vk: [mesilov.maxim](https://vk.com/mesilov.maxim)  
