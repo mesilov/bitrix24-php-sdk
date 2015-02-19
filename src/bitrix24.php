@@ -450,24 +450,10 @@ class Bitrix24
 		{
 			$isSecureCall = true;
 		}
-
+		// execute request
 		$requestResult = $this->executeRequest($url, $additionalParameters);
-
-		// handling bitrix24 api-level errors
-		if (array_key_exists('error', $requestResult))
-		{
-			$errName = '';
-			$errDescription = '';
-			if (isset($requestResult['error_description'])) {
-				$errDescription = $requestResult['error_description'].PHP_EOL;
-			}
-			if (!strlen($errDescription)) {
-				$errName = $requestResult['error'].PHP_EOL;
-			}
-			$errorMsg = $errName.$errDescription.'in call: [ '.$methodName.' ]';
-			throw new Bitrix24ApiException($errorMsg);
-		}
-
+		// check errors and throw exception if errors exists
+		$this->handleBitrix24APILevelErrors($requestResult, $methodName);
 		// handling security sign for secure api-call
 		if($isSecureCall)
 		{
@@ -521,6 +507,30 @@ class Bitrix24
 		return $requestResult;
 	}
 
+	/**
+	 * Handling bitrix24 api-level errors
+	 * @param $arRequestResult
+	 * @param $methodName
+	 * @return null
+	 * @throws Bitrix24ApiException
+	 */
+	protected function handleBitrix24APILevelErrors($arRequestResult, $methodName)
+	{
+		if (array_key_exists('error', $arRequestResult))
+		{
+			$errName = '';
+			$errDescription = '';
+			if (isset($arRequestResult['error_description'])) {
+				$errDescription = $arRequestResult['error_description'].PHP_EOL;
+			}
+			if (!strlen($errDescription)) {
+				$errName = $arRequestResult['error'].PHP_EOL;
+			}
+			$errorMsg = $errName.$errDescription.'in call: [ '.$methodName.' ]';
+			throw new Bitrix24ApiException($errorMsg);
+		}
+		return null;
+	}
 	/**
 	 * Get raw response from Bitrix24 before json_decode call, method available only in debug mode.
 	 * To activate debug mode you must before set to true flag isSaveRawResponse in class construct
@@ -583,6 +593,8 @@ class Bitrix24
 			'&scope='.implode(',', array_map('urlencode', array_unique($applicationScope))).
 			'&redirect_uri='.urlencode($redirectUri);
 		$requestResult = $this->executeRequest($url);
+		// handling bitrix24 api-level errors
+		$this->handleBitrix24APILevelErrors($requestResult, 'refresh access token');
 		return $requestResult;
 	}
 
