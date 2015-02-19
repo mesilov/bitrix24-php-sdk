@@ -1,6 +1,6 @@
 bitrix24-php-sdk (unofficial)
 ================
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mesilov/bitrix24-php-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mesilov/bitrix24-php-sdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![License](https://poser.pugx.org/mesilov/bitrix24-php-sdk/license.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk) [![Total Downloads](https://poser.pugx.org/mesilov/bitrix24-php-sdk/downloads.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
 
 A powerfull PHP library for the Bitrix24 REST API
 
