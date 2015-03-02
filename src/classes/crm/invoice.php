@@ -5,6 +5,19 @@ use Bitrix24\Bitrix24Entity;
 class Invoice extends Bitrix24Entity
 {
     /**
+     * @var string STATUS_DRAFT pre-defined invoice status "draft"
+     */
+    const STATUS_DRAFT = 'N';
+    /**
+     * @var string STATUS_PAID pre-defined invoice status "paid"
+     */
+    const STATUS_PAID = 'P';
+    /**
+     * @var string STATUS_REJECTED pre-defined invoice status "rejected"
+     */
+    const STATUS_REJECTED = 'D';
+
+    /**
      * Get list of lead items.
      * @link http://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_list.php
      * @param array $order - order of task items
@@ -66,6 +79,25 @@ class Invoice extends Bitrix24Entity
         $fullResult = $this->client->call(
             'crm.invoice.add',
             array('fields' => $fields)
+        );
+        return $fullResult;
+    }
+
+    /**
+     * update invoice by id
+     * @var $invoiceId integer invoice identifier
+     * @var $invoiceFields array invoice fields to update
+     * @link http://dev.1c-bitrix.ru/rest_help/crm/invoice/crm_invoice_update.php
+     * @return array
+     */
+    public function update($invoiceId, $invoiceFields)
+    {
+        $fullResult = $this->client->call(
+            'crm.invoice.update',
+            array(
+                'id' => $invoiceId,
+                'fields' => $invoiceFields
+            )
         );
         return $fullResult;
     }
