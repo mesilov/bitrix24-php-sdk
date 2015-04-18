@@ -618,7 +618,7 @@ class Bitrix24
 		{
 			throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
 		}
-		$url = 'https://'.$domain."/rest/methods.json?auth=".$accessToken.'&full=true';
+		$url = 'https://'.$domain."/rest/app.info?auth=".$accessToken;
 		$requestResult = $this->executeRequest($url);
 		if('expired_token' == $requestResult['error'])
 		{
