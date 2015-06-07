@@ -19,7 +19,7 @@ class Invoice extends Bitrix24Entity
 
     /**
      * Get list of lead items.
-     * @link http://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_list.php
+     * @link http://dev.1c-bitrix.ru/rest_help/crm/invoice/crm_invoice_list.php
      * @param array $order - order of task items
      * @param array $filter - filter array
      * @param array $select - array of collumns to select
