@@ -18,4 +18,12 @@ class Fields
 	 * @var string
 	 */
 	const AUTH_TYPE = 'auth_type';
+	/**
+	 * @var string
+	 */
+	const DATA = 'data';
+	/**
+	 * @var string
+	 */
+	const AUTH = 'auth';
 }
