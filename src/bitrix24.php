@@ -576,7 +576,7 @@ class Bitrix24
 		{
 			throw new Bitrix24Exception('application id not found, you must call setRefreshToken method before');
 		}
-		elseif(is_null($applicationScope))
+		elseif(empty($applicationScope))
 		{
 			throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
 		}
@@ -597,6 +597,55 @@ class Bitrix24
 		$this->handleBitrix24APILevelErrors($requestResult, 'refresh access token');
 		return $requestResult;
 	}
+
+    /**
+     * Authorize and get first access token
+     * @return array
+     * @throws Bitrix24Exception
+     */
+    public function getFirstAccessToken($code)
+    {
+        $domain = $this->getDomain();
+        $applicationId = $this->getApplicationId();
+        $applicationSecret = $this->getApplicationSecret();
+        //$refreshToken = $this->getRefreshToken();
+        $applicationScope = $this->getApplicationScope();
+        $redirectUri = $this->getRedirectUri();
+
+        if(is_null($domain))
+        {
+            throw new Bitrix24Exception('domain not found, you must call setDomain method before');
+        }
+        elseif(is_null($applicationId))
+        {
+            throw new Bitrix24Exception('application id not found, you must call setApplicationId method before');
+        }
+        elseif(is_null($applicationSecret))
+        {
+            throw new Bitrix24Exception('application id not found, you must call setApplicationSecret method before');
+        }
+        elseif(empty($applicationScope))
+        {
+            throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
+        }
+        elseif(is_null($redirectUri))
+        {
+            throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
+        }
+
+        $url = 'https://'.$domain."/oauth/token/".
+            "?client_id=".urlencode($applicationId).
+            "&grant_type=authorization_code".
+            "&client_secret=".$applicationSecret.
+            '&scope='.implode(',', array_map('urlencode', array_unique($applicationScope))).
+            '&redirect_uri='.urlencode($redirectUri).
+            '&code='.urlencode($_GET['code']);
+
+        $requestResult = $this->executeRequest($url);
+        // handling bitrix24 api-level errors
+        $this->handleBitrix24APILevelErrors($requestResult, 'get first access token');
+        return $requestResult;
+    }
 
 	/**
 	 * Сheck is access token expire, сall list of all available api-methods from B24 portal with current access token
