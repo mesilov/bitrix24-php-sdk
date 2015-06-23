@@ -5,6 +5,7 @@ namespace Bitrix24\Presets\CRM\Lead;
  * Class Fields
  * @link http://www.bitrixsoft.com/rest_help/crm/leads/crm_lead_fields.php
  * @package Bitrix24\Presets\CRM\Lead
+ * @todo check fields
  */
 class Fields
 {
@@ -49,13 +50,17 @@ class Fields
 	 */
 	const STATUS_DESCRIPTION = 'STATUS_DESCRIPTION';
 	/**
-	 * @var string Position	Can be read, can be write
+	 * @var string Position in company structure. Can be read, can be write
 	 */
 	const POST = 'POST';
 	/**
 	 * @var string 	Address	Can be read, can be write
 	 */
 	const  ADDRESS = 'ADDRESS';
+	/**
+	 * @var string 	Address	Can be read, can be write
+	 */
+	const  ADDRESS_APARTMENT = 'ADDRESS_2';
 	/**
 	 * @var integer Currency ID	Can be read, can be write
 	 */
