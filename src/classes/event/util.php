@@ -1,9 +1,9 @@
 <?php
-namespace Bitrix24\Events;
+namespace Bitrix24\Event;
 
 /**
  * Class Util
- * @package Bitrix24\Events
+ * @package Bitrix24\Event
  */
 class Util
 {

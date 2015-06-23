@@ -2,38 +2,14 @@
 namespace Bitrix24\Event;
 use Bitrix24\Bitrix24Entity;
 use Bitrix24\Bitrix24Exception;
+use Bitrix24\Presets\Event\Event as EventType;
 
+/**
+ * Class Event
+ * @package Bitrix24\Event
+ */
 class Event extends Bitrix24Entity
 {
-	/**
-	 * event code when bitrix24 application has uninstall
-	 */
-	const ON_APP_UNINSTALL = 'ONAPPUNINSTALL';
-	/**
-	 * event code when bitrix24 application update
-	 */
-	const ON_APP_UPDATE = 'ONAPPUPDATE';
-	/**
-	 * event code when bitrix24 application payment
-	 */
-	const ON_APP_PAYMENT = 'ONAPPPAYMENT';
-	/**
-	 * event code when task add in bitrix24
-	 */
-	const ON_TASK_ADD = 'ONTASKADD';
-	/**
-	 * event code when task in bitrix24 has update
-	 */
-	const ON_TASK_UPDATE = 'ONTASKUPDATE';
-	/**
-	 * event code when task in bitrix24 has delete
-	 */
-	const ON_TASK_DELETE = 'ONTASKDELETE';
-	/**
-	 * event code when new user in bitrix24 has added
-	 */
-	const ON_USER_ADD = 'ONUSERADD';
-
 	/**
 	 * check is event handler code valid
 	 * @param $eventHandlerName
@@ -44,13 +20,33 @@ class Event extends Bitrix24Entity
 		$isEventHandlerCodeValid = false;
 		switch(strtoupper($eventHandlerName))
 		{
-			case self::ON_APP_UPDATE:
-			case self::ON_APP_PAYMENT:
-			case self::ON_APP_UNINSTALL:
-			case self::ON_TASK_ADD:
-			case self::ON_TASK_DELETE:
-			case self::ON_TASK_UPDATE:
-			case self::ON_USER_ADD:
+			case EventType::ON_APP_UPDATE:
+			case EventType::ON_APP_PAYMENT:
+			case EventType::ON_APP_UNINSTALL:
+			case EventType::ON_TASK_ADD:
+			case EventType::ON_TASK_DELETE:
+			case EventType::ON_TASK_UPDATE:
+			case EventType::ON_USER_ADD:
+			case EventType::ON_CRM_ACTIVITY_ADD:
+			case EventType::ON_CRM_ACTIVITY_DELETE:
+			case EventType::ON_CRM_ACTIVITY_UPDATE:
+			case EventType::ON_CRM_COMPANY_ADD:
+			case EventType::ON_CRM_COMPANY_DELETE:
+			case EventType::ON_CRM_COMPANY_UPDATE:
+			case EventType::ON_CRM_CONTACT_ADD:
+			case EventType::ON_CRM_CONTACT_DELETE:
+			case EventType::ON_CRM_CONTACT_UPDATE:
+			case EventType::ON_CRM_CURRENCY_ADD:
+			case EventType::ON_CRM_CURRENCY_DELETE:
+			case EventType::ON_CRM_CURRENCY_UPDATE:
+			case EventType::ON_CRM_DEAL_ADD:
+			case EventType::ON_CRM_DEAL_DELETE:
+			case EventType::ON_CRM_DEAL_UPDATE:
+			case EventType::ON_CRM_LEAD_ADD:
+			case EventType::ON_CRM_LEAD_DELETE:
+			case EventType::ON_CRM_LEAD_UPDATE:
+			case EventType::ON_CRM_PRODUCT_ADD:
+			case EventType::ON_CRM_PRODUCT_DELETE:
 				$isEventHandlerCodeValid = true;
 				break;
 		}
@@ -58,6 +54,7 @@ class Event extends Bitrix24Entity
 	}
 
 	/**
+	 * Get list of register events
 	 * @return array
 	 */
 	public function get()
