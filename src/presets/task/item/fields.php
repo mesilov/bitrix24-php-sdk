@@ -16,7 +16,7 @@ class Fields
 	 */
 	const DESCRIPTION = 'DESCRIPTION';
 	/**
-	 * @var \DateTime Specifies the task deadline date. Read, write
+	 * @var string Specifies the task deadline date. Read, write
 	 */
 	const DEADLINE = 'DEADLINE';
 	/**

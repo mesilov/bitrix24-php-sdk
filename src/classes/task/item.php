@@ -77,10 +77,10 @@ class Item extends Bitrix24Entity
 	 * Return task description.
 	 * @link http://www.bitrixsoft.com/rest_help/tasks/task/item/getdescription.php
 	 * @param $taskId integer Task ID.
-	 * @param $format integer 1 (Corresponds to the PHP constant CTaskItem::DESCR_FORMAT_RAW) —
+	 * @param $format integer 1 (Corresponds to the PHP constant CTaskItem::DESCR_FORMAT_RAW) ï¿½
 	 * description will be returned in the format it is stored in the database (HTML or BB-code), will not be sanitized;
-	 * 2 (Corresponds to the PHP constant CTaskItem::DESCR_FORMAT_HTML) — description will be returned in HTML, will first be sanitized (if included in task module settings);
-	 * 3 (Corresponds to the PHP constant CTaskItem::DESCR_FORMAT_PLAIN_TEXT) — description will be returned as plain text (no HTML tags).
+	 * 2 (Corresponds to the PHP constant CTaskItem::DESCR_FORMAT_HTML) ï¿½ description will be returned in HTML, will first be sanitized (if included in task module settings);
+	 * 3 (Corresponds to the PHP constant CTaskItem::DESCR_FORMAT_PLAIN_TEXT) ï¿½ description will be returned as plain text (no HTML tags).
 	 * @return array
 	 */
 	public function getDescription($taskId, $format)
@@ -144,7 +144,7 @@ class Item extends Bitrix24Entity
 	 * @param $actionId integer Validated action ID (see CTaskItem::ACTION_* constants of PHP class CTaskItem).
 	 * @return array
 	 */
-	public function isÀctionAllowed($taskId, $actionId)
+	public function isActionAllowed($taskId, $actionId)
 	{
 		$result = $this->client->call('task.item.isactionallowed', array($taskId), array($actionId));
 		return $result;
