@@ -526,7 +526,11 @@ class Bitrix24
 			if (!strlen($errDescription)) {
 				$errName = $arRequestResult['error'].PHP_EOL;
 			}
-			$errorMsg = $errName.$errDescription.'in call: [ '.$methodName.' ]';
+			$errorMsg =  sprintf('%s %s in call [ %s ]', $errName, $errDescription, $methodName);
+			if('wrong_client' === strtolower(trim($errName)))
+			{
+				throw new Bitrix24WrongClientException($errorMsg);
+			}
 			throw new Bitrix24ApiException($errorMsg);
 		}
 		return null;
