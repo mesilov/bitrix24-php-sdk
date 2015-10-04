@@ -67,4 +67,40 @@ class Lead extends Bitrix24Entity
 		);
 		return $fullResult;
 	}
+
+	/**
+	 * @link https://training.bitrix24.com/rest_help/crm/leads/crm_lead_update.php
+	 * @param integer $leadId Specifies the lead ID
+	 * @param array $fields An array in format array("field"=>"value"[, ...]) containing values for the fields that need to be updated.
+	 * The fields can be one or more of those returned by crm.lead.fields.
+	 * @param array $params Set of parameters. REGISTER_SONET_EVENT - performs registration of a change event in a lead in the Activity Stream.
+	 * The lead's Responsible person will also receive notification.
+	 * @return array
+	 */
+	public function update($leadId, $fields = array(), $params = array())
+	{
+		$fullResult = $this->client->call(
+			'crm.lead.update',
+			array(
+				'id' => $leadId,
+				'fields' => $fields,
+				'params' => $params
+			)
+		);
+		return $fullResult;
+	}
+
+	/**
+	 * Deletes the specified lead and all the associated objects.
+	 * @param integer $leadId
+	 * @return array
+	 */
+	public function delete($leadId)
+	{
+		$fullResult = $this->client->call(
+			'crm.lead.delete',
+			array('id' => $leadId)
+		);
+		return $fullResult;
+	}
 }
