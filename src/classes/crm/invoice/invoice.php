@@ -23,9 +23,10 @@ class Invoice extends Bitrix24Entity
      * @param array $order - order of task items
      * @param array $filter - filter array
      * @param array $select - array of collumns to select
+     * @param integer $start - entity number to start from (usually returned in 'next' field of previous 'crm.invoice.list' API call)
      * @return array
      */
-    public function getList($order = array(), $filter = array(), $select = array())
+    public function getList($order = array(), $filter = array(), $select = array(), $start = 0)
     {
         $fullResult = $this->client->call(
             'crm.invoice.list',
@@ -33,6 +34,7 @@ class Invoice extends Bitrix24Entity
                 'order' => $order,
                 'filter'=> $filter,
                 'select'=> $select,
+		'start'	=> $start
             )
         );
         return $fullResult;
