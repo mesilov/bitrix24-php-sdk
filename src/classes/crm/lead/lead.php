@@ -5,7 +5,7 @@ use Bitrix24\Bitrix24Entity;
 class Lead extends Bitrix24Entity
 {
 	/**
-	 * Get list of lead items.
+	 * Get lead item by ID.
 	 * @link http://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_get.php
 	 * @param integer $leadId - lead id
 	 * @return array
@@ -25,9 +25,10 @@ class Lead extends Bitrix24Entity
 	 * @param array $order - order of task items
 	 * @param array $filter - filter array
 	 * @param array $select - array of collumns to select
+	 * @param integer $start - entity number to start from (usually returned in 'next' field of previous 'crm.lead.list' API call)
 	 * @return array
 	 */
-	public function getList($order = array(), $filter = array(), $select = array())
+	public function getList($order = array(), $filter = array(), $select = array(), $start = 0)
 	{
 		$fullResult = $this->client->call(
 			'crm.lead.list',
@@ -35,6 +36,7 @@ class Lead extends Bitrix24Entity
 				'order' => $order,
 				'filter'=> $filter,
 				'select'=> $select,
+				'start'	=> $start
 			)
 		);
 		return $fullResult;
