@@ -5,7 +5,7 @@ use Bitrix24\Bitrix24Entity;
 class Lead extends Bitrix24Entity
 {
 	/**
-	 * Get list of lead items.
+	 * Get lead item by ID.
 	 * @link http://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_get.php
 	 * @param integer $leadId - lead id
 	 * @return array
