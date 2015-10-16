@@ -60,4 +60,23 @@ class User extends Bitrix24Entity
 		);
 		return $result;
 	}
+	
+		
+	/**
+	 * Check if current user has any of access rights specified by $access param
+	 * @link http://dev.1c-bitrix.ru/rest_help/general/user_access.php
+	 * @throws Bitrix24Exception
+	 * @param array $access - list of access rights to check
+	 * @return array
+	 */
+	public function access($access)
+	{
+		$result = $this->client->call('user.access',
+			array(
+				'ACCESS' => $access
+			)
+		);
+		return $result;
+	}
 }
+
