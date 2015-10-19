@@ -1,5 +1,5 @@
 <?php
-namespace Bitrix24;
+namespace Bitrix24\User;
 use Bitrix24\Bitrix24Entity;
 use Bitrix24\Bitrix24Exception;
 
