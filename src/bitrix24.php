@@ -513,25 +513,27 @@ class Bitrix24
 	 * @param $methodName
 	 * @return null
 	 * @throws Bitrix24ApiException
+	 * @throws Bitrix24WrongClientException
+	 * @throws Bitrix24MethodNotFoundException
 	 */
 	protected function handleBitrix24APILevelErrors($arRequestResult, $methodName)
 	{
 		if (array_key_exists('error', $arRequestResult))
 		{
-			$errName = '';
-			$errDescription = '';
-			if (isset($arRequestResult['error_description'])) {
-				$errDescription = $arRequestResult['error_description'].PHP_EOL;
-			}
-			if (!strlen($errDescription)) {
-				$errName = $arRequestResult['error'].PHP_EOL;
-			}
-			$errorMsg =  sprintf('%s %s in call [ %s ]', $errName, $errDescription, $methodName);
-			if('wrong_client' === strtolower(trim($errName)))
+			$errorMsg =  sprintf('%s - %s in call [ %s ]', $arRequestResult['error'], $arRequestResult['error_description'], $methodName);
+			// throw specific API-level exceptions
+			switch(strtoupper(trim($arRequestResult['error'])))
 			{
-				throw new Bitrix24WrongClientException($errorMsg);
+				case 'WRONG_CLIENT':
+					throw new Bitrix24WrongClientException($errorMsg);
+					break;
+				case 'ERROR_METHOD_NOT_FOUND':
+					throw new Bitrix24MethodNotFoundException($errorMsg);
+					break;
+				default:
+					throw new Bitrix24ApiException($errorMsg);
+					break;
 			}
-			throw new Bitrix24ApiException($errorMsg);
 		}
 		return null;
 	}
