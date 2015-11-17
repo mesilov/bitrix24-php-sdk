@@ -342,7 +342,7 @@ class Bitrix24
 	 * @param array $options
 	 * @return bool
 	 */
-	public function setCustomCurlOptions($options = array())
+	public function setCustomCurlOptions($options)
 	{
 		$this->customCurlOptions = $options;
 
