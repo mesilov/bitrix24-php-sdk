@@ -339,7 +339,8 @@ class Bitrix24
 
 	/**
 	 * Set custom cURL options, overriding default ones
-	 * @param array $options
+	 * @link http://php.net/manual/en/function.curl-setopt.php
+	 * @param array $options - array(CURLOPT_XXX => value1, CURLOPT_XXX2 => value2,...)
 	 * @return bool
 	 */
 	public function setCustomCurlOptions($options)
