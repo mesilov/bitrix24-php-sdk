@@ -81,6 +81,11 @@ class Bitrix24
 	protected $memberId = null;
 
 	/**
+	 * @var array custom options for cURL
+	 */
+	protected $customCurlOptions = null;
+
+	/**
 	 * Create a object to work with Bitrix24 REST API service
 	 * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
 	 * @throws Bitrix24Exception
@@ -333,6 +338,19 @@ class Bitrix24
 	}
 
 	/**
+	 * Set custom cURL options, overriding default ones
+	 * @link http://php.net/manual/en/function.curl-setopt.php
+	 * @param array $options - array(CURLOPT_XXX => value1, CURLOPT_XXX2 => value2,...)
+	 * @return bool
+	 */
+	public function setCustomCurlOptions($options)
+	{
+		$this->customCurlOptions = $options;
+
+		return true;
+	}
+
+	/**
 	 * Return raw request, contain all cURL options array and API query. Data available after you try to call method call
 	 * numbers of array keys is const of cURL module. Example: CURLOPT_RETURNTRANSFER = 19913
 	 * @return array | null
@@ -369,9 +387,6 @@ class Bitrix24
 	 */
 	protected function executeRequest($url, array $additionalParameters = array())
 	{
-		/**
-		 * @todo add method to set custom cURL options
-		 */
 		$curlOptions = array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLINFO_HEADER_OUT => true,
@@ -383,6 +398,13 @@ class Bitrix24
 			CURLOPT_POSTFIELDS => http_build_query($additionalParameters),
 			CURLOPT_URL => $url
 		);
+
+		if(is_array($this->customCurlOptions)) {
+			foreach($this->customCurlOptions as $customCurlOptionKey => $customCurlOptionValue) {
+				$curlOptions[$customCurlOptionKey] = $customCurlOptionValue;
+			}
+		}
+
 		$this->rawRequest = $curlOptions;
 		$curl = curl_init();
 		curl_setopt_array($curl, $curlOptions);
