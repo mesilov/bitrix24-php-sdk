@@ -6,7 +6,7 @@ use Bitrix24\Bitrix24Exception;
 class Contact extends Bitrix24Entity
 {
 	/**
-	 * Get list of lead items.
+	 * Get list of contact items.
 	 * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_list.php
 	 * @param array $order - order of task items
 	 * @param array $filter - filter array
@@ -76,4 +76,26 @@ class Contact extends Bitrix24Entity
 		);
 		return $fullResult;
 	}
+
+    /**
+     * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_update.php
+     * @param integer $contactId Specifies the contact ID
+     * @param array $fields An array in format array("field"=>"value"[, ...]) containing values for the fields that need to be updated.
+     * The fields can be one or more of those returned by crm.contact.fields.
+     * @param array $params Set of parameters. REGISTER_SONET_EVENT - performs registration of a change event in a contact in the Activity Stream.
+     * The contact's Responsible person will also receive notification.
+     * @return array
+     */
+    public function update($contactId, $fields = array(), $params = array())
+    {
+        $fullResult = $this->client->call(
+            'crm.contact.update',
+            array(
+                'id' => $contactId,
+                'fields' => $fields,
+                'params' => $params
+            )
+        );
+        return $fullResult;
+    }
 }
