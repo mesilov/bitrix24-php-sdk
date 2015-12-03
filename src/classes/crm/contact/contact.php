@@ -30,19 +30,21 @@ class Contact extends Bitrix24Entity
 		return $fullResult;
 	}
 
-	/**
-	 * Add a new contact to CRM
-	 * @param array $fields array of fields
-	 * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_add.php
-	 * @return array
-	 * @throws Bitrix24Exception
-	 *
-	 */
-	public function add($fields = array())
+    /**
+     * Add a new contact to CRM
+     * @param array $fields array of fields
+     * @param array $params array of params
+     * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_add.php
+     * @return array
+     */
+	public function add($fields = array(), $params = array())
 	{
 		$fullResult = $this->client->call(
 			'crm.contact.add',
-			array('fields' => $fields)
+			array(
+                'fields' => $fields,
+                'params' => $params
+            )
 		);
 		return $fullResult;
 	}
