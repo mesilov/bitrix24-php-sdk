@@ -542,7 +542,7 @@ class Bitrix24
 	{
 		if (array_key_exists('error', $arRequestResult))
 		{
-			$errorMsg =  sprintf('%s - %s in call [ %s ]', $arRequestResult['error'], $arRequestResult['error_description'], $methodName);
+			$errorMsg =  sprintf('%s - %s in call [ %s ]', $arRequestResult['error'], (isset($arRequestResult['error_description']) ? $arRequestResult['error_description'] : ''), $methodName);
 			// throw specific API-level exceptions
 			switch(strtoupper(trim($arRequestResult['error'])))
 			{
