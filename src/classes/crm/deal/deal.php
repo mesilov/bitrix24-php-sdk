@@ -7,7 +7,7 @@ class Deal extends Bitrix24Entity
 	/**
 	 * Add a new deal to CRM
 	 * @param array $fields array of fields
-	 * @param array $fields array of params
+	 * @param array $params array of params
 	 * @link http://dev.1c-bitrix.ru/rest_help/crm/cdeals/crm_deal_add.php
 	 * @return array
 	 */
@@ -15,7 +15,10 @@ class Deal extends Bitrix24Entity
 	{
 		$fullResult = $this->client->call(
 			'crm.deal.add',
-			array('fields' => $fields)
+			array(
+                'fields' => $fields,
+                'params' => $params
+            )
 		);
 		return $fullResult;
 	}
