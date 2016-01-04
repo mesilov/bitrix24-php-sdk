@@ -14,7 +14,8 @@
     "require": {
         "php": ">=5.3.2",
         "ext-json": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "psr/log": "^1.0"
     },
     "autoload": {
         "classmap": ["src/"]

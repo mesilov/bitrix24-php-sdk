@@ -1,5 +1,12 @@
 <?php
 namespace Bitrix24;
+use Psr\Log\LoggerInterface;
+use Bitrix24\Logger\Stub;
+/**
+ * Class Bitrix24
+ * @author Mesilov Maxim <mesilov.maxim@gmail.com>
+ * @copyright 2013 - 2016 Mesilov Maxim
+ */
 class Bitrix24
 {
 	/**
@@ -11,19 +18,19 @@ class Bitrix24
 	 * access token
 	 * @var string
 	 */
-	protected $accessToken = null;
+	protected $accessToken;
 
 	/**
 	 * refresh token
 	 * @var string
 	 */
-	protected $refreshToken = null;
+	protected $refreshToken;
 
 	/**
 	 * domain
 	 * @var string
 	 */
-	protected $domain = null;
+	protected $domain;
 
 	/**
 	 * scope
@@ -35,30 +42,30 @@ class Bitrix24
 	 * application id
 	 * @var string
 	 */
-	protected $applicationId = null;
+	protected $applicationId;
 
 	/**
 	 * application secret
 	 * @var string
 	 */
-	protected $applicationSecret = null;
+	protected $applicationSecret;
 
 	/**
 	 * raw request, contain all cURL options array and API query
 	 * @var array
 	 */
-	protected $rawRequest = null;
+	protected $rawRequest;
 
 	/**
 	 * @var array, contain all api-method parameters, vill be available after call method
 	 */
-	protected $methodParameters = null;
+	protected $methodParameters;
 
 	/**
 	 * request info data structure акщь curl_getinfo function
 	 * @var array
 	 */
-	protected $requestInfo = null;
+	protected $requestInfo;
 
 	/**
 	 * @var bool if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
@@ -68,30 +75,38 @@ class Bitrix24
 	/**
 	 * @var array raw response from bitrix24
 	 */
-	protected $rawResponse = null;
+	protected $rawResponse;
 
 	/**
 	 * @var string redirect URI from application settings
 	 */
-	protected $redirectUri = null;
+	protected $redirectUri;
 
 	/**
 	 * @var string portal GUID
 	 */
-	protected $memberId = null;
+	protected $memberId;
 
 	/**
 	 * @var array custom options for cURL
 	 */
-	protected $customCurlOptions = null;
+	protected $customCurlOptions;
+	/**
+	 * PSR-3 compatible logger
+	 * use only from wrappers methods log*
+	 * @see https://github.com/Seldaek/monolog
+	 * @var \Monolog\Logger
+	 */
+	protected $log;
 
 	/**
 	 * Create a object to work with Bitrix24 REST API service
 	 * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
+	 * @param null|\Monolog\Logger $obLogger - instance of \Monolog\Logger
 	 * @throws Bitrix24Exception
 	 * @return Bitrix24
 	 */
-	public function __construct($isSaveRawResponse = false)
+	public function __construct($isSaveRawResponse = false, $obLogger = null)
 	{
 		if (!extension_loaded('curl'))
 		{
@@ -102,6 +117,21 @@ class Bitrix24
 			throw new Bitrix24Exception('isSaveRawResponse flag must be boolean');
 		}
 		$this->isSaveRawResponse = $isSaveRawResponse;
+		if($obLogger !== null)
+		{
+			/**
+			 * @var \Monolog\Logger
+			 */
+			$this->log = clone $obLogger;
+		}
+		else
+		{
+			// dev/null logger
+			/**
+			 * @var \Monolog\Logger
+			 */
+			$this->log = new Stub();
+		}
 	}
 
 	/**
@@ -272,7 +302,6 @@ class Bitrix24
 		}
 	}
 
-
 	/**
 	 * Get application scope
 	 */
@@ -410,6 +439,7 @@ class Bitrix24
 		curl_setopt_array($curl, $curlOptions);
 		$curlResult = curl_exec($curl);
 		$this->requestInfo = curl_getinfo($curl);
+		$this->log->debug('cURL request info', array($this->requestInfo));
 		$curlErrorNumber = curl_errno($curl);
 		// handling network I/O errors
 		if($curlErrorNumber > 0)
@@ -430,7 +460,7 @@ class Bitrix24
 		$jsonResult = json_decode($curlResult, true);
 		unset($curlResult);
 		$jsonErrorCode = json_last_error();
-		if(is_null($jsonResult) && (JSON_ERROR_NONE != $jsonErrorCode))
+		if(null === $jsonResult && (JSON_ERROR_NONE !== $jsonErrorCode))
 		{
 			/**
 			 * @todo add function json_last_error_msg()
@@ -446,19 +476,25 @@ class Bitrix24
 	 * @param string $methodName
 	 * @param array $additionalParameters
 	 * @throws Bitrix24Exception
+	 * @throws Bitrix24ApiException
+	 * @throws Bitrix24TokenIsInvalid
+	 * @throws Bitrix24TokenIsExpired
+	 * @throws Bitrix24WrongClientException
+	 * @throws Bitrix24MethodNotFoundException
+	 * @throws Bitrix24SecurityException
 	 * @return array
 	 */
 	public function call($methodName, array $additionalParameters = array())
 	{
-		if(is_null($this->getDomain()))
+		if(null === $this->getDomain())
 		{
 			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
 		}
-		if(is_null($this->getAccessToken()))
+		if(null === $this->getAccessToken())
 		{
 			throw new Bitrix24Exception('access token not found, you must call setAccessToken method before');
 		}
-		if(0 == strlen($methodName))
+		if('' === $methodName)
 		{
 			throw new Bitrix24Exception('method name not found, you must set method name');
 		}
@@ -473,6 +509,11 @@ class Bitrix24
 			$isSecureCall = true;
 		}
 		// execute request
+		$this->log->info('call bitrix24 method', array(
+			'BITRIX24_DOMAIN' => $this->domain,
+			'METHOD_NAME' => $methodName,
+			'METHOD_PARAMETERS' => $additionalParameters
+		));
 		$requestResult = $this->executeRequest($url, $additionalParameters);
 		// check errors and throw exception if errors exists
 		$this->handleBitrix24APILevelErrors($requestResult, $methodName);
@@ -486,11 +527,11 @@ class Bitrix24
 				{
 					throw new Bitrix24SecurityException('security signature is corrupted');
 				}
-				if(is_null($this->getMemberId()))
+				if(null === $this->getMemberId())
 				{
 					throw new Bitrix24Exception('member-id not found, you must call setMemberId method before');
 				}
-				if(is_null($this->getApplicationSecret()))
+				if(null === $this->getApplicationSecret())
 				{
 					throw new Bitrix24Exception('application secret not found, you must call setApplicationSecret method before');
 				}
@@ -509,7 +550,7 @@ class Bitrix24
 				$arClearData = json_decode(base64_decode($dataToDecode), true);
 				// handling json_decode errors
 				$jsonErrorCode = json_last_error();
-				if(is_null($arClearData) && (JSON_ERROR_NONE != $jsonErrorCode))
+				if(null === $arClearData && (JSON_ERROR_NONE !== $jsonErrorCode))
 				{
 					/**
 					 * @todo add function json_last_error_msg()
@@ -519,7 +560,7 @@ class Bitrix24
 				}
 				// merge dirty and clear data
 				unset($arClearData['state']);
-				$requestResult ["result"] = array_merge($requestResult ["result"], $arClearData);
+				$requestResult ['result'] = array_merge($requestResult ['result'], $arClearData);
 			}
 			else
 			{
@@ -535,6 +576,8 @@ class Bitrix24
 	 * @param $methodName
 	 * @return null
 	 * @throws Bitrix24ApiException
+	 * @throws Bitrix24TokenIsInvalid
+	 * @throws Bitrix24TokenIsExpired
 	 * @throws Bitrix24WrongClientException
 	 * @throws Bitrix24MethodNotFoundException
 	 */
@@ -548,13 +591,14 @@ class Bitrix24
 			{
 				case 'WRONG_CLIENT':
 					throw new Bitrix24WrongClientException($errorMsg);
-					break;
 				case 'ERROR_METHOD_NOT_FOUND':
 					throw new Bitrix24MethodNotFoundException($errorMsg);
-					break;
+				case 'INVALID_TOKEN':
+					throw new Bitrix24TokenIsInvalid($errorMsg);
+				case 'EXPIRED_TOKEN':
+					throw new Bitrix24TokenIsExpired($errorMsg);
 				default:
 					throw new Bitrix24ApiException($errorMsg);
-					break;
 			}
 		}
 		return null;
@@ -578,6 +622,11 @@ class Bitrix24
 	 * Get new access token
 	 * @return array
 	 * @throws Bitrix24Exception
+	 * @throws Bitrix24ApiException
+	 * @throws Bitrix24TokenIsInvalid
+	 * @throws Bitrix24TokenIsExpired
+	 * @throws Bitrix24WrongClientException
+	 * @throws Bitrix24MethodNotFoundException
 	 */
 	public function getNewAccessToken()
 	{
@@ -588,19 +637,19 @@ class Bitrix24
 		$applicationScope = $this->getApplicationScope();
 		$redirectUri = $this->getRedirectUri();
 
-		if(is_null($domain))
+		if(null === $domain)
 		{
 			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
 		}
-		elseif(is_null($applicationId))
+		elseif(null === $applicationId)
 		{
 			throw new Bitrix24Exception('application id not found, you must call setApplicationId method before');
 		}
-		elseif(is_null($applicationSecret))
+		elseif(null === $applicationSecret)
 		{
 			throw new Bitrix24Exception('application id not found, you must call setApplicationSecret method before');
 		}
-		elseif(is_null($refreshToken))
+		elseif(null === $refreshToken)
 		{
 			throw new Bitrix24Exception('application id not found, you must call setRefreshToken method before');
 		}
@@ -608,16 +657,16 @@ class Bitrix24
 		{
 			throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
 		}
-		elseif(is_null($redirectUri))
+		elseif(null === $redirectUri)
 		{
 			throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
 		}
 
-		$url = 'https://'.$domain."/oauth/token/".
-			"?client_id=".urlencode($applicationId).
-			"&grant_type=refresh_token".
-			"&client_secret=".$applicationSecret.
-			"&refresh_token=".$refreshToken.
+		$url = 'https://'.$domain.'/oauth/token/'.
+			'?client_id='.urlencode($applicationId).
+			'&grant_type=refresh_token'.
+			'&client_secret='.$applicationSecret.
+			'&refresh_token='.$refreshToken.
 			'&scope='.implode(',', array_map('urlencode', array_unique($applicationScope))).
 			'&redirect_uri='.urlencode($redirectUri);
 		$requestResult = $this->executeRequest($url);
@@ -626,11 +675,18 @@ class Bitrix24
 		return $requestResult;
 	}
 
-    /**
-     * Authorize and get first access token
-     * @return array
-     * @throws Bitrix24Exception
-     */
+	/**
+	 * Authorize and get first access token
+	 * @param $code
+	 * @return array
+	 * @throws Bitrix24ApiException
+	 * @throws Bitrix24Exception
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24MethodNotFoundException
+	 * @throws Bitrix24TokenIsExpired
+	 * @throws Bitrix24TokenIsInvalid
+	 * @throws Bitrix24WrongClientException
+	 */
     public function getFirstAccessToken($code)
     {
         $domain = $this->getDomain();
@@ -640,15 +696,15 @@ class Bitrix24
         $applicationScope = $this->getApplicationScope();
         $redirectUri = $this->getRedirectUri();
 
-        if(is_null($domain))
+        if(null === $domain)
         {
             throw new Bitrix24Exception('domain not found, you must call setDomain method before');
         }
-        elseif(is_null($applicationId))
+        elseif(null === $applicationId)
         {
             throw new Bitrix24Exception('application id not found, you must call setApplicationId method before');
         }
-        elseif(is_null($applicationSecret))
+        elseif(null === $applicationSecret)
         {
             throw new Bitrix24Exception('application id not found, you must call setApplicationSecret method before');
         }
@@ -656,18 +712,18 @@ class Bitrix24
         {
             throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
         }
-        elseif(is_null($redirectUri))
+        elseif(null === $redirectUri)
         {
             throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
         }
 
-        $url = 'https://'.$domain."/oauth/token/".
-            "?client_id=".urlencode($applicationId).
-            "&grant_type=authorization_code".
-            "&client_secret=".$applicationSecret.
+        $url = 'https://'.$domain.'/oauth/token/'.
+            '?client_id='.urlencode($applicationId).
+            '&grant_type=authorization_code'.
+            '&client_secret='.$applicationSecret.
             '&scope='.implode(',', array_map('urlencode', array_unique($applicationScope))).
             '&redirect_uri='.urlencode($redirectUri).
-            '&code='.urlencode($_GET['code']);
+            '&code='.urlencode($code);
 
         $requestResult = $this->executeRequest($url);
         // handling bitrix24 api-level errors
@@ -676,9 +732,14 @@ class Bitrix24
     }
 
 	/**
-	 * Сheck is access token expire, сall list of all available api-methods from B24 portal with current access token
+	 * Check is access token expire, call list of all available api-methods from B24 portal with current access token
 	 * if we have an error code expired_token then return true else return false
 	 * @throws Bitrix24Exception
+	 * @throws Bitrix24ApiException
+	 * @throws Bitrix24TokenIsInvalid
+	 * @throws Bitrix24TokenIsExpired
+	 * @throws Bitrix24WrongClientException
+	 * @throws Bitrix24MethodNotFoundException
 	 * @return boolean
 	 */
 	public function isAccessTokenExpire()
@@ -687,19 +748,24 @@ class Bitrix24
 		$accessToken = $this->getAccessToken();
 		$domain = $this->getDomain();
 
-		if(is_null($domain))
+		if(null === $domain)
 		{
 			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
 		}
-		elseif(is_null($accessToken))
+		elseif(null === $accessToken)
 		{
 			throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
 		}
-		$url = 'https://'.$domain."/rest/app.info?auth=".$accessToken;
+		$url = 'https://'.$domain.'/rest/app.info?auth='.$accessToken;
 		$requestResult = $this->executeRequest($url);
-		if('expired_token' == $requestResult['error'])
+		if('expired_token' === $requestResult['error'])
 		{
 			$isTokenExpire = true;
+		}
+		else
+		{
+			// handle other errors
+			$this->handleBitrix24APILevelErrors($requestResult, 'app.info');
 		}
 		return $isTokenExpire;
 	}// end of isTokenExpire
@@ -711,16 +777,16 @@ class Bitrix24
 	 * @return array
 	 * @throws Bitrix24Exception
 	 */
-	public function getАvailableMethoods($applicationScope = array(), $isFull=false)
+	public function getAvailableMethods(array $applicationScope = array(), $isFull = false)
 	{
 		$accessToken = $this->getAccessToken();
 		$domain = $this->getDomain();
 
-		if(is_null($domain))
+		if(null === $domain)
 		{
 			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
 		}
-		elseif(is_null($accessToken))
+		elseif(null === $accessToken)
 		{
 			throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
 		}
@@ -731,7 +797,7 @@ class Bitrix24
 			$showAll = '&full=true';
 		}
 		$scope='';
-		if(is_null($applicationScope))
+		if(null === $applicationScope)
 		{
 			$scope = '&scope';
 		}
@@ -739,7 +805,7 @@ class Bitrix24
 		{
 			$scope = '&scope='.implode(',', array_map('urlencode', array_unique($applicationScope)));
 		}
-		$url = 'https://'.$domain."/rest/methods.json?auth=".$accessToken.$showAll.$scope;
+		$url = 'https://'.$domain.'/rest/methods.json?auth='.$accessToken.$showAll.$scope;
 		$requestResult = $this->executeRequest($url);
 		return $requestResult;
 	}
@@ -755,11 +821,11 @@ class Bitrix24
 		$accessToken = $this->getAccessToken();
 		$domain = $this->getDomain();
 
-		if(is_null($domain))
+		if(null === $domain)
 		{
 			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
 		}
-		elseif(is_null($accessToken))
+		elseif(null === $accessToken)
 		{
 			throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
 		}
@@ -768,7 +834,7 @@ class Bitrix24
 		{
 			$showAll = '&full=true';
 		}
-		$url = 'https://'.$domain."/rest/scope.json?auth=".$accessToken.$showAll;
+		$url = 'https://'.$domain.'/rest/scope.json?auth='.$accessToken.$showAll;
 		$requestResult = $this->executeRequest($url);
 		return $requestResult;
 	}
