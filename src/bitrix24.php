@@ -152,15 +152,12 @@ class Bitrix24
 	 */
 	public function setMemberId($memberId)
 	{
-		if(!empty($memberId))
-		{
-			$this->memberId = $memberId;
-			return true;
-		}
-		else
+		if('' === $memberId)
 		{
 			throw new Bitrix24Exception('memberId is empty');
 		}
+		$this->memberId = $memberId;
+		return true;
 	}
 
 	/**
@@ -180,15 +177,12 @@ class Bitrix24
 	 */
 	public function setRedirectUri($redirectUri)
 	{
-		if(!empty($redirectUri))
+		if('' === $redirectUri)
 		{
-			$this->redirectUri = $redirectUri;
-			return true;
+			throw new Bitrix24Exception('redirect URI is empty');
 		}
-		else
-		{
-			throw new Bitrix24Exception('redirect URI not set');
-		}
+		$this->redirectUri = $redirectUri;
+		return true;
 	}
 
 	/**
@@ -207,15 +201,12 @@ class Bitrix24
 	 */
 	public function setAccessToken($accessToken)
 	{
-		if(!empty($accessToken))
+		if('' === $accessToken)
 		{
+			throw new Bitrix24Exception('access token is empty');
+		}
 			$this->accessToken = $accessToken;
 			return true;
-		}
-		else
-		{
-			throw new Bitrix24Exception('access token not set');
-		}
 	}
 
 	/**
@@ -235,15 +226,12 @@ class Bitrix24
 	 */
 	public function setRefreshToken($refreshToken)
 	{
-		if(!empty($refreshToken))
+		if('' === $refreshToken)
 		{
-			$this->refreshToken = $refreshToken;
-			return true;
+			throw new Bitrix24Exception('refresh token is empty');
 		}
-		else
-		{
-			throw new Bitrix24Exception('refresh token not set');
-		}
+		$this->refreshToken = $refreshToken;
+		return true;
 	}
 
 	/**
@@ -263,15 +251,12 @@ class Bitrix24
 	 */
 	public function setDomain($domain)
 	{
-		if(!empty($domain))
+		if('' === $domain)
 		{
-			$this->domain = $domain;
-			return true;
+			throw new Bitrix24Exception('domain is empty');
 		}
-		else
-		{
-			throw new Bitrix24Exception('domain not set');
-		}
+		$this->domain = $domain;
+		return true;
 	}
 
 	/**
@@ -318,15 +303,12 @@ class Bitrix24
 	 */
 	public function setApplicationId($applicationId)
 	{
-		if(!empty($applicationId))
+		if('' === $applicationId)
 		{
-			$this->applicationId = $applicationId;
-			return true;
+			throw new Bitrix24Exception('application id is empty');
 		}
-		else
-		{
-			throw new Bitrix24Exception('application id not set');
-		}
+		$this->applicationId = $applicationId;
+		return true;
 	}// end of SetApplicationId
 
 	/**
@@ -346,15 +328,12 @@ class Bitrix24
 	 */
 	public function setApplicationSecret($applicationSecret)
 	{
-		if(!empty($applicationSecret))
+		if('' === $applicationSecret)
 		{
-			$this->applicationSecret = $applicationSecret;
-			return true;
+			throw new Bitrix24Exception('application secret is empty');
 		}
-		else
-		{
-			throw new Bitrix24Exception('application secret not set');
-		}
+		$this->applicationSecret = $applicationSecret;
+		return true;
 	}
 
 	/**
@@ -516,7 +495,7 @@ class Bitrix24
 		));
 		$requestResult = $this->executeRequest($url, $additionalParameters);
 		// check errors and throw exception if errors exists
-		$this->handleBitrix24APILevelErrors($requestResult, $methodName);
+		$this->handleBitrix24APILevelErrors($requestResult, $methodName, $additionalParameters);
 		// handling security sign for secure api-call
 		if($isSecureCall)
 		{
@@ -574,6 +553,7 @@ class Bitrix24
 	 * Handling bitrix24 api-level errors
 	 * @param $arRequestResult
 	 * @param $methodName
+	 * @param array $additionalParameters
 	 * @return null
 	 * @throws Bitrix24ApiException
 	 * @throws Bitrix24TokenIsInvalid
@@ -581,11 +561,34 @@ class Bitrix24
 	 * @throws Bitrix24WrongClientException
 	 * @throws Bitrix24MethodNotFoundException
 	 */
-	protected function handleBitrix24APILevelErrors($arRequestResult, $methodName)
+	protected function handleBitrix24APILevelErrors($arRequestResult, $methodName, array $additionalParameters = array())
 	{
 		if (array_key_exists('error', $arRequestResult))
 		{
-			$errorMsg =  sprintf('%s - %s in call [ %s ]', $arRequestResult['error'], (isset($arRequestResult['error_description']) ? $arRequestResult['error_description'] : ''), $methodName);
+			$errorMsg =  sprintf('%s - %s in call [%s] for domain [%s]',
+				$arRequestResult['error'],
+				(array_key_exists('error_description', $arRequestResult) ? $arRequestResult['error_description'] : ''),
+				$methodName,
+				$this->getDomain());
+			$this->log->error($errorMsg, array(
+				// response
+				'REQUEST_RESULT' => $arRequestResult,
+				// query
+				'METHOD_NAME' => $methodName,
+				'ADDITIONAL_PARAMETERS' => $additionalParameters,
+				// portal specific settings
+				'B24_DOMAIN' => $this->getDomain(),
+				'B24_MEMBER_ID' => $this->getMemberId(),
+				'B24_ACCESS_TOKEN' => $this->getAccessToken(),
+				'B24_REFRESH_TOKEN' => $this->getRefreshToken(),
+				// application settings
+				'APPLICATION_SCOPE' => $this->getApplicationScope(),
+				'APPLICATION_ID' => $this->getApplicationId(),
+				'APPLICATION_SECRET' => $this->getApplicationSecret(),
+				'REDIRECT_URI' => $this->getRedirectUri(),
+				// network
+				'RAW_REQUEST' => $this->getRawRequest(),
+				'CURL_REQUEST_INFO' => $this->getRequestInfo()));
 			// throw specific API-level exceptions
 			switch(strtoupper(trim($arRequestResult['error'])))
 			{
@@ -653,7 +656,7 @@ class Bitrix24
 		{
 			throw new Bitrix24Exception('application id not found, you must call setRefreshToken method before');
 		}
-		elseif(empty($applicationScope))
+		elseif(0 === count($applicationScope))
 		{
 			throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
 		}
@@ -708,7 +711,7 @@ class Bitrix24
         {
             throw new Bitrix24Exception('application id not found, you must call setApplicationSecret method before');
         }
-        elseif(empty($applicationScope))
+        elseif(0 === count($applicationScope))
         {
             throw new Bitrix24Exception('application scope not found, you must call setApplicationScope method before');
         }
