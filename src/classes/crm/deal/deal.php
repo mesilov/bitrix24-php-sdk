@@ -46,7 +46,7 @@ class Deal extends Bitrix24Entity
 	public function fields()
 	{
 		$fullResult = $this->client->call(
-			'crm.invoice.fields'
+			'crm.deal.fields'
 		);
 		return $fullResult;
 	}
