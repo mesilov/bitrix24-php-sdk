@@ -21,4 +21,4 @@ before_script:
   - composer require jakub-onderka/php-console-highlighter 0.3
 
 script:
-  - ./parallel-lint --exclude vendor .
+  parallel-lint . --exclude vendor
