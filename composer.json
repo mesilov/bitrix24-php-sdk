@@ -17,7 +17,16 @@
         "ext-curl": "*",
         "psr/log": "^1.0"
     },
+    "require-dev": {
+        "jakub-onderka/php-parallel-lint": "0.9",
+        "jakub-onderka/php-console-highlighter": "~0.3"
+    },
     "autoload": {
         "classmap": ["src/"]
+    },
+    "scripts": {
+        "test": [
+            "parallel-lint . --exclude vendor"
+        ]
     }
 }
