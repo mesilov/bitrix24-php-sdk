@@ -1,12 +1,12 @@
 <?php
-namespace Bitrix24\Logger;
+namespace Bitrix24\Stub;
 use Psr\Log\LoggerInterface;
 /**
- * Class Stub
+ * Class Logger
  * fake logger object, analog dev/null
  * @package Bitrix24\Logger
  */
-class Stub implements LoggerInterface
+class Logger implements LoggerInterface
 {
 	/**
 	 * System is unusable.

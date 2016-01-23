@@ -1,13 +1,16 @@
 <?php
 namespace Bitrix24;
+
+use Bitrix24\Contracts\iBitrix24;
+use Bitrix24\Stub\Logger;
 use Psr\Log\LoggerInterface;
-use Bitrix24\Logger\Stub;
+
 /**
  * Class Bitrix24
  * @author Mesilov Maxim <mesilov.maxim@gmail.com>
  * @copyright 2013 - 2016 Mesilov Maxim
  */
-class Bitrix24
+class Bitrix24 implements iBitrix24
 {
 	/**
 	 * SDK version
@@ -102,11 +105,11 @@ class Bitrix24
 	/**
 	 * Create a object to work with Bitrix24 REST API service
 	 * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
-	 * @param null|\Monolog\Logger $obLogger - instance of \Monolog\Logger
+	 * @param null|LoggerInterface $obLogger - instance of \Monolog\Logger
 	 * @throws Bitrix24Exception
 	 * @return Bitrix24
 	 */
-	public function __construct($isSaveRawResponse = false, $obLogger = null)
+	public function __construct($isSaveRawResponse = false, LoggerInterface $obLogger = null)
 	{
 		if (!extension_loaded('curl'))
 		{
@@ -130,7 +133,7 @@ class Bitrix24
 			/**
 			 * @var \Monolog\Logger
 			 */
-			$this->log = new Stub();
+			$this->log = new Logger();
 		}
 	}
 
@@ -155,6 +158,10 @@ class Bitrix24
 		if('' === $memberId)
 		{
 			throw new Bitrix24Exception('memberId is empty');
+		}
+		elseif(null === $memberId)
+		{
+			throw new Bitrix24Exception('memberId is null');
 		}
 		$this->memberId = $memberId;
 		return true;
