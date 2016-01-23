@@ -66,6 +66,22 @@ class Contact extends Bitrix24Entity
 	}
 
 	/**
+	 * Deletes the specified contact
+	 * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_delete.php
+	 * @param integer $bitrix24UserId contact identifier
+	 * @return array
+	 * @throws Bitrix24Exception
+	 */
+	public function delete($bitrix24UserId)
+	{
+		$fullResult = $this->client->call(
+			'crm.contact.delete',
+			array('id' => $bitrix24UserId)
+		);
+		return $fullResult;
+	}
+	
+	/**
 	 * get list of contact fields with description
 	 * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_fields.php
 	 * @return array
