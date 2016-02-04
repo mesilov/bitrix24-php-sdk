@@ -80,7 +80,7 @@ class Contact extends Bitrix24Entity
 		);
 		return $fullResult;
 	}
-	
+
 	/**
 	 * get list of contact fields with description
 	 * @link http://dev.1c-bitrix.ru/rest_help/crm/contacts/crm_contact_fields.php

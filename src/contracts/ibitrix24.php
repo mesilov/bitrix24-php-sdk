@@ -254,4 +254,30 @@ interface iBitrix24
 	 * @return array
 	 */
 	public function getScope($isFull=false);
+
+	/**
+	 * set CURL request count retries
+	 * @param $retriesCnt
+	 * @return boolean
+	 */
+	public function setRetriesToConnectCount($retriesCnt = 1);
+
+	/**
+	 * set retries to connect timeout in microseconds
+	 * @param $microseconds
+	 * @return boolean
+	 */
+	public function setRetriesToConnectTimeout($microseconds = 1000000);
+
+	/**
+	 * get CURL request count retries
+	 * @return int
+	 */
+	public function getRetriesToConnectCount();
+
+	/**
+	 * get retries to connect timeout in microseconds
+	 * @return mixed
+	 */
+	public function getRetriesToConnectTimeout();
 }
