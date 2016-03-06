@@ -857,7 +857,7 @@ class Bitrix24 implements iBitrix24
 		}
 		$url = 'https://'.$domain.'/rest/app.info?auth='.$accessToken;
 		$requestResult = $this->executeRequest($url);
-		if('expired_token' === $requestResult['error'])
+		if(isset($requestResult['error']) && ('expired_token' === $requestResult['error']))
 		{
 			$isTokenExpire = true;
 		}
