@@ -65,7 +65,11 @@ class CommentItem extends Bitrix24Entity
 	 */
 	public function add($taskId, $fields)
 	{
-		$result = $this->client->call('task.commentitem.add', array($taskId, array($fields)));
+		$result = $this->client->call('task.commentitem.add', 
+			array(
+				'TASKID' => $taskId,
+				'arFields' => $fields
+			));
 		return $result;
 	}
 
