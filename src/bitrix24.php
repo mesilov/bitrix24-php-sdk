@@ -374,6 +374,7 @@ class Bitrix24
 		 */
 		$curlOptions = array(
 			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => true,
 			CURLINFO_HEADER_OUT => true,
 			CURLOPT_VERBOSE => true,
 			CURLOPT_CONNECTTIMEOUT => 5,
