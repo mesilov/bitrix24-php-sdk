@@ -2,7 +2,8 @@
 namespace Bitrix24;
 
 use Bitrix24\Contracts\iBitrix24;
-use Bitrix24\Stub\Logger;
+
+use Psr\Log\NullLogger;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -137,7 +138,7 @@ class Bitrix24 implements iBitrix24
 			/**
 			 * @var \Monolog\Logger
 			 */
-			$this->log = new Logger();
+			$this->log = new NullLogger();
 		}
 		$this->setRetriesToConnectCount(1);
 		$this->setRetriesToConnectTimeout(1000000);

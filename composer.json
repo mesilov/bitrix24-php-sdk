@@ -29,7 +29,7 @@
     "scripts": {
         "test": [
             "parallel-lint . --exclude vendor --no-colors",
-            "phpunit --colors=always --verbose --debug"
+            "phpunit --colors=always --verbose"
         ]
     }
 }

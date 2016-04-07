@@ -10,7 +10,8 @@
 
 namespace Bitrix24;
 
-use Bitrix24\Stub\Logger as Bitrix24StubLogger;
+use \Psr\Log\NullLogger;
+
 /**
  * Class Bitrix24Test
  * @package Bitrix24
@@ -37,14 +38,14 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testConstructorWithStubLogger()
 	{
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 	}
 	/**
 	 * @covers Bitrix24::setMemberId
 	 */
 	public function testSetMemberIdWithValidArgument()
 	{
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setMemberId('valid_member_id');
 		$this->assertTrue($result);
 	}
@@ -54,7 +55,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	public function testSetMemberIdWithNullArgument()
 	{
 		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setMemberId(null);
 		$this->assertTrue($result);
 	}
@@ -64,7 +65,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	public function testSetMemberIdWithEmptyStringArgument()
 	{
 		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setMemberId('');
 		$this->assertTrue($result);
 	}
@@ -74,7 +75,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	public function testSetRetriesToConnectCountWithNull()
 	{
 		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectCount(null);
 	}
 	/**
@@ -82,7 +83,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetRetriesToConnectCountWithEmptyArgs()
 	{
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectCount();
 		$this->assertTrue($result);
 	}
@@ -91,7 +92,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetRetriesToConnectCountWithValidArgs()
 	{
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectCount(1);
 		$this->assertTrue($result);
 	}
@@ -101,7 +102,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	public function testSetRetriesToConnectTimeoutWithNull()
 	{
 		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectTimeout(null);
 	}
 	/**
@@ -109,7 +110,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetRetriesToConnectTimeoutWithEmptyArgs()
 	{
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectTimeout();
 		$this->assertTrue($result);
 	}
@@ -118,7 +119,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetRetriesToConnectTimeoutWithValidArgs()
 	{
-		$obBitrix24 = new Bitrix24(false, new Bitrix24StubLogger());
+		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectTimeout(1000000);
 		$this->assertTrue($result);
 	}

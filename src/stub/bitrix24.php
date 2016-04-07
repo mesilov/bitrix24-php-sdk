@@ -2,7 +2,6 @@
 namespace Bitrix24\Stub;
 
 use Bitrix24\Contracts\iBitrix24;
-use Bitrix24\Stub\Logger;
 use Psr\Log\LoggerInterface;
 
 use Bitrix24\Bitrix24Exception;
@@ -17,6 +16,7 @@ use Bitrix24\Bitrix24SecurityException;
 /**
  * Class Bitrix24
  * fake Bitrix24 object, analog dev/null
+ *
  * @package Bitrix24\Stub
  */
 class Bitrix24 implements iBitrix24
@@ -28,9 +28,12 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Create a object to work with Bitrix24 REST API service
+	 *
 	 * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
 	 * @param null|LoggerInterface $obLogger - instance of \Monolog\Logger
+	 *
 	 * @throws Bitrix24Exception
+	 *
 	 * @return Bitrix24
 	 */
 	public function __construct($isSaveRawResponse = false, LoggerInterface $obLogger = null)
@@ -40,6 +43,7 @@ class Bitrix24 implements iBitrix24
 	/**
 	 * Get a random string to sign protected api-call. Use salt for argument "state" in secure api-call
 	 * random string is a result of mt_rand function
+	 *
 	 * @return int
 	 */
 	public function getSecuritySignSalt()
@@ -48,15 +52,20 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set member ID — portal GUID
+	 *
 	 * @param string $memberId
+	 *
 	 * @throws Bitrix24Exception
+	 *
 	 * @return true;
 	 */
 	public function setMemberId($memberId)
 	{
 	}
+
 	/**
 	 * Get memeber ID
+	 *
 	 * @return string | null
 	 */
 	public function getMemberId()
@@ -65,8 +74,11 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set redirect URI
+	 *
 	 * @param string $redirectUri
+	 *
 	 * @throws Bitrix24Exception
+	 *
 	 * @return true;
 	 */
 	public function setRedirectUri($redirectUri)
@@ -75,6 +87,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get redirect URI
+	 *
 	 * @return string | null
 	 */
 	public function getRedirectUri()
@@ -83,9 +96,12 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set access token
+	 *
 	 * @param string $accessToken
+	 *
 	 * @throws Bitrix24Exception
-	 * @return true;
+	 *
+	 * @return true
 	 */
 	public function setAccessToken($accessToken)
 	{
@@ -93,6 +109,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get access token
+	 *
 	 * @return string | null
 	 */
 	public function getAccessToken()
@@ -101,8 +118,11 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set refresh token
+	 *
 	 * @param $refreshToken
+	 *
 	 * @throws Bitrix24Exception
+	 *
 	 * @return true;
 	 */
 	public function setRefreshToken($refreshToken)
@@ -111,6 +131,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get refresh token
+	 *
 	 * @return string
 	 */
 	public function getRefreshToken()
@@ -119,9 +140,12 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set domain
+	 *
 	 * @param $domain
+	 *
 	 * @throws Bitrix24Exception
-	 * @return true;
+	 *
+	 * @return true
 	 */
 	public function setDomain($domain)
 	{
@@ -129,6 +153,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get domain
+	 *
 	 * @return string | null
 	 */
 	public function getDomain()
@@ -137,8 +162,11 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set application scope
+	 *
 	 * @param array $applicationScope
+	 *
 	 * @return boolean
+	 *
 	 * @throws Bitrix24Exception
 	 */
 	public function setApplicationScope(array $applicationScope)
@@ -147,6 +175,8 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get application scope
+	 *
+	 * @return array
 	 */
 	public function getApplicationScope()
 	{
@@ -154,9 +184,12 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set application id
+	 *
 	 * @param string $applicationId
+	 *
 	 * @throws Bitrix24Exception
-	 * @return true;
+	 *
+	 * @return true
 	 */
 	public function setApplicationId($applicationId)
 	{
@@ -164,6 +197,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get application id
+	 *
 	 * @return string
 	 */
 	public function getApplicationId()
@@ -172,8 +206,11 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Set application secret
+	 *
 	 * @param string $applicationSecret
+	 *
 	 * @throws Bitrix24Exception
+	 *
 	 * @return true;
 	 */
 	public function setApplicationSecret($applicationSecret)
@@ -182,6 +219,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get application secret
+	 *
 	 * @return string
 	 */
 	public function getApplicationSecret()
@@ -191,7 +229,9 @@ class Bitrix24 implements iBitrix24
 	/**
 	 * Set custom cURL options, overriding default ones
 	 * @link http://php.net/manual/en/function.curl-setopt.php
+	 *
 	 * @param array $options - array(CURLOPT_XXX => value1, CURLOPT_XXX2 => value2,...)
+	 *
 	 * @return bool
 	 */
 	public function setCustomCurlOptions($options)
@@ -201,6 +241,7 @@ class Bitrix24 implements iBitrix24
 	/**
 	 * Return raw request, contain all cURL options array and API query. Data available after you try to call method call
 	 * numbers of array keys is const of cURL module. Example: CURLOPT_RETURNTRANSFER = 19913
+	 *
 	 * @return array | null
 	 */
 	public function getRawRequest()
@@ -209,6 +250,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Return result from function curl_getinfo. Data available after you try to call method call
+	 *
 	 * @return array | null
 	 */
 	public function getRequestInfo()
@@ -217,6 +259,7 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Return additional parameters of last api-call. Data available after you try to call method call
+	 *
 	 * @return array | null
 	 */
 	public function getMethodParameters()
@@ -225,8 +268,10 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Execute Bitrix24 REST API method
+	 *
 	 * @param string $methodName
 	 * @param array $additionalParameters
+	 *
 	 * @throws Bitrix24Exception
 	 * @throws Bitrix24ApiException
 	 * @throws Bitrix24TokenIsInvalid
@@ -234,6 +279,7 @@ class Bitrix24 implements iBitrix24
 	 * @throws Bitrix24WrongClientException
 	 * @throws Bitrix24MethodNotFoundException
 	 * @throws Bitrix24SecurityException
+	 *
 	 * @return array
 	 */
 	public function call($methodName, array $additionalParameters = array())
@@ -243,7 +289,9 @@ class Bitrix24 implements iBitrix24
 	/**
 	 * Get raw response from Bitrix24 before json_decode call, method available only in debug mode.
 	 * To activate debug mode you must before set to true flag isSaveRawResponse in class construct
+	 *
 	 * @throws Bitrix24Exception
+	 *
 	 * @return string
 	 */
 	public function getRawResponse()
@@ -252,7 +300,9 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get new access token
+	 *
 	 * @return array
+	 *
 	 * @throws Bitrix24Exception
 	 * @throws Bitrix24ApiException
 	 * @throws Bitrix24TokenIsInvalid
@@ -266,8 +316,11 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Authorize and get first access token
+	 *
 	 * @param $code
+	 *
 	 * @return array
+	 *
 	 * @throws Bitrix24ApiException
 	 * @throws Bitrix24Exception
 	 * @throws Bitrix24IoException
@@ -283,12 +336,14 @@ class Bitrix24 implements iBitrix24
 	/**
 	 * Check is access token expire, call list of all available api-methods from B24 portal with current access token
 	 * if we have an error code expired_token then return true else return false
+	 *
 	 * @throws Bitrix24Exception
 	 * @throws Bitrix24ApiException
 	 * @throws Bitrix24TokenIsInvalid
 	 * @throws Bitrix24TokenIsExpired
 	 * @throws Bitrix24WrongClientException
 	 * @throws Bitrix24MethodNotFoundException
+	 *
 	 * @return boolean
 	 */
 	public function isAccessTokenExpire()
@@ -297,9 +352,12 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * Get list of all methods available for current application
+	 *
 	 * @param array | null $applicationScope
 	 * @param bool $isFull
+	 *
 	 * @return array
+	 *
 	 * @throws Bitrix24Exception
 	 */
 	public function getAvailableMethods(array $applicationScope = array(), $isFull = false)
@@ -308,11 +366,54 @@ class Bitrix24 implements iBitrix24
 
 	/**
 	 * get list of scope for current application from bitrix24 api
+	 *
 	 * @param bool $isFull
+	 *
 	 * @throws Bitrix24Exception
+	 *
 	 * @return array
 	 */
 	public function getScope($isFull=false)
+	{
+	}
+
+	/**
+	 * set CURL request count retries
+	 *
+	 * @param $retriesCnt
+	 *
+	 * @return boolean
+	 */
+	public function setRetriesToConnectCount($retriesCnt = 1)
+	{
+	}
+
+	/**
+	 * set retries to connect timeout in microseconds
+	 *
+	 * @param $microseconds
+	 *
+	 * @return boolean
+	 */
+	public function setRetriesToConnectTimeout($microseconds = 1000000)
+	{
+	}
+
+	/**
+	 * get CURL request count retries
+	 *
+	 * @return int
+	 */
+	public function getRetriesToConnectCount()
+	{
+	}
+
+	/**
+	 * get retries to connect timeout in microseconds
+	 *
+	 * @return mixed
+	 */
+	public function getRetriesToConnectTimeout()
 	{
 	}
 }
