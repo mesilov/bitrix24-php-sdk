@@ -1,4 +1,7 @@
 # bitrix24-php-sdk change log
+## 0.2.1 (27.04.2016)
+* add exception class `Bitrix24PortalDeleted` and handle Bitrix24 portal deleted event. See issue [Add support for deleted portals #40](https://github.com/mesilov/bitrix24-php-sdk/issues/40)  
+
 ## 0.2.0 (24.06.2015)
 * add class Deal
 * add class LiveFeedMessage
