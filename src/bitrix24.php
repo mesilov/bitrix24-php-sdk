@@ -508,13 +508,39 @@ class Bitrix24 implements iBitrix24
 				continue;
 			}
 			$this->requestInfo = curl_getinfo($curl);
-			$this->log->debug('cURL request info', array($this->requestInfo));
+			$this->log->debug('cURL request info', array($this->getRequestInfo()));
 			curl_close($curl);
 			break;
 		}
 		if(true === $this->isSaveRawResponse)
 		{
 			$this->rawResponse = $curlResult;
+		}
+		// handling URI level resource errors
+		switch ($this->requestInfo['http_code'])
+		{
+			case 403:
+				$errorMsg = sprintf('portal [%s] deleted, query aborted', $this->getDomain());
+				$this->log->error($errorMsg,
+					array(
+						// portal specific settings
+						'B24_DOMAIN' => $this->getDomain(),
+						'B24_MEMBER_ID' => $this->getMemberId(),
+						'B24_ACCESS_TOKEN' => $this->getAccessToken(),
+						'B24_REFRESH_TOKEN' => $this->getRefreshToken(),
+						// application settings
+						'APPLICATION_SCOPE' => $this->getApplicationScope(),
+						'APPLICATION_ID' => $this->getApplicationId(),
+						'APPLICATION_SECRET' => $this->getApplicationSecret(),
+						'REDIRECT_URI' => $this->getRedirectUri(),
+						// network
+						'RAW_REQUEST' => $this->getRawRequest(),
+						'CURL_REQUEST_INFO' => $this->getRequestInfo(),
+						'RAW_RESPONSE' => $curlResult
+					)
+				);
+				throw new Bitrix24PortalDeleted($errorMsg);
+				break;
 		}
 		// handling json_decode errors
 		$jsonResult = json_decode($curlResult, true);

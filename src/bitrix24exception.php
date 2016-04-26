@@ -10,6 +10,7 @@
  * 				\Bitrix24MethodNotFoundException — API-method not found
  * 				\Bitrix24TokenIsInvalid — The access token provided is invalid
  * 				\Bitrix24TokenIsExpired — The access token provided has expired
+ * 				\Bitrix24PortalDeleted — Bitrix24 portal deleted
  * 			\Bitrix24SecurityException — Security errors for protected methods
  */
 namespace Bitrix24;
@@ -20,4 +21,5 @@ class Bitrix24WrongClientException extends Bitrix24ApiException {}
 class Bitrix24MethodNotFoundException extends Bitrix24ApiException {}
 class Bitrix24TokenIsInvalid extends Bitrix24ApiException {}
 class Bitrix24TokenIsExpired extends Bitrix24ApiException {}
+class Bitrix24PortalDeleted extends Bitrix24ApiException {}
 class Bitrix24SecurityException extends Bitrix24Exception {}
