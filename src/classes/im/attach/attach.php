@@ -42,6 +42,8 @@ class Attach implements iAttach
 	 */
 	public function __construct($id = null, $color = null)
 	{
+		$this->attachItems = array();
+
 		if(null === $id)
 		{
 			$this->id = time();
@@ -94,7 +96,7 @@ class Attach implements iAttach
 		/**
 		 * @var $obAttachItem iAttachItem
 		 */
-		foreach($this->attachItems as $cnt => $obAttachItem)
+		foreach($this->getAttachItems() as $cnt => $obAttachItem)
 		{
 			$arResult[][$obAttachItem->getAttachTypeCode()] = $obAttachItem->getAttachData();
 		}

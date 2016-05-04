@@ -1,4 +1,8 @@
 # bitrix24-php-sdk change log
+## 0.3.1 (04.05.2016)
+* add `dev` branch in GitHub repo
+* fixed bug in class `Bitrix24\Im\Attach\Attach`, method `Attach::getAttachItems()` already return array
+
 ## 0.3.0 (04.05.2016)
 * add class `Bitrix24\Im\Attach\Item\Message` class implements work with string messages in attach item
 * add interface `Bitrix24\Presets\Im\iChatColor` with chat color presets  
