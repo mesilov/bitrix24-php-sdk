@@ -24,7 +24,7 @@ class Chat extends Bitrix24Entity
 	 *
 	 * @param string $title
 	 * @param string $description
-	 * @param string $color
+	 * @param string $color chat color in Bitrix24\Presets\Im\iChatColor for mobile
 	 * @param string $message
 	 * @param array $users
 	 * @param string $avatarImgInBase64

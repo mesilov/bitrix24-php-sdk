@@ -41,4 +41,9 @@ interface iAttach
 	 * @return mixed
 	 */
 	public function setStatusProblem();
+
+	/**
+	 * @return array
+	 */
+	public function getAttachItems();
 }

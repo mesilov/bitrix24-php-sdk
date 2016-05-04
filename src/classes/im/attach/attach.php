@@ -22,7 +22,7 @@ class Attach implements iAttach
 	/**
 	 * @var string
 	 */
-	const CHAT = "CHAT";
+	const CHAT = 'CHAT';
 	/**
 	 * @var int $id Unix timestamp
 	 */
@@ -49,9 +49,10 @@ class Attach implements iAttach
 
 		if (self::CHAT !== $color)
 		{
-			if(null === $color)
+			$this->color = $color;
+			if(null === $this->color)
 			{
-				$this->color = $this->setStatusNormal();
+				$this->setStatusNormal();
 			}
 		}
 	}
@@ -73,8 +74,15 @@ class Attach implements iAttach
 			'ID' => $this->id,
 			'BLOCKS' => $this->getAttachList(),
 			'COLOR' => $this->color
-
 		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAttachItems()
+	{
+		return $this->attachItems;
 	}
 
 	/**
