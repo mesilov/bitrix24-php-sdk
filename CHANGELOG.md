@@ -1,4 +1,7 @@
 # bitrix24-php-sdk change log
+## 0.3.2 (07.05.2016)
+* fixed bug in class `Bitrix24\Im\Notify` see issue [ATTACH_ERROR for calls method im.notify for empty attach #42](https://github.com/mesilov/bitrix24-php-sdk/issues/42)
+ 
 ## 0.3.1 (04.05.2016)
 * add `dev` branch in GitHub repo
 * fixed bug in class `Bitrix24\Im\Attach\Attach`, method `Attach::getAttachItems()` already return array
