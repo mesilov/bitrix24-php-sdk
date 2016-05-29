@@ -17,6 +17,11 @@ class Bitrix24 implements iBitrix24
 	 * @var string SDK version
 	 */
 	const VERSION = '1.0';
+	
+	/**
+	 * @var string OAuth server
+	 */
+	const OAUTH_SERVER = 'oauth.bitrix.info';
 
 	/**
 	 * @var string access token
@@ -575,6 +580,11 @@ class Bitrix24 implements iBitrix24
 	 */
 	public function call($methodName, array $additionalParameters = array())
 	{
+		$arAuthServerMethods = array(
+			'app.info',
+			'app.stat'
+		);
+
 		if(null === $this->getDomain())
 		{
 			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
@@ -587,7 +597,15 @@ class Bitrix24 implements iBitrix24
 		{
 			throw new Bitrix24Exception('method name not found, you must set method name');
 		}
-		$url = 'https://'.$this->domain.'/rest/'.$methodName;
+
+		if(in_array(strtolower($methodName), $arAuthServerMethods, true))
+		{
+			$url = 'https://'.self::OAUTH_SERVER.'/rest/'.$methodName;
+		}
+		else
+		{
+			$url = 'https://'.$this->domain.'/rest/'.$methodName;
+		}
 		$additionalParameters['auth'] = $this->accessToken;
 		// save method parameters for debug
 		$this->methodParameters = $additionalParameters;
@@ -751,18 +769,13 @@ class Bitrix24 implements iBitrix24
 	 */
 	public function getNewAccessToken()
 	{
-		$domain = $this->getDomain();
 		$applicationId = $this->getApplicationId();
 		$applicationSecret = $this->getApplicationSecret();
 		$refreshToken = $this->getRefreshToken();
 		$applicationScope = $this->getApplicationScope();
 		$redirectUri = $this->getRedirectUri();
 
-		if(null === $domain)
-		{
-			throw new Bitrix24Exception('domain not found, you must call setDomain method before');
-		}
-		elseif(null === $applicationId)
+		if(null === $applicationId)
 		{
 			throw new Bitrix24Exception('application id not found, you must call setApplicationId method before');
 		}
@@ -783,12 +796,12 @@ class Bitrix24 implements iBitrix24
 			throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
 		}
 
-		$url = 'https://'.$domain.'/oauth/token/'.
+//		$url = 'https://'.self::OAUTH_SERVER.'/oauth/token/'.
+		$url = 'https://'.$this->getDomain().'/oauth/token/'.
 			'?client_id='.urlencode($applicationId).
 			'&grant_type=refresh_token'.
 			'&client_secret='.$applicationSecret.
 			'&refresh_token='.$refreshToken.
-			'&scope='.implode(',', array_map('urlencode', array_unique($applicationScope))).
 			'&redirect_uri='.urlencode($redirectUri);
 		$requestResult = $this->executeRequest($url);
 		// handling bitrix24 api-level errors
@@ -813,18 +826,12 @@ class Bitrix24 implements iBitrix24
 	 */
     public function getFirstAccessToken($code)
     {
-        $domain = $this->getDomain();
         $applicationId = $this->getApplicationId();
         $applicationSecret = $this->getApplicationSecret();
-        //$refreshToken = $this->getRefreshToken();
         $applicationScope = $this->getApplicationScope();
         $redirectUri = $this->getRedirectUri();
 
-        if(null === $domain)
-        {
-            throw new Bitrix24Exception('domain not found, you must call setDomain method before');
-        }
-        elseif(null === $applicationId)
+		if(null === $applicationId)
         {
             throw new Bitrix24Exception('application id not found, you must call setApplicationId method before');
         }
@@ -841,11 +848,11 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
         }
 
-        $url = 'https://'.$domain.'/oauth/token/'.
+//        $url = 'https://'.self::OAUTH_SERVER.'/oauth/token/'.
+        $url = 'https://'.$this->getDomain().'/oauth/token/'.
             '?client_id='.urlencode($applicationId).
             '&grant_type=authorization_code'.
             '&client_secret='.$applicationSecret.
-            '&scope='.implode(',', array_map('urlencode', array_unique($applicationScope))).
             '&redirect_uri='.urlencode($redirectUri).
             '&code='.urlencode($code);
 
@@ -882,9 +889,10 @@ class Bitrix24 implements iBitrix24
 		{
 			throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
 		}
+//		$url = 'https://'.self::OAUTH_SERVER.'/rest/app.info?auth='.$accessToken;
 		$url = 'https://'.$domain.'/rest/app.info?auth='.$accessToken;
 		$requestResult = $this->executeRequest($url);
-		if(isset($requestResult['error']) && ('expired_token' === $requestResult['error']))
+		if(in_array($requestResult['error'], array('expired_token', 'invalid_token', 'WRONG_TOKEN'), false))
 		{
 			$isTokenExpire = true;
 		}
@@ -935,8 +943,7 @@ class Bitrix24 implements iBitrix24
 			$scope = '&scope='.implode(',', array_map('urlencode', array_unique($applicationScope)));
 		}
 		$url = 'https://'.$domain.'/rest/methods.json?auth='.$accessToken.$showAll.$scope;
-		$requestResult = $this->executeRequest($url);
-		return $requestResult;
+		return $this->executeRequest($url);
 	}
 
 	/**
@@ -967,8 +974,7 @@ class Bitrix24 implements iBitrix24
 			$showAll = '&full=true';
 		}
 		$url = 'https://'.$domain.'/rest/scope.json?auth='.$accessToken.$showAll;
-		$requestResult = $this->executeRequest($url);
-		return $requestResult;
+		return $this->executeRequest($url);
 	}
 
 	/**

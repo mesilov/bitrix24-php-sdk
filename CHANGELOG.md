@@ -1,4 +1,7 @@
 # bitrix24-php-sdk change log
+## 0.3.3 (28.05.2016)
+* fixed bug in class `Bitrix24` see issue [Fix errors after change REST API to support self hosted version #43](https://github.com/mesilov/bitrix24-php-sdk/issues/43)
+
 ## 0.3.2 (07.05.2016)
 * fixed bug in class `Bitrix24\Im\Notify` see issue [ATTACH_ERROR for calls method im.notify for empty attach #42](https://github.com/mesilov/bitrix24-php-sdk/issues/42)
  
