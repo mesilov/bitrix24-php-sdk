@@ -1,4 +1,9 @@
 # bitrix24-php-sdk change log
+## 0.3.4 (06.06.2016)
+* add exception class `Bitrix24EmptyResponseException`
+* in class `Bitrix24` add debug information for some error types
+* temporary remove calls to oauth.bitrix.info for methods `app.info` and `app.stat` see issue [Fix errors after change REST API to support self hosted version #43](https://github.com/mesilov/bitrix24-php-sdk/issues/43)   
+
 ## 0.3.3 (28.05.2016)
 * fixed bug in class `Bitrix24` see issue [Fix errors after change REST API to support self hosted version #43](https://github.com/mesilov/bitrix24-php-sdk/issues/43)
 

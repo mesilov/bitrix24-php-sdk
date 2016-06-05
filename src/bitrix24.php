@@ -447,12 +447,40 @@ class Bitrix24 implements iBitrix24
 	}
 
 	/**
+	 * get error context
+	 *
+	 * @return array
+	 */
+	protected function getErrorContext()
+	{
+		return array(
+			// portal specific settings
+			'B24_DOMAIN' => $this->getDomain(),
+			'B24_MEMBER_ID' => $this->getMemberId(),
+			'B24_ACCESS_TOKEN' => $this->getAccessToken(),
+			'B24_REFRESH_TOKEN' => $this->getRefreshToken(),
+			// application settings
+			'APPLICATION_SCOPE' => $this->getApplicationScope(),
+			'APPLICATION_ID' => $this->getApplicationId(),
+			'APPLICATION_SECRET' => $this->getApplicationSecret(),
+			'REDIRECT_URI' => $this->getRedirectUri(),
+			// network
+			'RAW_REQUEST' => $this->getRawRequest(),
+			'CURL_REQUEST_INFO' => $this->getRequestInfo(),
+			'RAW_RESPONSE' => $this->getRawResponse()
+		);
+	}
+
+	/**
 	 * Execute a request API to Bitrix24 using cURL
 	 *
 	 * @param string $url
 	 * @param array $additionalParameters
 	 *
 	 * @throws Bitrix24Exception
+	 * @throws Bitrix24PortalDeleted
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24EmptyResponseException
 	 *
 	 * @return array
 	 */
@@ -465,7 +493,7 @@ class Bitrix24 implements iBitrix24
 			CURLE_READ_ERROR,
 			CURLE_OPERATION_TIMEOUTED,
 			CURLE_HTTP_POST_ERROR,
-			CURLE_SSL_CONNECT_ERROR,
+			CURLE_SSL_CONNECT_ERROR
 		);
 
 		$curlOptions = array(
@@ -501,52 +529,42 @@ class Bitrix24 implements iBitrix24
 				$curlErrorNumber = curl_errno($curl);
 				$errorMsg = sprintf('in try[%s] cURL error (code %s): %s'.PHP_EOL, $retriesCnt, $curlErrorNumber, curl_error($curl));
 				if (false === in_array($curlErrorNumber, $retryableErrorCodes, true) || !$retriesCnt) {
-					$this->log->error($errorMsg);
+					$this->log->error($errorMsg, $this->getErrorContext());
 					curl_close($curl);
 					throw new Bitrix24IoException($errorMsg);
 				}
 				else
 				{
-					$this->log->warning($errorMsg);
+					$this->log->warning($errorMsg, $this->getErrorContext());
 				}
 				usleep($this->getRetriesToConnectTimeout());
 				continue;
 			}
 			$this->requestInfo = curl_getinfo($curl);
+			$this->rawResponse = $curlResult;
 			$this->log->debug('cURL request info', array($this->getRequestInfo()));
 			curl_close($curl);
 			break;
 		}
-		if(true === $this->isSaveRawResponse)
-		{
-			$this->rawResponse = $curlResult;
-		}
+
 		// handling URI level resource errors
 		switch ($this->requestInfo['http_code'])
 		{
 			case 403:
 				$errorMsg = sprintf('portal [%s] deleted, query aborted', $this->getDomain());
-				$this->log->error($errorMsg,
-					array(
-						// portal specific settings
-						'B24_DOMAIN' => $this->getDomain(),
-						'B24_MEMBER_ID' => $this->getMemberId(),
-						'B24_ACCESS_TOKEN' => $this->getAccessToken(),
-						'B24_REFRESH_TOKEN' => $this->getRefreshToken(),
-						// application settings
-						'APPLICATION_SCOPE' => $this->getApplicationScope(),
-						'APPLICATION_ID' => $this->getApplicationId(),
-						'APPLICATION_SECRET' => $this->getApplicationSecret(),
-						'REDIRECT_URI' => $this->getRedirectUri(),
-						// network
-						'RAW_REQUEST' => $this->getRawRequest(),
-						'CURL_REQUEST_INFO' => $this->getRequestInfo(),
-						'RAW_RESPONSE' => $curlResult
-					)
-				);
+				$this->log->error($errorMsg, $this->getErrorContext());
 				throw new Bitrix24PortalDeleted($errorMsg);
 				break;
 		}
+		
+		// handling server-side API errors: empty response from bitrix24 portal 
+		if($curlResult === '')
+		{
+			$errorMsg = sprintf('empty response from portal [%s]', $this->getDomain());
+			$this->log->error($errorMsg, $this->getErrorContext());
+			throw new Bitrix24EmptyResponseException($errorMsg);
+		}
+
 		// handling json_decode errors
 		$jsonResult = json_decode($curlResult, true);
 		unset($curlResult);
@@ -557,6 +575,7 @@ class Bitrix24 implements iBitrix24
 			 * @todo add function json_last_error_msg()
 			 */
 			$errorMsg = 'fatal error in function json_decode.'.PHP_EOL.'Error code: '.$jsonErrorCode.PHP_EOL;
+			$this->log->error($errorMsg, $this->getErrorContext());
 			throw new Bitrix24Exception($errorMsg);
 		}
 		return $jsonResult;
@@ -575,15 +594,18 @@ class Bitrix24 implements iBitrix24
 	 * @throws Bitrix24WrongClientException
 	 * @throws Bitrix24MethodNotFoundException
 	 * @throws Bitrix24SecurityException
+	 * @throws Bitrix24PortalDeleted
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24EmptyResponseException
 	 *
 	 * @return array
 	 */
 	public function call($methodName, array $additionalParameters = array())
 	{
-		$arAuthServerMethods = array(
-			'app.info',
-			'app.stat'
-		);
+//		$arAuthServerMethods = array(
+//			'app.info',
+//			'app.stat'
+//		);
 
 		if(null === $this->getDomain())
 		{
@@ -598,14 +620,14 @@ class Bitrix24 implements iBitrix24
 			throw new Bitrix24Exception('method name not found, you must set method name');
 		}
 
-		if(in_array(strtolower($methodName), $arAuthServerMethods, true))
-		{
-			$url = 'https://'.self::OAUTH_SERVER.'/rest/'.$methodName;
-		}
-		else
-		{
+//		if(in_array(strtolower($methodName), $arAuthServerMethods, true))
+//		{
+//			$url = 'https://'.self::OAUTH_SERVER.'/rest/'.$methodName;
+//		}
+//		else
+//		{
 			$url = 'https://'.$this->domain.'/rest/'.$methodName;
-		}
+//		}
 		$additionalParameters['auth'] = $this->accessToken;
 		// save method parameters for debug
 		$this->methodParameters = $additionalParameters;
@@ -701,25 +723,7 @@ class Bitrix24 implements iBitrix24
 				(array_key_exists('error_description', $arRequestResult) ? $arRequestResult['error_description'] : ''),
 				$methodName,
 				$this->getDomain());
-			$this->log->error($errorMsg, array(
-				// response
-				'REQUEST_RESULT' => $arRequestResult,
-				// query
-				'METHOD_NAME' => $methodName,
-				'ADDITIONAL_PARAMETERS' => $additionalParameters,
-				// portal specific settings
-				'B24_DOMAIN' => $this->getDomain(),
-				'B24_MEMBER_ID' => $this->getMemberId(),
-				'B24_ACCESS_TOKEN' => $this->getAccessToken(),
-				'B24_REFRESH_TOKEN' => $this->getRefreshToken(),
-				// application settings
-				'APPLICATION_SCOPE' => $this->getApplicationScope(),
-				'APPLICATION_ID' => $this->getApplicationId(),
-				'APPLICATION_SECRET' => $this->getApplicationSecret(),
-				'REDIRECT_URI' => $this->getRedirectUri(),
-				// network
-				'RAW_REQUEST' => $this->getRawRequest(),
-				'CURL_REQUEST_INFO' => $this->getRequestInfo()));
+			$this->log->error($errorMsg, $this->getErrorContext());
 			// throw specific API-level exceptions
 			switch(strtoupper(trim($arRequestResult['error'])))
 			{
@@ -742,16 +746,10 @@ class Bitrix24 implements iBitrix24
 	 * Get raw response from Bitrix24 before json_decode call, method available only in debug mode.
 	 * To activate debug mode you must before set to true flag isSaveRawResponse in class construct
 	 *
-	 * @throws Bitrix24Exception
-	 *
-	 * @return string
+	 * @return string | null
 	 */
 	public function getRawResponse()
 	{
-		if(false === $this->isSaveRawResponse)
-		{
-			throw new Bitrix24Exception('you must before set to true flag isSaveRawResponse in class construct');
-		}
 		return $this->rawResponse;
 	}
 
@@ -766,6 +764,10 @@ class Bitrix24 implements iBitrix24
 	 * @throws Bitrix24TokenIsExpired
 	 * @throws Bitrix24WrongClientException
 	 * @throws Bitrix24MethodNotFoundException
+	 * @throws Bitrix24PortalDeleted
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24EmptyResponseException
+	 *
 	 */
 	public function getNewAccessToken()
 	{
@@ -823,6 +825,10 @@ class Bitrix24 implements iBitrix24
 	 * @throws Bitrix24TokenIsExpired
 	 * @throws Bitrix24TokenIsInvalid
 	 * @throws Bitrix24WrongClientException
+	 * @throws Bitrix24PortalDeleted
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24EmptyResponseException
+	 *
 	 */
     public function getFirstAccessToken($code)
     {
@@ -872,6 +878,9 @@ class Bitrix24 implements iBitrix24
 	 * @throws Bitrix24TokenIsExpired
 	 * @throws Bitrix24WrongClientException
 	 * @throws Bitrix24MethodNotFoundException
+	 * @throws Bitrix24PortalDeleted
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24EmptyResponseException
 	 *
 	 * @return boolean
 	 */
@@ -913,6 +922,10 @@ class Bitrix24 implements iBitrix24
 	 * @return array
 	 *
 	 * @throws Bitrix24Exception
+	 * @throws Bitrix24Exception
+	 * @throws Bitrix24PortalDeleted
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24EmptyResponseException
 	 */
 	public function getAvailableMethods(array $applicationScope = array(), $isFull = false)
 	{
@@ -952,6 +965,10 @@ class Bitrix24 implements iBitrix24
 	 * @param bool $isFull
 	 *
 	 * @throws Bitrix24Exception
+	 * @throws Bitrix24Exception
+	 * @throws Bitrix24PortalDeleted
+	 * @throws Bitrix24IoException
+	 * @throws Bitrix24EmptyResponseException
 	 *
 	 * @return array
 	 */
