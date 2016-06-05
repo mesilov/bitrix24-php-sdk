@@ -5,6 +5,7 @@
  * \Exception
  * 		\Bitrix24Exception — base class
  * 			\Bitrix24IoException — I/O network errors
+ *              \Bitrix24EmptyResponseException — empty response from Bitrix24 portal
  * 			\Bitrix24ApiException — API level errors
  * 				\Bitrix24WrongClientException — Wrong client or application will be deleted from portal
  * 				\Bitrix24MethodNotFoundException — API-method not found
@@ -16,6 +17,7 @@
 namespace Bitrix24;
 class Bitrix24Exception extends \Exception {}
 class Bitrix24IoException extends Bitrix24Exception {}
+class Bitrix24EmptyResponseException extends Bitrix24IoException {}
 class Bitrix24ApiException extends Bitrix24Exception {}
 class Bitrix24WrongClientException extends Bitrix24ApiException {}
 class Bitrix24MethodNotFoundException extends Bitrix24ApiException {}
