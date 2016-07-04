@@ -57,7 +57,7 @@ class Item extends Bitrix24Entity
 	 */
 	public function update($taskId, $taskData)
 	{
-		$result = $this->client->call('task.item.update', $taskId, array($taskData));
+		$result = $this->client->call('task.item.update', array($taskId, $taskData));
 		return $result;
 	}
 
