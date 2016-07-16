@@ -7,7 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Bitrix24;
 
 use \Psr\Log\NullLogger;
@@ -23,7 +22,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testConstructorWithFirstArgumentIsNotBoolean()
 	{
-		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
+		$this->setExpectedException('\Bitrix24\Exceptions\Bitrix24Exception');
 		$obBitrix24 = new Bitrix24(array());
 	}
 	/**
@@ -54,7 +53,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetMemberIdWithNullArgument()
 	{
-		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
+		$this->setExpectedException('\Bitrix24\Exceptions\Bitrix24Exception');
 		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setMemberId(null);
 		$this->assertTrue($result);
@@ -64,7 +63,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetMemberIdWithEmptyStringArgument()
 	{
-		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
+		$this->setExpectedException('\Bitrix24\Exceptions\Bitrix24Exception');
 		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setMemberId('');
 		$this->assertTrue($result);
@@ -74,7 +73,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetRetriesToConnectCountWithNull()
 	{
-		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
+		$this->setExpectedException('\Bitrix24\Exceptions\Bitrix24Exception');
 		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectCount(null);
 	}
@@ -101,7 +100,7 @@ class Bitrix24Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetRetriesToConnectTimeoutWithNull()
 	{
-		$this->setExpectedException('\Bitrix24\Bitrix24Exception');
+		$this->setExpectedException('\Bitrix24\Exceptions\Bitrix24Exception');
 		$obBitrix24 = new Bitrix24(false, new NullLogger());
 		$result = $obBitrix24->setRetriesToConnectTimeout(null);
 	}

@@ -8,16 +8,19 @@
 namespace Bitrix24\Contracts;
 
 use Bitrix24\Bitrix24;
-use Bitrix24\Bitrix24Exception;
-use Bitrix24\Bitrix24IoException;
-use Bitrix24\Bitrix24ApiException;
-use Bitrix24\Bitrix24WrongClientException;
-use Bitrix24\Bitrix24MethodNotFoundException;
-use Bitrix24\Bitrix24TokenIsInvalid;
-use Bitrix24\Bitrix24TokenIsExpired;
-use Bitrix24\Bitrix24SecurityException;
+use Bitrix24\Exceptions\Bitrix24Exception;
+use Bitrix24\Exceptions\Bitrix24IoException;
+use Bitrix24\Exceptions\Bitrix24PaymentRequiredException;
+use Bitrix24\Exceptions\Bitrix24EmptyResponseException;
+use Bitrix24\Exceptions\Bitrix24ApiException;
+use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
+use Bitrix24\Exceptions\Bitrix24WrongClientException;
+use Bitrix24\Exceptions\Bitrix24MethodNotFoundException;
+use Bitrix24\Exceptions\Bitrix24TokenIsExpiredException;
+use Bitrix24\Exceptions\Bitrix24PortalDeletedException;
+use Bitrix24\Exceptions\Bitrix24SecurityException;
 
-use Bitrix24\Stub\Logger;
+
 use Psr\Log\LoggerInterface;
 
 /**
@@ -176,19 +179,26 @@ interface iBitrix24
 	 */
 	public function getMethodParameters();
 
-	/**
-	 * Execute Bitrix24 REST API method
-	 * @param string $methodName
-	 * @param array $additionalParameters
-	 * @throws Bitrix24Exception
-	 * @throws Bitrix24ApiException
-	 * @throws Bitrix24TokenIsInvalid
-	 * @throws Bitrix24TokenIsExpired
-	 * @throws Bitrix24WrongClientException
-	 * @throws Bitrix24MethodNotFoundException
-	 * @throws Bitrix24SecurityException
-	 * @return array
-	 */
+    /**
+     * Execute Bitrix24 REST API method
+     *
+     * @param string $methodName
+     * @param array $additionalParameters
+     *
+     * @throws Bitrix24Exception
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24TokenIsInvalidException
+     * @throws Bitrix24TokenIsExpiredException
+     * @throws Bitrix24WrongClientException
+     * @throws Bitrix24MethodNotFoundException
+     * @throws Bitrix24PaymentRequiredException
+     * @throws Bitrix24SecurityException
+     * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24IoException
+     * @throws Bitrix24EmptyResponseException
+     *
+     * @return array
+     */
 	public function call($methodName, array $additionalParameters = array());
 
 	/**
@@ -199,43 +209,63 @@ interface iBitrix24
 	 */
 	public function getRawResponse();
 
-	/**
-	 * Get new access token
-	 * @return array
-	 * @throws Bitrix24Exception
-	 * @throws Bitrix24ApiException
-	 * @throws Bitrix24TokenIsInvalid
-	 * @throws Bitrix24TokenIsExpired
-	 * @throws Bitrix24WrongClientException
-	 * @throws Bitrix24MethodNotFoundException
-	 */
+    /**
+     * Get new access token
+     *
+     * @return array
+     *
+     * @throws Bitrix24Exception
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24IoException
+     * @throws Bitrix24EmptyResponseException
+     * @throws Bitrix24TokenIsInvalidException
+     * @throws Bitrix24TokenIsExpiredException
+     * @throws Bitrix24WrongClientException
+     * @throws Bitrix24MethodNotFoundException
+     * @throws Bitrix24PaymentRequiredException
+     *
+     */
 	public function getNewAccessToken();
 
-	/**
-	 * Authorize and get first access token
-	 * @param $code
-	 * @return array
-	 * @throws Bitrix24ApiException
-	 * @throws Bitrix24Exception
-	 * @throws Bitrix24IoException
-	 * @throws Bitrix24MethodNotFoundException
-	 * @throws Bitrix24TokenIsExpired
-	 * @throws Bitrix24TokenIsInvalid
-	 * @throws Bitrix24WrongClientException
-	 */
+    /**
+     * Authorize and get first access token
+     *
+     * @param $code
+     *
+     * @return array
+     *
+     * @throws Bitrix24Exception
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24IoException
+     * @throws Bitrix24EmptyResponseException
+     * @throws Bitrix24TokenIsInvalidException
+     * @throws Bitrix24TokenIsExpiredException
+     * @throws Bitrix24WrongClientException
+     * @throws Bitrix24MethodNotFoundException
+     * @throws Bitrix24PaymentRequiredException
+     *
+     */
 	public function getFirstAccessToken($code);
 
-	/**
-	 * Check is access token expire, call list of all available api-methods from B24 portal with current access token
-	 * if we have an error code expired_token then return true else return false
-	 * @throws Bitrix24Exception
-	 * @throws Bitrix24ApiException
-	 * @throws Bitrix24TokenIsInvalid
-	 * @throws Bitrix24TokenIsExpired
-	 * @throws Bitrix24WrongClientException
-	 * @throws Bitrix24MethodNotFoundException
-	 * @return boolean
-	 */
+    /**
+     * Check is access token expire, call list of all available api-methods from B24 portal with current access token
+     * if we have an error code expired_token then return true else return false
+     *
+     * @throws Bitrix24Exception
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24IoException
+     * @throws Bitrix24EmptyResponseException
+     * @throws Bitrix24TokenIsInvalidException
+     * @throws Bitrix24TokenIsExpiredException
+     * @throws Bitrix24WrongClientException
+     * @throws Bitrix24MethodNotFoundException
+     * @throws Bitrix24PaymentRequiredException
+     *
+     * @return boolean
+     */
 	public function isAccessTokenExpire();
 
 	/**
