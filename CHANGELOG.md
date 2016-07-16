@@ -1,4 +1,28 @@
 # bitrix24-php-sdk change log
+## 0.4.0 (16.07.2016)
+* remove all exceptions in namespace `\Exceptions` see issue [Move all exceptions in namespace «Exceptions» #46](https://github.com/mesilov/bitrix24-php-sdk/issues/46)
+* add class `Bitrix24\Exceptions\Bitrix24Exception`
+* add class `Bitrix24\Exceptions\Bitrix24IoException`
+* add class `Bitrix24\Exceptions\Bitrix24EmptyResponseException`
+* add class `Bitrix24\Exceptions\Bitrix24ApiException`
+* add class `Bitrix24\Exceptions\Bitrix24WrongClientException`
+* add class `Bitrix24\Exceptions\Bitrix24MethodNotFoundException`
+* add class `Bitrix24\Exceptions\Bitrix24TokenIsInvalidException`
+* add class `Bitrix24\Exceptions\Bitrix24TokenIsExpiredException`
+* add class `Bitrix24\Exceptions\Bitrix24PortalDeletedException`
+* add class `Bitrix24\Exceptions\Bitrix24PaymentRequiredException`
+* add class `Bitrix24\Exceptions\Bitrix24SecurityException`
+* updated class `Bitrix24\Bitrix24Exception` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24IoException` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24EmptyResponseException` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24ApiException` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24WrongClientException` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24MethodNotFoundException` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24TokenIsInvalid` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24TokenIsExpired` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24PortalDeleted` mark as **deprecated**
+* updated class `Bitrix24\Bitrix24SecurityException` mark as **deprecated**
+
 ## 0.3.4 (06.06.2016)
 * add exception class `Bitrix24EmptyResponseException`
 * in class `Bitrix24` add debug information for some error types
