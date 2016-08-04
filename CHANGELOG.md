@@ -1,4 +1,9 @@
 # bitrix24-php-sdk change log
+## 0.4.1 (4.08.2016)
+* add new events in class `Bitrix24\Presets\Event\Event` see issue [Add new bitrix24 events #44](https://github.com/mesilov/bitrix24-php-sdk/issues/44) 
+* add new scope in class `Bitrix24\Presets\Scope` see issue [Update scope presets class #47](https://github.com/mesilov/bitrix24-php-sdk/issues/47)
+* remove file with old deprecated exceptions see issue [Move all exceptions in namespace «Exceptions» #46](https://github.com/mesilov/bitrix24-php-sdk/issues/46)
+
 ## 0.4.0 (16.07.2016)
 * remove all exceptions in namespace `\Exceptions` see issue [Move all exceptions in namespace «Exceptions» #46](https://github.com/mesilov/bitrix24-php-sdk/issues/46)
 * add class `Bitrix24\Exceptions\Bitrix24Exception`
