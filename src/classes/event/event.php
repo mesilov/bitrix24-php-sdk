@@ -17,40 +17,9 @@ class Event extends Bitrix24Entity
 	 */
 	protected function isEventHandlerCodeValid($eventHandlerName)
 	{
-        $isEventHandlerCodeValid = false;
-        switch(strtoupper($eventHandlerName))
-        {
-            case EventType::ON_APP_UPDATE:
-            case EventType::ON_APP_PAYMENT:
-            case EventType::ON_APP_UNINSTALL:
-            case EventType::ON_TASK_ADD:
-            case EventType::ON_TASK_DELETE:
-            case EventType::ON_TASK_UPDATE:
-            case EventType::ON_USER_ADD:
-            case EventType::ON_CRM_ACTIVITY_ADD:
-            case EventType::ON_CRM_ACTIVITY_DELETE:
-            case EventType::ON_CRM_ACTIVITY_UPDATE:
-            case EventType::ON_CRM_COMPANY_ADD:
-            case EventType::ON_CRM_COMPANY_DELETE:
-            case EventType::ON_CRM_COMPANY_UPDATE:
-            case EventType::ON_CRM_CONTACT_ADD:
-            case EventType::ON_CRM_CONTACT_DELETE:
-            case EventType::ON_CRM_CONTACT_UPDATE:
-            case EventType::ON_CRM_CURRENCY_ADD:
-            case EventType::ON_CRM_CURRENCY_DELETE:
-            case EventType::ON_CRM_CURRENCY_UPDATE:
-            case EventType::ON_CRM_DEAL_ADD:
-            case EventType::ON_CRM_DEAL_DELETE:
-            case EventType::ON_CRM_DEAL_UPDATE:
-            case EventType::ON_CRM_LEAD_ADD:
-            case EventType::ON_CRM_LEAD_DELETE:
-            case EventType::ON_CRM_LEAD_UPDATE:
-            case EventType::ON_CRM_PRODUCT_ADD:
-            case EventType::ON_CRM_PRODUCT_DELETE:
-                $isEventHandlerCodeValid = true;
-                break;
-        }
-        return $isEventHandlerCodeValid;
+        $reflection = new \ReflectionClass('\Bitrix24\Presets\Event\Event');
+        $result = $reflection->getConstant(strtoupper($eventHandlerName));
+        return isset($result);
 	}
 
 	/**
