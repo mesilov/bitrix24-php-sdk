@@ -876,11 +876,13 @@ class Bitrix24 implements iBitrix24
 //		$url = 'https://'.self::OAUTH_SERVER.'/rest/app.info?auth='.$accessToken;
         $url = 'https://' . $domain . '/rest/app.info?auth=' . $accessToken;
         $requestResult = $this->executeRequest($url);
-        if (isset($requestResult['error']) && in_array($requestResult['error'], array('EXPIRED_TOKEN', 'INVALID_TOKEN', 'WRONG_TOKEN'), false)) {
-            $isTokenExpire = true;
-        } else {
-            // handle other errors
-            $this->handleBitrix24APILevelErrors($requestResult, 'app.info');
+        if (isset($requestResult['error'])) {
+            if (in_array($requestResult['error'], array('EXPIRED_TOKEN', 'INVALID_TOKEN', 'WRONG_TOKEN'), false)) {
+                $isTokenExpire = true;
+            } else {
+                // handle other errors
+                $this->handleBitrix24APILevelErrors($requestResult, 'app.info');
+            }
         }
         return $isTokenExpire;
     }// end of isTokenExpire
