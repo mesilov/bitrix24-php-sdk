@@ -1,4 +1,9 @@
 # bitrix24-php-sdk change log
+## 0.5.0 (4.09.2016)
+* add class `Bitrix24\CRM\Quote` see pr [Added support for Quote API calls](https://github.com/mesilov/bitrix24-php-sdk/pull/53/)
+* add support http status 301 moved permanently in class `Bitrix24` see issue [301 Moved Permanently #49](https://github.com/mesilov/bitrix24-php-sdk/issues/49)
+* fixed bug in class `Bitrix24` see pr [Issue in the isAccessTokenExpire method](https://github.com/mesilov/bitrix24-php-sdk/pull/54)
+
 ## 0.4.1 (4.08.2016)
 * add new events in class `Bitrix24\Presets\Event\Event` see issue [Add new bitrix24 events #44](https://github.com/mesilov/bitrix24-php-sdk/issues/44) 
 * add new scope in class `Bitrix24\Presets\Scope` see issue [Update scope presets class #47](https://github.com/mesilov/bitrix24-php-sdk/issues/47)
