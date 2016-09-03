@@ -500,6 +500,7 @@ class Bitrix24 implements iBitrix24
         );
 
         $curlOptions = array(
+            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLINFO_HEADER_OUT => true,
             CURLOPT_VERBOSE => true,
