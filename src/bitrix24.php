@@ -11,6 +11,7 @@ namespace Bitrix24;
 
 use Bitrix24\Contracts\iBitrix24;
 
+use Bitrix24\Exceptions\Bitrix24BadGatewayException;
 use Bitrix24\Exceptions\Bitrix24Exception;
 use Bitrix24\Exceptions\Bitrix24IoException;
 use Bitrix24\Exceptions\Bitrix24PaymentRequiredException;
@@ -555,6 +556,12 @@ class Bitrix24 implements iBitrix24
                 $errorMsg = sprintf('portal [%s] deleted, query aborted', $this->getDomain());
                 $this->log->error($errorMsg, $this->getErrorContext());
                 throw new Bitrix24PortalDeletedException($errorMsg);
+                break;
+            
+            case 502:
+                $errorMsg = sprintf('bad gateway to portal [%s]', $this->getDomain());
+                $this->log->error($errorMsg, $this->getErrorContext());
+                throw new Bitrix24BadGatewayException($errorMsg);
                 break;
         }
 
