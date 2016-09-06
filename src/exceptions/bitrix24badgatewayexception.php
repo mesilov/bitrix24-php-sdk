@@ -13,6 +13,6 @@ namespace Bitrix24\Exceptions;
  * Class Bitrix24BadGatewayException
  * @package Bitrix24
  */
-class Bitrix24BadGatewayException extends Bitrix24Exception
+class Bitrix24BadGatewayException extends Bitrix24IoException
 {
 }
