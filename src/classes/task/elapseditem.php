@@ -89,7 +89,7 @@ class ElapsedItem extends Bitrix24Entity
 	 */
 	public function add($taskId, $fields)
 	{
-		$result = $this->client->call('task.elapseditem.add', array($taskId, array($fields)));
+		$result = $this->client->call('task.elapseditem.add', array($taskId, $fields));
 		return $result;
 	}
 

@@ -21,4 +21,16 @@ class SonetGroup extends  Bitrix24Entity
 			));
 		return $result;
 	}
+
+    /**
+     * @param $FILTER
+     * @return array
+     */
+    public function UserGet($FILTER)
+    {
+        $result= $this->client->call('sonet_group.user.get',
+            $FILTER
+        );
+        return $result;
+    }
 }
