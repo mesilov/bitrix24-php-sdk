@@ -1040,14 +1040,18 @@ class Bitrix24 implements iBitrix24
      * @param string $method
      * @param array $parameters
      * @param callable|null $callback
+     *
+     * @return string Unique call ID.
      */
     public function addBatchCall($method, array $parameters = array(), callable $callback = null)
     {
-        $this->_batch[] = array(
+        $id = uniqid();
+        $this->_batch[$id] = array(
             'method' => $method,
             'parameters' => $parameters,
             'callback' => $callback,
         );
+        return $id;
     }
 
     /**
