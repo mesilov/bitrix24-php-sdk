@@ -45,6 +45,16 @@ class Bitrix24 implements iBitrix24
     const OAUTH_SERVER = 'oauth.bitrix.info';
 
     /**
+     * Max calls in one batch
+     */
+    const MAX_BATCH_CALLS = 50;
+
+    /**
+     * Default delay between batch calls (in msec)
+     */
+    const BATCH_DELAY = 500000;
+
+    /**
      * @var string access token
      */
     protected $accessToken;
@@ -129,6 +139,11 @@ class Bitrix24 implements iBitrix24
      * @var integer retries to connect timeout in microseconds
      */
     protected $retriesToConnectTimeout;
+
+    /**
+     * @var array pending batch calls
+     */
+    protected $_batch = array();
 
     /**
      * Create a object to work with Bitrix24 REST API service
@@ -1017,5 +1032,71 @@ class Bitrix24 implements iBitrix24
     public function getRetriesToConnectTimeout()
     {
         return $this->retriesToConnectTimeout;
+    }
+
+    /**
+     * Add call to batch. If [[$callback]] parameter is set, it will receive call result as first parameter.
+     *
+     * @param string $method
+     * @param array $parameters
+     * @param callable|null $callback
+     *
+     * @return string Unique call ID.
+     */
+    public function addBatchCall($method, array $parameters = array(), callable $callback = null)
+    {
+        $id = uniqid();
+        $this->_batch[$id] = array(
+            'method' => $method,
+            'parameters' => $parameters,
+            'callback' => $callback,
+        );
+        return $id;
+    }
+
+    /**
+     * Return true, if we have unprocessed batch calls.
+     *
+     * @return bool
+     */
+    public function hasBatchCalls()
+    {
+        return (bool) count($this->_batch);
+    }
+
+    /**
+     * Process batch calls.
+     *
+     * @param int $halt Halt batch on error
+     * @param int $delay Delay between batch calls (in msec)
+     * @throws Bitrix24Exception
+     * @throws Bitrix24SecurityException
+     */
+    public function processBatchCalls($halt = 0, $delay = self::BATCH_DELAY)
+    {
+        while (count($this->_batch)) {
+            $slice = array_splice($this->_batch, 0, self::MAX_BATCH_CALLS);
+            $commands = array();
+            foreach ($slice as $idx => $call) {
+                $commands[$idx] = $call['method'] . '?' . http_build_query($call['parameters']);
+            }
+            $batchResult = $this->call('batch', array('halt' => $halt, 'cmd' => $commands));
+            $results = $batchResult['result'];
+            foreach ($slice as $idx => $call) {
+                if (!isset($call['callback']) || !is_callable($call['callback'])) {
+                    continue;
+                }
+
+                call_user_func($call['callback'], array(
+                    'result' => isset($results['result'][$idx]) ? $results['result'][$idx] : null,
+                    'error' => isset($results['result_error'][$idx]) ? $results['result_error'][$idx] : null,
+                    'total' => isset($results['result_total'][$idx]) ? $results['result_total'][$idx] : null,
+                    'next' => isset($results['result_next'][$idx]) ? $results['result_next'][$idx] : null,
+                ));
+            }
+            if (count($this->_batch) && $delay) {
+                usleep($delay);
+            }
+        }
     }
 }
