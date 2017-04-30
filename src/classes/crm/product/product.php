@@ -43,6 +43,21 @@ class Product extends Bitrix24Entity
         return $fullResult;
     }
 
+    /**
+     * add new product
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_add.php
+     * @param $arNewProduct
+     * @return array
+     */
+    public function add($arNewProduct)
+    {
+        $fullResult = $this->client->call(
+            'crm.product.add',
+            array('fields' => $arNewProduct)
+        );
+        return $fullResult;
+    }
 }
 
 

@@ -1,4 +1,8 @@
 # bitrix24-php-sdk change log
+## 0.5.1 (30.04.2017)
+* add preset `Bitrix24\Presets\CRM\Products\Fields`
+* add method `add` in class `Bitrix24\CRM\Product`
+
 ## 0.5.0 (4.09.2016)
 * add class `Bitrix24\CRM\Quote` see pr [Added support for Quote API calls](https://github.com/mesilov/bitrix24-php-sdk/pull/53/)
 * add support http status 301 moved permanently in class `Bitrix24` see issue [301 Moved Permanently #49](https://github.com/mesilov/bitrix24-php-sdk/issues/49)
