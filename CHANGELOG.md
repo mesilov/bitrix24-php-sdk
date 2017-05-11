@@ -1,6 +1,12 @@
 # bitrix24-php-sdk change log
+## 0.5.2 (11.05.2017)
+* add preset `Bitrix24\Presets\CRM\Product\ProductRowFields`
+* updated preset `Bitrix24\Presets\CRM\Contact\Fields`
+* updated preset `Bitrix24\Presets\CRM\Deal\Fields`
+* updated preset `Bitrix24\Presets\CRM\Lead\Fields`
+
 ## 0.5.1 (30.04.2017)
-* add preset `Bitrix24\Presets\CRM\Products\Fields`
+* add preset `Bitrix24\Presets\CRM\Product\Fields`
 * add method `add` in class `Bitrix24\CRM\Product`
 
 ## 0.5.0 (4.09.2016)
