@@ -1,4 +1,9 @@
 # bitrix24-php-sdk change log
+## 0.5.3 (20.05.2017)
+* add class `Bitrix24\Placement\Placement`
+* add preset `Bitrix24\Presets\Placement\Placement` with placement codes
+* add preset `Bitrix24\Presets\Placement\Fields` with placement fields
+
 ## 0.5.2 (11.05.2017)
 * add preset `Bitrix24\Presets\CRM\Product\ProductRowFields`
 * updated preset `Bitrix24\Presets\CRM\Contact\Fields`
