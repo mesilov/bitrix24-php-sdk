@@ -10,22 +10,20 @@
 namespace Bitrix24;
 
 use Bitrix24\Contracts\iBitrix24;
-
+use Bitrix24\Exceptions\Bitrix24ApiException;
 use Bitrix24\Exceptions\Bitrix24BadGatewayException;
+use Bitrix24\Exceptions\Bitrix24EmptyResponseException;
 use Bitrix24\Exceptions\Bitrix24Exception;
 use Bitrix24\Exceptions\Bitrix24IoException;
-use Bitrix24\Exceptions\Bitrix24PaymentRequiredException;
-use Bitrix24\Exceptions\Bitrix24EmptyResponseException;
-use Bitrix24\Exceptions\Bitrix24ApiException;
-use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
-use Bitrix24\Exceptions\Bitrix24WrongClientException;
 use Bitrix24\Exceptions\Bitrix24MethodNotFoundException;
-use Bitrix24\Exceptions\Bitrix24TokenIsExpiredException;
+use Bitrix24\Exceptions\Bitrix24PaymentRequiredException;
 use Bitrix24\Exceptions\Bitrix24PortalDeletedException;
 use Bitrix24\Exceptions\Bitrix24SecurityException;
-
-use Psr\Log\NullLogger;
+use Bitrix24\Exceptions\Bitrix24TokenIsExpiredException;
+use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
+use Bitrix24\Exceptions\Bitrix24WrongClientException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class Bitrix24
@@ -144,6 +142,22 @@ class Bitrix24 implements iBitrix24
      * @var array pending batch calls
      */
     protected $_batch = array();
+
+    /**
+     * @var callable callback for expired tokens
+     */
+    protected $_onExpiredToken;
+
+    /**
+     * Set function called on token expiration. Callback receives instance as first parameter.
+     * If callback returns true, API call will be retried.
+     *
+     * @param callable $callback
+     */
+    public function setOnExpiredToken(callable $callback)
+    {
+        $this->_onExpiredToken = $callback;
+    }
 
     /**
      * Create a object to work with Bitrix24 REST API service
@@ -494,7 +508,7 @@ class Bitrix24 implements iBitrix24
      * Execute a request API to Bitrix24 using cURL
      *
      * @param string $url
-     * @param array $additionalParameters
+     * @param array  $additionalParameters
      *
      * @throws Bitrix24Exception
      * @throws Bitrix24PortalDeletedException
@@ -502,6 +516,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24EmptyResponseException
      *
      * @return array
+     * @throws \Bitrix24\Exceptions\Bitrix24BadGatewayException
      */
     protected function executeRequest($url, array $additionalParameters = array())
     {
@@ -572,7 +587,7 @@ class Bitrix24 implements iBitrix24
                 $this->log->error($errorMsg, $this->getErrorContext());
                 throw new Bitrix24PortalDeletedException($errorMsg);
                 break;
-            
+
             case 502:
                 $errorMsg = sprintf('bad gateway to portal [%s]', $this->getDomain());
                 $this->log->error($errorMsg, $this->getErrorContext());
@@ -602,6 +617,45 @@ class Bitrix24 implements iBitrix24
         return $jsonResult;
     }
 
+
+    /**
+     * Execute Bitrix24 REST API method
+     *
+     * @param string $methodName
+     * @param array  $additionalParameters
+     *
+     * @return mixed
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     * @throws Bitrix24TokenIsExpiredException
+     */
+    public function call($methodName, array $additionalParameters = array())
+    {
+        try {
+            $result = $this->_call($methodName, $additionalParameters);
+        } catch (Bitrix24TokenIsExpiredException $e) {
+            if (!is_callable($this->_onExpiredToken)) {
+                throw $e;
+            }
+
+            $retry = call_user_func($this->_onExpiredToken, $this);
+            if (!$retry) {
+                throw $e;
+            }
+            $result = $this->_call($methodName, $additionalParameters);
+        }
+
+        return $result;
+    }
+
     /**
      * Execute Bitrix24 REST API method
      *
@@ -622,13 +676,8 @@ class Bitrix24 implements iBitrix24
      *
      * @return array
      */
-    public function call($methodName, array $additionalParameters = array())
+    protected function _call($methodName, array $additionalParameters = array())
     {
-//		$arAuthServerMethods = array(
-//			'app.info',
-//			'app.stat'
-//		);
-
         if (null === $this->getDomain()) {
             throw new Bitrix24Exception('domain not found, you must call setDomain method before');
         }
@@ -639,14 +688,7 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('method name not found, you must set method name');
         }
 
-//		if(in_array(strtolower($methodName), $arAuthServerMethods, true))
-//		{
-//			$url = 'https://'.self::OAUTH_SERVER.'/rest/'.$methodName;
-//		}
-//		else
-//		{
         $url = 'https://' . $this->domain . '/rest/' . $methodName;
-//		}
         $additionalParameters['auth'] = $this->accessToken;
         // save method parameters for debug
         $this->methodParameters = $additionalParameters;
@@ -1067,10 +1109,13 @@ class Bitrix24 implements iBitrix24
     /**
      * Process batch calls.
      *
-     * @param int $halt Halt batch on error
+     * @param int $halt  Halt batch on error
      * @param int $delay Delay between batch calls (in msec)
+     *
      * @throws Bitrix24Exception
      * @throws Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
      */
     public function processBatchCalls($halt = 0, $delay = self::BATCH_DELAY)
     {
