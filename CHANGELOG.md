@@ -1,4 +1,11 @@
 # bitrix24-php-sdk change log
+## 0.5.4 (8.07.2017)
+* add Callback for expired token. Fix pullrequest#63 by valga
+* add method `update` in class `Bitrix24\CRM\Product`
+* increased curl time out
+* add new scope `placement` in class `Bitrix24\Presets\Scope`
+* add batch calls method to bitrix24 api client interface
+
 ## 0.5.3 (20.05.2017)
 * add class `Bitrix24\Placement\Placement`
 * add preset `Bitrix24\Presets\Placement\Placement` with placement codes
