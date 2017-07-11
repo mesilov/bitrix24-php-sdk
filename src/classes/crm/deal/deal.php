@@ -93,18 +93,21 @@ class Deal extends Bitrix24Entity
 
     /**
      * update deal by id
-     * @var $dealId integer deal identifier
-     * @var $dealFields array deal fields to update
+     * @param integer $dealId integer deal identifier
+     * @param array $dealFields array deal fields to update
+     * @param array $params Set of parameters. REGISTER_SONET_EVENT - performs registration of a change event in a deal in the Activity Stream.
+     * The deals's Responsible person will also receive notification.
      * @link http://dev.1c-bitrix.ru/rest_help/crm/cdeals/crm_deal_update.php
      * @return array
      */
-    public function update($dealId, $dealFields)
+    public function update($dealId, $dealFields, $params = array())
     {
         $fullResult = $this->client->call(
             'crm.deal.update',
             array(
                 'id' => $dealId,
-                'fields' => $dealFields
+                'fields' => $dealFields,
+                'params' => $params
             )
         );
         return $fullResult;
