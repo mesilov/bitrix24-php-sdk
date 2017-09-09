@@ -9,7 +9,7 @@ class SonetGroup extends  Bitrix24Entity
     /**
      * @param $order
      * @param $filter
-     * @link https://dev.1c-bitrix.ru/rest_help/socialnetwork/sonet_group/sonet_group_create.php
+     * @link https://dev.1c-bitrix.ru/rest_help/socialnetwork/sonet_group/sonet_group_get.php
      * @throws Bitrix24Exception
      * @return array
      */
@@ -128,7 +128,7 @@ class SonetGroup extends  Bitrix24Entity
         );
         return $result;
     }
-    
+
     /**
      * @param $group_id
      * @param $message
