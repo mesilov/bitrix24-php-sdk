@@ -83,4 +83,26 @@ class UserField extends Bitrix24Entity
 		);
 		return $fullResult;
 	}
+
+    /**
+     * Updates userfield
+     *
+     * @param       $id
+     * @param array $fields
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/leads/crm_lead_userfield_update.php
+     * @return array
+     */
+    public function update($id, $fields = array())
+    {
+        $fullResult = $this->client->call(
+            'crm.lead.userfield.update',
+            array(
+                'id'     => $id,
+                'fields' => $fields
+            )
+        );
+
+        return $fullResult;
+    }
 }
