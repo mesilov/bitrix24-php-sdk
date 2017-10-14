@@ -19,6 +19,7 @@ use Bitrix24\Exceptions\Bitrix24IoException;
 use Bitrix24\Exceptions\Bitrix24MethodNotFoundException;
 use Bitrix24\Exceptions\Bitrix24PaymentRequiredException;
 use Bitrix24\Exceptions\Bitrix24PortalDeletedException;
+use Bitrix24\Exceptions\Bitrix24PortalRenamedException;
 use Bitrix24\Exceptions\Bitrix24SecurityException;
 use Bitrix24\Exceptions\Bitrix24TokenIsExpiredException;
 use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
@@ -238,7 +239,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24WrongClientException
      * @throws Bitrix24MethodNotFoundException
      * @throws Bitrix24PaymentRequiredException
-     *
+     * @throws Bitrix24PortalRenamedException
      */
     public function getNewAccessToken()
     {
@@ -711,6 +712,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24WrongClientException
      * @throws Bitrix24MethodNotFoundException
      * @throws Bitrix24PaymentRequiredException
+     * @throws Bitrix24PortalRenamedException
      */
     protected function handleBitrix24APILevelErrors(
         $arRequestResult,
@@ -739,6 +741,8 @@ class Bitrix24 implements iBitrix24
                     throw new Bitrix24TokenIsExpiredException($errorMsg);
                 case 'PAYMENT_REQUIRED':
                     throw new Bitrix24PaymentRequiredException($errorMsg);
+                case 'NO_AUTH_FOUND':
+                    throw new Bitrix24PortalRenamedException($errorMsg);
                 default:
                     throw new Bitrix24ApiException($errorMsg);
             }
@@ -763,7 +767,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24WrongClientException
      * @throws Bitrix24MethodNotFoundException
      * @throws Bitrix24PaymentRequiredException
-     *
+     * @throws Bitrix24PortalRenamedException
      */
     public function getFirstAccessToken($code)
     {
@@ -810,6 +814,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24WrongClientException
      * @throws Bitrix24MethodNotFoundException
      * @throws Bitrix24PaymentRequiredException
+     * @throws Bitrix24PortalRenamedException
      *
      * @return boolean
      */
@@ -849,6 +854,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24Exception
      * @throws Bitrix24Exception
      * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24PortalRenamedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      */
@@ -885,6 +891,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24Exception
      * @throws Bitrix24Exception
      * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24PortalRenamedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      *
@@ -1025,6 +1032,7 @@ class Bitrix24 implements iBitrix24
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
      * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
      * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
      * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
      * @throws \Bitrix24\Exceptions\Bitrix24IoException
@@ -1069,6 +1077,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24PortalDeletedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
+     * @throws Bitrix24PortalRenamedException
      *
      * @return array
      */
