@@ -142,9 +142,17 @@ class Fields
      */
     const PHONE = 'PHONE';
     /**
+     * @var string Mobile phone. Can be read, can be write
+     */
+    const PHONE_MOBILE = 'PHONE_MOBILE';
+    /**
      * @var string E-mail. Can be read, can be write
      */
     const EMAIL = 'EMAIL';
+    /**
+     * @var string Over e-mail. Can be read, can be write
+     */
+    const EMAIL_OTHER = 'EMAIL_OTHER';
     /**
      * @var string Website    Can be read, can be write
      */
