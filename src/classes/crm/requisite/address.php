@@ -1,6 +1,6 @@
 <?php
 
-namespace Bitrix24\CRM;
+namespace Bitrix24\CRM\Requisite;
 
 use Bitrix24\Bitrix24Entity;
 use Bitrix24\Exceptions\Bitrix24Exception;
