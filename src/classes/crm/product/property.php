@@ -33,6 +33,26 @@ class Property extends Bitrix24Entity
     }
 
     /**
+     * delete product property by id
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_property_delete.php
+     *
+     * @param integer $productPropertyId - product property identifier
+     *
+     * @return array
+     * @throws Bitrix24Exception
+     */
+    public function delete($productPropertyId)
+    {
+        $fullResult = $this->client->call(
+            'crm.product.property.delete',
+            array('id' => $productPropertyId)
+        );
+
+        return $fullResult;
+    }
+
+    /**
      * get product property list
      *
      * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_property_list.php
