@@ -9,11 +9,14 @@ class Product extends Bitrix24Entity
 
     /**
      * Get list of product items.
+     *
      * @link http://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_list.php
+     *
      * @param array $order - order of items
      * @param array $filter - filter array
      * @param array $select - array of columns to select
      * @param integer $start - entity number to start from (usually returned in 'next' field of previous 'crm.product.list' API call)
+     *
      * @return array
      */
     public function getList($order = array(), $filter = array(), $select = array(), $start = 0)
@@ -24,16 +27,20 @@ class Product extends Bitrix24Entity
                 'order' => $order,
                 'filter' => $filter,
                 'select' => $select,
-                'start' => $start
+                'start' => $start,
             )
         );
+
         return $fullResult;
     }
 
     /**
      * get product by id
+     *
      * @link http://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_get.php
+     *
      * @param integer $productId - product item identifier
+     *
      * @return array
      */
     public function get($productId)
@@ -42,19 +49,40 @@ class Product extends Bitrix24Entity
             'crm.product.get',
             array('id' => $productId)
         );
+
+        return $fullResult;
+    }
+
+    /**
+     * delete product by id
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_delete.php
+     *
+     * @param integer $productId - product item identifier
+     *
+     * @return array
+     */
+    public function delete($productId)
+    {
+        $fullResult = $this->client->call(
+            'crm.product.delete',
+            array('id' => $productId)
+        );
+
         return $fullResult;
     }
 
     /**
      * @param $productId
      * @param array $arFields
+     *
      * @return array
      */
     public function update($productId, array $arFields)
     {
         return $this->client->call('crm.product.update', array(
             'id' => $productId,
-            'fields' => $arFields
+            'fields' => $arFields,
         ));
     }
 
@@ -62,7 +90,9 @@ class Product extends Bitrix24Entity
      * add new product
      *
      * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_add.php
+     *
      * @param $arNewProduct
+     *
      * @return array
      */
     public function add($arNewProduct)
@@ -71,6 +101,7 @@ class Product extends Bitrix24Entity
             'crm.product.add',
             array('fields' => $arNewProduct)
         );
+
         return $fullResult;
     }
 }
