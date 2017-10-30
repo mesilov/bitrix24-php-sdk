@@ -689,9 +689,9 @@ class Bitrix24 implements iBitrix24
      */
     public function setRetriesToConnectTimeout($microseconds = 1000000)
     {
-        $this->log->debug(sprintf('set retries to connect count %s', $microseconds));
+        $this->log->debug(sprintf('set retries to connect timeout %s', $microseconds));
         if (!is_numeric($microseconds)) {
-            throw new Bitrix24Exception('retries to connect count must be an integer');
+            throw new Bitrix24Exception('retries to connect timeout must be an integer');
         }
         $this->retriesToConnectTimeout = $microseconds;
         return true;
