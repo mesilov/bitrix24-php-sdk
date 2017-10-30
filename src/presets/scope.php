@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Bitrix24\Presets;
 
 /**
@@ -94,4 +95,9 @@ class Scope
      * @var string work with lists
      */
     const LISTS = 'lists';
+
+    /**
+     * @var string work with placement
+     */
+    const PLACEMENT = 'placement';
 }

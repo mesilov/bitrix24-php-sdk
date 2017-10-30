@@ -1,4 +1,26 @@
 # bitrix24-php-sdk change log
+## 0.5.4 (8.07.2017)
+* add Callback for expired token. Fix pullrequest#63 by valga
+* add method `update` in class `Bitrix24\CRM\Product`
+* increased curl time out
+* add new scope `placement` in class `Bitrix24\Presets\Scope`
+* add batch calls method to bitrix24 api client interface
+
+## 0.5.3 (20.05.2017)
+* add class `Bitrix24\Placement\Placement`
+* add preset `Bitrix24\Presets\Placement\Placement` with placement codes
+* add preset `Bitrix24\Presets\Placement\Fields` with placement fields
+
+## 0.5.2 (11.05.2017)
+* add preset `Bitrix24\Presets\CRM\Product\ProductRowFields`
+* updated preset `Bitrix24\Presets\CRM\Contact\Fields`
+* updated preset `Bitrix24\Presets\CRM\Deal\Fields`
+* updated preset `Bitrix24\Presets\CRM\Lead\Fields`
+
+## 0.5.1 (30.04.2017)
+* add preset `Bitrix24\Presets\CRM\Product\Fields`
+* add method `add` in class `Bitrix24\CRM\Product`
+
 ## 0.5.0 (4.09.2016)
 * add class `Bitrix24\CRM\Quote` see pr [Added support for Quote API calls](https://github.com/mesilov/bitrix24-php-sdk/pull/53/)
 * add support http status 301 moved permanently in class `Bitrix24` see issue [301 Moved Permanently #49](https://github.com/mesilov/bitrix24-php-sdk/issues/49)

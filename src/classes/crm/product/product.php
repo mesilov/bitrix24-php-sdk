@@ -1,5 +1,7 @@
 <?php
+
 namespace Bitrix24\CRM;
+
 use Bitrix24\Bitrix24Entity;
 
 class Product extends Bitrix24Entity
@@ -20,9 +22,9 @@ class Product extends Bitrix24Entity
             'crm.product.list',
             array(
                 'order' => $order,
-                'filter'=> $filter,
-                'select'=> $select,
-		'start' => $start
+                'filter' => $filter,
+                'select' => $select,
+                'start' => $start
             )
         );
         return $fullResult;
@@ -43,6 +45,34 @@ class Product extends Bitrix24Entity
         return $fullResult;
     }
 
+    /**
+     * @param $productId
+     * @param array $arFields
+     * @return array
+     */
+    public function update($productId, array $arFields)
+    {
+        return $this->client->call('crm.product.update', array(
+            'id' => $productId,
+            'fields' => $arFields
+        ));
+    }
+
+    /**
+     * add new product
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_add.php
+     * @param $arNewProduct
+     * @return array
+     */
+    public function add($arNewProduct)
+    {
+        $fullResult = $this->client->call(
+            'crm.product.add',
+            array('fields' => $arNewProduct)
+        );
+        return $fullResult;
+    }
 }
 
 

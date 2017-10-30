@@ -22,6 +22,7 @@ namespace Bitrix24\Exceptions;
  * 				\Bitrix24TokenIsInvalidException — The access token provided is invalid
  * 				\Bitrix24TokenIsExpiredException — The access token provided has expired
  * 				\Bitrix24PortalDeletedException — Bitrix24 portal deleted
+ * 				\Bitrix24PortalRenamedException — Bitrix24 portal renamed
  * 				\Bitrix24PaymentRequiredException — Bitrix24 application payment required
  * 			\Bitrix24SecurityException — Security errors for protected methods
  *
