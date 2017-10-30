@@ -101,4 +101,16 @@ class Property extends Bitrix24Entity
 
         return $fullResult;
     }
+
+    /**
+     * get property types
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_property_types.php
+     * @return array
+     * @throws Bitrix24Exception
+     */
+    public function getTypes()
+    {
+        return $this->client->call('crm.product.property.types');
+    }
 }
