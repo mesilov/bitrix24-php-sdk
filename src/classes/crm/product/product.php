@@ -35,6 +35,20 @@ class Product extends Bitrix24Entity
     }
 
     /**
+     * get list of product fields with description
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_fields.php
+     *
+     * @return array
+     */
+    public function fields()
+    {
+        return $this->client->call(
+            'crm.product.fields'
+        );
+    }
+
+    /**
      * get product by id
      *
      * @link http://dev.1c-bitrix.ru/rest_help/crm/products/crm_product_get.php
