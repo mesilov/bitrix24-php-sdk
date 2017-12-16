@@ -104,6 +104,30 @@ class Enum extends Bitrix24Entity
 	}
 
 
+    /**
+     * Get list of supported address types.
+     *
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/enum/crm_enum_addresstype.php
+     *
+     * @return array
+     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     */
+	public function addressType()
+    {
+        $fullResult = $this->client->call(
+            'crm.enum.addresstype'
+        );
+        return $fullResult;
+    }
 }
-
-
