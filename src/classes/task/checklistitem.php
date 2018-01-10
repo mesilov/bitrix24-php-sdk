@@ -76,7 +76,7 @@ class ChecklistItem extends Bitrix24Entity
 	 */
 	public function add($taskId, $fields)
 	{
-		$result = $this->client->call('task.checklistitem.add', array($taskId, array($fields)));
+		$result = $this->client->call('task.checklistitem.add', array($taskId, $fields));
 		return $result;
 	}
 
