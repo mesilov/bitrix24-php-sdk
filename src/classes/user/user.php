@@ -48,15 +48,18 @@ class User extends Bitrix24Entity
 	 * @param $SORT - field name to sort by them
 	 * @param $ORDER - sort direction? must be set to ASC or DESC
 	 * @param $FILTER - list of fields user entity to filter result
+	 * @param $start - entity number to start from (usually returned in 'next' field of previous 'user.get' API call)
 	 * @return array
 	 */
-	public function get($SORT, $ORDER, $FILTER)
+	public function get($SORT, $ORDER, $FILTER, $start = 0)
 	{
 		$result = $this->client->call('user.get',
 			array(
 				'SORT' => $SORT,
 				'ORDER' => $ORDER,
-				'FILTER'=> $FILTER)
+				'FILTER'=> $FILTER,
+                'start' => $start,
+            )
 		);
 		return $result;
 	}
