@@ -1,17 +1,107 @@
 <?php
 
-namespace Bitrix24\CRM;
+namespace Bitrix24\CRM\Requisite;
 
 use Bitrix24\Bitrix24Entity;
 
-class Status extends Bitrix24Entity
+class PresetField extends Bitrix24Entity
 {
     /**
-     * get list of dictionary fields descriptions
+     * @param array $preset
+     * @param array $fields array of fields
      *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/index.php
      * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/requisite/methods/crm_requisite_preset_field_add.php
+     */
+    public function add($preset = array(), $fields = array())
+    {
+        $fullResult = $this->client->call(
+            'crm.requisite.preset.field.add',
+            array(
+                'preset' => $preset,
+                'fields' => $fields,
+            )
+        );
+        return $fullResult;
+    }
+
+    /**
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/requisite/methods/crm_requisite_preset_field_availabletoadd.php
+     *
+     * @param array $preset
+     *
+     * @return array
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     */
+    public function availableToAdd($preset = array())
+    {
+        $fullResult = $this->client->call(
+            'crm.requisite.preset.field.availabletoadd',
+            array(
+                'preset' => $preset,
+            )
+        );
+        return $fullResult;
+    }
+
+    /**
+     * @link     https://dev.1c-bitrix.ru/rest_help/crm/requisite/methods/crm_requisite_preset_field_delete.php
+     *
+     * @param $id
+     *
+     * @param $preset
+     *
+     * @return array
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     * @internal param array $fields array of fields
+     */
+    public function delete($id, $preset)
+    {
+        $fullResult = $this->client->call(
+            'crm.requisite.preset.field.delete',
+            array(
+                'id'     => $id,
+                'preset' => $preset
+            )
+        );
+        return $fullResult;
+    }
+
+    /**
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/requisite/methods/crm_requisite_preset_field_fields.php
+     *
+     * @return array
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
@@ -27,106 +117,19 @@ class Status extends Bitrix24Entity
     public function fields()
     {
         $fullResult = $this->client->call(
-            'crm.status.fields'
+            'crm.requisite.preset.field.fields'
         );
         return $fullResult;
     }
 
     /**
-     * get list of dictionary types
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/requisite/methods/crm_requisite_preset_field_get.php
      *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/crm_status_entity_types.php
-     * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
-     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
-     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
-     * @throws \Bitrix24\Exceptions\Bitrix24IoException
-     * @throws \Bitrix24\Exceptions\Bitrix24Exception
-     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
-     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
-     */
-    public function entityTypes()
-    {
-        $fullResult = $this->client->call(
-            'crm.status.entity.types'
-        );
-        return $fullResult;
-    }
-
-    /**
-     * get dictionary data
-     *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/crm_status_entity_items.php
-     *
-     * @param string $entityId
-     *
-     * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
-     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
-     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
-     * @throws \Bitrix24\Exceptions\Bitrix24IoException
-     * @throws \Bitrix24\Exceptions\Bitrix24Exception
-     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
-     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
-     */
-    public function entityItems($entityId)
-    {
-        $fullResult = $this->client->call(
-            'crm.status.entity.items',
-            [
-                'entityId' => $entityId
-            ]
-        );
-        return $fullResult;
-    }
-
-    /**
-     * @param $fields
-     *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/crm_status_add.php
-     * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
-     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
-     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
-     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
-     * @throws \Bitrix24\Exceptions\Bitrix24IoException
-     * @throws \Bitrix24\Exceptions\Bitrix24Exception
-     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
-     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
-     */
-    public function add($fields)
-    {
-        $fullResult = $this->client->call(
-            'crm.status.add',
-            [
-                'fields' => $fields
-            ]
-        );
-        return $fullResult;
-    }
-
-    /**
      * @param $id
-     * @param $params
      *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/crm_status_delete.php
+     * @param $preset
      *
      * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
@@ -139,25 +142,29 @@ class Status extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
      * @throws \Bitrix24\Exceptions\Bitrix24ApiException
      */
-    public function delete($id, $params)
+    public function get($id, $preset)
     {
         $fullResult = $this->client->call(
-            'crm.status.delete',
-            [
+            'crm.requisite.preset.field.get',
+            array(
                 'id'     => $id,
-                'params' => $params
-            ]
+                'preset' => $preset
+            )
         );
         return $fullResult;
     }
 
+
     /**
-     * @param $id
-     * @param $fields
+     * Get list of requisite items.
      *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/crm_status_update.php
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/requisite/methods/crm_requisite_preset_field_list.php
+     *
+     *
+     * @param array $preset
+     * @param int   $start
+     *
      * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
@@ -170,74 +177,48 @@ class Status extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
      * @throws \Bitrix24\Exceptions\Bitrix24ApiException
      */
-    public function update($id, $fields)
+    public function getList($preset = array(), $start = 0)
     {
         $fullResult = $this->client->call(
-            'crm.status.update',
-            [
-                'id'     => $id,
+            'crm.requisite.preset.field.list',
+            array(
+                'preset' => $preset,
+                'start'  => $start
+            )
+        );
+        return $fullResult;
+    }
+
+
+    /**
+     * @link https://dev.1c-bitrix.ru/rest_help/crm/requisite/methods/crm_requisite_preset_update.php
+     *
+     * @param       $id
+     * @param array $fields      An array in format array("field"=>"value"[, ...]) containing values for the fields
+     *                           that need to be updated. The fields can be one or more of those returned by
+     *                           crm.requisite.preset.fields
+     *
+     * @return array
+     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
+     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
+     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
+     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
+     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
+     * @throws \Bitrix24\Exceptions\Bitrix24IoException
+     * @throws \Bitrix24\Exceptions\Bitrix24Exception
+     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
+     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     */
+    public function update($preset = array(), $fields = array())
+    {
+        $fullResult = $this->client->call(
+            'crm.requisite.preset.field.update',
+            array(
+                'preset' => $preset,
                 'fields' => $fields
-            ]
-        );
-        return $fullResult;
-    }
-
-    /**
-     * @param $id
-     *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/crm_status_get.php
-     * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
-     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
-     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
-     * @throws \Bitrix24\Exceptions\Bitrix24IoException
-     * @throws \Bitrix24\Exceptions\Bitrix24Exception
-     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
-     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
-     */
-    public function get($id)
-    {
-        $fullResult = $this->client->call(
-            'crm.status.get',
-            [
-                'id' => $id
-            ]
-        );
-        return $fullResult;
-    }
-
-    /**
-     * @param $order
-     * @param $filter
-     *
-     * @link https://dev.1c-bitrix.ru/rest_help/crm/auxiliary/status/crm_status_list.php
-     * @return array
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalRenamedException
-     * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
-     * @throws \Bitrix24\Exceptions\Bitrix24TokenIsExpiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24SecurityException
-     * @throws \Bitrix24\Exceptions\Bitrix24PortalDeletedException
-     * @throws \Bitrix24\Exceptions\Bitrix24PaymentRequiredException
-     * @throws \Bitrix24\Exceptions\Bitrix24MethodNotFoundException
-     * @throws \Bitrix24\Exceptions\Bitrix24IoException
-     * @throws \Bitrix24\Exceptions\Bitrix24Exception
-     * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
-     * @throws \Bitrix24\Exceptions\Bitrix24ApiException
-     */
-    public function getList($order, $filter)
-    {
-        $fullResult = $this->client->call(
-            'crm.status.list',
-            [
-                'order'  => $order,
-                'filter' => $filter
-            ]
+            )
         );
         return $fullResult;
     }

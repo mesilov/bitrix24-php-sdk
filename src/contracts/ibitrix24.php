@@ -14,6 +14,7 @@ use Bitrix24\Exceptions\Bitrix24IoException;
 use Bitrix24\Exceptions\Bitrix24PaymentRequiredException;
 use Bitrix24\Exceptions\Bitrix24EmptyResponseException;
 use Bitrix24\Exceptions\Bitrix24ApiException;
+use Bitrix24\Exceptions\Bitrix24PortalRenamedException;
 use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
 use Bitrix24\Exceptions\Bitrix24WrongClientException;
 use Bitrix24\Exceptions\Bitrix24MethodNotFoundException;
@@ -209,6 +210,7 @@ interface iBitrix24
      * @throws Bitrix24PaymentRequiredException
      * @throws Bitrix24SecurityException
      * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24PortalRenamedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      *
@@ -232,6 +234,7 @@ interface iBitrix24
      * @throws Bitrix24Exception
      * @throws Bitrix24ApiException
      * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24PortalRenamedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      * @throws Bitrix24TokenIsInvalidException
@@ -253,6 +256,7 @@ interface iBitrix24
      * @throws Bitrix24Exception
      * @throws Bitrix24ApiException
      * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24PortalRenamedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      * @throws Bitrix24TokenIsInvalidException
@@ -271,6 +275,7 @@ interface iBitrix24
      * @throws Bitrix24Exception
      * @throws Bitrix24ApiException
      * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24PortalRenamedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      * @throws Bitrix24TokenIsInvalidException
