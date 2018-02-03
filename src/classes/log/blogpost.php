@@ -31,7 +31,7 @@ class BlogPost extends  Bitrix24Entity
      * @throws Bitrix24Exception
      * @return array
      */
-    public function Add($message='', $title='', $perm=["UA"])
+    public function Add($message='', $title='', $perm=array("UA"))
     {
         $result = $this->client->call(
             'log.blogpost.add',
