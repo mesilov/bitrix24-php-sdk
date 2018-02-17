@@ -31,16 +31,16 @@ class DealCategory extends Bitrix24Entity
      * @param integer $start - entity number to start from (usually returned in 'next' field of previous 'crm.dealcategory.list' API call)
      * @return array
      */
-    public function getList($order = [], $filter = [], $select = [], $start = 0)
+    public function getList($order = array(), $filter = array(), $select = array(), $start = 0)
     {
         $fullResult = $this->client->call(
             'crm.dealcategory.list',
-            [
+            array(
                 'order'  => $order,
                 'filter' => $filter,
                 'select' => $select,
                 'start'  => $start,
-            ]
+            )
         );
 
         return $fullResult;

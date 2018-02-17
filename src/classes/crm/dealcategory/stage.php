@@ -17,9 +17,9 @@ class Stage extends Bitrix24Entity
     {
         $fullResult = $this->client->call(
             'crm.dealcategory.stage.list',
-            [
+            array(
                 'id' => $id,
-            ]
+            )
         );
 
         return $fullResult;
