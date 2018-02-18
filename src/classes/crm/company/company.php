@@ -54,19 +54,24 @@ class Company extends Bitrix24Entity
 	 * Updates the specified (existing) company.
 	 * @param array $bitrix24CompanyId integer
 	 * @param array $fields array of fields
+     * @param array $params Set of parameters. REGISTER_SONET_EVENT - performs registration of a change event in a lead in the Activity Stream.
+     * The lead's Responsible person will also receive notification.
 	 * @link http://www.bitrixsoft.com/rest_help/crm/company/crm_company_add.php
 	 * @return array
 	 * @throws Bitrix24Exception
 	 *
 	 */
-	public function update($bitrix24CompanyId, $fields = array())
+	public function update($bitrix24CompanyId, $fields = array(), $params = array())
 	{
-		$fullResult = $this->client->call(
-			'crm.company.update',
-			array('id' => $bitrix24CompanyId),
-			array('fields' => $fields)
-		);
-		return $fullResult;
+        $fullResult = $this->client->call(
+            'crm.company.update',
+            array(
+                'id' => $bitrix24CompanyId,
+                'fields' => $fields,
+                'params' => $params
+            )
+        );
+        return $fullResult;
 	}
 
 	/**
