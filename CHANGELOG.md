@@ -1,5 +1,6 @@
 # bitrix24-php-sdk change log
 ## 0.6.0 (18.02.2018)
+* add support for `FaceTracker` entity
 * add presets for request timing information 
 * add all methods for sonetgroup
 * add method `crm.contact.userfield.update`
