@@ -142,6 +142,11 @@ class Bitrix24 implements iBitrix24
     protected $_onExpiredToken;
 
     /**
+     * @var resource|null reusable cURL handle
+     */
+    protected $curlHandle;
+
+    /**
      * Create a object to work with Bitrix24 REST API service
      *
      * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
@@ -174,6 +179,21 @@ class Bitrix24 implements iBitrix24
         }
         $this->setRetriesToConnectCount(1);
         $this->setRetriesToConnectTimeout(1000000);
+
+        // Available since PHP 5.5.0.
+        if (function_exists('curl_reset')) {
+            $this->curlHandle = curl_init();
+        }
+    }
+
+    /**
+     * Clean up everything.
+     */
+    public function __destruct()
+    {
+        if ($this->curlHandle !== null) {
+            @curl_close($this->curlHandle);
+        }
     }
 
     /**
@@ -474,8 +494,12 @@ class Bitrix24 implements iBitrix24
             CURLOPT_RETURNTRANSFER => true,
             CURLINFO_HEADER_OUT => true,
             CURLOPT_VERBOSE => true,
+            CURLOPT_ENCODING => '',
             CURLOPT_CONNECTTIMEOUT => 65,
             CURLOPT_TIMEOUT => 70,
+            CURLOPT_HTTPHEADER => array(
+                'Connection: keep-alive',
+            ),
             CURLOPT_USERAGENT => strtolower(__CLASS__ . '-PHP-SDK/v' . self::VERSION),
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($additionalParameters),
@@ -489,7 +513,18 @@ class Bitrix24 implements iBitrix24
         }
 
         $this->rawRequest = $curlOptions;
-        $curl = curl_init();
+        if ($this->curlHandle !== null) {
+            $curl = $this->curlHandle;
+            curl_setopt($curl, CURLOPT_HEADERFUNCTION, null);
+            curl_setopt($curl, CURLOPT_READFUNCTION, null);
+            curl_setopt($curl, CURLOPT_WRITEFUNCTION, null);
+            curl_setopt($curl, CURLOPT_PROGRESSFUNCTION, null);
+            curl_reset($curl);
+            $needToCloseCurl = false;
+        } else {
+            $curl = curl_init();
+            $needToCloseCurl = true;
+        }
         curl_setopt_array($curl, $curlOptions);
 
         $curlResult = false;
@@ -504,7 +539,9 @@ class Bitrix24 implements iBitrix24
                     curl_error($curl));
                 if (false === in_array($curlErrorNumber, $retryableErrorCodes, true) || !$retriesCnt) {
                     $this->log->error($errorMsg, $this->getErrorContext());
-                    curl_close($curl);
+                    if ($needToCloseCurl) {
+                        curl_close($curl);
+                    }
                     throw new Bitrix24IoException($errorMsg);
                 } else {
                     $this->log->warning($errorMsg, $this->getErrorContext());
@@ -515,7 +552,9 @@ class Bitrix24 implements iBitrix24
             $this->requestInfo = curl_getinfo($curl);
             $this->rawResponse = $curlResult;
             $this->log->debug('cURL request info', array($this->getRequestInfo()));
-            curl_close($curl);
+            if ($needToCloseCurl) {
+                curl_close($curl);
+            }
             break;
         }
 
