@@ -1,4 +1,22 @@
 # bitrix24-php-sdk change log
+## 0.6.0 (18.02.2018)
+* add support for `FaceTracker` entity
+* add presets for request timing information 
+* add all methods for sonetgroup
+* add method `crm.contact.userfield.update`
+* add activities methods
+* add exception `Bitrix24PortalRenamedException`
+* add a pair of fields for the Lead
+* add requisite support
+* add method update to deal\userfield entity
+* add `Product\Property` support
+* add method `crm.product.delete`
+* add method `crm.product.fields`
+* add method `crm.product.property.types`
+* add method `crm.product.property.delete`
+* add methods for `\Bitrix24\CRM\Status`
+* add new placement presets for detail page
+
 ## 0.5.4 (8.07.2017)
 * add Callback for expired token. Fix pullrequest#63 by valga
 * add method `update` in class `Bitrix24\CRM\Product`
