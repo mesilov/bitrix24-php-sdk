@@ -142,6 +142,12 @@ class Bitrix24 implements iBitrix24
     protected $_onExpiredToken;
 
     /**
+     * @var bool ssl verify for checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
+     */
+    protected $sslVerify = true;
+    
+    
+    /**
      * Create a object to work with Bitrix24 REST API service
      *
      * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
@@ -444,6 +450,22 @@ class Bitrix24 implements iBitrix24
     }
 
     /**
+     * disable of checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
+     */
+    public function setDisabledSslVerify ()
+    {
+        $this->sslVerify = false;
+    }
+    
+    /**
+     * enable of checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
+     */
+    public function setEnabledSslVerify ()
+    {
+        $this->sslVerify = true;
+    }
+    
+    /**
      * Execute a request API to Bitrix24 using cURL
      *
      * @param string $url
@@ -481,6 +503,12 @@ class Bitrix24 implements iBitrix24
             CURLOPT_POSTFIELDS => http_build_query($additionalParameters),
             CURLOPT_URL => $url
         );
+        
+        if (!$this->sslVerify)
+        {
+            $curlOptions[CURLOPT_SSL_VERIFYPEER] = 0;
+            $curlOptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        }
 
         if (is_array($this->customCurlOptions)) {
             foreach ($this->customCurlOptions as $customCurlOptionKey => $customCurlOptionValue) {
