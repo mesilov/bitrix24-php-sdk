@@ -39,7 +39,7 @@ class Robot extends Bitrix24Entity
      */
     public function add($code, $handler, $userId, $arName, $arProps)
     {
-        $arResult = $this->client->call('bizproc.activity.add',
+        $arResult = $this->client->call('bizproc.robot.add',
             array(
                 'CODE' => $code,
                 'HANDLER' => $handler,
