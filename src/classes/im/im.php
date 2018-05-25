@@ -45,4 +45,47 @@ class Im extends Bitrix24Entity
 		);
 		return $fullResult;
 	}
+
+
+    /**
+     * add a message to private/public group chats
+     * @param int $chatId
+     * @param $message
+     * @param string $system
+     * @param string $userId
+     * @return array
+     */
+    public function messageAdd($chatId = 1, $message, $system = 'N', $userId = '')
+    {
+        if(is_null($chatId) && empty($userId))
+        {
+            throw new Bitrix24Exception('chat id is null and user id is empty');
+        }
+        elseif(is_null($message))
+        {
+            throw new Bitrix24Exception('message is null');
+        }
+        elseif(!in_array($system, array("N", "Y"), true))
+        {
+            throw new Bitrix24Exception('unknown system');
+        }
+
+        $arAdditionalParameters = array(
+            'message' => $message,
+            'system' => $system
+        );
+
+        if (!empty($userId)) {
+            $arAdditionalParameters['user_id'] = $userId;
+        } else {
+            $arAdditionalParameters['chat_id'] = $chatId;
+        }
+
+        $fullResult = $this->client->call(
+            'im.message.add',
+            $arAdditionalParameters
+        );
+        return $fullResult;
+    }
+
 }
