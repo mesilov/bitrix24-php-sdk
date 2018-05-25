@@ -146,7 +146,16 @@ class Bitrix24 implements iBitrix24
      */
     protected $sslVerify = true;
 
+    /**
+     * @var strung code, which returned by method getFirstAuthCode
+     */
     protected $code;
+
+    /**
+     * account of user, on behalf of which messages will be sent
+     */
+    protected $userLogin;
+    protected $userPassword;
     
     /**
      * Create a object to work with Bitrix24 REST API service
@@ -324,6 +333,34 @@ class Bitrix24 implements iBitrix24
     public function setCode($code)
     {
         $this->code = $code;
+        return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserLogin()
+    {
+        return $this->userLogin;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserPassword()
+    {
+        return $this->userPassword;
+    }
+
+    /**
+     * @param $user_login
+     * @param $user_password
+     * @return bool
+     */
+    public function setUserAccount($user_login, $user_password)
+    {
+        $this->userLogin = $user_login;
+        $this->userPassword = $user_password;
         return true;
     }
 
@@ -821,8 +858,8 @@ class Bitrix24 implements iBitrix24
             'AUTH_FORM' => 'Y',
             'TYPE' => 'AUTH',
             'backurl' => $math[1],
-            'USER_LOGIN' => "logger@bitrix24.ru",
-            'USER_PASSWORD' => "123456",
+            'USER_LOGIN' => $this->getUserLogin(),
+            'USER_PASSWORD' => $this->getUserPassword(),
             'USER_REMEMBER' => 'Y'
         ]);
         curl_setopt($ch, CURLOPT_URL, 'https://www.bitrix24.net/auth/');
