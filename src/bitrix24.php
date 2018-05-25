@@ -145,7 +145,8 @@ class Bitrix24 implements iBitrix24
      * @var bool ssl verify for checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
      */
     protected $sslVerify = true;
-    
+
+    protected $code;
     
     /**
      * Create a object to work with Bitrix24 REST API service
@@ -307,6 +308,25 @@ class Bitrix24 implements iBitrix24
         $this->applicationId = $applicationId;
         return true;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param $code
+     * @return bool
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return true;
+    }
+
 
     /**
      * Get application secret
@@ -778,6 +798,66 @@ class Bitrix24 implements iBitrix24
         return null;
     }
 
+
+    //TODO: переписать
+    public function getFirstAuthCode()
+    {
+        $_url = 'https://' . $this->getDomain();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $_url);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($ch);
+        $l = '';
+        if (preg_match('#Location: (.*)#', $res, $r)) {
+            $l = trim($r[1]);
+        }
+//echo $l.PHP_EOL;
+        curl_setopt($ch, CURLOPT_URL, $l);
+        $res = curl_exec($ch);
+        preg_match('#name="backurl" value="(.*)"#', $res, $math);
+        $post = http_build_query([
+            'AUTH_FORM' => 'Y',
+            'TYPE' => 'AUTH',
+            'backurl' => $math[1],
+            'USER_LOGIN' => "logger@bitrix24.ru",
+            'USER_PASSWORD' => "123456",
+            'USER_REMEMBER' => 'Y'
+        ]);
+        curl_setopt($ch, CURLOPT_URL, 'https://www.bitrix24.net/auth/');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        $res = curl_exec($ch);
+        $l = '';
+        if (preg_match('#Location: (.*)#', $res, $r)) {
+            $l = trim($r[1]);
+        }
+//echo $l.PHP_EOL;
+        curl_setopt($ch, CURLOPT_URL, $l);
+        $res = curl_exec($ch);
+        $l = '';
+        if (preg_match('#Location: (.*)#', $res, $r)) {
+            $l = trim($r[1]);
+        }
+//echo $l.PHP_EOL;
+        curl_setopt($ch, CURLOPT_URL, $l);
+        $res = curl_exec($ch);
+//end autorize
+        curl_setopt($ch, CURLOPT_URL,
+            'https://' . $this->getDomain() . '/oauth/authorize/?response_type=code&client_id=' . $this->getApplicationId());
+        $res = curl_exec($ch);
+        $l = '';
+        if (preg_match('#Location: (.*)#', $res, $r)) {
+            $l = trim($r[1]);
+        }
+        preg_match('/code=(.*)&do/', $l, $code);
+        $code = explode("&", $code[1])[0];
+        $this->setCode($code);
+
+    }
+
+
     /**
      * Authorize and get first access token
      *
@@ -813,6 +893,7 @@ class Bitrix24 implements iBitrix24
         } elseif (null === $redirectUri) {
             throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
         }
+
 
 //        $url = 'https://'.self::OAUTH_SERVER.'/oauth/token/'.
         $url = 'https://' . $this->getDomain() . '/oauth/token/' .
