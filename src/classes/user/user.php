@@ -50,7 +50,7 @@ class User extends Bitrix24Entity
 	 * @param $FILTER - list of fields user entity to filter result
 	 * @return array
 	 */
-	public function get($SORT, $ORDER, $FILTER, $OFFSET)
+	public function get($SORT, $ORDER, $FILTER, $OFFSET = 0)
 	{
 		$result = $this->client->call('user.get',
 			array(
