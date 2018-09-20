@@ -24,6 +24,7 @@ use Bitrix24\Exceptions\Bitrix24SecurityException;
 use Bitrix24\Exceptions\Bitrix24TokenIsExpiredException;
 use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
 use Bitrix24\Exceptions\Bitrix24WrongClientException;
+use Bitrix24\Exceptions\Bitrix24InsufficientScope;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -741,6 +742,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24MethodNotFoundException
      * @throws Bitrix24PaymentRequiredException
      * @throws Bitrix24PortalRenamedException
+     * @throws Bitrix24InsufficientScope
      */
     protected function handleBitrix24APILevelErrors(
         $arRequestResult,
@@ -771,6 +773,8 @@ class Bitrix24 implements iBitrix24
                     throw new Bitrix24PaymentRequiredException($errorMsg);
                 case 'NO_AUTH_FOUND':
                     throw new Bitrix24PortalRenamedException($errorMsg);
+                case 'INSUFFICIENT_SCOPE':
+                    throw new Bitrix24InsufficientScope($errorMsg);
                 default:
                     throw new Bitrix24ApiException($errorMsg);
             }
