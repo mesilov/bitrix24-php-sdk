@@ -1035,6 +1035,13 @@ class Bitrix24 implements iBitrix24
                     continue;
                 }
 
+                if (isset($results['result_error'][$idx])) {
+                    $this->handleBitrix24APILevelErrors(array(
+                        'error' => $results['result_error'][$idx]['error'],
+                        'error_description' => $results['result_error'][$idx]['error_description'],
+                    ), $call['method'], $call['parameters']);
+                }
+
                 call_user_func($call['callback'], array(
                     'result' => isset($results['result'][$idx]) ? $results['result'][$idx] : null,
                     'error' => isset($results['result_error'][$idx]) ? $results['result_error'][$idx] : null,
