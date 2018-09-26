@@ -1,5 +1,4 @@
 <?php
-
 namespace Bitrix24\CRM\Lead;
 use Bitrix24\Bitrix24Entity;
 

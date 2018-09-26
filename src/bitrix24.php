@@ -24,6 +24,7 @@ use Bitrix24\Exceptions\Bitrix24SecurityException;
 use Bitrix24\Exceptions\Bitrix24TokenIsExpiredException;
 use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
 use Bitrix24\Exceptions\Bitrix24WrongClientException;
+use Bitrix24\Exceptions\Bitrix24InsufficientScope;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -141,6 +142,12 @@ class Bitrix24 implements iBitrix24
      */
     protected $_onExpiredToken;
 
+    /**
+     * @var bool ssl verify for checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
+     */
+    protected $sslVerify = true;
+    
+    
     /**
      * Create a object to work with Bitrix24 REST API service
      *
@@ -444,6 +451,22 @@ class Bitrix24 implements iBitrix24
     }
 
     /**
+     * disable of checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
+     */
+    public function setDisabledSslVerify ()
+    {
+        $this->sslVerify = false;
+    }
+    
+    /**
+     * enable of checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
+     */
+    public function setEnabledSslVerify ()
+    {
+        $this->sslVerify = true;
+    }
+    
+    /**
      * Execute a request API to Bitrix24 using cURL
      *
      * @param string $url
@@ -481,6 +504,12 @@ class Bitrix24 implements iBitrix24
             CURLOPT_POSTFIELDS => http_build_query($additionalParameters),
             CURLOPT_URL => $url
         );
+        
+        if (!$this->sslVerify)
+        {
+            $curlOptions[CURLOPT_SSL_VERIFYPEER] = 0;
+            $curlOptions[CURLOPT_SSL_VERIFYHOST] = 0;
+        }
 
         if (is_array($this->customCurlOptions)) {
             foreach ($this->customCurlOptions as $customCurlOptionKey => $customCurlOptionValue) {
@@ -713,6 +742,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24MethodNotFoundException
      * @throws Bitrix24PaymentRequiredException
      * @throws Bitrix24PortalRenamedException
+     * @throws Bitrix24InsufficientScope
      */
     protected function handleBitrix24APILevelErrors(
         $arRequestResult,
@@ -743,6 +773,8 @@ class Bitrix24 implements iBitrix24
                     throw new Bitrix24PaymentRequiredException($errorMsg);
                 case 'NO_AUTH_FOUND':
                     throw new Bitrix24PortalRenamedException($errorMsg);
+                case 'INSUFFICIENT_SCOPE':
+                    throw new Bitrix24InsufficientScope($errorMsg);
                 default:
                     throw new Bitrix24ApiException($errorMsg);
             }
@@ -1005,6 +1037,13 @@ class Bitrix24 implements iBitrix24
             foreach ($slice as $idx => $call) {
                 if (!isset($call['callback']) || !is_callable($call['callback'])) {
                     continue;
+                }
+
+                if (isset($results['result_error'][$idx])) {
+                    $this->handleBitrix24APILevelErrors(array(
+                        'error' => $results['result_error'][$idx]['error'],
+                        'error_description' => $results['result_error'][$idx]['error_description'],
+                    ), $call['method'], $call['parameters']);
                 }
 
                 call_user_func($call['callback'], array(
