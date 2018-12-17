@@ -12,6 +12,7 @@ namespace Bitrix24\CRM;
 use Bitrix24\CRM\Company;
 use Bitrix24\Contracts\iBitrix24;
 
+
 /**
  * @package Bitrix24
  */
@@ -27,11 +28,11 @@ class CompanyTest extends \PHPUnit_Framework_TestCase
 
         //silly mocking in PHPUnit 4.8
         $methods = array();
-        $ref = new \ReflectionClass(iBitrix24::class);
+        $ref = new \ReflectionClass('Bitrix24\\Contracts\\iBitrix24');
         foreach ($ref->getMethods() as $method) {
             $methods[] = $method->getName();
         }
-        $client = $this->getMockBuilder(iBitrix24::class)
+        $client = $this->getMockBuilder('Bitrix24\\Contracts\\iBitrix24')
             ->setMethods($methods)
             ->getMock();
         $client->expects($this->once())
