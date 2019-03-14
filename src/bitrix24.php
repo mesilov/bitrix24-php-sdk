@@ -274,6 +274,7 @@ class Bitrix24 implements iBitrix24
             '&grant_type=refresh_token' .
             '&client_secret=' . $applicationSecret .
             '&refresh_token=' . $refreshToken .
+            '&scope=' . implode(',', $applicationScope) .
             '&redirect_uri=' . urlencode($redirectUri);
         $requestResult = $this->executeRequest($url);
         // handling bitrix24 api-level errors
