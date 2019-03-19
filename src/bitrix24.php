@@ -30,7 +30,8 @@ use Psr\Log\NullLogger;
 
 /**
  * Class Bitrix24
- * @author Mesilov Maxim <mesilov.maxim@gmail.com>
+ *
+ * @author    Mesilov Maxim <mesilov.maxim@gmail.com>
  * @copyright 2013 - 2016 Mesilov Maxim
  */
 class Bitrix24 implements iBitrix24
@@ -146,13 +147,13 @@ class Bitrix24 implements iBitrix24
      * @var bool ssl verify for checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
      */
     protected $sslVerify = true;
-    
-    
+
+
     /**
      * Create a object to work with Bitrix24 REST API service
      *
-     * @param bool $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
-     * @param null|LoggerInterface $obLogger - instance of \Monolog\Logger
+     * @param bool                 $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
+     * @param null|LoggerInterface $obLogger          - instance of \Monolog\Logger
      *
      * @throws Bitrix24Exception
      *
@@ -279,6 +280,7 @@ class Bitrix24 implements iBitrix24
         $requestResult = $this->executeRequest($url);
         // handling bitrix24 api-level errors
         $this->handleBitrix24APILevelErrors($requestResult, 'refresh access token');
+
         return $requestResult;
     }
 
@@ -307,6 +309,7 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application id is empty');
         }
         $this->applicationId = $applicationId;
+
         return true;
     }
 
@@ -335,6 +338,7 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application secret is empty');
         }
         $this->applicationSecret = $applicationSecret;
+
         return true;
     }
 
@@ -363,6 +367,7 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('refresh token is empty');
         }
         $this->refreshToken = $refreshToken;
+
         return true;
     }
 
@@ -389,6 +394,7 @@ class Bitrix24 implements iBitrix24
     {
         if (is_array($applicationScope) && count($applicationScope) > 0) {
             $this->applicationScope = $applicationScope;
+
             return true;
         } else {
             throw new Bitrix24Exception('application scope not set');
@@ -420,6 +426,7 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('redirect URI is empty');
         }
         $this->redirectUri = $redirectUri;
+
         return true;
     }// end of SetApplicationId
 
@@ -448,30 +455,31 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('domain is empty');
         }
         $this->domain = $domain;
+
         return true;
     }
 
     /**
      * disable of checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
      */
-    public function setDisabledSslVerify ()
+    public function setDisabledSslVerify()
     {
         $this->sslVerify = false;
     }
-    
+
     /**
      * enable of checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
      */
-    public function setEnabledSslVerify ()
+    public function setEnabledSslVerify()
     {
         $this->sslVerify = true;
     }
-    
+
     /**
      * Execute a request API to Bitrix24 using cURL
      *
      * @param string $url
-     * @param array $additionalParameters
+     * @param array  $additionalParameters
      *
      * @throws Bitrix24Exception
      * @throws Bitrix24PortalDeletedException
@@ -490,7 +498,7 @@ class Bitrix24 implements iBitrix24
             CURLE_READ_ERROR,
             CURLE_OPERATION_TIMEOUTED,
             CURLE_HTTP_POST_ERROR,
-            CURLE_SSL_CONNECT_ERROR
+            CURLE_SSL_CONNECT_ERROR,
         );
 
         $curlOptions = array(
@@ -503,11 +511,10 @@ class Bitrix24 implements iBitrix24
             CURLOPT_USERAGENT => strtolower(__CLASS__ . '-PHP-SDK/v' . self::VERSION),
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($additionalParameters),
-            CURLOPT_URL => $url
+            CURLOPT_URL => $url,
         );
-        
-        if (!$this->sslVerify)
-        {
+
+        if (!$this->sslVerify) {
             $curlOptions[CURLOPT_SSL_VERIFYPEER] = 0;
             $curlOptions[CURLOPT_SSL_VERIFYHOST] = 0;
         }
@@ -583,6 +590,7 @@ class Bitrix24 implements iBitrix24
             $this->log->error($errorMsg, $this->getErrorContext());
             throw new Bitrix24Exception($errorMsg);
         }
+
         return $jsonResult;
     }
 
@@ -607,7 +615,7 @@ class Bitrix24 implements iBitrix24
             // network
             'RAW_REQUEST' => $this->getRawRequest(),
             'CURL_REQUEST_INFO' => $this->getRequestInfo(),
-            'RAW_RESPONSE' => $this->getRawResponse()
+            'RAW_RESPONSE' => $this->getRawResponse(),
         );
     }
 
@@ -638,6 +646,7 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('memberId is null');
         }
         $this->memberId = $memberId;
+
         return true;
     }
 
@@ -666,6 +675,7 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('access token is empty');
         }
         $this->accessToken = $accessToken;
+
         return true;
     }
 
@@ -713,7 +723,9 @@ class Bitrix24 implements iBitrix24
 
     /**
      * set retries to connect timeout in microseconds
+     *
      * @param int $microseconds
+     *
      * @return bool
      * @throws Bitrix24Exception
      */
@@ -724,14 +736,15 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('retries to connect count must be an integer');
         }
         $this->retriesToConnectTimeout = $microseconds;
+
         return true;
     }
 
     /**
      * Handling bitrix24 api-level errors
      *
-     * @param $arRequestResult
-     * @param $methodName
+     * @param       $arRequestResult
+     * @param       $methodName
      * @param array $additionalParameters
      *
      * @return null
@@ -757,29 +770,37 @@ class Bitrix24 implements iBitrix24
                 (array_key_exists('error_description', $arRequestResult) ? $arRequestResult['error_description'] : ''),
                 $methodName,
                 $this->getDomain());
-            $this->log->error($errorMsg, $this->getErrorContext());
             // throw specific API-level exceptions
             switch (strtoupper(trim($arRequestResult['error']))) {
                 case 'WRONG_CLIENT':
                 case 'ERROR_OAUTH':
+                    $this->log->error($errorMsg, $this->getErrorContext());
                     throw new Bitrix24WrongClientException($errorMsg);
                 case 'ERROR_METHOD_NOT_FOUND':
+                    $this->log->error($errorMsg, $this->getErrorContext());
                     throw new Bitrix24MethodNotFoundException($errorMsg);
                 case 'INVALID_TOKEN':
                 case 'INVALID_GRANT':
+                    $this->log->error($errorMsg, $this->getErrorContext());
                     throw new Bitrix24TokenIsInvalidException($errorMsg);
                 case 'EXPIRED_TOKEN':
+                    $this->log->notice($errorMsg, $this->getErrorContext());
                     throw new Bitrix24TokenIsExpiredException($errorMsg);
                 case 'PAYMENT_REQUIRED':
+                    $this->log->error($errorMsg, $this->getErrorContext());
                     throw new Bitrix24PaymentRequiredException($errorMsg);
                 case 'NO_AUTH_FOUND':
+                    $this->log->error($errorMsg, $this->getErrorContext());
                     throw new Bitrix24PortalRenamedException($errorMsg);
                 case 'INSUFFICIENT_SCOPE':
+                    $this->log->error($errorMsg, $this->getErrorContext());
                     throw new Bitrix24InsufficientScope($errorMsg);
                 default:
+                    $this->log->error($errorMsg, $this->getErrorContext());
                     throw new Bitrix24ApiException($errorMsg);
             }
         }
+
         return null;
     }
 
@@ -830,6 +851,7 @@ class Bitrix24 implements iBitrix24
         $requestResult = $this->executeRequest($url);
         // handling bitrix24 api-level errors
         $this->handleBitrix24APILevelErrors($requestResult, 'get first access token');
+
         return $requestResult;
     }
 
@@ -873,6 +895,7 @@ class Bitrix24 implements iBitrix24
                 $this->handleBitrix24APILevelErrors($requestResult, 'app.info');
             }
         }
+
         return $isTokenExpire;
     }// end of isTokenExpire
 
@@ -880,7 +903,7 @@ class Bitrix24 implements iBitrix24
      * Get list of all methods available for current application
      *
      * @param array | null $applicationScope
-     * @param bool $isFull
+     * @param bool         $isFull
      *
      * @return array
      *
@@ -913,6 +936,7 @@ class Bitrix24 implements iBitrix24
             $scope = '&scope=' . implode(',', array_map('urlencode', array_unique($applicationScope)));
         }
         $url = 'https://' . $domain . '/rest/methods.json?auth=' . $accessToken . $showAll . $scope;
+
         return $this->executeRequest($url);
     }
 
@@ -945,6 +969,7 @@ class Bitrix24 implements iBitrix24
             $showAll = '&full=true';
         }
         $url = 'https://' . $domain . '/rest/scope.json?auth=' . $accessToken . $showAll;
+
         return $this->executeRequest($url);
     }
 
@@ -960,6 +985,7 @@ class Bitrix24 implements iBitrix24
 
     /**
      * set CURL request count retries
+     *
      * @param $retriesCnt
      *
      * @return boolean
@@ -973,14 +999,15 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('retries to connect count must be an integer');
         }
         $this->retriesToConnectCount = (int)$retriesCnt;
+
         return true;
     }
 
     /**
      * Add call to batch. If [[$callback]] parameter is set, it will receive call result as first parameter.
      *
-     * @param string $method
-     * @param array $parameters
+     * @param string        $method
+     * @param array         $parameters
      * @param callable|null $callback
      *
      * @return string Unique call ID.
@@ -993,6 +1020,7 @@ class Bitrix24 implements iBitrix24
             'parameters' => $parameters,
             'callback' => $callback,
         );
+
         return $id;
     }
 
@@ -1009,7 +1037,7 @@ class Bitrix24 implements iBitrix24
     /**
      * Process batch calls.
      *
-     * @param int $halt Halt batch on error
+     * @param int $halt  Halt batch on error
      * @param int $delay Delay between batch calls (in msec)
      *
      * @throws Bitrix24Exception
@@ -1025,7 +1053,7 @@ class Bitrix24 implements iBitrix24
             $batchQueryCounter++;
             $slice = array_splice($this->_batch, 0, self::MAX_BATCH_CALLS);
             $this->log->info('bitrix24PhpSdk.processBatchCalls.callItem', array(
-                'batch_query_number' => $batchQueryCounter
+                'batch_query_number' => $batchQueryCounter,
             ));
 
             $commands = array();
@@ -1065,7 +1093,7 @@ class Bitrix24 implements iBitrix24
      * Execute Bitrix24 REST API method
      *
      * @param string $methodName
-     * @param array $additionalParameters
+     * @param array  $additionalParameters
      *
      * @return mixed
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
@@ -1104,7 +1132,7 @@ class Bitrix24 implements iBitrix24
      * Execute Bitrix24 REST API method
      *
      * @param string $methodName
-     * @param array $additionalParameters
+     * @param array  $additionalParameters
      *
      * @throws Bitrix24Exception
      * @throws Bitrix24ApiException
@@ -1146,7 +1174,7 @@ class Bitrix24 implements iBitrix24
         $this->log->info('call bitrix24 method', array(
             'BITRIX24_DOMAIN' => $this->domain,
             'METHOD_NAME' => $methodName,
-            'METHOD_PARAMETERS' => $additionalParameters
+            'METHOD_PARAMETERS' => $additionalParameters,
         ));
         $requestResult = $this->executeRequest($url, $additionalParameters);
         // check errors and throw exception if errors exists
@@ -1192,6 +1220,7 @@ class Bitrix24 implements iBitrix24
                 throw new Bitrix24SecurityException('security signature in api-response not found');
             }
         }
+
         return $requestResult;
     }
 }

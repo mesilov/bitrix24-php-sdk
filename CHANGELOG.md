@@ -1,4 +1,16 @@
 # bitrix24-php-sdk change log
+## 0.6.1 (20.03.2019)
+* add `offset` parameter to entity `CRM\Status\Status` in method `getList`
+* add `offset` parameter to entity `User\User` in method `getList`
+* add method `messageAdd` to entity `Bitrix24\Bitrix24`
+* add method `setEnabledSslVerify` to entity `Classes\Im\Im`
+* add entity `Bitrix24\Bizproc\Provider`
+* add entity `Bitrix24\CRM\Lead\ProductRows` class to work with products
+* fix error in method `crm.company.update`
+* fix error in method `Bitrix24::getNewAccessToken`
+* fix error in method `Bizproc\Robot::add`
+* fix log level in method `Bitrix24::handleBitrix24APILevelErrors`
+
 ## 0.6.0 (18.02.2018)
 * add support for `FaceTracker` entity
 * add presets for request timing information 
