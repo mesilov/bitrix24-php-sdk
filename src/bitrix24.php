@@ -63,6 +63,11 @@ class Bitrix24 implements iBitrix24
     protected $domain;
 
     /**
+     * @var string urlPrefix
+     */
+    protected $urlPrefix;
+
+    /**
      * @var array scope
      */
     protected $applicationScope = array();
@@ -369,6 +374,23 @@ class Bitrix24 implements iBitrix24
         $this->refreshToken = $refreshToken;
 
         return true;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getUrlPrefix (): string
+    {
+        return $this->urlPrefix;
+    }
+
+    /**
+     * @param string $urlPrefix
+     */
+    public function setUrlPrefix (string $urlPrefix): void
+    {
+        $this->urlPrefix = $urlPrefix;
     }
 
     /**
@@ -1154,12 +1176,14 @@ class Bitrix24 implements iBitrix24
         if (null === $this->getDomain()) {
             throw new Bitrix24Exception('domain not found, you must call setDomain method before');
         }
-        if (null === $this->getAccessToken()) {
-            throw new Bitrix24Exception('access token not found, you must call setAccessToken method before');
-        }
+//        if (null === $this->getAccessToken()) {
+//            throw new Bitrix24Exception('access token not found, you must call setAccessToken method before');
+//        }
         if ('' === $methodName) {
             throw new Bitrix24Exception('method name not found, you must set method name');
         }
+        if ($prefix = $this -> getUrlPrefix())
+            $methodName = $prefix . $methodName;
 
         $url = 'https://' . $this->domain . '/rest/' . $methodName;
         $additionalParameters['auth'] = $this->accessToken;
