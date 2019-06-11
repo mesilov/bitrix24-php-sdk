@@ -380,7 +380,7 @@ class Bitrix24 implements iBitrix24
     /**
      * @return string
      */
-    public function getUrlPrefix (): string
+    public function getUrlPrefix ()
     {
         return $this->urlPrefix;
     }
@@ -388,7 +388,7 @@ class Bitrix24 implements iBitrix24
     /**
      * @param string $urlPrefix
      */
-    public function setUrlPrefix (string $urlPrefix): void
+    public function setUrlPrefix (string $urlPrefix)
     {
         $this->urlPrefix = $urlPrefix;
     }
