@@ -15,6 +15,7 @@ use Bitrix24\Exceptions\Bitrix24ApiException;
 use Bitrix24\Exceptions\Bitrix24BadGatewayException;
 use Bitrix24\Exceptions\Bitrix24EmptyResponseException;
 use Bitrix24\Exceptions\Bitrix24Exception;
+use Bitrix24\Exceptions\Bitrix24InsufficientScope;
 use Bitrix24\Exceptions\Bitrix24IoException;
 use Bitrix24\Exceptions\Bitrix24MethodNotFoundException;
 use Bitrix24\Exceptions\Bitrix24PaymentRequiredException;
@@ -24,7 +25,6 @@ use Bitrix24\Exceptions\Bitrix24SecurityException;
 use Bitrix24\Exceptions\Bitrix24TokenIsExpiredException;
 use Bitrix24\Exceptions\Bitrix24TokenIsInvalidException;
 use Bitrix24\Exceptions\Bitrix24WrongClientException;
-use Bitrix24\Exceptions\Bitrix24InsufficientScope;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -270,22 +270,14 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
         }
 
-//		$url = 'https://'.self::OAUTH_SERVER.'/oauth/token/'
-        $url = 'https://' . $this->getDomain() . '/oauth/token/'
+        $url = 'https://' . self::OAUTH_SERVER . '/oauth/token/'
             . '?grant_type=refresh_token'
             . '&client_id=' . urlencode($applicationId)
             . '&client_secret=' . $applicationSecret
             . '&refresh_token=' . $refreshToken
-           . '&scope=' . implode(',', $applicationScope)
-           . '&redirect_uri=' . urlencode($redirectUri)
         ;
 
-        var_dump($url);
-
-
         $requestResult = $this->executeRequest($url);
-
-        var_dump($requestResult);
 
         // handling bitrix24 api-level errors
         $this->handleBitrix24APILevelErrors($requestResult, 'refresh access token');
@@ -850,13 +842,11 @@ class Bitrix24 implements iBitrix24
             throw new Bitrix24Exception('application redirect URI not found, you must call setRedirectUri method before');
         }
 
-//        $url = 'https://'.self::OAUTH_SERVER.'/oauth/token/'
-         $url = 'https://' . $this->getDomain() . '/oauth/token/'
+        $url = 'https://' . self::OAUTH_SERVER . '/oauth/token/'
             . '?grant_type=authorization_code'
             . '&client_id=' . urlencode($applicationId)
             . '&client_secret=' . $applicationSecret
             . '&code=' . urlencode($code)
-            . '&redirect_uri=' . urlencode($redirectUri)
         ;
 
         $requestResult = $this->executeRequest($url);
@@ -895,9 +885,9 @@ class Bitrix24 implements iBitrix24
         } elseif (null === $accessToken) {
             throw new Bitrix24Exception('application id not found, you must call setAccessToken method before');
         }
-//		$url = 'https://'.self::OAUTH_SERVER.'/rest/app.info?auth='.$accessToken;
-        $url = 'https://' . $domain . '/rest/app.info?auth=' . $accessToken;
+        $url = 'https://' . self::OAUTH_SERVER . '/rest/app.info?auth=' . $accessToken;
         $requestResult = $this->executeRequest($url);
+
         if (isset($requestResult['error'])) {
             if (in_array($requestResult['error'], array('expired_token', 'invalid_token', 'WRONG_TOKEN'), false)) {
                 $isTokenExpire = true;
@@ -1182,8 +1172,6 @@ class Bitrix24 implements iBitrix24
             $isSecureCall = true;
         }
 
-        echo '<pre>params '; print_r($additionalParameters); echo '</pre>';
-
         // execute request
         $this->log->info('call bitrix24 method', array(
             'BITRIX24_DOMAIN' => $this->domain,
@@ -1214,17 +1202,11 @@ class Bitrix24 implements iBitrix24
                 // compare signatures
                 $hash = hash_hmac('sha256', $dataToDecode, $key, true);
 
-                echo '<pre>result '; print_r($requestResult); echo '</pre>';
-                echo '<pre>hash '; print_r($hash); echo '</pre>';
-                echo '<pre>signature '; print_r($signature); echo '</pre>';
-
                 if ($hash !== $signature) {
                     throw new Bitrix24SecurityException('security signatures not same, bad request');
                 }
                 // decode
                 $arClearData = json_decode(base64_decode($dataToDecode), true);
-
-                echo '<pre>arClearData '; print_r($arClearData); echo '</pre>';
 
                 // handling json_decode errors
                 $jsonErrorCode = json_last_error();
