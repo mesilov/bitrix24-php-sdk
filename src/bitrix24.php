@@ -151,7 +151,7 @@ class Bitrix24 implements iBitrix24
     /**
      * @var array result from batch query
      */
-    public $batchResult = array();
+    protected $batchResult = array();
 
     /**
      * Create a object to work with Bitrix24 REST API service
@@ -186,6 +186,11 @@ class Bitrix24 implements iBitrix24
         }
         $this->setRetriesToConnectCount(1);
         $this->setRetriesToConnectTimeout(1000000);
+    }
+
+    public function getBatchResult()
+    {
+        return $this->batchResult;
     }
 
     /**
