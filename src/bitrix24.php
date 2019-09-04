@@ -188,6 +188,11 @@ class Bitrix24 implements iBitrix24
         $this->setRetriesToConnectTimeout(1000000);
     }
 
+    /**
+     * Get batch query result
+     *
+     * @return array
+     */
     public function getBatchResult()
     {
         return $this->batchResult;
