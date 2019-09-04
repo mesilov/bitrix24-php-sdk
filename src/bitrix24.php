@@ -1021,15 +1021,32 @@ class Bitrix24 implements iBitrix24
     /**
      * Add call to batch. If [[$callback]] parameter is set, it will receive call result as first parameter.
      *
-     * @param string        $method
-     * @param array         $parameters
+     * @param string|array $method
+     * @param array $parameters
      * @param callable|null $callback
      *
      * @return string Unique call ID.
+     * @throws Bitrix24Exception
      */
     public function addBatchCall($method, array $parameters = array(), callable $callback = null)
     {
         $id = uniqid();
+        switch (true) {
+            case is_string($method):
+                break;
+            case is_array($method):
+                if (!empty($method['id'])) {
+                    $id = $method['id'];
+                }
+                if (!empty($method['name'])) {
+                    $method = $method['name'];
+                    break;
+                }
+                throw new Bitrix24Exception("id isn't valid");
+            default:
+                throw new Bitrix24Exception("method isn't valid");
+        }
+
         $this->_batch[$id] = array(
             'method' => $method,
             'parameters' => $parameters,
