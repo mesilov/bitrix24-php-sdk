@@ -148,6 +148,10 @@ class Bitrix24 implements iBitrix24
      */
     protected $sslVerify = true;
 
+    /**
+     * @var array result from batch query
+     */
+    public $batchResult = array();
 
     /**
      * Create a object to work with Bitrix24 REST API service
@@ -1063,24 +1067,24 @@ class Bitrix24 implements iBitrix24
             }
 
             $batchResult = $this->call('batch', array('halt' => $halt, 'cmd' => $commands));
-            $results = $batchResult['result'];
+            $this->batchResult = $batchResult['result'];
             foreach ($slice as $idx => $call) {
                 if (!isset($call['callback']) || !is_callable($call['callback'])) {
                     continue;
                 }
 
-                if (isset($results['result_error'][$idx])) {
+                if (isset($this->batchResult['result_error'][$idx])) {
                     $this->handleBitrix24APILevelErrors(array(
-                        'error' => $results['result_error'][$idx]['error'],
-                        'error_description' => $results['result_error'][$idx]['error_description'],
+                        'error' => $this->batchResult['result_error'][$idx]['error'],
+                        'error_description' => $this->batchResult['result_error'][$idx]['error_description'],
                     ), $call['method'], $call['parameters']);
                 }
 
                 call_user_func($call['callback'], array(
-                    'result' => isset($results['result'][$idx]) ? $results['result'][$idx] : null,
-                    'error' => isset($results['result_error'][$idx]) ? $results['result_error'][$idx] : null,
-                    'total' => isset($results['result_total'][$idx]) ? $results['result_total'][$idx] : null,
-                    'next' => isset($results['result_next'][$idx]) ? $results['result_next'][$idx] : null,
+                    'result' => isset($this->batchResult['result'][$idx]) ? $this->batchResult['result'][$idx] : null,
+                    'error' => isset($this->batchResult['result_error'][$idx]) ? $this->batchResult['result_error'][$idx] : null,
+                    'total' => isset($this->batchResult['result_total'][$idx]) ? $this->batchResult['result_total'][$idx] : null,
+                    'next' => isset($this->batchResult['result_next'][$idx]) ? $this->batchResult['result_next'][$idx] : null,
                 ));
             }
             if (count($this->_batch) && $delay) {
