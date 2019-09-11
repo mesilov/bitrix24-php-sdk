@@ -1,4 +1,8 @@
 # bitrix24-php-sdk change log
+## 0.6.2 (12.09.2019)
+* remove in method, `processBatchCalls` remove call `handleBitrix24APILevelErrors`
+* remove php 5.x branch in travis config
+
 ## 0.6.1 (20.03.2019)
 * add `offset` parameter to entity `CRM\Status\Status` in method `getList`
 * add `offset` parameter to entity `User\User` in method `getList`
