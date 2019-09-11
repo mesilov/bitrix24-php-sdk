@@ -155,9 +155,9 @@ class Bitrix24 implements iBitrix24
      * @param bool                 $isSaveRawResponse - if true raw response from bitrix24 will be available from method getRawResponse, this is debug mode
      * @param null|LoggerInterface $obLogger          - instance of \Monolog\Logger
      *
+     * @return Bitrix24
      * @throws Bitrix24Exception
      *
-     * @return Bitrix24
      */
     public function __construct($isSaveRawResponse = false, LoggerInterface $obLogger = null)
     {
@@ -274,8 +274,7 @@ class Bitrix24 implements iBitrix24
             . '?grant_type=refresh_token'
             . '&client_id=' . urlencode($applicationId)
             . '&client_secret=' . $applicationSecret
-            . '&refresh_token=' . $refreshToken
-        ;
+            . '&refresh_token=' . $refreshToken;
 
         $requestResult = $this->executeRequest($url);
 
@@ -300,9 +299,9 @@ class Bitrix24 implements iBitrix24
      *
      * @param string $applicationId
      *
+     * @return true;
      * @throws Bitrix24Exception
      *
-     * @return true;
      */
     public function setApplicationId($applicationId)
     {
@@ -329,9 +328,9 @@ class Bitrix24 implements iBitrix24
      *
      * @param string $applicationSecret
      *
+     * @return true;
      * @throws Bitrix24Exception
      *
-     * @return true;
      */
     public function setApplicationSecret($applicationSecret)
     {
@@ -358,9 +357,9 @@ class Bitrix24 implements iBitrix24
      *
      * @param $refreshToken
      *
+     * @return true;
      * @throws Bitrix24Exception
      *
-     * @return true;
      */
     public function setRefreshToken($refreshToken)
     {
@@ -417,9 +416,9 @@ class Bitrix24 implements iBitrix24
      *
      * @param string $redirectUri
      *
+     * @return true;
      * @throws Bitrix24Exception
      *
-     * @return true;
      */
     public function setRedirectUri($redirectUri)
     {
@@ -446,9 +445,9 @@ class Bitrix24 implements iBitrix24
      *
      * @param $domain
      *
+     * @return true;
      * @throws Bitrix24Exception
      *
-     * @return true;
      */
     public function setDomain($domain)
     {
@@ -482,12 +481,12 @@ class Bitrix24 implements iBitrix24
      * @param string $url
      * @param array  $additionalParameters
      *
-     * @throws Bitrix24Exception
+     * @return array
      * @throws Bitrix24PortalDeletedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      *
-     * @return array
+     * @throws Bitrix24Exception
      * @throws \Bitrix24\Exceptions\Bitrix24BadGatewayException
      */
     protected function executeRequest($url, array $additionalParameters = array())
@@ -635,9 +634,9 @@ class Bitrix24 implements iBitrix24
      *
      * @param string $memberId
      *
+     * @return true
      * @throws Bitrix24Exception
      *
-     * @return true
      */
     public function setMemberId($memberId)
     {
@@ -666,9 +665,9 @@ class Bitrix24 implements iBitrix24
      *
      * @param string $accessToken
      *
+     * @return true
      * @throws Bitrix24Exception
      *
-     * @return true
      */
     public function setAccessToken($accessToken)
     {
@@ -809,6 +808,7 @@ class Bitrix24 implements iBitrix24
      * Authorize and get first access token
      *
      * @link https://dev.1c-bitrix.ru/learning/course/index.php?COURSE_ID=99&LESSON_ID=2486&LESSON_PATH=8771.5380.5379.2486
+     *
      * @param $code
      *
      * @return array
@@ -846,8 +846,7 @@ class Bitrix24 implements iBitrix24
             . '?grant_type=authorization_code'
             . '&client_id=' . urlencode($applicationId)
             . '&client_secret=' . $applicationSecret
-            . '&code=' . urlencode($code)
-        ;
+            . '&code=' . urlencode($code);
 
         $requestResult = $this->executeRequest($url);
         // handling bitrix24 api-level errors
@@ -860,6 +859,7 @@ class Bitrix24 implements iBitrix24
      * Check is access token expire, call list of all available api-methods from B24 portal with current access token
      * if we have an error code expired_token then return true else return false
      *
+     * @return boolean
      * @throws Bitrix24Exception
      * @throws Bitrix24ApiException
      * @throws Bitrix24PortalDeletedException
@@ -872,7 +872,6 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24PaymentRequiredException
      * @throws Bitrix24PortalRenamedException
      *
-     * @return boolean
      */
     public function isAccessTokenExpire()
     {
@@ -946,14 +945,14 @@ class Bitrix24 implements iBitrix24
      *
      * @param bool $isFull
      *
-     * @throws Bitrix24Exception
+     * @return array
      * @throws Bitrix24Exception
      * @throws Bitrix24PortalDeletedException
      * @throws Bitrix24PortalRenamedException
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      *
-     * @return array
+     * @throws Bitrix24Exception
      */
     public function getScope($isFull = false)
     {
@@ -1069,13 +1068,6 @@ class Bitrix24 implements iBitrix24
                     continue;
                 }
 
-                if (isset($results['result_error'][$idx])) {
-                    $this->handleBitrix24APILevelErrors(array(
-                        'error' => $results['result_error'][$idx]['error'],
-                        'error_description' => $results['result_error'][$idx]['error_description'],
-                    ), $call['method'], $call['parameters']);
-                }
-
                 call_user_func($call['callback'], array(
                     'result' => isset($results['result'][$idx]) ? $results['result'][$idx] : null,
                     'error' => isset($results['result_error'][$idx]) ? $results['result_error'][$idx] : null,
@@ -1135,6 +1127,7 @@ class Bitrix24 implements iBitrix24
      * @param string $methodName
      * @param array  $additionalParameters
      *
+     * @return array
      * @throws Bitrix24Exception
      * @throws Bitrix24ApiException
      * @throws Bitrix24TokenIsInvalidException
@@ -1148,7 +1141,6 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24EmptyResponseException
      * @throws Bitrix24PortalRenamedException
      *
-     * @return array
      */
     protected function _call($methodName, array $additionalParameters = array())
     {
