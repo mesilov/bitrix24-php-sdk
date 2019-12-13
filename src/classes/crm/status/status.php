@@ -230,14 +230,13 @@ class Status extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
      * @throws \Bitrix24\Exceptions\Bitrix24ApiException
      */
-    public function getList($order, $filter, $offset = 0)
+    public function getList($order, $filter)
     {
         $fullResult = $this->client->call(
             'crm.status.list',
             [
                 'order'  => $order,
-                'filter' => $filter,
-                'start' => $offset
+                'filter' => $filter
             ]
         );
         return $fullResult;
