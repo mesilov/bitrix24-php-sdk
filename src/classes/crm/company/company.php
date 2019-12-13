@@ -63,10 +63,8 @@ class Company extends Bitrix24Entity
 	{
 		$fullResult = $this->client->call(
 			'crm.company.update',
-			array(
-                            'id' => $bitrix24CompanyId,
-                            'fields' => $fields,
-                        )
+			array('id' => $bitrix24CompanyId),
+			array('fields' => $fields)
 		);
 		return $fullResult;
 	}
