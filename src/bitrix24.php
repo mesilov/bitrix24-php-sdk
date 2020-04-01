@@ -83,12 +83,12 @@ class Bitrix24 implements iBitrix24
     protected $rawRequest;
 
     /**
-     * @var array, contain all api-method parameters, vill be available after call method
+     * @var array, contain all api-method parameters, will be available after call method
      */
     protected $methodParameters;
 
     /**
-     * @var array request info data structure акщь curl_getinfo function
+     * @var array request info data structure from curl_getinfo function
      */
     protected $requestInfo;
 
