@@ -1,4 +1,7 @@
 # bitrix24-php-sdk change log
+## 0.7.0 (11.07.2020)
+* add arguments in method `Bitrix24\Bizproc\Robot::add` for return results support
+
 ## 0.6.2 (12.09.2019)
 * remove in method, `processBatchCalls` remove call `handleBitrix24APILevelErrors`
 * remove php 5.x branch in travis config

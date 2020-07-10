@@ -12,18 +12,16 @@ use Bitrix24\Bitrix24Entity;
 class Robot extends Bitrix24Entity
 {
     /**
-     * add crm-robot
-     *
-     * @param string $code
-     * @param string $handler
-     * @param int    $userId
-     * @param array  $arName
-     * @param array  $arProps
+     * @param $code
+     * @param $handler
+     * @param $userId
+     * @param $arName
+     * @param $arProps
+     * @param $arReturnProps
+     * @param $isUseSubscription
+     * @param $isUsePlacement
      *
      * @return mixed
-     *
-     * @see https://dev.1c-bitrix.ru/rest_help/bizproc/bizproc_robot/robotadd.php
-     *
      * @throws \Bitrix24\Exceptions\Bitrix24ApiException
      * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
      * @throws \Bitrix24\Exceptions\Bitrix24Exception
@@ -37,16 +35,21 @@ class Robot extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24TokenIsInvalidException
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
      */
-    public function add($code, $handler, $userId, $arName, $arProps)
+    public function add($code, $handler, $userId, $arName, $arProps, $arReturnProps, $isUseSubscription, $isUsePlacement)
     {
-        $arResult = $this->client->call('bizproc.robot.add',
+        $arResult = $this->client->call(
+            'bizproc.robot.add',
             array(
-                'CODE' => $code,
-                'HANDLER' => $handler,
-                'AUTH_USER_ID' => $userId,
-                'NAME' => $arName,
-                'PROPERTIES' => $arProps,
-            ));
+                'CODE'              => $code,
+                'HANDLER'           => $handler,
+                'AUTH_USER_ID'      => $userId,
+                'NAME'              => $arName,
+                'PROPERTIES'        => $arProps,
+                'RETURN_PROPERTIES' => $arReturnProps,
+                'USE_PLACEMENT'     => $isUsePlacement === true ? 'Y' : 'N',
+                'USE_SUBSCRIPTION'  => $isUseSubscription === true ? 'Y' : 'N',
+            )
+        );
 
         return $arResult['result'];
     }
@@ -55,8 +58,6 @@ class Robot extends Bitrix24Entity
      * delete activity
      *
      * @param $code string
-     *
-     * @see https://dev.1c-bitrix.ru/rest_help/bizproc/bizproc_robot/robotdelete.php
      *
      * @return array
      * @throws \Bitrix24\Exceptions\Bitrix24WrongClientException
@@ -70,10 +71,13 @@ class Robot extends Bitrix24Entity
      * @throws \Bitrix24\Exceptions\Bitrix24Exception
      * @throws \Bitrix24\Exceptions\Bitrix24EmptyResponseException
      * @throws \Bitrix24\Exceptions\Bitrix24ApiException
+     * @see https://dev.1c-bitrix.ru/rest_help/bizproc/bizproc_robot/robotdelete.php
+     *
      */
     public function delete($code)
     {
-        $arResult = $this->client->call('bizproc.robot.delete',
+        $arResult = $this->client->call(
+            'bizproc.robot.delete',
             array(
                 'code' => $code,
             )
@@ -103,7 +107,8 @@ class Robot extends Bitrix24Entity
      */
     public function getList()
     {
-        $arResult = $this->client->call('bizproc.robot.list',
+        $arResult = $this->client->call(
+            'bizproc.robot.list',
             array()
         );
 
