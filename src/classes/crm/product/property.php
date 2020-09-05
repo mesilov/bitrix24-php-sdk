@@ -112,7 +112,7 @@ class Property extends Bitrix24Entity
     public function update($productPropertyId, array $fields)
     {
         $fullResult = $this->client->call(
-            'crm.product.property.add',
+            'crm.product.property.update',
             array(
                 'id' => $productPropertyId,
                 'fields' => $fields,
