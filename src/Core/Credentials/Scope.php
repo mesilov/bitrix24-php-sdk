@@ -70,7 +70,8 @@ class Scope
      */
     public function __construct(array $scope = [])
     {
-        array_change_key_case($scope, CASE_LOWER);
+        $scope = array_map('strtolower', $scope);
+        array_unique($scope);
         foreach ($scope as $item) {
             if (!in_array($item, $this->availableScope, true)) {
                 throw new UnknownScopeCodeException(sprintf('unknown application scope code - %s', $item));
@@ -85,6 +86,6 @@ class Scope
      */
     public function getScopeCodes(): array
     {
-        return array_unique($this->currentScope);
+        return $this->currentScope;
     }
 }
