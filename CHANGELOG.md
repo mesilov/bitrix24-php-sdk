@@ -1,4 +1,8 @@
 # bitrix24-php-sdk change log
+## 2.0 DEV
+* remove all old code
+
+
 ## 0.7.0 (11.07.2020)
 * add arguments in method `Bitrix24\Bizproc\Robot::add` for return results support
 
