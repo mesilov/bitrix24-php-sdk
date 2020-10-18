@@ -148,6 +148,15 @@ class Bitrix24 implements iBitrix24
      */
     protected $sslVerify = true;
 
+    /**
+     * @var bool if true - webhook will be used in API calls (without access_token)
+     */
+    protected $webhook_usage;
+
+    /**
+     * @var string webhook secret identifier
+     */
+    protected $webhook_secret;
 
     /**
      * Create a object to work with Bitrix24 REST API service
@@ -1105,7 +1114,8 @@ class Bitrix24 implements iBitrix24
     public function call($methodName, array $additionalParameters = array())
     {
         try {
-            $result = $this->_call($methodName, $additionalParameters);
+                $result = $this->getWebhookUsage()  ? $this->_call_webhook($methodName, $additionalParameters)
+                                                    : $this->_call($methodName, $additionalParameters);
         } catch (Bitrix24TokenIsExpiredException $e) {
             if (!is_callable($this->_onExpiredToken)) {
                 throw $e;
@@ -1115,7 +1125,9 @@ class Bitrix24 implements iBitrix24
             if (!$retry) {
                 throw $e;
             }
-            $result = $this->_call($methodName, $additionalParameters);
+
+            $result = $this->getWebhookUsage()  ? $this->_call_webhook($methodName, $additionalParameters)
+                                                : $this->_call($methodName, $additionalParameters);
         }
 
         return $result;
@@ -1216,6 +1228,107 @@ class Bitrix24 implements iBitrix24
                 throw new Bitrix24SecurityException('security signature in api-response not found');
             }
         }
+
+        return $requestResult;
+    }
+
+    /**
+     * Set whether we using webhook or application in API calls
+     * If true - use webhook in API call
+     *
+     * @param bool $webhook_usage_boolean
+     * @return bool
+     */
+    public function setWebhookUsage($webhook_usage_boolean)
+    {
+        $this->webhook_usage = $webhook_usage_boolean;
+
+        return true;
+    }
+
+    /**
+     * Return whether we using webhook or application in API calls
+     *
+     * @return bool
+     */
+    public function getWebhookUsage()
+    {
+        return $this->webhook_usage;
+    }
+
+    /**
+     * Set webhook secret to use in API calls
+     *
+     * @param string $webhook_secret
+     * @return bool
+     */
+    public function setWebhookSecret($webhook_secret)
+    {
+        $this->webhook_secret = $webhook_secret;
+
+        return true;
+    }
+
+    /**
+     * Return string with webhook secret
+     *
+     * @return string
+     */
+    public function getWebhookSecret()
+    {
+        return $this->webhook_secret;
+    }
+
+    /**
+     * Execute Bitrix24 REST API method using webhook
+     *
+     * @param string $methodName
+     * @param array  $additionalParameters
+     *
+     * @return array
+     * @throws Bitrix24Exception
+     * @throws Bitrix24ApiException
+     * @throws Bitrix24TokenIsInvalidException
+     * @throws Bitrix24TokenIsExpiredException
+     * @throws Bitrix24WrongClientException
+     * @throws Bitrix24MethodNotFoundException
+     * @throws Bitrix24PaymentRequiredException
+     * @throws Bitrix24SecurityException
+     * @throws Bitrix24PortalDeletedException
+     * @throws Bitrix24IoException
+     * @throws Bitrix24EmptyResponseException
+     * @throws Bitrix24PortalRenamedException
+     */
+    protected function _call_webhook($methodName, array $additionalParameters = array())
+    {
+        if (null === $this->getDomain()) {
+            throw new Bitrix24Exception('domain not found, you must call setDomain method before');
+        }
+
+        if ('' === $methodName) {
+            throw new Bitrix24Exception('method name not found, you must set method name');
+        }
+
+        if (null === $this->getWebhookSecret()) {
+            throw new Bitrix24Exception('no webhook secret provided, you must call setWebhookSecret method before');
+        }
+
+        $url = 'https://' . $this->domain . '/rest/' . $this->getWebhookSecret() . '/' . $methodName;
+
+        // save method parameters for debug
+        $this->methodParameters = $additionalParameters;
+
+        // execute request
+        $this->log->info('call bitrix24 method', array(
+            'BITRIX24_WEBHOOK_URL' => $url,
+            'BITRIX24_DOMAIN' => $this->domain,
+            'METHOD_NAME' => $methodName,
+            'METHOD_PARAMETERS' => $additionalParameters,
+        ));
+        $requestResult = $this->executeRequest($url, $additionalParameters);
+
+        // check errors and throw exception if errors exists
+        $this->handleBitrix24APILevelErrors($requestResult, $methodName, $additionalParameters);
 
         return $requestResult;
     }
