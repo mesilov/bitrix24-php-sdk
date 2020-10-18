@@ -1,0 +1,8 @@
+{
+  "require": {
+    "monolog/monolog": "2.*"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
+  }
+}

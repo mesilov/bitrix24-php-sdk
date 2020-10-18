@@ -2,54 +2,47 @@ bitrix24-php-sdk [![Build Status](https://travis-ci.org/mesilov/bitrix24-php-sdk
 ================
 [![License](https://poser.pugx.org/mesilov/bitrix24-php-sdk/license.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk) [![Total Downloads](https://poser.pugx.org/mesilov/bitrix24-php-sdk/downloads.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
 
-A powerfull PHP library for the Bitrix24 REST API
+A powerful PHP library for the Bitrix24 REST API
 
 [Bitrix24 API documentation - Russian](http://dev.1c-bitrix.ru/rest_help/)<br />
 [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
-## Promo code for new Bitrix24 accounts 
-- `b24io5gb` — add 5GB on your Bitrix24
-- `b24iousers`  — add 12 users on your Bitrix24  
 [Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)
 
-Bitrix24-PHP-SDK has a two branches
-- 1.x with 5.x php support, bugfix and minor updates only
-- 2.x only with 7.3+ php support, active work 
+Bitrix24 auth features
+- work with auth tokens
+- work with incoming webhooks
 
-Current master is 1.x branch
+add low-level tools to devs:
+- 2.1 callbacks
+- 2.2 rate-limiter - wait for symfony/symfony#37471
+- 2.3 RetryHttpClient - symfony/symfony#38182
+
+API - level features
+- 3.1 batch queries
+- 3.2 offline queues
+- 3.3 add change domain URL support
+
+## Architecture
+```
+    /Core
+        ApiClient.php - default api-client, work on http abstraction layer, return - Symfony\Contracts\HttpClient\ResponseInterface
+    /Services
+        /CRM
+            /Deals
+                /Client
+                    Deals.php
+                /Exceptions
+        /Tasks
+        … 
+        Main.php - default bitrix24 rest api service provide basic funcions, work with data transfer objects
+```
 
 ## Requirements
-- php: >=5.3.2
+- php: >=7.4
 - ext-json: *
-- ext-curl: *
-- Monolog: optional 
+- ext-curl: * 
 
 ## Example ##
-``` php
-<?php
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-
-// create a log channel
-$log = new Logger('bitrix24');
-$log->pushHandler(new StreamHandler('path/to/your.log', Logger::DEBUG));
-
-
-// init lib
-$obB24App = new \Bitrix24\Bitrix24(false, $log);
-$obB24App->setApplicationScope($arParams['B24_APPLICATION_SCOPE']);
-$obB24App->setApplicationId($arParams['B24_APPLICATION_ID']);
-$obB24App->setApplicationSecret($arParams['B24_APPLICATION_SECRET']);
- 
-// set user-specific settings
-$obB24App->setDomain($arParams['DOMAIN']);
-$obB24App->setMemberId($arParams['MEMBER_ID']);
-$obB24App->setAccessToken($arParams['AUTH_ID']);
-$obB24App->setRefreshToken($arParams['REFRESH_ID']);
-
-// get information about current user from bitrix24
-$obB24User = new \Bitrix24\User\User($obB24App);
-$arCurrentB24User = $obB24User->current();
-```
 ## Installation ##
 Add `"mesilov/bitrix24-php-sdk": "dev-master"` to `composer.json` of your application. Or clone repo to your project.
 
