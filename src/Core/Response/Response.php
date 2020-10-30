@@ -45,29 +45,21 @@ class Response
     }
 
     /**
-     * @return DTO\Response
+     * @return DTO\ResponseData
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function getResponse(): DTO\Response
+    public function getResponseData(): DTO\ResponseData
     {
         $resultString = $this->httpResponse->getContent();
-
         try {
             $result = json_decode($resultString, true, 512, JSON_THROW_ON_ERROR);
 
-            return new DTO\Response(
+            return new DTO\ResponseData(
                 new DTO\Result($result['result']),
-                new DTO\Time(
-                    $result['time']['start'],
-                    $result['time']['finish'],
-                    $result['time']['duration'],
-                    $result['time']['processing'],
-                    new \DateTimeImmutable($result['time']['date_start']),
-                    new \DateTimeImmutable($result['time']['date_finish'])
-                )
+                DTO\Time::initFromResponse($result['time'])
             );
         } catch (\JsonException $e) {
             $this->logger->error($e->getMessage());

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core\Response\DTO;
 
 /**
- * Class Response
+ * Class ResponseData
  *
  * @package Bitrix24\SDK\Core\Response\DTO
  */
-class Response
+class ResponseData
 {
     /**
      * @var Result

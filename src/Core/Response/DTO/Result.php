@@ -29,7 +29,7 @@ class Result
     /**
      * @return array
      */
-    public function getResult(): array
+    public function getResultData(): array
     {
         return $this->result;
     }

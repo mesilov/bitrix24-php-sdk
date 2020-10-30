@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Response\DTO;
 
+/**
+ * Class Time
+ *
+ * @package Bitrix24\SDK\Core\Response\DTO
+ */
 class Time
 {
     /**
@@ -103,5 +108,23 @@ class Time
     public function getDateFinish(): \DateTimeImmutable
     {
         return $this->dateFinish;
+    }
+
+    /**
+     * @param array $response
+     *
+     * @return static
+     * @throws \Exception
+     */
+    public static function initFromResponse(array $response): self
+    {
+        return new self(
+            (float)$response['start'],
+            (float)$response['finish'],
+            (float)$response['duration'],
+            (float)$response['processing'],
+            new \DateTimeImmutable($response['date_start']),
+            new \DateTimeImmutable($response['date_finish'])
+        );
     }
 }
