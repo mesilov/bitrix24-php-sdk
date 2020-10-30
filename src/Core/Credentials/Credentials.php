@@ -11,9 +11,18 @@ namespace Bitrix24\SDK\Core\Credentials;
  */
 class Credentials
 {
-    protected ?WebhookUrl $webhookUrl;
-    protected ?OAuthToken $oauthToken;
-    protected ?string $domainUrl;
+    /**
+     * @var WebhookUrl|null
+     */
+    protected $webhookUrl;
+    /**
+     * @var OAuthToken|null
+     */
+    protected $oauthToken;
+    /**
+     * @var string|null
+     */
+    protected $domainUrl;
 
     /**
      * Credentials constructor.

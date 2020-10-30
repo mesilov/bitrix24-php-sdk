@@ -1,17 +1,10 @@
 language: php
 
 php:
-  - 7.0
   - 7.1
   - 7.2
   - 7.3
-  - 7.4snapshot
-  - hhvm
-  
-matrix:
-  allow_failures:
-    - php: 5.3.3
-    - php: hhvm
+  - 7.4
 
 sudo: false
 
