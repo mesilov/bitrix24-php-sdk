@@ -8,6 +8,7 @@ A powerful PHP library for the Bitrix24 REST API
 [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
 [Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)
 
+
 Bitrix24 auth features
 - work with auth tokens
 - work with incoming webhooks
@@ -22,7 +23,32 @@ API - level features
 - 3.2 offline queues
 - 3.3 add change domain URL support
 
+## SDK Documentation
+- [Russian](/docs/RU/documentation.md)
+- [English]()
+
+
 ## Architecture
+
+### Abstraction layers
+```
+- http protocol
+- json data
+- symfony http client
+- \Bitrix24\SDK\Core\ApiClient - work with b24 rest-api endpoints
+    input: arrays \ strings
+    output: Symfony\Contracts\HttpClient\ResponseInterface, operate with strings
+    process: network operations 
+- \Bitrix24\SDK\Services\Main - work with b24 rest-api entities
+    input: arrays \ strings (?) or queries?
+    output: b24 response dto
+    process: b24 entities, operate with  
+```
+
+
+
+
+### File Structure
 ```
     /Core
         ApiClient.php - default api-client, work on http abstraction layer, return - Symfony\Contracts\HttpClient\ResponseInterface

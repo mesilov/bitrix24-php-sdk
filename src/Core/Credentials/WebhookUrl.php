@@ -11,7 +11,10 @@ namespace Bitrix24\SDK\Core\Credentials;
  */
 class WebhookUrl
 {
-    protected string $url;
+    /**
+     * @var string
+     */
+    protected $url;
 
     /**
      * WebHookToken constructor.
