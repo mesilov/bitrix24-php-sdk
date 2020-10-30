@@ -5,12 +5,12 @@ bitrix24-php-sdk [![Build Status](https://travis-ci.org/mesilov/bitrix24-php-sdk
 A powerful PHP library for the Bitrix24 REST API
 
 [Bitrix24 API documentation - Russian](http://dev.1c-bitrix.ru/rest_help/)<br />
-[Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
-[Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)
+[Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)<br />
+[Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)<br />
 
 
 Bitrix24 auth features
-- work with auth tokens
+~~- work with auth tokens~~
 - work with incoming webhooks
 
 add low-level tools to devs:
@@ -23,10 +23,16 @@ API - level features
 - 3.2 offline queues
 - 3.3 add change domain URL support
 
+Core DTO
+- Response
+- Scope
+~~- Time~~
+- OAuthToken
+
+
 ## SDK Documentation
 - [Russian](/docs/RU/documentation.md)
-- [English]()
-
+- [English](/docs/EN/documentation.md)
 
 ## Architecture
 
