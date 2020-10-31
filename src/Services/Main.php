@@ -42,6 +42,7 @@ class Main
      *
      * @return Response
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
     public function call(string $apiMethod, array $parameters = []): Response
     {

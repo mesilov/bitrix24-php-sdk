@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
-use Bitrix24\SDK\Core\Credentials\OAuthToken;
+use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -29,6 +30,14 @@ class ApiClient
      * @var Credentials\Credentials
      */
     protected $credentials;
+    /**
+     * @const string
+     */
+    protected const BITRIX24_OAUTH_SERVER_URL = 'https://oauth.bitrix.info';
+    /**
+     * @const string
+     */
+    protected const SDK_VERSION = '2.0';
 
     /**
      * ApiClient constructor.
@@ -53,19 +62,42 @@ class ApiClient
     }
 
     /**
-     * @param Credentials\Credentials $credentials
+     * @return AccessToken
+     * @throws InvalidArgumentException
+     * @throws TransportExceptionInterface
+     * @throws \JsonException
      */
-    public function setCredentials(Credentials\Credentials $credentials): void
+    public function getNewAccessToken(): AccessToken
     {
-        $this->credentials = $credentials;
-    }
+        $this->logger->debug(sprintf('getNewAccessToken.start'));
+        if ($this->getCredentials()->getApplicationProfile() === null) {
+            throw new InvalidArgumentException(sprintf('application profile not set'));
+        }
+        if ($this->getCredentials()->getAccessToken() === null) {
+            throw new InvalidArgumentException(sprintf('access token in credentials not set'));
+        }
 
-    /**
-     * @return OAuthToken
-     */
-    public function getNewToken(): OAuthToken
-    {
-        return new OAuthToken('1', '2', 3600);
+        $method = 'GET';
+        $url = sprintf(
+            '%s/oauth/token/?%s',
+            $this::BITRIX24_OAUTH_SERVER_URL,
+            http_build_query(
+                [
+                    'grant_type'    => 'refresh_token',
+                    'client_id'     => $this->getCredentials()->getApplicationProfile()->getClientId(),
+                    'client_secret' => $this->getCredentials()->getApplicationProfile()->getClientSecret(),
+                    'refresh_token' => $this->getCredentials()->getAccessToken()->getRefreshToken(),
+                ]
+            )
+        );
+
+        $response = $this->client->request($method, $url, []);
+        $result = $response->toArray(true);
+        $newAccessToken = AccessToken::initFromArray($result);
+
+        $this->logger->debug(sprintf('getNewAccessToken.finish'));
+
+        return $newAccessToken;
     }
 
     /**
@@ -74,6 +106,7 @@ class ApiClient
      *
      * @return ResponseInterface
      * @throws TransportExceptionInterface
+     * @throws InvalidArgumentException
      */
     public function getResponse(string $apiMethod, array $parameters = []): ResponseInterface
     {
@@ -86,19 +119,20 @@ class ApiClient
         );
 
         $method = 'POST';
-
-        if ($this->credentials->getWebhookUrl() !== null) {
-            $url = sprintf('%s/%s/', $this->credentials->getWebhookUrl()->getUrl(), $apiMethod);
+        if ($this->getCredentials()->getWebhookUrl() !== null) {
+            $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
         } else {
-            // todo domain rename case
-            $url = sprintf('%s/%s', $this->credentials->getDomainUrl(), $apiMethod);
-        }
+            $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
 
+            if ($this->getCredentials()->getAccessToken() === null) {
+                throw new InvalidArgumentException(sprintf('access token in credentials not found '));
+            }
+            $parameters['auth'] = $this->getCredentials()->getAccessToken()->getAccessToken();
+        }
 
         $requestOptions = [
             'json' => $parameters,
         ];
-
         $response = $this->client->request($method, $url, $requestOptions);
 
         $this->logger->debug(
