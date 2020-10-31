@@ -16,9 +16,14 @@ class Credentials
      */
     protected $webhookUrl;
     /**
-     * @var OAuthToken|null
+     * @var AccessToken|null
      */
-    protected $oauthToken;
+    protected $accessToken;
+    /**
+     * @var ApplicationProfile|null
+     */
+    protected $applicationProfile;
+
     /**
      * @var string|null
      */
@@ -27,21 +32,43 @@ class Credentials
     /**
      * Credentials constructor.
      *
-     * @param WebhookUrl|null $webhookUrl
-     * @param OAuthToken|null $oauthToken
-     * @param string|null     $domainUrl
+     * @param WebhookUrl|null         $webhookUrl
+     * @param AccessToken|null        $accessToken
+     * @param ApplicationProfile|null $applicationProfile
+     * @param string|null             $domainUrl
      */
-    public function __construct(?WebhookUrl $webhookUrl, ?OAuthToken $oauthToken, ?string $domainUrl)
-    {
+    public function __construct(
+        ?WebhookUrl $webhookUrl,
+        ?AccessToken $accessToken,
+        ?ApplicationProfile $applicationProfile,
+        ?string $domainUrl
+    ) {
         $this->webhookUrl = $webhookUrl;
-        $this->oauthToken = $oauthToken;
+        $this->accessToken = $accessToken;
+        $this->applicationProfile = $applicationProfile;
         $this->domainUrl = $domainUrl;
-        if ($this->oauthToken === null && $this->webhookUrl === null) {
-            throw new \LogicException(sprintf('you must set on of auth type: webhook or oauth'));
+        if ($this->accessToken === null && $this->webhookUrl === null) {
+            throw new \LogicException(sprintf('you must set on of auth type: webhook or OAuth 2.0'));
         }
-        if ($this->oauthToken !== null && $this->domainUrl === null) {
+        if ($this->accessToken !== null && $this->domainUrl === null) {
             throw new \LogicException(sprintf('for oauth type you must set domain url'));
         }
+    }
+
+    /**
+     * @param AccessToken $accessToken
+     */
+    public function setAccessToken(AccessToken $accessToken): void
+    {
+        $this->accessToken = $accessToken;
+    }
+
+    /**
+     * @return ApplicationProfile|null
+     */
+    public function getApplicationProfile(): ?ApplicationProfile
+    {
+        return $this->applicationProfile;
     }
 
     /**
@@ -52,7 +79,7 @@ class Credentials
         if ($this->getWebhookUrl() !== null) {
             $url = parse_url($this->getWebhookUrl()->getUrl())['host'];
         } else {
-            $url = $this->getDomainUrl();
+            $url = $this->domainUrl;
         }
 
         return $url;
@@ -67,10 +94,42 @@ class Credentials
     }
 
     /**
-     * @return OAuthToken|null
+     * @return AccessToken|null
      */
-    public function getOauthToken(): ?OAuthToken
+    public function getAccessToken(): ?AccessToken
     {
-        return $this->oauthToken;
+        return $this->accessToken;
+    }
+
+    /**
+     * @param WebhookUrl $webhookUrl
+     *
+     * @return static
+     */
+    public static function createForWebHook(WebhookUrl $webhookUrl): self
+    {
+        return new self(
+            $webhookUrl,
+            null,
+            null,
+            null
+        );
+    }
+
+    /**
+     * @param AccessToken        $accessToken
+     * @param ApplicationProfile $applicationProfile
+     * @param string             $domainUrl
+     *
+     * @return static
+     */
+    public static function createForOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
+    {
+        return new self(
+            null,
+            $accessToken,
+            $applicationProfile,
+            $domainUrl
+        );
     }
 }

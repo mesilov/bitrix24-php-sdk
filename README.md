@@ -9,12 +9,14 @@ A powerful PHP library for the Bitrix24 REST API
 [Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)<br />
 
 
-Bitrix24 auth features
-~~- work with auth tokens~~
-- work with incoming webhooks
+## SDK 2.0 core features
+
+Bitrix24 auth features 
+- ~~work with auth tokens~~
+- ~~work with incoming webhooks~~
 
 add low-level tools to devs:
-- 2.1 callbacks
+- 2.1 callbacks (token expired, domain url changed)
 - 2.2 rate-limiter - wait for symfony/symfony#37471
 - 2.3 RetryHttpClient - symfony/symfony#38182
 
@@ -24,11 +26,11 @@ API - level features
 - 3.3 add change domain URL support
 
 Core DTO
-- Response
-- Scope
-~~- Time~~
-- OAuthToken
-
+- ~~Response~~
+- ~~Scope~~
+- ~~Time~~
+- ~~OAuthToken~~
+- ~~ApplicationProfile~~
 
 ## SDK Documentation
 - [Russian](/docs/RU/documentation.md)

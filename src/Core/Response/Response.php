@@ -53,16 +53,33 @@ class Response
      */
     public function getResponseData(): DTO\ResponseData
     {
+        $this->logger->debug('getResponseData.start');
         $resultString = $this->httpResponse->getContent();
         try {
-            $result = json_decode($resultString, true, 512, JSON_THROW_ON_ERROR);
+            $responseResult = json_decode($resultString, true, 512, JSON_THROW_ON_ERROR);
+
+            $resultDto = new DTO\Result($responseResult['result']);
+            $time = DTO\Time::initFromResponse($responseResult['time']);
+
+            $this->logger->debug(
+                'getResponseData.finish',
+                [
+                    'result'       => $resultDto->getResultData(),
+                    'durationTime' => $time->getDuration(),
+                ]
+            );
 
             return new DTO\ResponseData(
-                new DTO\Result($result['result']),
-                DTO\Time::initFromResponse($result['time'])
+                $resultDto,
+                $time
             );
         } catch (\JsonException $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                $e->getMessage(),
+                [
+                    'response' => $this->httpResponse->getContent(),
+                ]
+            );
         }
     }
 }
