@@ -70,12 +70,11 @@ $token = new \Bitrix24\SDK\Core\Credentials\AccessToken(
     '404bc55… refresh token',
     1604179882
 );
-$domain = 'https://loyalty-dev-2020-10.bitrix24.ru';
+$domain = 'https:// client portal address  .bitrix24.ru';
 $credentials = \Bitrix24\SDK\Core\Credentials\Credentials::createForOAuth($token, $appProfile, $domain);
 
 $apiClient = new \Bitrix24\SDK\Core\ApiClient($credentials, $traceableClient, $log);
 $app = new \Bitrix24\SDK\Services\Main($apiClient, $log);
-
 
 $log->debug('================================');
 $res = $app->call('app.info');
