@@ -16,14 +16,15 @@ Bitrix24 auth features
 - ~~work with incoming webhooks~~
 
 add low-level tools to devs:
-- 2.1 callbacks (token expired, domain url changed)
+- ~~2.1 events (token expired, domain url changed)~~
 - 2.2 rate-limiter - wait for symfony/symfony#37471
 - 2.3 RetryHttpClient - symfony/symfony#38182
 
 API - level features
-- 3.1 batch queries
-- 3.2 offline queues
-- 3.3 add change domain URL support
+- ~~3.1 auto renew access tokens~~ 
+- 3.2 batch queries
+- 3.3 offline queues
+- 3.4 add change domain URL support
 
 Core DTO
 - ~~Response~~
@@ -53,9 +54,6 @@ Core DTO
     process: b24 entities, operate with  
 ```
 
-
-
-
 ### File Structure
 ```
     /Core
@@ -78,7 +76,7 @@ Core DTO
 
 ## Example ##
 ## Installation ##
-Add `"mesilov/bitrix24-php-sdk": "dev-master"` to `composer.json` of your application. Or clone repo to your project.
+Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
 
 ## Submitting bugs and feature requests
 

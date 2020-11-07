@@ -17,6 +17,7 @@ class Scope
      * @var string[]
      */
     protected $availableScope = [
+        'app',
         'bizproc',
         'calendar',
         'call',
