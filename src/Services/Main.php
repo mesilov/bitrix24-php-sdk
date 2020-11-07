@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services;
 
 use Bitrix24\SDK\Core\ApiClient;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\Response;
+use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class Main
@@ -23,16 +27,22 @@ class Main
      * @var LoggerInterface
      */
     protected $log;
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
     /**
      * Main constructor.
      *
-     * @param ApiClient       $apiClient
-     * @param LoggerInterface $log
+     * @param ApiClient                $apiClient
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param LoggerInterface          $log
      */
-    public function __construct(ApiClient $apiClient, LoggerInterface $log)
+    public function __construct(ApiClient $apiClient, EventDispatcherInterface $eventDispatcher, LoggerInterface $log)
     {
         $this->apiClient = $apiClient;
+        $this->eventDispatcher = $eventDispatcher;
         $this->log = $log;
     }
 
@@ -41,13 +51,71 @@ class Main
      * @param array  $parameters
      *
      * @return Response
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \JsonException
+     * @throws BaseException
      */
     public function call(string $apiMethod, array $parameters = []): Response
     {
-        $result = $this->apiClient->getResponse($apiMethod, $parameters);
+        $this->log->debug(
+            'call.start',
+            [
+                'method'     => $apiMethod,
+                'parameters' => $parameters,
+            ]
+        );
 
-        return new Response($result, $this->log);
+        // make async request
+        $apiCallResult = $this->apiClient->getResponse($apiMethod, $parameters);
+
+        $response = null;
+        switch ($apiCallResult->getStatusCode()) {
+            case StatusCodeInterface::STATUS_OK:
+                //todo check with empty response size from server
+                $response = new Response($apiCallResult, $this->log);
+                break;
+            case StatusCodeInterface::STATUS_UNAUTHORIZED:
+                $body = $apiCallResult->toArray(false);
+                $this->log->notice(
+                    'UNAUTHORIZED request',
+                    [
+                        'body' => $body,
+                    ]
+                );
+
+                if ($body['error'] === 'expired_token') {
+                    // renew access token
+                    $renewedToken = $this->apiClient->getNewAccessToken();
+                    $this->log->debug(
+                        'access token renewed',
+                        [
+                            'newAccessToken'  => $renewedToken->getAccessToken()->getAccessToken(),
+                            'newRefreshToken' => $renewedToken->getAccessToken()->getRefreshToken(),
+                            'newExpires'      => $renewedToken->getAccessToken()->getExpires(),
+                            'appStatus'       => $renewedToken->getApplicationStatus(),
+                        ]
+                    );
+                    $this->apiClient->getCredentials()->setAccessToken($renewedToken->getAccessToken());
+
+                    // repeat api-call
+                    $response = $this->call($apiMethod, $parameters);
+                    $this->log->debug(
+                        'api call repeated',
+                        [
+                            'repeatedApiMethod' => $apiMethod,
+                            'httpStatusCode'    => $response->getHttpResponse()->getStatusCode(),
+                        ]
+                    );
+
+                    // dispatch event
+                    $this->eventDispatcher->dispatch(new AuthTokenRenewedEvent($renewedToken));
+                } else {
+                    throw new BaseException('UNAUTHORIZED request error');
+                }
+        }
+        $this->log->debug('call.finish');
+
+        return $response;
     }
 }

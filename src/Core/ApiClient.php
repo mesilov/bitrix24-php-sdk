@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
-use Bitrix24\SDK\Core\Credentials\AccessToken;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Response\DTO\RenewedAccessToken;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -62,12 +62,12 @@ class ApiClient
     }
 
     /**
-     * @return AccessToken
+     * @return RenewedAccessToken
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
      * @throws \JsonException
      */
-    public function getNewAccessToken(): AccessToken
+    public function getNewAccessToken(): RenewedAccessToken
     {
         $this->logger->debug(sprintf('getNewAccessToken.start'));
         if ($this->getCredentials()->getApplicationProfile() === null) {
@@ -92,8 +92,8 @@ class ApiClient
         );
 
         $response = $this->client->request($method, $url, []);
-        $result = $response->toArray(true);
-        $newAccessToken = AccessToken::initFromArray($result);
+        $result = $response->toArray(false);
+        $newAccessToken = RenewedAccessToken::initFromArray($result);
 
         $this->logger->debug(sprintf('getNewAccessToken.finish'));
 
