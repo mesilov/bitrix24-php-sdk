@@ -42,6 +42,22 @@ class User extends Bitrix24Entity
 	}
 
 	/**
+	 * Get user by id
+	 * @link http://dev.1c-bitrix.ru/rest_help/users/user_get.php
+	 * @throws Bitrix24Exception
+	 * @param $id - user id
+	 * @return array
+	 */
+	public function getById($id) {
+		$result = $this->client->call('user.get', 
+			array(
+				'ID' => $id,
+			)
+		);
+		return $result;
+	}
+
+	/**
 	 * Get list of users
 	 * @link http://dev.1c-bitrix.ru/rest_help/users/user_get.php
 	 * @throws Bitrix24Exception
