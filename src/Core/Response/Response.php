@@ -8,6 +8,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Throwable;
 
 /**
  * Class Response
@@ -67,13 +68,16 @@ class Response
 
                 $this->handleApiLevelErrors($responseResult);
 
+                if (!is_array($responseResult['result'])) {
+                    $responseResult['result'] = [$responseResult['result']];
+                }
                 $resultDto = new DTO\Result($responseResult['result']);
                 $time = DTO\Time::initFromResponse($responseResult['time']);
                 $this->responseData = new DTO\ResponseData(
                     $resultDto,
                     $time
                 );
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->logger->error(
                     $e->getMessage(),
                     [
