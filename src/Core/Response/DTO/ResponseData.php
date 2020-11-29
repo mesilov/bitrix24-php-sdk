@@ -19,17 +19,31 @@ class ResponseData
      * @var Time
      */
     protected $time;
+    /**
+     * @var Pagination
+     */
+    protected $pagination;
 
     /**
-     * Response constructor.
+     * ResponseData constructor.
      *
-     * @param Result $result
-     * @param Time   $time
+     * @param Result     $result
+     * @param Time       $time
+     * @param Pagination $pagination
      */
-    public function __construct(Result $result, Time $time)
+    public function __construct(Result $result, Time $time, Pagination $pagination)
     {
         $this->result = $result;
         $this->time = $time;
+        $this->pagination = $pagination;
+    }
+
+    /**
+     * @return Pagination
+     */
+    public function getPagination(): Pagination
+    {
+        return $this->pagination;
     }
 
     /**

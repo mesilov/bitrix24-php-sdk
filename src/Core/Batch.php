@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Core;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Commands\CommandCollection;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Result;
 use Bitrix24\SDK\Core\Response\DTO\Time;
@@ -105,7 +106,12 @@ class Batch
                     throw new BaseException(sprintf('query time with key %s not found', $singleQueryKey));
                 }
 
-                yield new ResponseData(new Result($singleQueryResult), Time::initFromResponse($resultQueryTimeItems[$singleQueryKey]));
+                // todo, посмотреть, что будет постраничке для батч-запросов на чтение
+                yield new ResponseData(
+                    new Result($singleQueryResult),
+                    Time::initFromResponse($resultQueryTimeItems[$singleQueryKey]),
+                    new Pagination(null, null)
+                );
             }
         }
     }

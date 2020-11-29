@@ -40,7 +40,7 @@ class Command
      *
      * @throws \Exception
      */
-    public function __construct(string $apiMethod, array $parameters, ?string $name=null)
+    public function __construct(string $apiMethod, array $parameters, ?string $name = null)
     {
         $this->uuid = Uuid::uuid4();
         $this->apiMethod = $apiMethod;

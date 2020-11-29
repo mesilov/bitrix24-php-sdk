@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
+use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
@@ -66,16 +67,16 @@ class Core
         );
 
         // make async request
-        $apiCallResult = $this->apiClient->getResponse($apiMethod, $parameters);
+        $apiCallResponse = $this->apiClient->getResponse($apiMethod, $parameters);
 
         $response = null;
-        switch ($apiCallResult->getStatusCode()) {
+        switch ($apiCallResponse->getStatusCode()) {
             case StatusCodeInterface::STATUS_OK:
                 //todo check with empty response size from server
-                $response = new Response($apiCallResult, $this->log);
+                $response = new Response($apiCallResponse, new Command($apiMethod, $parameters), $this->log);
                 break;
             case StatusCodeInterface::STATUS_UNAUTHORIZED:
-                $body = $apiCallResult->toArray(false);
+                $body = $apiCallResponse->toArray(false);
                 $this->log->notice(
                     'UNAUTHORIZED request',
                     [
