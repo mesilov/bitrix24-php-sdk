@@ -57,7 +57,14 @@ class Batch
      */
     public function clearCommands(): void
     {
+        $this->log->debug(
+            'clearCommands.start',
+            [
+                'commandsCount' => $this->commands->count(),
+            ]
+        );
         $this->commands = new CommandCollection();
+        $this->log->debug('clearCommands.finish');
     }
 
     /**
@@ -76,28 +83,138 @@ class Batch
         ?string $commandName = null,
         callable $callback = null
     ) {
+        $this->log->debug(
+            'addCommand.start',
+            [
+                'apiMethod'   => $apiMethod,
+                'parameters'  => $parameters,
+                'commandName' => $commandName,
+            ]
+        );
+
         $this->commands->attach(new Command($apiMethod, $parameters, $commandName));
+
+        $this->log->debug(
+            'addCommand.finish',
+            [
+                'commandsCount' => $this->commands->count(),
+            ]
+        );
+    }
+
+    /**
+     * @param string $apiMethod
+     * @param array  $order
+     * @param array  $filter
+     * @param array  $select
+     *
+     * @return Traversable
+     * @throws BaseException
+     * @throws Exceptions\InvalidArgumentException
+     * @throws \JsonException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select): Traversable
+    {
+        $this->log->debug(
+            'getTraversableList.start',
+            [
+                'apiMethod' => $apiMethod,
+                'order'     => $order,
+                'filter'    => $filter,
+                'select'    => $select,
+            ]
+        );
+        $this->clearCommands();
+
+        // get total elements count
+        $firstResult = $this->coreService->call(
+            $apiMethod,
+            [
+                'order'  => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'start'  => 0,
+            ]
+        );
+        $nextItem = $firstResult->getResponseData()->getPagination()->getNextItem();
+        $total = $firstResult->getResponseData()->getPagination()->getTotal();
+
+        // register list commands
+        for ($startItem = 0; $startItem < $total; $startItem += $nextItem) {
+            $this->addCommand(
+                $apiMethod,
+                [
+                    'order'  => $order,
+                    'filter' => $filter,
+                    'select' => $select,
+                    'start'  => $startItem,
+                ]
+            );
+        }
+
+        // iterate batch queries
+        foreach ($this->getTraversable(true) as $queryCnt => $queryResultData) {
+            /**
+             * @var $queryResultData \Bitrix24\SDK\Core\Response\DTO\ResponseData
+             */
+            // iterate items in query result
+            foreach ($queryResultData->getResult()->getResultData() as $cnt => $listElement) {
+                yield $listElement;
+            }
+        }
+
+        $this->log->debug('getTraversableList.finish');
     }
 
     /**
      * @param bool $isHaltOnError
      *
-     * @return Response
+     * @return Traversable
      * @throws BaseException
      * @throws Exceptions\InvalidArgumentException
      * @throws \JsonException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     public function getTraversable(bool $isHaltOnError): Traversable
     {
+        $this->log->debug(
+            'getTraversable.start',
+            [
+                'isHaltOnError' => $isHaltOnError,
+            ]
+        );
+
         foreach ($this->getTraversableBatchResults($isHaltOnError) as $batchItem => $batchResult) {
             /**
              * @var $batchResult Response
              */
+            $this->log->debug(
+                'getTraversable.batchResultItem.processStart',
+                [
+                    'batchItemNumber' => $batchItem,
+                    //                    'batchApiCommand'           => $batchResult->getApiCommand()->getApiMethod(),
+                    //                    'batchApiCommandParameters' => $batchResult->getApiCommand()->getParameters(),
+                ]
+            );
             $response = $batchResult->getResponseData();
 
+            // single queries
+            // todo handle error field
             $resultDataItems = $response->getResult()->getResultData()['result'];
             $resultQueryTimeItems = $response->getResult()->getResultData()['result_time'];
+
+            // list queries
+            //todo handle result_error for list queries
+            $resultNextItems = $response->getResult()->getResultData()['result_next'];
+            $totalItems = $response->getResult()->getResultData()['result_total'];
+
             foreach ($resultDataItems as $singleQueryKey => $singleQueryResult) {
                 if (!is_array($singleQueryResult)) {
                     $singleQueryResult = [$singleQueryResult];
@@ -106,14 +223,24 @@ class Batch
                     throw new BaseException(sprintf('query time with key %s not found', $singleQueryKey));
                 }
 
-                // todo, посмотреть, что будет постраничке для батч-запросов на чтение
+                $nextItem = null;
+                if ($resultNextItems !== null && count($resultNextItems) > 0) {
+                    $nextItem = $resultNextItems[$singleQueryKey];
+                }
+                $total = null;
+                if ($totalItems !== null && count($totalItems) > 0) {
+                    $total = $totalItems[$singleQueryKey];
+                }
+
                 yield new ResponseData(
                     new Result($singleQueryResult),
                     Time::initFromResponse($resultQueryTimeItems[$singleQueryKey]),
-                    new Pagination(null, null)
+                    new Pagination($nextItem, $total)
                 );
             }
+            $this->log->debug('getTraversable.batchResult.processFinish');
         }
+        $this->log->debug('getTraversable.finish');
     }
 
     /**

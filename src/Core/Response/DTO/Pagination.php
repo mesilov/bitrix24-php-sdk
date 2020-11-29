@@ -14,7 +14,7 @@ class Pagination
     /**
      * @var int|null
      */
-    private $nextPage;
+    private $nextItem;
     /**
      * @var int|null
      */
@@ -23,21 +23,21 @@ class Pagination
     /**
      * Pagination constructor.
      *
-     * @param int|null $nextPage
+     * @param int|null $nextItem
      * @param int|null $total
      */
-    public function __construct(int $nextPage = null, int $total = null)
+    public function __construct(int $nextItem = null, int $total = null)
     {
-        $this->nextPage = $nextPage;
+        $this->nextItem = $nextItem;
         $this->total = $total;
     }
 
     /**
      * @return int|null
      */
-    public function getNextPage(): ?int
+    public function getNextItem(): ?int
     {
-        return $this->nextPage;
+        return $this->nextItem;
     }
 
     /**

@@ -86,10 +86,10 @@ class Response
                     $responseResult['result'] = [$responseResult['result']];
                 }
 
-                $nextPage = null;
+                $nextItem = null;
                 $total = null;
                 if (array_key_exists('next', $responseResult)) {
-                    $nextPage = (int)$responseResult['next'];
+                    $nextItem = (int)$responseResult['next'];
                 }
                 if (array_key_exists('total', $responseResult)) {
                     $total = (int)$responseResult['total'];
@@ -98,7 +98,7 @@ class Response
                 $this->responseData = new DTO\ResponseData(
                     new DTO\Result($responseResult['result']),
                     DTO\Time::initFromResponse($responseResult['time']),
-                    new DTO\Pagination($nextPage, $total)
+                    new DTO\Pagination($nextItem, $total)
                 );
             } catch (Throwable $e) {
                 $this->logger->error(
