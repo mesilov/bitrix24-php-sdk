@@ -93,3 +93,9 @@ See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/
 
 ## Need custom Bitrix24 application? ##
 email: <mesilov.maxim@gmail.com>
+
+
+## Русский
+
+### Ключевые особенности
+- сервисы возвращают структуры данных пригодные для работы внутри клиентского кода
