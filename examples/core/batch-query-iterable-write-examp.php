@@ -10,21 +10,25 @@ use Symfony\Component\HttpClient\HttpClient;
 
 $log = new Logger('name');
 $log->pushHandler(new StreamHandler('b24-api-client-debug.log', Logger::DEBUG));
+$log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor(true, true));
 
 $client = HttpClient::create(['http_version' => '2.0']);
-$traceableClient = new \Symfony\Component\HttpClient\TraceableHttpClient($client);
-$traceableClient->setLogger($log);
+//$httpClient = new \Symfony\Component\HttpClient\TraceableHttpClient($client);
+//$httpClient->setLogger($log);
+
+// $httpClient = HttpClient::create();
+
 
 $credentials = Bitrix24\SDK\Core\Credentials\Credentials::createForWebHook(
     new \Bitrix24\SDK\Core\Credentials\WebhookUrl('https://')
 );
 
 try {
-    $apiClient = new \Bitrix24\SDK\Core\ApiClient($credentials, $traceableClient, $log);
+    $apiClient = new \Bitrix24\SDK\Core\ApiClient($credentials, $httpClient, $log);
     $ed = new \Symfony\Component\EventDispatcher\EventDispatcher();
     $core = new \Bitrix24\SDK\Core\Core($apiClient, $ed, $log);
 
-    $arraySize = 120;
+    $arraySize = 10000;
     print(sprintf('Prepare raw data example...') . PHP_EOL);
     $rawDeals = [];
     for ($i = 0; $i < $arraySize; $i++) {

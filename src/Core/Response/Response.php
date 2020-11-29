@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Response;
 
+use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO;
 use Psr\Log\LoggerInterface;
@@ -26,19 +27,25 @@ class Response
      */
     protected $logger;
     /**
-     * @var  DTO\ResponseData|null
+     * @var  DTO\ResponseData
      */
     protected $responseData;
+    /**
+     * @var Command
+     */
+    protected $apiCommand;
 
     /**
      * Response constructor.
      *
      * @param ResponseInterface $httpResponse
+     * @param Command           $apiCommand
      * @param LoggerInterface   $logger
      */
-    public function __construct(ResponseInterface $httpResponse, LoggerInterface $logger)
+    public function __construct(ResponseInterface $httpResponse, Command $apiCommand, LoggerInterface $logger)
     {
         $this->httpResponse = $httpResponse;
+        $this->apiCommand = $apiCommand;
         $this->logger = $logger;
     }
 
@@ -48,6 +55,14 @@ class Response
     public function getHttpResponse(): ResponseInterface
     {
         return $this->httpResponse;
+    }
+
+    /**
+     * @return Command
+     */
+    public function getApiCommand(): Command
+    {
+        return $this->apiCommand;
     }
 
     /**
@@ -65,17 +80,25 @@ class Response
         if ($this->responseData === null) {
             try {
                 $responseResult = $this->httpResponse->toArray(true);
-
                 $this->handleApiLevelErrors($responseResult);
 
                 if (!is_array($responseResult['result'])) {
                     $responseResult['result'] = [$responseResult['result']];
                 }
-                $resultDto = new DTO\Result($responseResult['result']);
-                $time = DTO\Time::initFromResponse($responseResult['time']);
+
+                $nextItem = null;
+                $total = null;
+                if (array_key_exists('next', $responseResult)) {
+                    $nextItem = (int)$responseResult['next'];
+                }
+                if (array_key_exists('total', $responseResult)) {
+                    $total = (int)$responseResult['total'];
+                }
+
                 $this->responseData = new DTO\ResponseData(
-                    $resultDto,
-                    $time
+                    new DTO\Result($responseResult['result']),
+                    DTO\Time::initFromResponse($responseResult['time']),
+                    new DTO\Pagination($nextItem, $total)
                 );
             } catch (Throwable $e) {
                 $this->logger->error(

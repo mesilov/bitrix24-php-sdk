@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deals\Service;
 
+use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\AbstractService;
 
 /**
@@ -13,6 +14,57 @@ use Bitrix24\SDK\Services\AbstractService;
  */
 class Deals extends AbstractService
 {
+    /**
+     * Get list of deal items.
+     *
+     * @link http://dev.1c-bitrix.ru/rest_help/crm/cdeals/crm_deal_list.php
+     *
+     * @param array   $order     - order of deal items
+     * @param array   $filter    - filter array
+     * @param array   $select    - array of collumns to select
+     * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.deal.list' API call)
+     *
+     * @return Response
+     */
+    public function list(array $order, array $filter, array $select, int $startItem = 0): Response
+    {
+        $this->log->debug(
+            'deals.list.start',
+            [
+                'order'  => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'start'  => $startItem,
+            ]
+        );
+
+        $result = $this->core->call(
+            'crm.deal.list',
+            [
+                'order'  => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'start'  => $startItem,
+            ]
+        );
+        $this->log->debug('deals.list.finish');
+
+        return $result;
+    }
+
+    /**
+     * @param array $fields
+     * @param array $params
+     *
+     * @return int
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws \JsonException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
     public function add(array $fields, array $params = []): int
     {
         $this->log->debug(
@@ -36,6 +88,18 @@ class Deals extends AbstractService
         return $result->getResponseData()->getResult()->getResultData()[0];
     }
 
+    /**
+     * @param int $id
+     *
+     * @return array
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws \JsonException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
     public function get(int $id): array
     {
         $this->log->debug(
@@ -46,7 +110,6 @@ class Deals extends AbstractService
         );
 
         $response = $this->core->call('crm.deal.get', ['id' => $id]);
-
 
         $this->log->debug('deals.get.finish');
 
