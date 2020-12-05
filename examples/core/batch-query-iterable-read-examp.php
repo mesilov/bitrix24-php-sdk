@@ -27,20 +27,25 @@ try {
     $core = new \Bitrix24\SDK\Core\Core($apiClient, $ed, $log);
     $dealsService = new \Bitrix24\SDK\Services\CRM\Deals\Service\Deals($core, $log);
 
+
+    $firstResult = $dealsService->list([], ['>ID' => 50], ['ID', 'TITLE']);
+    $totalCount = $firstResult->getResponseData()->getPagination()->getTotal();
+
+
     // примеры формирования батч-запросов на чтение
     // задача: прочитать все сделки из Б24
-
     // простая стратегия (с подсчётом количества элементов на стороне Б24 на каждом шаге):
     $timeStart = microtime(true);
     $batch = new \Bitrix24\SDK\Core\Batch($core, $log);
-    foreach ($batch->getTraversableList('crm.deal.list', [], ['>ID' => 50], ['ID', 'TITLE']) as $cnt => $queryItem) {
-        print(sprintf(' %s | %s - %s', $cnt, $queryItem['ID'], $queryItem['TITLE']) . PHP_EOL);
+    $elementsFromBatchCount = 0;
+    foreach ($batch->getTraversableList('crm.deal.list', [], ['>ID' => 50], ['ID', 'TITLE']) as $queryItem) {
+        $elementsFromBatchCount++;
+        print(sprintf(' %s | %s - %s', $elementsFromBatchCount, $queryItem['ID'], $queryItem['TITLE']) . PHP_EOL);
     }
     $timeEnd = microtime(true);
     print(sprintf('batch query duration: %s seconds', round($timeEnd - $timeStart, 2)) . PHP_EOL . PHP_EOL);
-
-    $firstResult = $dealsService->list([], ['>ID' => 2], ['ID', 'TITLE']);
-    print (sprintf('elements total count: %s', $firstResult->getResponseData()->getPagination()->getTotal()) . PHP_EOL);
+    print(sprintf('elements in bitrix24 count: %s', $totalCount) . PHP_EOL);
+    print(sprintf('elements from batch count: %s ', $elementsFromBatchCount) . PHP_EOL . PHP_EOL);
 
 
 //    // пример вызова списочного метода c получением 50 элементов за один раз
@@ -71,43 +76,6 @@ try {
 //    print(sprintf('total elements: %s', $result->getResponseData()->getPagination()->getTotal()) . PHP_EOL);
 //    print(sprintf('next item: %s', $result->getResponseData()->getPagination()->getNextItem()) . PHP_EOL);
 //
-//    $apiMethod = 'crm.deal.list';
-//
-//    $nextItem = $firstResult->getResponseData()->getPagination()->getNextItem();
-//    $total = $firstResult->getResponseData()->getPagination()->getTotal();
-//
-//
-//    for ($startItem = $nextItem; $startItem < $total; $startItem += $nextItem) {
-//        $batch->addCommand(
-//            $apiMethod,
-//            [
-//                'order'  => [],
-//                'filter' => ['>ID' => 2],
-//                'select' => ['ID', 'TITLE'],
-//                'start'  => $startItem,
-//            ]
-//        );
-//    }
-//
-//
-//    foreach ($batch->getTraversable(true) as $queryCnt => $queryResultData) {
-//        /**
-//         * @var $queryResultData \Bitrix24\SDK\Core\Response\DTO\ResponseData
-//         */
-//
-//        print(sprintf(' batch query number %s: ', $queryCnt) . PHP_EOL);
-//        print(sprintf(
-//                ' time |start: %s |duration %s |',
-//                $queryResultData->getTime()->getDateStart()->format('H:i:s'),
-//                $queryResultData->getTime()->getDuration(),
-//            ) . PHP_EOL);
-//
-//
-//        var_dump($queryResultData->getResult()->getResultData());
-//        var_dump($queryResultData->getPagination()->getNextItem());
-//        var_dump($queryResultData->getPagination()->getTotal());
-////        var_dump($queryResultData->getResult()->getResultData());
-//    }
 
     // ------------------------------------------------------------------------------
     // пока не делаем, т.к. нет понимания как будет использоваться в клиентском коде
