@@ -37,7 +37,8 @@ class ApiClient
     /**
      * @const string
      */
-    protected const SDK_VERSION = '2.0';
+    protected const SDK_VERSION = '2.0.0';
+    protected const SDK_USER_AGENT = 'bitrix24-php-sdk';
 
     /**
      * ApiClient constructor.
@@ -51,6 +52,26 @@ class ApiClient
         $this->credentials = $credentials;
         $this->client = $client;
         $this->logger = $logger;
+        $this->logger->debug(
+            'ApiClient.init',
+            [
+                'httpClientType' => get_class($client),
+            ]
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultHeaders(): array
+    {
+        return [
+            'Accept'                         => 'application/json',
+            'Accept-Charset'                 => 'utf-8',
+            'User-Agent'                     => sprintf('%s-v-%s-php-%s', self::SDK_USER_AGENT, self::SDK_VERSION, PHP_VERSION),
+            'X-BITRIX24-PHP-SDK-PHP-VERSION' => PHP_VERSION,
+            'X-BITRIX24-PHP-SDK-VERSION'     => self::SDK_VERSION,
+        ];
     }
 
     /**
@@ -91,7 +112,10 @@ class ApiClient
             )
         );
 
-        $response = $this->client->request($method, $url, []);
+        $requestOptions = [
+            'headers' => $this->getDefaultHeaders(),
+        ];
+        $response = $this->client->request($method, $url, $requestOptions);
         $result = $response->toArray(false);
         $newAccessToken = RenewedAccessToken::initFromArray($result);
 
@@ -131,7 +155,8 @@ class ApiClient
         }
 
         $requestOptions = [
-            'json' => $parameters,
+            'json'    => $parameters,
+            'headers' => $this->getDefaultHeaders(),
         ];
         $response = $this->client->request($method, $url, $requestOptions);
 
