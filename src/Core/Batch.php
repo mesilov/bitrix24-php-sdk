@@ -103,10 +103,12 @@ class Batch
     }
 
     /**
-     * @param string $apiMethod
-     * @param array  $order
-     * @param array  $filter
-     * @param array  $select
+     * batch wrapper for *.list methods
+     *
+     * @param string $apiMethod api command
+     * @param array  $order     [] field to order and order direction
+     * @param array  $filter    [] filter
+     * @param array  $select    [] fields to select
      *
      * @return Traversable
      * @throws BaseException
@@ -116,6 +118,7 @@ class Batch
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
      */
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select): Traversable
     {
@@ -144,7 +147,7 @@ class Batch
         $total = $firstResult->getResponseData()->getPagination()->getTotal();
 
         // register list commands
-        for ($startItem = 0; $startItem < $total; $startItem += $nextItem) {
+        for ($startItem = 0; $startItem <= $total; $startItem += $nextItem) {
             $this->addCommand(
                 $apiMethod,
                 [
@@ -155,13 +158,27 @@ class Batch
                 ]
             );
         }
+        $this->log->debug(
+            'getTraversableList.commandsRegistered',
+            [
+                'commandsCount'      => $this->commands->count(),
+                'totalItemsToSelect' => $total,
+            ]
+        );
 
-        // iterate batch queries
+        // iterate batch queries, max:  50 results per 50 elements in each result
         foreach ($this->getTraversable(true) as $queryCnt => $queryResultData) {
             /**
-             * @var $queryResultData \Bitrix24\SDK\Core\Response\DTO\ResponseData
+             * @var $queryResultData ResponseData
              */
-            // iterate items in query result
+            $this->log->debug(
+                'getTraversableList.batchResultItem',
+                [
+                    'batchCommandItemNumber' => $queryCnt,
+                    'nextItem'               => $queryResultData->getPagination()->getNextItem(),
+                ]
+            );
+            // iterate items in batch query result
             foreach ($queryResultData->getResult()->getResultData() as $cnt => $listElement) {
                 yield $listElement;
             }
@@ -181,6 +198,7 @@ class Batch
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
      */
     public function getTraversable(bool $isHaltOnError): Traversable
     {
@@ -198,9 +216,9 @@ class Batch
             $this->log->debug(
                 'getTraversable.batchResultItem.processStart',
                 [
-                    'batchItemNumber' => $batchItem,
-                    //                    'batchApiCommand'           => $batchResult->getApiCommand()->getApiMethod(),
-                    //                    'batchApiCommandParameters' => $batchResult->getApiCommand()->getParameters(),
+                    'batchItemNumber'     => $batchItem,
+                    'batchApiCommand'     => $batchResult->getApiCommand()->getApiMethod(),
+                    'batchApiCommandUuid' => $batchResult->getApiCommand()->getUuid()->toString(),
                 ]
             );
             $response = $batchResult->getResponseData();
@@ -214,7 +232,6 @@ class Batch
             //todo handle result_error for list queries
             $resultNextItems = $response->getResult()->getResultData()['result_next'];
             $totalItems = $response->getResult()->getResultData()['result_total'];
-
             foreach ($resultDataItems as $singleQueryKey => $singleQueryResult) {
                 if (!is_array($singleQueryResult)) {
                     $singleQueryResult = [$singleQueryResult];
@@ -224,9 +241,10 @@ class Batch
                 }
 
                 $nextItem = null;
-                if ($resultNextItems !== null && count($resultNextItems) > 0) {
+                if ($resultNextItems !== null && array_key_exists($singleQueryKey, $resultNextItems) && count($resultNextItems) > 0) {
                     $nextItem = $resultNextItems[$singleQueryKey];
                 }
+
                 $total = null;
                 if ($totalItems !== null && count($totalItems) > 0) {
                     $total = $totalItems[$singleQueryKey];
