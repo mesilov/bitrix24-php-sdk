@@ -161,7 +161,7 @@ class ApiClient
         $response = $this->client->request($method, $url, $requestOptions);
 
         $this->logger->debug(
-            sprintf('getResponse.end %s', $apiMethod),
+            sprintf('getResponse.end [%s]', $apiMethod),
             [
                 'responseInfo' => $response->getInfo(),
             ]
