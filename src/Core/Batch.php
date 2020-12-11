@@ -12,8 +12,8 @@ use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Result;
 use Bitrix24\SDK\Core\Response\DTO\Time;
 use Bitrix24\SDK\Core\Response\Response;
+use Generator;
 use Psr\Log\LoggerInterface;
-use Traversable;
 
 /**
  * Class Batch
@@ -105,22 +105,21 @@ class Batch
     /**
      * batch wrapper for *.list methods
      *
-     * @param string $apiMethod api command
-     * @param array  $order     [] field to order and order direction
-     * @param array  $filter    [] filter
-     * @param array  $select    [] fields to select
+     * @param string   $apiMethod
+     * @param array    $order
+     * @param array    $filter
+     * @param array    $select
+     * @param int|null $limit
      *
-     * @return Traversable
+     * @return Generator
      * @throws BaseException
-     * @throws Exceptions\InvalidArgumentException
-     * @throws \JsonException
+     * @throws Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Exception
      */
-    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select): Traversable
+    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         $this->log->debug(
             'getTraversableList.start',
@@ -129,6 +128,7 @@ class Batch
                 'order'     => $order,
                 'filter'    => $filter,
                 'select'    => $select,
+                'limit'     => $limit,
             ]
         );
         $this->clearCommands();
@@ -157,6 +157,9 @@ class Batch
                     'start'  => $startItem,
                 ]
             );
+            if ($limit !== null && $limit < $startItem) {
+                break;
+            }
         }
         $this->log->debug(
             'getTraversableList.commandsRegistered',
@@ -167,6 +170,7 @@ class Batch
         );
 
         // iterate batch queries, max:  50 results per 50 elements in each result
+        $elementsCounter = 0;
         foreach ($this->getTraversable(true) as $queryCnt => $queryResultData) {
             /**
              * @var $queryResultData ResponseData
@@ -180,6 +184,10 @@ class Batch
             );
             // iterate items in batch query result
             foreach ($queryResultData->getResult()->getResultData() as $cnt => $listElement) {
+                $elementsCounter++;
+                if ($limit !== null && $elementsCounter > $limit) {
+                    return;
+                }
                 yield $listElement;
             }
         }
@@ -190,17 +198,15 @@ class Batch
     /**
      * @param bool $isHaltOnError
      *
-     * @return Traversable
+     * @return Generator
      * @throws BaseException
-     * @throws Exceptions\InvalidArgumentException
-     * @throws \JsonException
+     * @throws Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Exception
      */
-    public function getTraversable(bool $isHaltOnError): Traversable
+    public function getTraversable(bool $isHaltOnError): Generator
     {
         $this->log->debug(
             'getTraversable.start',
@@ -264,13 +270,11 @@ class Batch
     /**
      * @param bool $isHaltOnError
      *
-     * @return Traversable
+     * @return Generator
      * @throws BaseException
-     * @throws Exceptions\InvalidArgumentException
-     * @throws \JsonException
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws Exceptions\TransportException
      */
-    private function getTraversableBatchResults(bool $isHaltOnError): Traversable
+    private function getTraversableBatchResults(bool $isHaltOnError): Generator
     {
         $this->log->debug(
             'getTraversableBatchResults.start',
