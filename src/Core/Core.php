@@ -33,17 +33,27 @@ class Core
      * @var EventDispatcherInterface
      */
     protected $eventDispatcher;
+    /**
+     * @var ApiLevelErrorHandler
+     */
+    protected $apiLevelErrorHandler;
 
     /**
      * Main constructor.
      *
      * @param ApiClient                $apiClient
+     * @param ApiLevelErrorHandler     $apiLevelErrorHandler
      * @param EventDispatcherInterface $eventDispatcher
      * @param LoggerInterface          $logger
      */
-    public function __construct(ApiClient $apiClient, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger)
-    {
+    public function __construct(
+        ApiClient $apiClient,
+        ApiLevelErrorHandler $apiLevelErrorHandler,
+        EventDispatcherInterface $eventDispatcher,
+        LoggerInterface $logger
+    ) {
         $this->apiClient = $apiClient;
+        $this->apiLevelErrorHandler = $apiLevelErrorHandler;
         $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
     }
@@ -70,6 +80,12 @@ class Core
         try {
             // make async request
             $apiCallResponse = $this->apiClient->getResponse($apiMethod, $parameters);
+            $this->logger->debug(
+                'call.responseInfo',
+                [
+                    'httpStatus' => $apiCallResponse->getStatusCode(),
+                ]
+            );
             switch ($apiCallResponse->getStatusCode()) {
                 case StatusCodeInterface::STATUS_OK:
                     //todo check with empty response size from server
@@ -113,8 +129,31 @@ class Core
                     } else {
                         throw new BaseException('UNAUTHORIZED request error');
                     }
+                    break;
+                case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
+                    $body = $apiCallResponse->toArray(false);
+                    $this->logger->notice(
+                        'bitrix24 portal unavailable',
+                        [
+                            'body' => $body,
+                        ]
+                    );
+                    $this->apiLevelErrorHandler->handle($body);
+                    break;
+                default:
+                    $body = $apiCallResponse->toArray(false);
+                    $this->logger->notice(
+                        'unhandled server status',
+                        [
+                            'httpStatus' => $apiCallResponse->getStatusCode(),
+                            'body'       => $body,
+                        ]
+                    );
+                    $this->apiLevelErrorHandler->handle($body);
+                    break;
             }
         } catch (TransportExceptionInterface $exception) {
+            // catch symfony http client transport exception
             $this->logger->error(
                 'call.transportException',
                 [
@@ -123,6 +162,9 @@ class Core
                 ]
             );
             throw new TransportException(sprintf('transport error - %s', $exception->getMessage()), $exception->getCode(), $exception);
+        } catch (BaseException $exception) {
+            // rethrow known bitrix24 php sdk exception
+            throw $exception;
         } catch (\Throwable $exception) {
             $this->logger->error(
                 'call.unknownException',
