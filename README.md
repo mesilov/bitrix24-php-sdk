@@ -23,6 +23,10 @@ add low-level tools to devs:
 API - level features
 - ~~3.1 auto renew access tokens~~ 
 - 3.2 batch queries (work in progress)
+- ~~3.2.1 read~~ 
+- ~~3.2.2 write~~
+- 3.2.3 read + write
+- 3.2.4 read without count flag
 - 3.3 list queries with «start=-1» support
 - 3.4 offline queues
 - 3.5 add change domain URL support
