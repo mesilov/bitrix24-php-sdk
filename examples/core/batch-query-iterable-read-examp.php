@@ -17,7 +17,9 @@ try {
 
     $core = (new \Bitrix24\SDK\Core\CoreBuilder())
         ->withLogger($log)
-        ->withWebhookUrl('')
+        // INSERT YOUR WEBHOOK HERE
+        ->withWebhookUrl('https://')
+        // INSERT YOUR WEBHOOK HERE
         ->build();
     $dealsService = new \Bitrix24\SDK\Services\CRM\Deals\Service\Deals($core, $log);
 
