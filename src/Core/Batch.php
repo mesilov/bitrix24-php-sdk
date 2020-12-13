@@ -34,6 +34,7 @@ class Batch
      * @var int
      */
     protected const MAX_BATCH_PACKET_SIZE = 50;
+    protected const MAX_ELEMENTS_IN_PAGE = 50;
     /**
      * @var CommandCollection
      */
@@ -105,6 +106,8 @@ class Batch
     /**
      * batch wrapper for *.list methods
      *
+     * work with start item position and elements count
+     *
      * @param string   $apiMethod
      * @param array    $order
      * @param array    $filter
@@ -143,24 +146,47 @@ class Batch
                 'start'  => 0,
             ]
         );
+
         $nextItem = $firstResult->getResponseData()->getPagination()->getNextItem();
         $total = $firstResult->getResponseData()->getPagination()->getTotal();
 
-        // register list commands
-        for ($startItem = 0; $startItem <= $total; $startItem += $nextItem) {
+        $this->log->debug(
+            'getTraversableList.calculateCommandsRange',
+            [
+                'nextItem'   => $nextItem,
+                'totalItems' => $total,
+            ]
+        );
+
+        if ($total > self::MAX_ELEMENTS_IN_PAGE && $nextItem !== null) {
+            //more than one page in results -  register list commands
+            for ($startItem = 0; $startItem <= $total; $startItem += $nextItem) {
+                $this->addCommand(
+                    $apiMethod,
+                    [
+                        'order'  => $order,
+                        'filter' => $filter,
+                        'select' => $select,
+                        'start'  => $startItem,
+                    ]
+                );
+                if ($limit !== null && $limit < $startItem) {
+                    break;
+                }
+            }
+        } else {
+            // one page in results
             $this->addCommand(
                 $apiMethod,
                 [
                     'order'  => $order,
                     'filter' => $filter,
                     'select' => $select,
-                    'start'  => $startItem,
+                    'start'  => 0,
                 ]
             );
-            if ($limit !== null && $limit < $startItem) {
-                break;
-            }
         }
+
         $this->log->debug(
             'getTraversableList.commandsRegistered',
             [
@@ -180,6 +206,7 @@ class Batch
                 [
                     'batchCommandItemNumber' => $queryCnt,
                     'nextItem'               => $queryResultData->getPagination()->getNextItem(),
+                    'durationTime'           => $queryResultData->getTime()->getDuration(),
                 ]
             );
             // iterate items in batch query result

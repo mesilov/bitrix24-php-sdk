@@ -58,8 +58,7 @@ class Deals extends AbstractService
      *
      * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @throws \JsonException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
@@ -93,8 +92,7 @@ class Deals extends AbstractService
      *
      * @return array
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @throws \JsonException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
