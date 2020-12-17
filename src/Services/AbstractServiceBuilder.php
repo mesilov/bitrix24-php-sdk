@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
+
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class AbstractService
+ * Class AbstractServiceBuilder
  *
  * @package Bitrix24\SDK\Services
  */
-abstract class AbstractService
+abstract class AbstractServiceBuilder
 {
-    protected BatchInterface $batch;
     protected CoreInterface $core;
+    protected BatchInterface $batch;
     protected LoggerInterface $log;
+    protected array $serviceCache;
 
     /**
-     * AbstractService constructor.
+     * AbstractServiceBuilder constructor.
      *
      * @param CoreInterface   $core
      * @param BatchInterface  $batch

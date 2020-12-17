@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deals\Service;
 
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\AbstractService;
+use Generator;
 
 /**
  * Class Deals
@@ -14,6 +17,34 @@ use Bitrix24\SDK\Services\AbstractService;
  */
 class Deals extends AbstractService
 {
+    /**
+     * @param array    $order
+     * @param array    $filter
+     * @param array    $select
+     * @param int|null $limit
+     *
+     * @return Generator
+     * @throws BaseException
+     */
+    public function getTraversableList(array $order, array $filter, array $select, ?int $limit = null): Generator
+    {
+        $this->log->debug(
+            'getTraversableList.start',
+            [
+                'order'  => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'limit'  => $limit,
+            ]
+        );
+
+        $result = $this->batch->getTraversableList('crm.deal.list', $order, $filter, $select, $limit);
+
+        $this->log->debug('getTraversableList.finish');
+
+        return $result;
+    }
+
     /**
      * Get list of deal items.
      *
@@ -56,18 +87,14 @@ class Deals extends AbstractService
      * @param array $fields
      * @param array $params
      *
-     * @return int
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @return Response
+     * @throws BaseException
+     * @throws TransportException
      */
-    public function add(array $fields, array $params = []): int
+    public function add(array $fields, array $params = []): Response
     {
         $this->log->debug(
-            'deals.add.start',
+            'add.start',
             [
                 'fields' => $fields,
                 'params' => $params,
@@ -82,26 +109,22 @@ class Deals extends AbstractService
             ]
         );
 
-        $this->log->debug('deals.add.finish');
+        $this->log->debug('add.finish');
 
-        return $result->getResponseData()->getResult()->getResultData()[0];
+        return $result;
     }
 
     /**
      * @param int $id
      *
-     * @return array
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @return Response
+     * @throws BaseException
+     * @throws TransportException
      */
-    public function get(int $id): array
+    public function get(int $id): Response
     {
         $this->log->debug(
-            'deals.get.start',
+            'get.start',
             [
                 'id' => $id,
             ]
@@ -109,8 +132,8 @@ class Deals extends AbstractService
 
         $response = $this->core->call('crm.deal.get', ['id' => $id]);
 
-        $this->log->debug('deals.get.finish');
+        $this->log->debug('get.finish');
 
-        return $response->getResponseData()->getResult()->getResultData();
+        return $response;
     }
 }

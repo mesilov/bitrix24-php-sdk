@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Commands\Command;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
@@ -19,24 +20,24 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  *
  * @package Bitrix24\SDK\Core
  */
-class Core
+class Core implements CoreInterface
 {
     /**
      * @var ApiClient
      */
-    protected $apiClient;
+    protected ApiClient $apiClient;
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    protected LoggerInterface $logger;
     /**
      * @var EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
     /**
      * @var ApiLevelErrorHandler
      */
-    protected $apiLevelErrorHandler;
+    protected ApiLevelErrorHandler $apiLevelErrorHandler;
 
     /**
      * Main constructor.
