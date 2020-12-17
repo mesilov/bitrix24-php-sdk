@@ -17,8 +17,62 @@
 Список [событий](Core/Events/events.md), на которые можно подписаться.
 
 ## Отправка запросов в пакетном режиме — batch
+
 - [получение данных](Core/Batch/batch-read-mode.md) в batch-режиме
 - запись данных в batch-режиме
 - смешанный режим работы
 
-   
+## Сервисы
+
+SDK разбита на сервисы которые соответствуют разрешениям — SCOPE к различным сущностям Битрикс24. Каждый сервис расположен в своём
+неймспейсе и предоставляет API по работе с методами из своего пространства имён.
+
+Именно сервис предоставляет CRUD+ API по работе с сущностью.
+
+- im
+- imbot
+- bizproc
+- placement
+- user
+- entity
+- pull
+- pull_channel
+- mobile
+- log
+- sonet_group
+- telephony
+- call
+- messageservice
+- forum
+- pay_system
+- mailservice
+- userconsent
+- rating
+- smile
+- lists
+- delivery
+- sale
+- timeman
+- faceid
+- landing
+- landing_cloud
+- imopenlines
+- calendar
+- department
+- contact_center
+- intranet
+- documentgenerator
+- crm
+- task
+- tasks_extended
+- disk
+- catalog
+- rpa
+- salescenter
+- socialnetwork
+
+Точкой входа в неймспейс является билдер сервисов. Например — `CRMServiceBuilder`, который производит конфигурацию конкретных сервисов
+отвечающих за работу с CRM.
+
+Сервисы предоставляют CRUD+ API по работе с конкретной сущностью, сервис именуется так же как сущность. Сервис по работе со сделками будет
+доступен при вызове `CRM\Deals\Service\Deals`

@@ -6,6 +6,8 @@ namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Commands\CommandCollection;
+use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
@@ -20,35 +22,23 @@ use Psr\Log\LoggerInterface;
  *
  * @package Bitrix24\SDK\Core
  */
-class Batch
+class Batch implements BatchInterface
 {
-    /**
-     * @var Core
-     */
-    private $coreService;
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
-    /**
-     * @var int
-     */
+    private CoreInterface $core;
+    private LoggerInterface $log;
     protected const MAX_BATCH_PACKET_SIZE = 50;
     protected const MAX_ELEMENTS_IN_PAGE = 50;
-    /**
-     * @var CommandCollection
-     */
-    protected $commands;
+    protected CommandCollection $commands;
 
     /**
      * Batch constructor.
      *
-     * @param Core            $core
+     * @param CoreInterface   $core
      * @param LoggerInterface $log
      */
-    public function __construct(Core $core, LoggerInterface $log)
+    public function __construct(CoreInterface $core, LoggerInterface $log)
     {
-        $this->coreService = $core;
+        $this->core = $core;
         $this->log = $log;
         $this->commands = new CommandCollection();
     }
@@ -137,7 +127,7 @@ class Batch
         $this->clearCommands();
 
         // get total elements count
-        $firstResult = $this->coreService->call(
+        $firstResult = $this->core->call(
             $apiMethod,
             [
                 'order'  => $order,
@@ -325,7 +315,7 @@ class Batch
                 ]
             );
             // batch call
-            $batchResult = $this->coreService->call('batch', ['halt' => $isHaltOnError, 'cmd' => $batchQuery]);
+            $batchResult = $this->core->call('batch', ['halt' => $isHaltOnError, 'cmd' => $batchQuery]);
             // todo analyze batch result and halt on error
 
             $batchQueryCounter++;

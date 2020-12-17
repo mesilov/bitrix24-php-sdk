@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -118,10 +119,10 @@ class CoreBuilder
     }
 
     /**
-     * @return Core
+     * @return CoreInterface
      * @throws InvalidArgumentException
      */
-    public function build(): Core
+    public function build(): CoreInterface
     {
         if ($this->webhookUrl !== null) {
             $this->credentials = Credentials::createForWebHook($this->webhookUrl);
