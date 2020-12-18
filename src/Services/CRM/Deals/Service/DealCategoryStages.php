@@ -25,17 +25,11 @@ class DealCategoryStages extends AbstractService
      */
     public function list(int $categoryId): Response
     {
-        $this->log->debug(
-            'list.start',
+        return $this->core->call(
+            'crm.dealcategory.stage.list',
             [
-                'categoryId' => $categoryId,
+                'id' => $categoryId,
             ]
         );
-
-        $result = $this->core->call('crm.dealcategory.stage.list');
-
-        $this->log->debug('list.finish');
-
-        return $result;
     }
 }
