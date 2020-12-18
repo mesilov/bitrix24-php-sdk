@@ -8,22 +8,24 @@ A powerful PHP library for the Bitrix24 REST API
 [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)<br />
 [Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)<br />
 
-
 ## SDK 2.0 core features
 
-Bitrix24 auth features 
+Bitrix24 auth features
+
 - ~~work with auth tokens~~
 - ~~work with incoming webhooks~~
 
 add low-level tools to devs:
+
 - ~~2.1 events (token expired, domain url changed)~~
 - 2.2 rate-limiter - wait for symfony/symfony#37471
 - 2.3 RetryHttpClient - symfony/symfony#38182
 
 API - level features
-- ~~3.1 auto renew access tokens~~ 
+
+- ~~3.1 auto renew access tokens~~
 - 3.2 batch queries (work in progress)
-- ~~3.2.1 read~~ 
+- ~~3.2.1 read~~
 - ~~3.2.2 write~~
 - 3.2.3 read + write
 - 3.2.4 read without count flag
@@ -32,6 +34,7 @@ API - level features
 - 3.5 add change domain URL support
 
 Core DTO
+
 - ~~Response~~
 - ~~Scope~~
 - ~~Time~~
@@ -40,12 +43,14 @@ Core DTO
 - ~~Pagination~~
 
 ## SDK Documentation
+
 - [Russian](/docs/RU/documentation.md)
 - [English](/docs/EN/documentation.md)
 
 ## Architecture
 
 ### Abstraction layers
+
 ```
 - http protocol
 - json data
@@ -61,6 +66,7 @@ Core DTO
 ```
 
 ### File Structure
+
 ```
     /Core
         ApiClient.php - default api-client, work on http abstraction layer, return - Symfony\Contracts\HttpClient\ResponseInterface
@@ -76,13 +82,23 @@ Core DTO
 ```
 
 ## Requirements
+
 - php: >=7.4
 - ext-json: *
-- ext-curl: * 
+- ext-curl: *
 
 ## Example ##
+
 ## Installation ##
+
 Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
+
+## Tests ##
+
+SDK test locate in folder `tests` and we have two test types
+
+- Unit: **fast**, in-memory tests without a network I\O
+- Integration: **slow** tests with full lifecycle with test Bitrix24 portal via webhook
 
 ## Submitting bugs and feature requests
 
@@ -98,10 +114,11 @@ Maxim Mesilov - <mesilov.maxim@gmail.com> - <https://twitter.com/mesilov><br />
 See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/graphs/contributors) which participated in this project.
 
 ## Need custom Bitrix24 application? ##
-email: <mesilov.maxim@gmail.com>
 
+email: <mesilov.maxim@gmail.com>
 
 ## Русский
 
 ### Ключевые особенности
+
 - сервисы возвращают структуры данных пригодные для работы внутри клиентского кода
