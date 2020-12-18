@@ -42,7 +42,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Bitrix24\\SDK\\Tools\\": "tools"
+      "Bitrix24\\SDK\\Tools\\": "tools",
+      "Bitrix24\\SDK\\Tests\\": "tests"
     }
   },
   "scripts": {
