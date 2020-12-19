@@ -8,8 +8,7 @@ A powerful PHP library for the Bitrix24 REST API
 [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)<br />
 [Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)<br />
 
-
-## SDK 2.0 core features
+### SDK 2.0 core features
 
 Bitrix24 auth features
 
@@ -43,12 +42,12 @@ Core DTO
 - ~~ApplicationProfile~~
 - ~~Pagination~~
 
-## SDK Documentation
+### SDK Documentation
 
 - [Russian](/docs/RU/documentation.md)
 - [English](/docs/EN/documentation.md)
 
-## Architecture
+### Architecture
 
 ### Abstraction layers
 
@@ -82,56 +81,66 @@ Core DTO
         Main.php - default bitrix24 rest api service provide basic funcions, work with data transfer objects
 ```
 
-## Requirements
+### Requirements
 
 - php: >=7.4
 - ext-json: *
 - ext-curl: *
 
-## Example ##
+### Example
 
-## Installation ##
+### Installation 
 
 Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
 
-## Tests ##
+### Tests
 
 SDK test locate in folder `tests` and we have two test types
 
 - Unit: **fast**, in-memory tests without a network I\O
 - Integration: **slow** tests with full lifecycle with test Bitrix24 portal via webhook
 
-## Submitting bugs and feature requests
+### Submitting bugs and feature requests
 
 Bugs and feature request are tracked on [GitHub](https://github.com/mesilov/bitrix24-php-sdk/issues)
 
-## License
+### License
 
 bitrix24-php-sdk is licensed under the MIT License - see the `MIT-LICENSE.txt` file for details
 
-## Author
+### Author
 
 Maxim Mesilov - <mesilov.maxim@gmail.com> - <https://twitter.com/mesilov><br />
 See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/graphs/contributors) which participated in this project.
 
-## Need custom Bitrix24 application? ##
+### Need custom Bitrix24 application? ##
 
 email: <mesilov.maxim@gmail.com>
+### Sponsors
+
+
 
 ## Русский
+
 ### Принципы по которым ведётся разработка
+
 - хороший DX (Developer Experience)
+    - автодополнение методов на уровне IDE
+    - типизированные сигнатуры вызова методов
+    - типизированные результаты вызова методов: используются нативные типы: int, array, bool, string
 - хорошая документация
+    - документация по работе конкретного метода содержащая ссылку на офф документацию
+    - документация по работе с SDK
 - производительность:
-  - SDK должно оказывать минимальное влияние на клиентский код
-  - должна быть возможность работать с большими объёмами данных с константным потреблением памяти
-  - SDK должно обеспечивать эффективную работу c API: поддержка батч-запросов    
+    - минимальное влияние на клиентский код
+    - возможность работать с большими объёмами данных с константным потреблением памяти
+    - эффективна работа c API с использованием батч-запросов
 - работать на современном стеке технологий:
-  - использовать современные библиотеки для работы с сетью
-  - использовать фичи новых версий PHP   
+    - современные библиотеки для работы с сетью и возможностью асинхронной работы
+    - фичи новых версий PHP
 - надёжной:
-  - SDK покрыта тестами: unit, интеграционные, контрактные
-  - SDK имеет типовые примеры характерные для разных режимов работы и они оптимизированы по памяти \ быстродействию
+    - покрытие тестами: unit, интеграционные, контрактные
+    - есть типовые примеры характерные для разных режимов работы и они оптимизированы по памяти \ быстродействию
 
 ### Ключевые особенности
 
@@ -215,8 +224,8 @@ list(array $order, array $filter, array $select, int $start):Core\Response
 
 В случае обнаружения ошибок уровня домена будет выброшено соответствующее типизированное исключение.
 
-Объект `Result` содержит метод `getResultData`, который возвращает массив с результатом исполнения API-запроса. В зависимости от
-вызванного метода там может быть:
+Объект `Result` содержит метод `getResultData`, который возвращает массив с результатом исполнения API-запроса. В зависимости от вызванного
+метода там может быть:
 
 - результат выполнения операции типа bool
 - идентификатор созданной сущности типа int
@@ -246,3 +255,5 @@ Symfony HttpClient
 #### Формат передачи данных по сети
 
 JSON по HTTP/2 или HTTP/1.1
+
+## Спонсоры
