@@ -72,12 +72,13 @@ class Products extends AbstractService
      * @param array $order
      * @param array $filter
      * @param array $select
+     * @param int   $startItem
      *
      * @return Response
      * @throws BaseException
      * @throws TransportException
      */
-    public function list(array $order, array $filter, array $select): Response
+    public function list(array $order, array $filter, array $select, int $startItem = 0): Response
     {
         $this->log->debug(
             'list.start',
@@ -85,6 +86,7 @@ class Products extends AbstractService
                 'order'  => $order,
                 'filter' => $filter,
                 'select' => $select,
+                'start'  => $startItem,
             ]
         );
 
@@ -94,6 +96,7 @@ class Products extends AbstractService
                 'order'  => $order,
                 'filter' => $filter,
                 'select' => $select,
+                'start'  => $startItem,
             ]
         );
 
