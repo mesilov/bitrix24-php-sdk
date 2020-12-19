@@ -163,7 +163,7 @@ email: <mesilov.maxim@gmail.com>
 
 - длинные цепочки в клиентском коде для получения возвращаемого результата
 
-```
+```php
 // добавили сделку в Б24
 $dealId = $dealsService->add($newDeal)->getResponseData()->getResult()->getResultData()[0];
 // получили массив сделок
@@ -174,7 +174,7 @@ $deals = $dealsService->list([], [], [], 0)->getResponseData()->getResult()->get
 
 Ожидание:
 
-```
+```php
  add(array $newDeal):int // идентификатор новой сделки
  list(array $order, array $filter, array $select, int $start):array //массив сделок + постраничка
  get(int $dealId):array // конкретная сделка
@@ -182,7 +182,7 @@ $deals = $dealsService->list([], [], [], 0)->getResponseData()->getResult()->get
 
 Текущая реализация — возвращается унифицированный результат:
 
-```
+```php
 add(array $newDeal):Core\Response
 list(array $order, array $filter, array $select, int $start):Core\Response
 ```
@@ -211,10 +211,11 @@ list(array $order, array $filter, array $select, int $start):Core\Response
 
 - `Result` - DTO c результатом исполнения запроса;
 - `Time` — DTO c таймингом прохождения запроса через сервера Битрикс24;
-- `Pagination` — DTO постраничной навигации с полями `next` и `total`; В случае обнаружения ошибок уровня домена будет выброшено
-  соответствующее типизированное исключение.
+- `Pagination` — DTO постраничной навигации с полями `next` и `total`;
 
-Объект `Result` содержит один метод `getResultData`, который возвращает массив с результатом исполнения API-запроса. В зависимости от
+В случае обнаружения ошибок уровня домена будет выброшено соответствующее типизированное исключение.
+
+Объект `Result` содержит метод `getResultData`, который возвращает массив с результатом исполнения API-запроса. В зависимости от
 вызванного метода там может быть:
 
 - результат выполнения операции типа bool
@@ -239,7 +240,7 @@ Symfony HttpClient
 - тип http-запроса
 - массив с параметрами
 
-Возвращаемые результат:
+Возвращаемые результаты:
 — `Symfony\Contracts\HttpClient\ResponseInterface`
 
 #### Формат передачи данных по сети
