@@ -18,22 +18,10 @@ use Throwable;
  */
 class Response
 {
-    /**
-     * @var ResponseInterface
-     */
-    protected $httpResponse;
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-    /**
-     * @var  DTO\ResponseData
-     */
-    protected $responseData;
-    /**
-     * @var Command
-     */
-    protected $apiCommand;
+    protected ResponseInterface $httpResponse;
+    protected LoggerInterface $logger;
+    protected ?DTO\ResponseData $responseData;
+    protected Command $apiCommand;
 
     /**
      * Response constructor.
@@ -47,6 +35,7 @@ class Response
         $this->httpResponse = $httpResponse;
         $this->apiCommand = $apiCommand;
         $this->logger = $logger;
+        $this->responseData = null;
     }
 
     /**
@@ -68,10 +57,6 @@ class Response
     /**
      * @return DTO\ResponseData
      * @throws BaseException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     public function getResponseData(): DTO\ResponseData
     {
@@ -80,6 +65,7 @@ class Response
         if ($this->responseData === null) {
             try {
                 $responseResult = $this->httpResponse->toArray(true);
+                // try to handle api-level errors
                 $this->handleApiLevelErrors($responseResult);
 
                 if (!is_array($responseResult['result'])) {
@@ -100,14 +86,14 @@ class Response
                     DTO\Time::initFromResponse($responseResult['time']),
                     new DTO\Pagination($nextItem, $total)
                 );
-            } catch (Throwable $e) {
+            } catch (Throwable $exception) {
                 $this->logger->error(
-                    $e->getMessage(),
+                    $exception->getMessage(),
                     [
-                        'response' => $this->httpResponse->getContent(false),
+                        'response' => $this->getHttpResponseContent(),
                     ]
                 );
-                throw new BaseException(sprintf('api request error: %s', $e->getMessage()), $e->getCode(), $e);
+                throw new BaseException(sprintf('api request error: %s', $exception->getMessage()), $exception->getCode(), $exception);
             }
         }
         $this->logger->debug('getResponseData.finish');
@@ -115,6 +101,20 @@ class Response
         return $this->responseData;
     }
 
+    /**
+     * @return string|null
+     */
+    private function getHttpResponseContent(): ?string
+    {
+        $content = null;
+        try {
+            $content = $this->httpResponse->getContent(false);
+        } catch (Throwable $exception) {
+            $this->logger->error($exception->getMessage());
+        }
+
+        return $content;
+    }
 
     /**
      * @param array $apiResponse
@@ -129,7 +129,8 @@ class Response
                 $apiResponse['error'],
                 (array_key_exists('error_description', $apiResponse) ? $apiResponse['error_description'] : ''),
             );
-
+// todo check api-level error codes
+//
 //            switch (strtoupper(trim($apiResponse['error']))) {
 //                case 'EXPIRED_TOKEN':
 //                    throw new Bitrix24TokenIsExpiredException($errorMsg);
