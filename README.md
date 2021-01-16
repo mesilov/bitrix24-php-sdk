@@ -89,7 +89,7 @@ Core DTO
 
 ### Example
 
-### Installation 
+### Installation
 
 Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
 
@@ -116,9 +116,8 @@ See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/
 ### Need custom Bitrix24 application? ##
 
 email: <mesilov.maxim@gmail.com>
+
 ### Sponsors
-
-
 
 ## Русский
 
@@ -127,7 +126,8 @@ email: <mesilov.maxim@gmail.com>
 - хороший DX (Developer Experience)
     - автодополнение методов на уровне IDE
     - типизированные сигнатуры вызова методов
-    - типизированные результаты вызова методов - используются нативные типы: int, array, bool, string
+    - типизированные результаты вызова методов – используются нативные типы: int, array, bool, string
+    - хелперы для типовых операций
 - хорошая документация
     - документация по работе конкретного метода содержащая ссылку на офф документацию
     - документация по работе с SDK

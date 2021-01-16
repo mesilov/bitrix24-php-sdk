@@ -80,11 +80,40 @@ class ContactTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $deal = $this->contactService->add(['NAME' => 'test']);
+        $contact = $this->contactService->add(['NAME' => 'test']);
         $newName = 'test2';
 
-        self::assertTrue($this->contactService->update($deal->getId(), ['NAME' => $newName], [])->isSuccess());
-        self::assertEquals($newName, $this->contactService->get($deal->getId())->contact()->NAME);
+        self::assertTrue($this->contactService->update($contact->getId(), ['NAME' => $newName], [])->isSuccess());
+        self::assertEquals($newName, $this->contactService->get($contact->getId())->contact()->NAME);
+    }
+
+    /**
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function testBatchList(): void
+    {
+        $this->contactService->add(['NAME' => 'test contact']);
+        $cnt = 0;
+
+        foreach ($this->contactService->batch->list([], ['>ID' => '1'], ['ID', 'NAME'], 1) as $item) {
+            $cnt++;
+        }
+        self::assertGreaterThanOrEqual(1, $cnt);
+    }
+
+    public function testBatchAdd(): void
+    {
+        $contacts = [];
+        for ($i = 1; $i < 60; $i++) {
+            $contacts[] = ['NAME' => 'name-' . $i];
+        }
+        $cnt = 0;
+        foreach ($this->contactService->batch->add($contacts) as $item) {
+            $cnt++;
+        }
+
+        self::assertEquals(count($contacts), $cnt);
     }
 
     public function setUp(): void
