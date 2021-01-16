@@ -30,7 +30,7 @@ class ShowFieldsDescriptionCommand extends Command
      */
     protected static $defaultName = 'util:show-fields-description';
     protected const WEBHOOK_URL = 'webhook';
-    protected const IS_SHOW_TABLE = 'is-show-table';
+    protected const OUTPUT_FORMAT = 'output-format';
 
     /**
      * ListCommand constructor.
@@ -46,9 +46,6 @@ class ShowFieldsDescriptionCommand extends Command
         parent::__construct();
     }
 
-    /**
-     * настройки
-     */
     protected function configure(): void
     {
         $this
@@ -62,11 +59,11 @@ class ShowFieldsDescriptionCommand extends Command
                 ''
             )
             ->addOption(
-                self::IS_SHOW_TABLE,
+                self::OUTPUT_FORMAT,
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'show fields as table',
-                true
+                'show fields as «table» or «class» header or function «property» enum',
+                'table'
             );
     }
 
@@ -79,7 +76,7 @@ class ShowFieldsDescriptionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $b24Webhook = (string)$input->getOption(self::WEBHOOK_URL);
-        $isShowTable = $input->getOption(self::IS_SHOW_TABLE) === 'true';
+        $outputFormat = strtolower($input->getOption(self::OUTPUT_FORMAT));
 
         $io = new SymfonyStyle($input, $output);
         try {
@@ -107,13 +104,18 @@ class ShowFieldsDescriptionCommand extends Command
             $output->writeln('You have just selected: ' . $selectedEntity);
 
             $fields = $this->core->call($selectedEntity);
-
-            if ($isShowTable) {
-                var_dump($fields->getResponseData()->getResult()->getResultData());
-
-                $this->showFieldsAsTable($output, $fields);
-            } else {
-                $this->showFieldsAsPhpDocHeader($output, $fields);
+            switch ($outputFormat) {
+                case 'table':
+                    $this->showFieldsAsTable($output, $fields);
+                    break;
+                case 'class':
+                    $this->showFieldsAsPhpDocClassHeader($output, $fields);
+                    break;
+                case 'property':
+                    $this->showFieldsAsPhpDocFunctionProperty($output, $fields);
+                    break;
+                default:
+                    throw new \InvalidArgumentException(sprintf('unknown output format %s', $outputFormat));
             }
         } catch (BaseException $exception) {
             $io->caution('Bitrix24 error');
@@ -142,7 +144,34 @@ class ShowFieldsDescriptionCommand extends Command
      *
      * @throws BaseException
      */
-    private function showFieldsAsPhpDocHeader(OutputInterface $output, Response $fields): void
+    private function showFieldsAsPhpDocFunctionProperty(OutputInterface $output, Response $fields): void
+    {
+        $fieldsList = ['*', '* @param array{'];
+        foreach ($fields->getResponseData()->getResult()->getResultData() as $fieldCode => $fieldDescription) {
+            switch (strtolower($fieldDescription['type'])) {
+                case 'integer':
+                    $phpDocType = 'int';
+                    break;
+                case 'datetime':
+                    $phpDocType = 'string';
+                    break;
+                default:
+                    $phpDocType = 'string';
+            }
+            $fieldsList[] = sprintf('*   %s?: %s,', $fieldCode, $phpDocType);
+        }
+        $fieldsList[] = '*   } $fields';
+        $fieldsList[] = '*';
+        $output->writeln($fieldsList);
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param Response        $fields
+     *
+     * @throws BaseException
+     */
+    private function showFieldsAsPhpDocClassHeader(OutputInterface $output, Response $fields): void
     {
         $fieldsList = ['/**', '*'];
         foreach ($fields->getResponseData()->getResult()->getResultData() as $fieldCode => $fieldDescription) {
