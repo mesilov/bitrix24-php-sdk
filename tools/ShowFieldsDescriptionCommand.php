@@ -62,7 +62,7 @@ class ShowFieldsDescriptionCommand extends Command
                 self::OUTPUT_FORMAT,
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'show fields as «table» or «class» header or function «property» enum',
+                'show fields as «table» or «class» header or function «property» enum or «select» property',
                 'table'
             );
     }
@@ -94,25 +94,42 @@ class ShowFieldsDescriptionCommand extends Command
             }
 
             $helper = $this->getHelper('question');
-            $question = new ChoiceQuestion(
+            $itemQuestion = new ChoiceQuestion(
                 'Please select item number to see fields',
                 $fieldsMethods,
                 null
             );
-            $question->setErrorMessage('Item number %s is invalid.');
-            $selectedEntity = $helper->ask($input, $output, $question);
+            $itemQuestion->setErrorMessage('Item number %s is invalid.');
+            $selectedEntity = $helper->ask($input, $output, $itemQuestion);
             $output->writeln('You have just selected: ' . $selectedEntity);
+
+            $outputQuestion = new ChoiceQuestion(
+                'Please select item number to see fields',
+                [
+                    'class properties header',
+                    'hashmap for function argument',
+                    'enum for function argument',
+                    'table',
+                ],
+                'table'
+            );
+            $outputQuestion->setErrorMessage('Item number %s is invalid.');
+            $outputFormat = $helper->ask($input, $output, $outputQuestion);
+            $output->writeln('You have just selected: ' . $outputFormat);
 
             $fields = $this->core->call($selectedEntity);
             switch ($outputFormat) {
                 case 'table':
                     $this->showFieldsAsTable($output, $fields);
                     break;
-                case 'class':
+                case 'class properties header':
                     $this->showFieldsAsPhpDocClassHeader($output, $fields);
                     break;
-                case 'property':
+                case 'hashmap for function argument':
                     $this->showFieldsAsPhpDocFunctionProperty($output, $fields);
+                    break;
+                case 'enum for function argument':
+                    $this->showFieldsAsPhpDocFunctionSelectSuggest($output, $fields);
                     break;
                 default:
                     throw new \InvalidArgumentException(sprintf('unknown output format %s', $outputFormat));
@@ -136,6 +153,21 @@ class ShowFieldsDescriptionCommand extends Command
         $this->logger->debug('ListCommand.start.finish');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param Response        $fields
+     *
+     * @throws BaseException
+     */
+    private function showFieldsAsPhpDocFunctionSelectSuggest(OutputInterface $output, Response $fields): void
+    {
+        $fieldsList = [];
+        foreach ($fields->getResponseData()->getResult()->getResultData() as $fieldCode => $fieldDescription) {
+            $fieldsList[] = sprintf("'%s'", $fieldCode);
+        }
+        $output->writeln(' * @param array $select = [' . implode(',', $fieldsList) . ']');
     }
 
     /**
