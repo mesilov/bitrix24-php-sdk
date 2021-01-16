@@ -7,11 +7,11 @@ namespace Bitrix24\SDK\Core\Result;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 
 /**
- * Class AddItemResult
+ * Class AddedItemResult
  *
  * @package Bitrix24\SDK\Core\Result
  */
-class AddItemResult extends AbstractResult
+class AddedItemResult extends AbstractResult
 {
     /**
      * @return int

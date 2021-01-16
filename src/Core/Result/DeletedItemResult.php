@@ -7,11 +7,11 @@ namespace Bitrix24\SDK\Core\Result;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 
 /**
- * Class DeleteItemResult
+ * Class DeletedItemResult
  *
  * @package Bitrix24\SDK\Core\Result
  */
-class DeleteItemResult extends AbstractResult
+class DeletedItemResult extends AbstractResult
 {
     /**
      * @return bool
