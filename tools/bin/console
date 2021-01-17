@@ -3,6 +3,7 @@
 
 use Bitrix24\SDK\Tools\DemoDataGenerators\CRM\Contacts\GenerateContactsCommand;
 use Bitrix24\SDK\Tools\PerformanceBenchmarks\ListCommand;
+use Bitrix24\SDK\Tools\ShowFieldsDescriptionCommand;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Symfony\Component\Console\Application;
@@ -50,4 +51,5 @@ $log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor(true, true));
 $application = new Application();
 $application->add(new GenerateContactsCommand($log));
 $application->add(new ListCommand($log));
+$application->add(new ShowFieldsDescriptionCommand($log));
 $application->run($input);

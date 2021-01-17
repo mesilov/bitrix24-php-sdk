@@ -15,7 +15,6 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractService
 {
-    protected BatchInterface $batch;
     protected CoreInterface $core;
     protected LoggerInterface $log;
 
@@ -23,13 +22,11 @@ abstract class AbstractService
      * AbstractService constructor.
      *
      * @param CoreInterface   $core
-     * @param BatchInterface  $batch
      * @param LoggerInterface $log
      */
-    public function __construct(CoreInterface $core, BatchInterface $batch, LoggerInterface $log)
+    public function __construct(CoreInterface $core, LoggerInterface $log)
     {
         $this->core = $core;
-        $this->batch = $batch;
         $this->log = $log;
     }
 }
