@@ -20,9 +20,6 @@ jobs:
           - "8.0"
           - "8.1"
         dependencies: [highest]
-        include:
-          - php-version: "8.0"
-            dependencies: lowest
 
     steps:
       - name: "Checkout"
@@ -45,7 +42,7 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: "Install latest dependencies"
+      - name: "Install dependencies"
         run: |
           composer update ${{ env.COMPOSER_FLAGS }}
 
