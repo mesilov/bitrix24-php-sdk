@@ -5,8 +5,7 @@
          colors="true"
          bootstrap="vendor/autoload.php"
          failOnRisky="true"
-         failOnWarning="true"
->
+         failOnWarning="true">
     <coverage>
         <include>
             <directory>./src</directory>
@@ -16,8 +15,8 @@
         <ini name="error_reporting" value="-1"/>
     </php>
     <testsuites>
-        <testsuite name="Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="Bitrix24 PHP SDK unit tests suite">
+            <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>
