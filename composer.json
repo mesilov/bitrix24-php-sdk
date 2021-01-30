@@ -48,7 +48,7 @@
     }
   },
   "scripts": {
-    "test": [
+    "unit-tests": [
       "phpunit --colors=always --verbose"
     ]
   }
