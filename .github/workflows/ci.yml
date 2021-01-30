@@ -17,8 +17,6 @@ jobs:
       matrix:
         php-version:
           - "7.4"
-          - "8.0"
-          - "8.1"
         dependencies: [highest]
 
     steps:
@@ -30,17 +28,6 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
-
-      - name: Get composer cache directory
-        id: composercache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
 
       - name: "Install dependencies"
         run: |
