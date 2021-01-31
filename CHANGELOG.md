@@ -3,7 +3,7 @@
 ## 2.0-alpha.2 (31.01.2021)
 
 * remove Travis CI and migrate to Github Actions
-* add unit-tests
+* add unit-tests in independent github action
 * add phpstan checks in independent github action
 * add in scope «CRM» Contacts service and integration test
 * add in scope «CRM» Contacts batch service and integration test
@@ -11,6 +11,7 @@
 * add in scope «CRM» Settings service and integration test
 * add in scope «CRM» DealCategoryStage service and integration test
 * add in scope «CRM» DealProductRows service and integration test
+* add in scope «CRM» DealContact service and integration test
 * add in scope «IM» IM service and integration test
 * add in default scope «Main» default service
 
