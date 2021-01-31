@@ -18,6 +18,10 @@ use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult;
 class DealProductRows extends AbstractService
 {
     /**
+     * Returns products inside the specified deal.
+     *
+     * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_get.php
+     *
      * @param int $dealId
      *
      * @return DealProductRowItemsResult
@@ -37,6 +41,10 @@ class DealProductRows extends AbstractService
     }
 
     /**
+     * Creates or updates product entries inside the specified deal.
+     *
+     * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_set.php
+     *
      * @param int $dealId
      * @param array<int, array{
      *   ID?: int,

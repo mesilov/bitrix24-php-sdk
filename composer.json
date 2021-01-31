@@ -50,6 +50,9 @@
   "scripts": {
     "unit-tests": [
       "phpunit --colors=always --verbose"
+    ],
+    "phpstan-analyse": [
+      "vendor/bin/phpstan analyse"
     ]
   }
 }
