@@ -27,4 +27,15 @@ class NullBatch implements BatchInterface
     {
         yield [];
     }
+
+    /**
+     * @param string $apiMethod
+     * @param array  $entityItems
+     *
+     * @return Generator
+     */
+    public function addEntityItems(string $apiMethod, array $entityItems): Generator
+    {
+        yield [];
+    }
 }

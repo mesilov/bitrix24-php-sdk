@@ -20,7 +20,7 @@ class IMServiceBuilder extends AbstractServiceBuilder
     public function IM(): IM
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new IM($this->core, $this->batch, $this->log);
+            $this->serviceCache[__METHOD__] = new IM($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

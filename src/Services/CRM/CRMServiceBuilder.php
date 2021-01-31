@@ -71,18 +71,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     }
 
     /**
-     * @return Deal\Service\Products
-     */
-    public function products(): Deal\Service\Products
-    {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Deal\Service\Products($this->core, $this->log);
-        }
-
-        return $this->serviceCache[__METHOD__];
-    }
-
-    /**
      * @return Contact\Service\Contact
      */
     public function contact(): Contact\Service\Contact
@@ -104,19 +92,19 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     public function dealProductRows(): Deal\Service\DealProductRows
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Deal\Service\DealProductRows($this->core, $this->batch, $this->log);
+            $this->serviceCache[__METHOD__] = new Deal\Service\DealProductRows($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
     }
 
     /**
-     * @return Deal\Service\DealCategoryStages
+     * @return Deal\Service\DealCategoryStage
      */
-    public function dealCategoryStages(): Deal\Service\DealCategoryStages
+    public function dealCategoryStage(): Deal\Service\DealCategoryStage
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Deal\Service\DealCategoryStages($this->core, $this->batch, $this->log);
+            $this->serviceCache[__METHOD__] = new Deal\Service\DealCategoryStage($this->core, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
