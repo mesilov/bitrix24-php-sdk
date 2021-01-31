@@ -10,6 +10,7 @@
 * add in scope «CRM» Products service and integration test
 * add in scope «CRM» Settings service and integration test
 * add in scope «CRM» DealCategoryStage service and integration test
+* add in scope «CRM» DealProductRows service and integration test
 * add in scope «IM» IM service and integration test
 * add in default scope «Main» default service
 
