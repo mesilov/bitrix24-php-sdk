@@ -144,6 +144,11 @@ class Bitrix24 implements iBitrix24
     protected $_onExpiredToken;
 
     /**
+     * @var callable callback after api method called
+     */
+    protected $_onCallApiMethod;
+
+    /**
      * @var bool ssl verify for checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
      */
     protected $sslVerify = true;
@@ -202,6 +207,16 @@ class Bitrix24 implements iBitrix24
     public function setOnExpiredToken(callable $callback)
     {
         $this->_onExpiredToken = $callback;
+    }
+
+    /**
+     * Set function called after api method executed. Callback receives instance as first parameter, method name as second.
+     *
+     * @param callable $callback
+     */
+    public function setOnCallApiMethod(callable $callback)
+    {
+        $this->_onCallApiMothod = $callback;
     }
 
     /**
@@ -1114,8 +1129,13 @@ class Bitrix24 implements iBitrix24
     public function call($methodName, array $additionalParameters = array())
     {
         try {
-                $result = $this->getWebhookUsage()  ? $this->_call_webhook($methodName, $additionalParameters)
-                                                    : $this->_call($methodName, $additionalParameters);
+            $result = $this->getWebhookUsage()  ? $this->_call_webhook($methodName, $additionalParameters)
+                : $this->_call($methodName, $additionalParameters);
+
+            if (is_callable($this->_onCallApiMothod)) {
+                call_user_func($this->_onCallApiMothod, $this, $methodName);
+            }
+
         } catch (Bitrix24TokenIsExpiredException $e) {
             if (!is_callable($this->_onExpiredToken)) {
                 throw $e;
