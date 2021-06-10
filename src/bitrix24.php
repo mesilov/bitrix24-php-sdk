@@ -216,7 +216,7 @@ class Bitrix24 implements iBitrix24
      */
     public function setOnCallApiMethod(callable $callback)
     {
-        $this->_onCallApiMothod = $callback;
+        $this->_onCallApiMethod = $callback;
     }
 
     /**
@@ -1132,8 +1132,8 @@ class Bitrix24 implements iBitrix24
             $result = $this->getWebhookUsage()  ? $this->_call_webhook($methodName, $additionalParameters)
                 : $this->_call($methodName, $additionalParameters);
 
-            if (is_callable($this->_onCallApiMothod)) {
-                call_user_func($this->_onCallApiMothod, $this, $methodName);
+            if (is_callable($this->_onCallApiMethod)) {
+                call_user_func($this->_onCallApiMethod, $this, $methodName);
             }
 
         } catch (Bitrix24TokenIsExpiredException $e) {
