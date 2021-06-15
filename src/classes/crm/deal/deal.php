@@ -1,6 +1,6 @@
 <?php
 
-namespace Bitrix24\CRM\Deal;
+namespace Bitrix24\CRM;
 
 use Bitrix24\Bitrix24Entity;
 
