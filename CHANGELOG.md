@@ -1,5 +1,9 @@
 # bitrix24-php-sdk change log
 
+## 2.0-alpha.3(10.11.2021)
+
+* add php8 version support
+
 ## 2.0-alpha.2 (31.01.2021)
 
 * remove Travis CI and migrate to Github Actions
