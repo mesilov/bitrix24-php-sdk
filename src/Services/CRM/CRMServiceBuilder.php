@@ -7,7 +7,7 @@ namespace Bitrix24\SDK\Services\CRM;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\CRM\Contact;
 use Bitrix24\SDK\Services\CRM\Deal;
-use Bitrix24\SDK\Services\CRM\Products;
+use Bitrix24\SDK\Services\CRM\Product;
 use Bitrix24\SDK\Services\CRM\Settings;
 
 
@@ -105,6 +105,22 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Deal\Service\DealCategoryStage($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * @return Product\Service\Product
+     */
+    public function product(): Product\Service\Product
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Product\Service\Product(
+                new Product\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];

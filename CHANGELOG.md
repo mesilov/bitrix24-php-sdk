@@ -3,6 +3,7 @@
 ## 2.0-alpha.3(10.11.2021)
 
 * add php8 version support
+* change in scope «CRM» Product service and integration tests
 
 ## 2.0-alpha.2 (31.01.2021)
 
