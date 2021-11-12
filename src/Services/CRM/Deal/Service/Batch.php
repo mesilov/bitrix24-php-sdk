@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Services\CRM\Deal\Service;
 
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
@@ -191,7 +192,7 @@ class Batch
      *   UTM_TERM?: string,
      *   }> $deals
      *
-     * @return Generator<int, DealItemResult>
+     * @return Generator<int, AddedItemBatchResult>|AddedItemBatchResult[]
      */
     public function add(array $deals): Generator
     {
@@ -202,11 +203,7 @@ class Batch
             ];
         }
         foreach ($this->batch->addEntityItems('crm.deal.add', $items) as $key => $item) {
-            yield $key => new DealItemResult(
-                [
-                    'ID' => $item->getResult()->getResultData()[0],
-                ]
-            );
+            yield $key => new AddedItemBatchResult($item);
         }
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Product\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Services\AbstractBatchService;
 use Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult;
 use Generator;
@@ -25,7 +26,7 @@ class Batch extends AbstractBatchService
      * @param array{
      *                         ID?: int,
      *                         } $filter
-     * @param array    $select = ['ID']
+     * @param array    $select = ['ID','CATALOG_ID','PRICE','CURRENCY_ID','NAME','CODE','DESCRIPTION','DESCRIPTION_TYPE','ACTIVE','SECTION_ID','SORT','VAT_ID','VAT_INCLUDED','MEASURE','XML_ID','PREVIEW_PICTURE','DETAIL_PICTURE','DATE_CREATE','TIMESTAMP_X','MODIFIED_BY','CREATED_BY']
      * @param int|null $limit
      *
      * @return Generator<int, ProductItemResult>
@@ -52,9 +53,29 @@ class Batch extends AbstractBatchService
      *
      * @param array <int, array{
      *                         ID?: int,
+     *                         CATALOG_ID?: int,
+     *                         PRICE?: string,
+     *                         CURRENCY_ID?: string,
+     *                         NAME?: string,
+     *                         CODE?: string,
+     *                         DESCRIPTION?: string,
+     *                         DESCRIPTION_TYPE?: string,
+     *                         ACTIVE?: string,
+     *                         SECTION_ID?: int,
+     *                         SORT?: int,
+     *                         VAT_ID?: int,
+     *                         VAT_INCLUDED?: string,
+     *                         MEASURE?: int,
+     *                         XML_ID?: string,
+     *                         PREVIEW_PICTURE?: string,
+     *                         DETAIL_PICTURE?: string,
+     *                         DATE_CREATE?: string,
+     *                         TIMESTAMP_X?: string,
+     *                         MODIFIED_BY?: int,
+     *                         CREATED_BY?: int
      *                         }> $products
      *
-     * @return Generator<int, ProductItemResult>
+     * @return Generator<int, AddedItemBatchResult>|AddedItemBatchResult[]
      */
     public function add(array $products): Generator
     {
@@ -65,11 +86,7 @@ class Batch extends AbstractBatchService
             ];
         }
         foreach ($this->batch->addEntityItems('crm.product.add', $items) as $key => $item) {
-            yield $key => new ProductItemResult(
-                [
-                    'ID' => $item->getResult()->getResultData()[0],
-                ]
-            );
+            yield $key => new AddedItemBatchResult($item);
         }
     }
 }

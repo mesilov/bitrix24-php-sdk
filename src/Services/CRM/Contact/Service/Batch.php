@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Contact\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Services\AbstractBatchService;
 use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Generator;
@@ -193,7 +194,7 @@ class Batch extends AbstractBatchService
      *                         IM?: string,
      *                         }> $contacts
      *
-     * @return Generator<int, ContactItemResult>
+     * @return Generator<int, AddedItemBatchResult>|AddedItemBatchResult[]
      */
     public function add(array $contacts): Generator
     {
@@ -204,11 +205,7 @@ class Batch extends AbstractBatchService
             ];
         }
         foreach ($this->batch->addEntityItems('crm.contact.add', $items) as $key => $item) {
-            yield $key => new ContactItemResult(
-                [
-                    'ID' => $item->getResult()->getResultData()[0],
-                ]
-            );
+            yield $key => new AddedItemBatchResult($item);
         }
     }
 }
