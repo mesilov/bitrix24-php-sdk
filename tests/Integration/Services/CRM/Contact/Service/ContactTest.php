@@ -70,7 +70,7 @@ class ContactTest extends TestCase
     public function testList(): void
     {
         $this->contactService->add(['NAME' => 'test contact']);
-        self::assertGreaterThanOrEqual(1, $this->contactService->list([''], [''], ['ID', 'NAME'], 0)->contacts());
+        self::assertGreaterThanOrEqual(1, $this->contactService->list([''], [''], ['ID', 'NAME'], 0)->getContacts());
     }
 
     /**

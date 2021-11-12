@@ -19,7 +19,7 @@ class ContactsResult extends AbstractResult
      * @return ContactItemResult[]
      * @throws BaseException
      */
-    public function contacts(): array
+    public function getContacts(): array
     {
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
