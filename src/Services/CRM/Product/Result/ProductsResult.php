@@ -19,7 +19,7 @@ class ProductsResult extends AbstractResult
      * @return \Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult[]
      * @throws BaseException
      */
-    public function getDeals(): array
+    public function getProducts(): array
     {
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {

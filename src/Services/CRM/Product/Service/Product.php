@@ -154,7 +154,7 @@ class Product extends AbstractService
     {
         return new ProductsResult(
             $this->core->call(
-                'crm.deal.list',
+                'crm.product.list',
                 [
                     'order'  => $order,
                     'filter' => $filter,
