@@ -5,6 +5,7 @@
 * add php8 version support
 * change in scope «CRM» Product service and integration tests
 * add `AddedItemIdResultInterface` for batch-queries result
+* add method `countByFilter` for CRM.Contact entity
 * fix method name in `ContactsResult`
 * add interface `ApiClientInterface`
 * bump phpunit version

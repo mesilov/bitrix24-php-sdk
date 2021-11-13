@@ -373,4 +373,64 @@ class Contact extends AbstractService
             )
         );
     }
+
+    /**
+     * @param array{
+     *                      ID?: int,
+     *                      HONORIFIC?: string,
+     *                      NAME?: string,
+     *                      SECOND_NAME?: string,
+     *                      LAST_NAME?: string,
+     *                      PHOTO?: string,
+     *                      BIRTHDATE?: string,
+     *                      TYPE_ID?: string,
+     *                      SOURCE_ID?: string,
+     *                      SOURCE_DESCRIPTION?: string,
+     *                      POST?: string,
+     *                      ADDRESS?: string,
+     *                      ADDRESS_2?: string,
+     *                      ADDRESS_CITY?: string,
+     *                      ADDRESS_POSTAL_CODE?: string,
+     *                      ADDRESS_REGION?: string,
+     *                      ADDRESS_PROVINCE?: string,
+     *                      ADDRESS_COUNTRY?: string,
+     *                      ADDRESS_COUNTRY_CODE?: string,
+     *                      ADDRESS_LOC_ADDR_ID?: int,
+     *                      COMMENTS?: string,
+     *                      OPENED?: string,
+     *                      EXPORT?: string,
+     *                      HAS_PHONE?: string,
+     *                      HAS_EMAIL?: string,
+     *                      HAS_IMOL?: string,
+     *                      ASSIGNED_BY_ID?: string,
+     *                      CREATED_BY_ID?: string,
+     *                      MODIFY_BY_ID?: string,
+     *                      DATE_CREATE?: string,
+     *                      DATE_MODIFY?: string,
+     *                      COMPANY_ID?: string,
+     *                      COMPANY_IDS?: string,
+     *                      LEAD_ID?: string,
+     *                      ORIGINATOR_ID?: string,
+     *                      ORIGIN_ID?: string,
+     *                      ORIGIN_VERSION?: string,
+     *                      FACE_ID?: int,
+     *                      UTM_SOURCE?: string,
+     *                      UTM_MEDIUM?: string,
+     *                      UTM_CAMPAIGN?: string,
+     *                      UTM_CONTENT?: string,
+     *                      UTM_TERM?: string,
+     *                      PHONE?: string,
+     *                      EMAIL?: string,
+     *                      WEB?: string,
+     *                      IM?: string,
+     *                      } $filter
+     *
+     * @return int
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     */
+    public function countByFilter(array $filter = []): int
+    {
+        return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+    }
 }

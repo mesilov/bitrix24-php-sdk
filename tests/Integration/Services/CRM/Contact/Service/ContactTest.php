@@ -116,6 +116,29 @@ class ContactTest extends TestCase
         self::assertEquals(count($contacts), $cnt);
     }
 
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function testCountByFilter(): void
+    {
+        $totalBefore = $this->contactService->countByFilter();
+
+        $newContactsCount = 70;
+
+        $contacts = [];
+        for ($i = 1; $i <= $newContactsCount; $i++) {
+            $contacts[] = ['NAME' => 'name-' . $i];
+        }
+
+        foreach ($this->contactService->batch->add($contacts) as $item) {
+        }
+
+        $totalAfter = $this->contactService->countByFilter();
+
+        $this->assertEquals($totalBefore + $newContactsCount, $totalAfter);
+    }
+
     public function setUp(): void
     {
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
