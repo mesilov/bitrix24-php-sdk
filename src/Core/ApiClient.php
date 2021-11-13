@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
+use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAccessToken;
 use Psr\Log\LoggerInterface;
@@ -11,25 +12,11 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Class ApiClient
- *
- * @package Bitrix24\SDK\Core
- */
-class ApiClient
+class ApiClient implements ApiClientInterface
 {
-    /**
-     * @var HttpClientInterface
-     */
-    protected $client;
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-    /**
-     * @var Credentials\Credentials
-     */
-    protected $credentials;
+    protected HttpClientInterface $client;
+    protected LoggerInterface $logger;
+    protected Credentials\Credentials $credentials;
     /**
      * @const string
      */
@@ -90,12 +77,12 @@ class ApiClient
      */
     public function getNewAccessToken(): RenewedAccessToken
     {
-        $this->logger->debug(sprintf('getNewAccessToken.start'));
+        $this->logger->debug('getNewAccessToken.start');
         if ($this->getCredentials()->getApplicationProfile() === null) {
-            throw new InvalidArgumentException(sprintf('application profile not set'));
+            throw new InvalidArgumentException('application profile not set');
         }
         if ($this->getCredentials()->getAccessToken() === null) {
-            throw new InvalidArgumentException(sprintf('access token in credentials not set'));
+            throw new InvalidArgumentException('access token in credentials not set');
         }
 
         $method = 'GET';
@@ -119,7 +106,7 @@ class ApiClient
         $result = $response->toArray(false);
         $newAccessToken = RenewedAccessToken::initFromArray($result);
 
-        $this->logger->debug(sprintf('getNewAccessToken.finish'));
+        $this->logger->debug('getNewAccessToken.finish');
 
         return $newAccessToken;
     }

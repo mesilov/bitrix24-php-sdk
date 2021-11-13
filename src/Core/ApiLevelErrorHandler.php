@@ -18,10 +18,7 @@ use Psr\Log\LoggerInterface;
  */
 class ApiLevelErrorHandler
 {
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
     protected const ERROR_KEY = 'error';
     protected const ERROR_DESCRIPTION_KEY = 'error_description';
 
@@ -58,9 +55,9 @@ class ApiLevelErrorHandler
         );
         switch ($errorCode) {
             case 'query_limit_exceeded':
-                throw new QueryLimitExceededException(sprintf('query limit exceeded - too many requests'));
+                throw new QueryLimitExceededException('query limit exceeded - too many requests');
             case 'error_method_not_found':
-                throw new MethodNotFoundException(sprintf('api method not found'));
+                throw new MethodNotFoundException('api method not found');
             default:
                 throw new BaseException(sprintf('%s - %s', $errorCode, $errorDescription));
         }

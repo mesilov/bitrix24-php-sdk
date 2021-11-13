@@ -24,4 +24,9 @@ interface CoreInterface
      * @throws TransportException
      */
     public function call(string $apiMethod, array $parameters = []): Response;
+
+    /**
+     * @return \Bitrix24\SDK\Core\Contracts\ApiClientInterface
+     */
+    public function getApiClient(): ApiClientInterface;
 }

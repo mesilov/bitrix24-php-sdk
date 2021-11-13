@@ -32,8 +32,8 @@
     "symfony/console": "5.2.*",
     "symfony/dotenv": "5.2.*",
     "symfony/debug-bundle": "5.2.*",
-    "phpstan/phpstan": "0.12.59",
-    "phpunit/phpunit": "9.3.*",
+    "phpstan/phpstan": "1.1.*",
+    "phpunit/phpunit": "9.5.*",
     "roave/security-advisories": "dev-master"
   },
   "autoload": {

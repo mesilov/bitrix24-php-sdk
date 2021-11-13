@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Psr\Log\LoggerInterface;
 
@@ -15,7 +14,10 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractService
 {
-    protected CoreInterface $core;
+    /**
+     * @property-read CoreInterface $core
+     */
+    public CoreInterface $core;
     protected LoggerInterface $log;
 
     /**

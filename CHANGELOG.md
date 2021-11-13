@@ -6,6 +6,9 @@
 * change in scope «CRM» Product service and integration tests
 * add `AddedItemIdResultInterface` for batch-queries result
 * fix method name in `ContactsResult`
+* add interface `ApiClientInterface`
+* bump phpunit version
+* bump phpstan version
 
 ## 2.0-alpha.2 (31.01.2021)
 

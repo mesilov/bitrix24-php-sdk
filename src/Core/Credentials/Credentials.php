@@ -11,23 +11,10 @@ namespace Bitrix24\SDK\Core\Credentials;
  */
 class Credentials
 {
-    /**
-     * @var WebhookUrl|null
-     */
-    protected $webhookUrl;
-    /**
-     * @var AccessToken|null
-     */
-    protected $accessToken;
-    /**
-     * @var ApplicationProfile|null
-     */
-    protected $applicationProfile;
-
-    /**
-     * @var string|null
-     */
-    protected $domainUrl;
+    protected ?WebhookUrl $webhookUrl;
+    protected ?AccessToken $accessToken;
+    protected ?ApplicationProfile $applicationProfile;
+    protected ?string $domainUrl;
 
     /**
      * Credentials constructor.
@@ -48,10 +35,10 @@ class Credentials
         $this->applicationProfile = $applicationProfile;
         $this->domainUrl = $domainUrl;
         if ($this->accessToken === null && $this->webhookUrl === null) {
-            throw new \LogicException(sprintf('you must set on of auth type: webhook or OAuth 2.0'));
+            throw new \LogicException('you must set on of auth type: webhook or OAuth 2.0');
         }
         if ($this->accessToken !== null && $this->domainUrl === null) {
-            throw new \LogicException(sprintf('for oauth type you must set domain url'));
+            throw new \LogicException('for oauth type you must set domain url');
         }
     }
 
@@ -77,7 +64,9 @@ class Credentials
     public function getDomainUrl(): string
     {
         if ($this->getWebhookUrl() !== null) {
-            $url = parse_url($this->getWebhookUrl()->getUrl())['host'];
+            $arUrl = parse_url($this->getWebhookUrl()->getUrl());
+
+            $url = sprintf('%s://%s', $arUrl['scheme'], $arUrl['host']);
         } else {
             $url = $this->domainUrl;
         }

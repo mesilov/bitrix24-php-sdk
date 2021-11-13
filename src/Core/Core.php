@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Commands\Command;
+use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -22,33 +23,21 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 class Core implements CoreInterface
 {
-    /**
-     * @var ApiClient
-     */
-    protected ApiClient $apiClient;
-    /**
-     * @var LoggerInterface
-     */
+    protected ApiClientInterface $apiClient;
     protected LoggerInterface $logger;
-    /**
-     * @var EventDispatcherInterface
-     */
     protected EventDispatcherInterface $eventDispatcher;
-    /**
-     * @var ApiLevelErrorHandler
-     */
     protected ApiLevelErrorHandler $apiLevelErrorHandler;
 
     /**
      * Main constructor.
      *
-     * @param ApiClient                $apiClient
+     * @param ApiClientInterface       $apiClient
      * @param ApiLevelErrorHandler     $apiLevelErrorHandler
      * @param EventDispatcherInterface $eventDispatcher
      * @param LoggerInterface          $logger
      */
     public function __construct(
-        ApiClient $apiClient,
+        ApiClientInterface $apiClient,
         ApiLevelErrorHandler $apiLevelErrorHandler,
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger
@@ -178,5 +167,13 @@ class Core implements CoreInterface
         $this->logger->debug('call.finish');
 
         return $response;
+    }
+
+    /**
+     * @return \Bitrix24\SDK\Core\Contracts\ApiClientInterface
+     */
+    public function getApiClient(): ApiClientInterface
+    {
+        return $this->apiClient;
     }
 }

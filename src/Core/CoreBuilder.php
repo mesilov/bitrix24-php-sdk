@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
+use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
@@ -22,34 +23,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class CoreBuilder
 {
-    /**
-     * @var ApiClient|null
-     */
-    protected $apiClient;
-    /**
-     * @var HttpClientInterface
-     */
-    protected $httpClient;
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-    /**
-     * @var WebhookUrl|null
-     */
-    protected $webhookUrl;
-    /**
-     * @var Credentials|null
-     */
-    protected $credentials;
-    /**
-     * @var ApiLevelErrorHandler
-     */
-    protected $apiLevelErrorHandler;
+    protected ?ApiClientInterface $apiClient;
+    protected HttpClientInterface $httpClient;
+    protected EventDispatcherInterface $eventDispatcher;
+    protected LoggerInterface $logger;
+    protected ?WebhookUrl $webhookUrl;
+    protected ?Credentials $credentials;
+    protected ApiLevelErrorHandler $apiLevelErrorHandler;
 
     /**
      * CoreBuilder constructor.
@@ -83,11 +63,11 @@ class CoreBuilder
     }
 
     /**
-     * @param ApiClient $apiClient
+     * @param ApiClientInterface $apiClient
      *
      * @return $this
      */
-    public function withApiClient(ApiClient $apiClient): self
+    public function withApiClient(ApiClientInterface $apiClient): self
     {
         $this->apiClient = $apiClient;
 
@@ -127,7 +107,7 @@ class CoreBuilder
         if ($this->webhookUrl !== null) {
             $this->credentials = Credentials::createForWebHook($this->webhookUrl);
         } elseif ($this->credentials === null) {
-            throw new InvalidArgumentException(sprintf('you must set webhook url or oauth credentials'));
+            throw new InvalidArgumentException('you must set webhook url or oauth credentials');
         }
 
         if ($this->apiClient === null) {
