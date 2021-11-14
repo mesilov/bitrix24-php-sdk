@@ -73,7 +73,7 @@ class ProductsTest extends TestCase
     public function testList(): void
     {
         $this->productService->add(['NAME' => 'test']);
-        self::assertGreaterThanOrEqual(1, $this->productService->list([], [], ['ID', 'NAME'])->getDeals());
+        self::assertGreaterThanOrEqual(1, $this->productService->list([], [], ['ID', 'NAME'])->getProducts());
     }
 
     /**
