@@ -1,6 +1,6 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.3(10.11.2021)
+## 2.0-alpha.3(14.11.2021)
 
 * add php8 version support
 * change in scope «CRM» Product service and integration tests
@@ -33,6 +33,9 @@
 * add documentation webhook auth type
 * add OAuth 2.0 support
 * add Events support
+
+## 0.1.0 (14.11.2021)
+branch version 1.x – bugfix and security releases only
 
 ## 0.7.0 (11.07.2020)
 
