@@ -14,6 +14,16 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v2
 
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Install dependencies"
+        run: |
+          composer update ${{ env.COMPOSER_FLAGS }}
+
       - name: PHPStan
         uses: docker://oskarstark/phpstan-ga
         with:
