@@ -2,6 +2,9 @@ on:
   push:
   pull_request:
 
+env:
+  COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
+
 name: PHPStan checks
 
 jobs:
@@ -9,6 +12,12 @@ jobs:
     name: PHPStan
 
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - "7.4"
+        dependencies: [ highest ]
 
     steps:
       - name: "Checkout"
