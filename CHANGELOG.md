@@ -1,5 +1,16 @@
 # bitrix24-php-sdk change log
 
+## 2.0-alpha.4(25.11.2021)
+
+### Changed
+* switch `symfony/http-client` to `5.3` version requirement.
+* switch `symfony/http-client-contracts` to `^2.4` version requirement.
+* switch `symfony/event-dispatcher` to `5.3.*` version requirement.
+* switch `ramsey/uuid` to `^4.0` version requirement.
+ 
+### Fixed
+* issue [Несовместимость с Laravel 8 #224](https://github.com/mesilov/bitrix24-php-sdk/issues/224)
+
 ## 2.0-alpha.3(14.11.2021)
 
 * add php8 version support
