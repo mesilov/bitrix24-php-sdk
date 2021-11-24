@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Response\DTO;
 
+use Bitrix24\SDK\Core\Commands\Command;
+
 /**
  * Class ResponseData
  *
@@ -11,31 +13,25 @@ namespace Bitrix24\SDK\Core\Response\DTO;
  */
 class ResponseData
 {
-    /**
-     * @var Result
-     */
-    protected $result;
-    /**
-     * @var Time
-     */
-    protected $time;
-    /**
-     * @var Pagination
-     */
-    protected $pagination;
+    protected Result $result;
+    protected Time $time;
+    protected Pagination $pagination;
+    protected Command $command;
 
     /**
      * ResponseData constructor.
      *
-     * @param Result     $result
-     * @param Time       $time
-     * @param Pagination $pagination
+     * @param Result                              $result
+     * @param Time                                $time
+     * @param Pagination                          $pagination
+     * @param \Bitrix24\SDK\Core\Commands\Command $command
      */
-    public function __construct(Result $result, Time $time, Pagination $pagination)
+    public function __construct(Result $result, Time $time, Pagination $pagination, Command $command)
     {
         $this->result = $result;
         $this->time = $time;
         $this->pagination = $pagination;
+        $this->command = $command;
     }
 
     /**
@@ -60,5 +56,13 @@ class ResponseData
     public function getResult(): Result
     {
         return $this->result;
+    }
+
+    /**
+     * @return \Bitrix24\SDK\Core\Commands\Command
+     */
+    public function getCommand(): Command
+    {
+        return $this->command;
     }
 }

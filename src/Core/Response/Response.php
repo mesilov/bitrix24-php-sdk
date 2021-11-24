@@ -84,7 +84,8 @@ class Response
                 $this->responseData = new DTO\ResponseData(
                     new DTO\Result($responseResult['result']),
                     DTO\Time::initFromResponse($responseResult['time']),
-                    new DTO\Pagination($nextItem, $total)
+                    new DTO\Pagination($nextItem, $total),
+                    $this->apiCommand
                 );
             } catch (Throwable $exception) {
                 $this->logger->error(

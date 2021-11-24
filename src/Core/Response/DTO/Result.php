@@ -11,10 +11,7 @@ namespace Bitrix24\SDK\Core\Response\DTO;
  */
 class Result
 {
-    /**
-     * @var array
-     */
-    protected $result;
+    protected array $result;
 
     /**
      * Result constructor.

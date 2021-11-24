@@ -16,6 +16,7 @@ use Bitrix24\SDK\Core\Response\DTO\Time;
 use Bitrix24\SDK\Core\Response\Response;
 use Generator;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class Batch
@@ -427,7 +428,7 @@ class Batch implements BatchInterface
     /**
      * @param bool $isHaltOnError
      *
-     * @return Generator<int, ResponseData>
+     * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      * @throws Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
@@ -485,10 +486,16 @@ class Batch implements BatchInterface
                     $total = $totalItems[$singleQueryKey];
                 }
 
+                if (Uuid::isValid($singleQueryKey)) {
+                    $currentCommand = $this->commands->getByUuid(Uuid::fromString($singleQueryKey));
+                } else {
+                    $currentCommand = $this->commands->getByName($singleQueryKey);
+                }
                 yield new ResponseData(
                     new Result($singleQueryResult),
                     Time::initFromResponse($resultQueryTimeItems[$singleQueryKey]),
-                    new Pagination($nextItem, $total)
+                    new Pagination($nextItem, $total),
+                    $currentCommand
                 );
             }
             $this->log->debug('getTraversable.batchResult.processFinish');
@@ -554,5 +561,24 @@ class Batch implements BatchInterface
         }
 
         return $apiCommands;
+    }
+
+    /**
+     * @return array
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    public function getCompositeResultAsArray(): array
+    {
+        $result = [];
+        foreach ($this->getTraversable(false) as $item) {
+            $result[$item->getCommand()->getName() ?? $item->getCommand()->getUuid()->toString()] = $item->getResult()->getResultData();
+        }
+
+        return $result;
     }
 }
