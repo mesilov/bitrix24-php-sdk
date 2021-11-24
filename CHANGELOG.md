@@ -1,17 +1,30 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.4(25.11.2021)
+## 2.0-alpha.5 – 26.11.2021
+
+### Added
+
+* add method `countByFilter` for all services, see
+  issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #228](https://github.com/mesilov/bitrix24-php-sdk/issues/228)
+
+### Removed
+
+* remove all `0.*` and `1.*` code from `2.*` branch
+
+## 2.0-alpha.4 – 25.11.2021
 
 ### Changed
+
 * switch `symfony/http-client` to `5.3` version requirement.
 * switch `symfony/http-client-contracts` to `^2.4` version requirement.
 * switch `symfony/event-dispatcher` to `5.3.*` version requirement.
 * switch `ramsey/uuid` to `^4.0` version requirement.
- 
+
 ### Fixed
+
 * issue [Несовместимость с Laravel 8 #224](https://github.com/mesilov/bitrix24-php-sdk/issues/224)
 
-## 2.0-alpha.3(14.11.2021)
+## 2.0-alpha.3 – 14.11.2021
 
 * add php8 version support
 * change in scope «CRM» Product service and integration tests
@@ -22,7 +35,7 @@
 * bump phpunit version
 * bump phpstan version
 
-## 2.0-alpha.2 (31.01.2021)
+## 2.0-alpha.2 – 31.01.2021
 
 * remove Travis CI and migrate to Github Actions
 * add unit-tests in independent github action
@@ -37,7 +50,7 @@
 * add in scope «IM» IM service and integration test
 * add in default scope «Main» default service
 
-## 2.0-alpha.1 (11.07.2020)
+## 2.0-alpha.1 – 11.07.2020
 
 * remove all v1 code
 * migrate to Symfony HttpClient
@@ -46,6 +59,7 @@
 * add Events support
 
 ## 0.1.0 (14.11.2021)
+
 branch version 1.x – bugfix and security releases only
 
 ## 0.7.0 (11.07.2020)
