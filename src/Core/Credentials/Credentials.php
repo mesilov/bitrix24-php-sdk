@@ -93,7 +93,7 @@ class Credentials
     /**
      * @param WebhookUrl $webhookUrl
      *
-     * @return static
+     * @return self
      */
     public static function createForWebHook(WebhookUrl $webhookUrl): self
     {
@@ -110,7 +110,7 @@ class Credentials
      * @param ApplicationProfile $applicationProfile
      * @param string             $domainUrl
      *
-     * @return static
+     * @return self
      */
     public static function createForOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
     {
