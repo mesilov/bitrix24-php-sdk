@@ -33,8 +33,5 @@ jobs:
         run: |
           composer update ${{ env.COMPOSER_FLAGS }}
 
-      - name: "Run tests"
-        run: "composer exec phpunit -- --verbose"
-
-      - name: Run test suite
-        run: composer run-script unit-tests
+      - name: "run unit tests"
+        run: "composer phpunit-run-unit-tests"

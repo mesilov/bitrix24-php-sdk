@@ -29,9 +29,9 @@
   },
   "require-dev": {
     "monolog/monolog": "2.1.*",
-    "symfony/console": "5.2.*",
-    "symfony/dotenv": "5.2.*",
-    "symfony/debug-bundle": "5.2.*",
+    "symfony/console": "5.3.*",
+    "symfony/dotenv": "5.3.*",
+    "symfony/debug-bundle": "5.3.*",
     "phpstan/phpstan": "1.1.*",
     "phpunit/phpunit": "9.5.*",
     "roave/security-advisories": "dev-master"
@@ -48,8 +48,11 @@
     }
   },
   "scripts": {
-    "unit-tests": [
-      "phpunit --colors=always --verbose"
+    "phpunit-run-unit-tests": [
+      "phpunit --testsuite unit_tests"
+    ],
+    "phpunit-run-integration-tests": [
+      "phpunit --testsuite integration_tests"
     ],
     "phpstan-analyse": [
       "vendor/bin/phpstan analyse"
