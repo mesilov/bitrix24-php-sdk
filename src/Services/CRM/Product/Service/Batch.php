@@ -20,10 +20,11 @@ class Batch extends AbstractBatchService
     /**
      * batch list method
      *
-     * @param array {
+     * @param array{
      *                         ID?: int
+     *                         } $order
      *
-     * @param array {
+     * @param array{
      *                         ID?: int
      *                         } $filter
      * @param array    $select = ['ID','CATALOG_ID','PRICE','CURRENCY_ID','NAME','CODE','DESCRIPTION','DESCRIPTION_TYPE','ACTIVE','SECTION_ID','SORT','VAT_ID','VAT_INCLUDED','MEASURE','XML_ID','PREVIEW_PICTURE','DETAIL_PICTURE','DATE_CREATE','TIMESTAMP_X','MODIFIED_BY','CREATED_BY']
