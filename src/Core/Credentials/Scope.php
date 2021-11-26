@@ -71,8 +71,7 @@ class Scope
      */
     public function __construct(array $scope = [])
     {
-        $scope = array_map('strtolower', $scope);
-        array_unique($scope);
+        $scope = array_unique(array_map('strtolower', $scope));
         foreach ($scope as $item) {
             if (!in_array($item, $this->availableScope, true)) {
                 throw new UnknownScopeCodeException(sprintf('unknown application scope code - %s', $item));
