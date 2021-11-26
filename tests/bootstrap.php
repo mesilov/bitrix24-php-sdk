@@ -20,4 +20,4 @@ if ($input->hasParameterOption('--no-debug', true)) {
     putenv('APP_DEBUG=' . $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
 }
 
-(new Dotenv())->bootEnv(dirname(__DIR__) .'/tests/.env.local');
+(new Dotenv())->loadEnv(dirname(__DIR__).'/tests/.env');
