@@ -14,34 +14,13 @@ use Bitrix24\SDK\Core\Credentials\Scope;
  */
 class RenewedAccessToken
 {
-    /**
-     * @var AccessToken
-     */
-    private $accessToken;
-    /**
-     * @var Scope
-     */
-    private $scope;
-    /**
-     * @var string
-     */
-    private $memberId;
-    /**
-     * @var string
-     */
-    private $clientEndpoint;
-    /**
-     * @var string
-     */
-    private $serverEndpoint;
-    /**
-     * @var string
-     */
-    private $applicationStatus;
-    /**
-     * @var string
-     */
-    private $domain;
+    private AccessToken $accessToken;
+    private Scope $scope;
+    private string $memberId;
+    private string $clientEndpoint;
+    private string $serverEndpoint;
+    private string $applicationStatus;
+    private string $domain;
 
     /**
      * RenewedAccessToken constructor.
@@ -131,7 +110,7 @@ class RenewedAccessToken
     /**
      * @param array $response
      *
-     * @return static
+     * @return self
      * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
      */
     public static function initFromArray(array $response): self

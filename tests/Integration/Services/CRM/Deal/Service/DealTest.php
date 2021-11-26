@@ -115,6 +115,31 @@ class DealTest extends TestCase
         self::assertEquals(count($deals), $cnt);
     }
 
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::countByFilter
+     */
+    public function testCountByFilter(): void
+    {
+        $before = $this->dealService->countByFilter();
+
+        $newDealsCount = 60;
+        $deals = [];
+        for ($i = 1; $i <= $newDealsCount; $i++) {
+            $deals[] = ['TITLE' => 'TITLE-' . $i];
+        }
+        $cnt = 0;
+        foreach ($this->dealService->batch->add($deals) as $item) {
+            $cnt++;
+        }
+        self::assertEquals(count($deals), $cnt);
+
+        $after = $this->dealService->countByFilter();
+
+        $this->assertEquals($before + $newDealsCount, $after);
+    }
+
     public function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();

@@ -6,3 +6,4 @@ composer.lock
 tools/.env.local
 tools/logs
 examples/logs
+.env.local

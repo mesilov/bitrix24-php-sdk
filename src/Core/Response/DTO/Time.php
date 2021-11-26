@@ -11,30 +11,12 @@ namespace Bitrix24\SDK\Core\Response\DTO;
  */
 class Time
 {
-    /**
-     * @var float
-     */
-    protected $start;
-    /**
-     * @var float
-     */
-    protected $finish;
-    /**
-     * @var float
-     */
-    protected $duration;
-    /**
-     * @var float
-     */
-    protected $processing;
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $dateStart;
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $dateFinish;
+    protected float $start;
+    protected float $finish;
+    protected float $duration;
+    protected float $processing;
+    protected \DateTimeImmutable $dateStart;
+    protected \DateTimeImmutable $dateFinish;
 
     /**
      * Time constructor.
@@ -113,7 +95,7 @@ class Time
     /**
      * @param array $response
      *
-     * @return static
+     * @return self
      * @throws \Exception
      */
     public static function initFromResponse(array $response): self

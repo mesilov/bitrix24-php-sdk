@@ -476,7 +476,7 @@ class Batch implements BatchInterface
                 }
 
                 $nextItem = null;
-                if ($resultNextItems !== null && array_key_exists($singleQueryKey, $resultNextItems) && count($resultNextItems) > 0) {
+                if ($resultNextItems !== null && array_key_exists($singleQueryKey, $resultNextItems)) {
                     $nextItem = $resultNextItems[$singleQueryKey];
                 }
 
@@ -544,7 +544,7 @@ class Batch implements BatchInterface
         $apiCommands = [];
         foreach ($this->commands as $itemCommand) {
             /**
-             * @var $itemCommand Command
+             * @var Command $itemCommand
              */
             $apiCommands[$itemCommand->getName() ?? $itemCommand->getUuid()->toString()] = sprintf(
                 '%s?%s',
