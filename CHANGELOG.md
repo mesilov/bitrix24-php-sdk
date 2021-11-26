@@ -4,7 +4,7 @@
 
 ### Added
 
-* add method `countByFilter` for all services, see
+* add method `countByFilter` for all related services, see
   issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #228](https://github.com/mesilov/bitrix24-php-sdk/issues/228)
 
 ### Removed

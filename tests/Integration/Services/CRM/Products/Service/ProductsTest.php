@@ -123,6 +123,30 @@ class ProductsTest extends TestCase
         self::assertEquals(count($products), $cnt);
     }
 
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @covers \Bitrix24\SDK\Services\CRM\Product\Service\Product::countByFilter
+     */
+    public function testCountByFilter(): void
+    {
+        $productsCountBefore = $this->productService->countByFilter();
+        $newProductsCount = 60;
+        $products = [];
+        for ($i = 1; $i <= $newProductsCount; $i++) {
+            $products[] = ['NAME' => 'NAME-' . $i];
+        }
+        $cnt = 0;
+        foreach ($this->productService->batch->add($products) as $item) {
+            $cnt++;
+        }
+
+        self::assertEquals(count($products), $cnt);
+
+        $productsCountAfter = $this->productService->countByFilter();
+        $this->assertEquals($productsCountBefore + $newProductsCount, $productsCountAfter);
+    }
+
     public function setUp(): void
     {
         $this->productService = Fabric::getServiceBuilder()->getCRMScope()->product();

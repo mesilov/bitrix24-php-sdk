@@ -211,4 +211,40 @@ class Product extends AbstractService
             )
         );
     }
+
+    /**
+     * Count products by filter
+     *
+     * @param array{
+     *   ID?: int,
+     *   CATALOG_ID?: int,
+     *   PRICE?: string,
+     *   CURRENCY_ID?: string,
+     *   NAME?: string,
+     *   CODE?: string,
+     *   DESCRIPTION?: string,
+     *   DESCRIPTION_TYPE?: string,
+     *   ACTIVE?: string,
+     *   SECTION_ID?: int,
+     *   SORT?: int,
+     *   VAT_ID?: int,
+     *   VAT_INCLUDED?: string,
+     *   MEASURE?: int,
+     *   XML_ID?: string,
+     *   PREVIEW_PICTURE?: string,
+     *   DETAIL_PICTURE?: string,
+     *   DATE_CREATE?: string,
+     *   TIMESTAMP_X?: string,
+     *   MODIFIED_BY?: int,
+     *   CREATED_BY?: int
+     *   } $filter
+     *
+     * @return int
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     */
+    public function countByFilter(array $filter = []): int
+    {
+        return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
+    }
 }
