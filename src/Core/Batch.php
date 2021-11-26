@@ -544,7 +544,7 @@ class Batch implements BatchInterface
         $apiCommands = [];
         foreach ($this->commands as $itemCommand) {
             /**
-             * @var $itemCommand Command
+             * @var Command $itemCommand
              */
             $apiCommands[$itemCommand->getName() ?? $itemCommand->getUuid()->toString()] = sprintf(
                 '%s?%s',
