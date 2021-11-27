@@ -125,4 +125,19 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    /**
+     * @return Userfield\Service\Userfield
+     */
+    public function userfield(): Userfield\Service\Userfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Userfield\Service\Userfield(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

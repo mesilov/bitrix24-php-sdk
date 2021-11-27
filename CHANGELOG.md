@@ -1,12 +1,13 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.5 – 26.11.2021
+## 2.0-alpha.5 – 28.11.2021
 
 ### Added
 
 * add method `countByFilter` for all related services, see
   issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #228](https://github.com/mesilov/bitrix24-php-sdk/issues/228)
-
+* add in scope «CRM» Userfield service and integration test
+ 
 ### Removed
 
 * remove all `0.*` and `1.*` code from `2.*` branch
