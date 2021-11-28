@@ -13,7 +13,7 @@ use Bitrix24\SDK\Core\Exceptions\ImmutableResultViolationException;
  */
 abstract class AbstractItem implements \IteratorAggregate
 {
-    private array $data;
+    protected array $data;
 
     /**
      * AbstractItem constructor.
@@ -74,5 +74,15 @@ abstract class AbstractItem implements \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->data);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    protected function isKeyExists(string $key): bool
+    {
+        return array_key_exists($key, $this->data);
     }
 }

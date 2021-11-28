@@ -16,11 +16,12 @@ class Scope
     /**
      * @var string[]
      */
-    protected $availableScope = [
+    protected array $availableScope = [
         'app',
         'bizproc',
         'calendar',
         'call',
+        'catalog',
         'contact_center',
         'crm',
         'delivery',
@@ -60,7 +61,7 @@ class Scope
     /**
      * @var array
      */
-    protected $currentScope = [];
+    protected array $currentScope = [];
 
     /**
      * Scope constructor.

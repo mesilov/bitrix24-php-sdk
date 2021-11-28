@@ -87,6 +87,21 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     }
 
     /**
+     * @return \Bitrix24\SDK\Services\CRM\Contact\Service\ContactUserfield
+     */
+    public function contactUserfield(): Contact\Service\ContactUserfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Contact\Service\ContactUserfield(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
      * @return Deal\Service\DealProductRows
      */
     public function dealProductRows(): Deal\Service\DealProductRows
@@ -118,6 +133,21 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Product\Service\Product(
                 new Product\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * @return Userfield\Service\Userfield
+     */
+    public function userfield(): Userfield\Service\Userfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Userfield\Service\Userfield(
                 $this->core,
                 $this->log
             );

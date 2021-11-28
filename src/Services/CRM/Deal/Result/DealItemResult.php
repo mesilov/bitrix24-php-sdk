@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 
 /**
  * Class DealItemResult
@@ -45,6 +45,6 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read string|null $UTM_CONTENT
  * @property-read string|null $UTM_TERM
  */
-class DealItemResult extends AbstractItem
+class DealItemResult extends AbstractCrmItem
 {
 }
