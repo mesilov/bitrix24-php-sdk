@@ -71,6 +71,21 @@ class CRMServiceBuilder extends AbstractServiceBuilder
     }
 
     /**
+     * @return \Bitrix24\SDK\Services\CRM\Deal\Service\DealUserfield
+     */
+    public function dealUserfield(): Deal\Service\DealUserfield
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Deal\Service\DealUserfield(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
      * @return Contact\Service\Contact
      */
     public function contact(): Contact\Service\Contact

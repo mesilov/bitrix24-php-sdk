@@ -7,8 +7,12 @@
 * add method `countByFilter` for all related services, see
   issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #228](https://github.com/mesilov/bitrix24-php-sdk/issues/228)
 * add in scope «CRM» Userfield service and integration test
-* add in scope «CRM» ContactUserfield service and integration test
+* add in scope «CRM» ContactUserfield service and integration test, see
+  issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #231](https://github.com/mesilov/bitrix24-php-sdk/issues/231)
 * add method getUserfieldByFieldName for `ContactItemResult`
+* add in scope «CRM» DealUserfield service and integration test, see
+  issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #232](https://github.com/mesilov/bitrix24-php-sdk/issues/232) 
+* add method getUserfieldByFieldName for `DealItemResult`
 * add exception `UserfieldNotFoundException`
 
 ### Removed
