@@ -47,4 +47,14 @@ use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
  */
 class DealItemResult extends AbstractCrmItem
 {
+    /**
+     * @param string $userfieldName
+     *
+     * @return mixed|null
+     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
+     */
+    public function getUserfieldByFieldName(string $userfieldName)
+    {
+        return $this->getKeyWithUserfieldByFieldName($userfieldName);
+    }
 }
