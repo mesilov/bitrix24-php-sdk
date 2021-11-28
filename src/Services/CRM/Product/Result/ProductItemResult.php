@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Product\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
 
 /**
  * Class ProductItemResult
@@ -31,6 +31,6 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read int    $MODIFIED_BY
  * @property-read int    $CREATED_BY
  */
-class ProductItemResult extends AbstractItem
+class ProductItemResult extends AbstractCrmItem
 {
 }

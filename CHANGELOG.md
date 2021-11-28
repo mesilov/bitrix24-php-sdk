@@ -7,10 +7,17 @@
 * add method `countByFilter` for all related services, see
   issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #228](https://github.com/mesilov/bitrix24-php-sdk/issues/228)
 * add in scope «CRM» Userfield service and integration test
- 
+* add in scope «CRM» ContactUserfield service and integration test
+* add method getUserfieldByFieldName for `ContactItemResult`
+* add exception `UserfieldNotFoundException`
+
 ### Removed
 
 * remove all `0.*` and `1.*` code from `2.*` branch
+
+### Changed
+
+* update type definition for `ContactItemResult`, now return types will be cast to real types: DateTimeInterface, int, boolean etc
 
 ## 2.0-alpha.4 – 25.11.2021
 

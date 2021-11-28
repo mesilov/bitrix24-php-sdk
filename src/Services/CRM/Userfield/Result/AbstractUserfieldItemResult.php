@@ -29,4 +29,16 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class AbstractUserfieldItemResult extends AbstractItem
 {
+    //crm userfield name prefix UF_CRM_
+    private const CRM_USERFIELD_PREFIX_LENGTH = 7;
+
+    /**
+     * get userfield name without prefix UF_CRM_
+     *
+     * @return string
+     */
+    public function getOriginalFieldName(): string
+    {
+        return substr($this->FIELD_NAME, self::CRM_USERFIELD_PREFIX_LENGTH);
+    }
 }
