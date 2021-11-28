@@ -1,15 +1,27 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.5 – 26.11.2021
+## 2.0-alpha.5 – 28.11.2021
 
 ### Added
 
 * add method `countByFilter` for all related services, see
   issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #228](https://github.com/mesilov/bitrix24-php-sdk/issues/228)
+* add in scope «CRM» Userfield service and integration test
+* add in scope «CRM» ContactUserfield service and integration test, see
+  issue [Добавить сервис по работе с юзерфилдами контакта #231](https://github.com/mesilov/bitrix24-php-sdk/issues/231)
+* add method getUserfieldByFieldName for `ContactItemResult`
+* add in scope «CRM» DealUserfield service and integration test, see
+  issue [Добавить сервис по работе с юзерфилдами cделки #232](https://github.com/mesilov/bitrix24-php-sdk/issues/232) 
+* add method getUserfieldByFieldName for `DealItemResult`
+* add exception `UserfieldNotFoundException`
 
 ### Removed
 
 * remove all `0.*` and `1.*` code from `2.*` branch
+
+### Changed
+
+* update type definition for `ContactItemResult`, now return types will be cast to real types: DateTimeInterface, int, boolean etc
 
 ## 2.0-alpha.4 – 25.11.2021
 
