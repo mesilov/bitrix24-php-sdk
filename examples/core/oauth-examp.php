@@ -44,7 +44,7 @@ try {
         }
     );
 
-    $app = new \Bitrix24\SDK\Services\Main($apiClient, $ed, $log);
+    $app = (new \Bitrix24\SDK\Core\CoreBuilder())->withCredentials($credentials)->withApiClient($apiClient)->build();
 
     $log->debug('================================');
 
