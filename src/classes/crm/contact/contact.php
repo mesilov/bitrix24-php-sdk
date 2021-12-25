@@ -42,9 +42,9 @@ class Contact extends Bitrix24Entity
 		$fullResult = $this->client->call(
 			'crm.contact.add',
 			array(
-                'fields' => $fields,
-                'params' => $params
-            )
+				'fields' => $fields,
+				'params' => $params
+			)
 		);
 		return $fullResult;
 	}
