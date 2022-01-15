@@ -1,5 +1,9 @@
 # bitrix24-php-sdk change log
 
+## 1.2.1 (15.01.2022)
+
+* fix php version requirements
+
 ## 1.2.0 (15.01.2022)
 
 * add callback function for PortalRenamed
