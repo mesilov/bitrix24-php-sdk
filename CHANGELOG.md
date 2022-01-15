@@ -1,4 +1,7 @@
 # bitrix24-php-sdk change log
+## 1.2.2 (15.01.2022)
+
+* fix php version requirements again =(
 
 ## 1.2.1 (15.01.2022)
 

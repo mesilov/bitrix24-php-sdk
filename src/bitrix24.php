@@ -40,7 +40,7 @@ class Bitrix24 implements iBitrix24
     /**
      * @var string SDK version
      */
-    const VERSION = '1.2.0';
+    const VERSION = '1.2.2';
 
     /**
      * @var string OAuth server
