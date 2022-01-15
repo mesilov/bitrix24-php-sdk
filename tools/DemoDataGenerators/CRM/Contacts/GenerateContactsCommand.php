@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tools\DemoDataGenerators\CRM\Contacts;
 
+use Bitrix24\SDK\Core\Batch;
+use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Response\DTO\ResponseData;
+use Bitrix24\SDK\Services\ServiceBuilder;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,6 +73,20 @@ class GenerateContactsCommand extends Command
     }
 
     /**
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return void
+     */
+    protected function interact(InputInterface $input, OutputInterface $output): void
+    {
+        $b24Webhook = (string)$input->getOption(self::WEBHOOK_URL);
+        if ($b24Webhook === '') {
+            throw new InvalidArgumentException(sprintf('option %s not found, you must set this option', self::WEBHOOK_URL));
+        }
+    }
+
+    /**
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
@@ -93,26 +110,27 @@ class GenerateContactsCommand extends Command
         );
 
         try {
-            $contacts = $this->generateContacts($contactsCount);
-
-            $core = (new \Bitrix24\SDK\Core\CoreBuilder())
+            $core = (new CoreBuilder())
                 ->withLogger($this->logger)
                 ->withWebhookUrl($b24Webhook)
                 ->build();
+            $services = new ServiceBuilder(
+                $core,
+                new Batch($core, $this->logger),
+                $this->logger
+            );
 
-            $countResult = $core->call('crm.contact.list');
-            $output->writeln(sprintf('contacts total count: %s', $countResult->getResponseData()->getPagination()->getTotal()));
+            $output->writeln(sprintf('contacts total count: %s', $services->getCRMScope()->contact()->countByFilter()));
 
-            $batch = new \Bitrix24\SDK\Core\Batch($core, $this->logger);
-            foreach ($contacts as $cnt => $contact) {
-                $batch->addCommand('crm.contact.add', $contact);
-            }
             $io->section('start adding contacts…');
-
             $timeStart = microtime(true);
-            foreach ($batch->getTraversable(true) as $queryCnt => $queryResultData) {
+            foreach (
+                $services->getCRMScope()->contact()->batch->add(
+                    $this->generateContacts($contactsCount)
+                ) as $queryCnt => $addedItem
+            ) {
                 /**
-                 * @var $queryResultData ResponseData
+                 * @var $queryResultData \Bitrix24\SDK\Core\Result\AddedItemBatchResult
                  */
                 $io->writeln(
                     [
@@ -121,7 +139,7 @@ class GenerateContactsCommand extends Command
                             round(memory_get_peak_usage(true) / 1024 / 1024, 2),
                             $queryCnt + 1,
                             $contactsCount,
-                            $queryResultData->getResult()->getResultData()[0]
+                            $addedItem->getId()
                         ),
                     ]
                 );
@@ -131,11 +149,9 @@ class GenerateContactsCommand extends Command
             $io->success('contacts added');
         } catch (BaseException $exception) {
             $io = new SymfonyStyle($input, $output);
-            $io->caution('Bitrix24 error');
+            $io->caution(sprintf('error message: %s', $exception->getMessage()));
             $io->text(
-                [
-                    sprintf('%s', $exception->getMessage()),
-                ]
+                $exception->getTraceAsString()
             );
         } catch (\Throwable $exception) {
             $io = new SymfonyStyle($input, $output);
@@ -148,10 +164,12 @@ class GenerateContactsCommand extends Command
         }
         $this->logger->debug('GenerateContactsCommand.finish');
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
+     * Generate fake contacts
+     *
      * @param int $contactsCount
      *
      * @return array<int, array> $contacts
@@ -162,16 +180,14 @@ class GenerateContactsCommand extends Command
         $contacts = [];
         for ($i = 0; $i < $contactsCount; $i++) {
             $contacts[] = [
-                'fields' => [
-                    'NAME'        => sprintf('name_%s', $i),
-                    'LAST_NAME'   => sprintf('last_%s', $i),
-                    'SECOND_NAME' => sprintf('second_%s', $i),
-                    'PHONE'       => [
-                        ['VALUE' => sprintf('+7978%s', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'MOBILE'],
-                    ],
-                    'EMAIL'       => [
-                        ['VALUE' => sprintf('test-%s@gmail.com', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'WORK'],
-                    ],
+                'NAME'        => sprintf('name_%s', $i),
+                'LAST_NAME'   => sprintf('last_%s', $i),
+                'SECOND_NAME' => sprintf('second_%s', $i),
+                'PHONE'       => [
+                    ['VALUE' => sprintf('+7978%s', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'MOBILE'],
+                ],
+                'EMAIL'       => [
+                    ['VALUE' => sprintf('test-%s@gmail.com', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'WORK'],
                 ],
             ];
         }
