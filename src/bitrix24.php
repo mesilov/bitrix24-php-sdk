@@ -33,14 +33,14 @@ use Psr\Log\NullLogger;
  * Class Bitrix24
  *
  * @author    Mesilov Maxim <mesilov.maxim@gmail.com>
- * @copyright 2013 - 2016 Mesilov Maxim
+ * @copyright 2013 - 2022 Mesilov Maxim
  */
 class Bitrix24 implements iBitrix24
 {
     /**
      * @var string SDK version
      */
-    const VERSION = '1.0';
+    const VERSION = '1.2.0';
 
     /**
      * @var string OAuth server
@@ -66,7 +66,7 @@ class Bitrix24 implements iBitrix24
     /**
      * @var array scope
      */
-    protected $applicationScope = array();
+    protected $applicationScope = [];
 
     /**
      * @var string application id
@@ -137,7 +137,7 @@ class Bitrix24 implements iBitrix24
     /**
      * @var array pending batch calls
      */
-    protected $_batch = array();
+    protected $_batch = [];
 
     /**
      * @var callable callback for expired tokens
@@ -148,6 +148,10 @@ class Bitrix24 implements iBitrix24
      * @var callable callback after api method called
      */
     protected $_onCallApiMethod;
+    /**
+     * @var callable callback after portal renamed
+     */
+    protected $_onPortalRenamed;
 
     /**
      * @var bool ssl verify for checking CURLOPT_SSL_VERIFYPEER and CURLOPT_SSL_VERIFYHOST
@@ -208,6 +212,19 @@ class Bitrix24 implements iBitrix24
     public function setOnExpiredToken(callable $callback)
     {
         $this->_onExpiredToken = $callback;
+    }
+
+    /**
+     * Set function called on portal renamed. Callback receives instance as first parameter and new portalUrl
+     * If callback returns true, last API call will be retried
+     *
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function setOnPortalRenamed(callable $callback)
+    {
+        $this->_onPortalRenamed = $callback;
     }
 
     /**
@@ -514,9 +531,9 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24Exception
      * @throws \Bitrix24\Exceptions\Bitrix24BadGatewayException
      */
-    protected function executeRequest($url, array $additionalParameters = array())
+    protected function executeRequest($url, array $additionalParameters = [])
     {
-        $retryableErrorCodes = array(
+        $retryableErrorCodes = [
             CURLE_COULDNT_RESOLVE_HOST,
             CURLE_COULDNT_CONNECT,
             CURLE_HTTP_NOT_FOUND,
@@ -524,10 +541,10 @@ class Bitrix24 implements iBitrix24
             CURLE_OPERATION_TIMEOUTED,
             CURLE_HTTP_POST_ERROR,
             CURLE_SSL_CONNECT_ERROR,
-        );
+        ];
 
-        $curlOptions = array(
-            CURLOPT_FOLLOWLOCATION => true,
+        $curlOptions = [
+            CURLOPT_FOLLOWLOCATION => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLINFO_HEADER_OUT    => true,
             CURLOPT_VERBOSE        => true,
@@ -537,7 +554,7 @@ class Bitrix24 implements iBitrix24
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => http_build_query($additionalParameters),
             CURLOPT_URL            => $url,
-        );
+        ];
 
         if (!$this->sslVerify) {
             $curlOptions[CURLOPT_SSL_VERIFYPEER] = 0;
@@ -580,7 +597,7 @@ class Bitrix24 implements iBitrix24
             }
             $this->requestInfo = curl_getinfo($curl);
             $this->rawResponse = $curlResult;
-            $this->log->debug('cURL request info', array($this->getRequestInfo()));
+            $this->log->debug('cURL request info', [$this->getRequestInfo()]);
             curl_close($curl);
             break;
         }
@@ -591,13 +608,40 @@ class Bitrix24 implements iBitrix24
                 $errorMsg = sprintf('portal [%s] deleted, query aborted', $this->getDomain());
                 $this->log->error($errorMsg, $this->getErrorContext());
                 throw new Bitrix24PortalDeletedException($errorMsg);
-                break;
+            case 302:
+                $this->log->warning('bitrix24Portal.renamed', [
+                    'oldDomainUrl' => $this->getDomain(),
+                    'newDomainUrl' => $this->requestInfo['redirect_url'],
+                ]);
 
+                $newDomainHost = parse_url((string)$this->requestInfo['redirect_url'], PHP_URL_HOST);
+                if (is_callable($this->_onPortalRenamed)) {
+                    $this->log->debug('bitrix24Portal.renamed.callbackFound');
+                    $isRetryApiCall = call_user_func($this->_onPortalRenamed, $this, $newDomainHost);
+                    if ($isRetryApiCall) {
+                        $newUrl = str_replace($this->getDomain(), $newDomainHost, $url);
+                        $this->log->debug('bitrix24Portal.renamed.tryToRetryLastQueryByNewHost', [
+                            'oldUrl' => $url,
+                            'newUrl' => $url,
+                        ]);
+
+                        return $this->executeRequest($newUrl, $additionalParameters);
+                    }
+                } else {
+                    throw new Bitrix24PortalRenamedException(
+                        sprintf(
+                            'bitrix24 portal %s renamed to %s',
+                            $this->getDomain(),
+                            $newDomainHost
+                        )
+                    );
+                }
+
+                break;
             case 502:
                 $errorMsg = sprintf('bad gateway to portal [%s]', $this->getDomain());
                 $this->log->error($errorMsg, $this->getErrorContext());
                 throw new Bitrix24BadGatewayException($errorMsg);
-                break;
         }
 
         // handling server-side API errors: empty response from bitrix24 portal
@@ -630,7 +674,7 @@ class Bitrix24 implements iBitrix24
      */
     protected function getErrorContext()
     {
-        return array(
+        return [
             // portal specific settings
             'B24_DOMAIN'         => $this->getDomain(),
             'B24_MEMBER_ID'      => $this->getMemberId(),
@@ -645,7 +689,7 @@ class Bitrix24 implements iBitrix24
             'RAW_REQUEST'        => $this->getRawRequest(),
             'CURL_REQUEST_INFO'  => $this->getRequestInfo(),
             'RAW_RESPONSE'       => $this->getRawResponse(),
-        );
+        ];
     }
 
     /**
@@ -790,7 +834,7 @@ class Bitrix24 implements iBitrix24
     protected function handleBitrix24APILevelErrors(
         $arRequestResult,
         $methodName,
-        array $additionalParameters = array()
+        array $additionalParameters = []
     ) {
         if (array_key_exists('error', $arRequestResult)) {
             $errorMsg = sprintf(
@@ -921,7 +965,7 @@ class Bitrix24 implements iBitrix24
         $requestResult = $this->executeRequest($url);
 
         if (isset($requestResult['error'])) {
-            if (in_array($requestResult['error'], array('expired_token', 'invalid_token', 'WRONG_TOKEN'), false)) {
+            if (in_array($requestResult['error'], ['expired_token', 'invalid_token', 'WRONG_TOKEN'], false)) {
                 $isTokenExpire = true;
             } else {
                 // handle other errors
@@ -947,7 +991,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24IoException
      * @throws Bitrix24EmptyResponseException
      */
-    public function getAvailableMethods(array $applicationScope = array(), $isFull = false)
+    public function getAvailableMethods(array $applicationScope = [], $isFull = false)
     {
         $accessToken = $this->getAccessToken();
         $domain = $this->getDomain();
@@ -1045,14 +1089,14 @@ class Bitrix24 implements iBitrix24
      *
      * @return string Unique call ID.
      */
-    public function addBatchCall($method, array $parameters = array(), callable $callback = null)
+    public function addBatchCall($method, array $parameters = [], callable $callback = null)
     {
-        $id = uniqid();
-        $this->_batch[$id] = array(
+        $id = uniqid('', true);
+        $this->_batch[$id] = [
             'method'     => $method,
             'parameters' => $parameters,
             'callback'   => $callback,
-        );
+        ];
 
         return $id;
     }
@@ -1080,33 +1124,33 @@ class Bitrix24 implements iBitrix24
      */
     public function processBatchCalls($halt = 0, $delay = self::BATCH_DELAY)
     {
-        $this->log->info('Bitrix24PhpSdk.processBatchCalls.start', array('batch_query_delay' => $delay));
+        $this->log->info('Bitrix24PhpSdk.processBatchCalls.start', ['batch_query_delay' => $delay]);
         $batchQueryCounter = 0;
         while (count($this->_batch)) {
             $batchQueryCounter++;
             $slice = array_splice($this->_batch, 0, self::MAX_BATCH_CALLS);
-            $this->log->info('bitrix24PhpSdk.processBatchCalls.callItem', array(
+            $this->log->info('bitrix24PhpSdk.processBatchCalls.callItem', [
                 'batch_query_number' => $batchQueryCounter,
-            ));
+            ]);
 
-            $commands = array();
+            $commands = [];
             foreach ($slice as $idx => $call) {
                 $commands[$idx] = $call['method'] . '?' . http_build_query($call['parameters']);
             }
 
-            $batchResult = $this->call('batch', array('halt' => $halt, 'cmd' => $commands));
+            $batchResult = $this->call('batch', ['halt' => $halt, 'cmd' => $commands]);
             $results = $batchResult['result'];
             foreach ($slice as $idx => $call) {
                 if (!isset($call['callback']) || !is_callable($call['callback'])) {
                     continue;
                 }
 
-                call_user_func($call['callback'], array(
+                call_user_func($call['callback'], [
                     'result' => isset($results['result'][$idx]) ? $results['result'][$idx] : null,
                     'error'  => isset($results['result_error'][$idx]) ? $results['result_error'][$idx] : null,
                     'total'  => isset($results['result_total'][$idx]) ? $results['result_total'][$idx] : null,
                     'next'   => isset($results['result_next'][$idx]) ? $results['result_next'][$idx] : null,
-                ));
+                ]);
             }
             if (count($this->_batch) && $delay) {
                 usleep($delay);
@@ -1135,7 +1179,7 @@ class Bitrix24 implements iBitrix24
      * @throws \Bitrix24\Exceptions\Bitrix24ApiException
      * @throws Bitrix24TokenIsExpiredException
      */
-    public function call($methodName, array $additionalParameters = array())
+    public function call($methodName, array $additionalParameters = [])
     {
         try {
             $result = $this->getWebhookUsage() ? $this->_call_webhook($methodName, $additionalParameters)
@@ -1182,7 +1226,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24PortalRenamedException
      *
      */
-    protected function _call($methodName, array $additionalParameters = array())
+    protected function _call($methodName, array $additionalParameters = [])
     {
         if (null === $this->getDomain()) {
             throw new Bitrix24Exception('domain not found, you must call setDomain method before');
@@ -1205,11 +1249,11 @@ class Bitrix24 implements iBitrix24
         }
 
         // execute request
-        $this->log->info('call bitrix24 method', array(
+        $this->log->info('call bitrix24 method', [
             'BITRIX24_DOMAIN'   => $this->domain,
             'METHOD_NAME'       => $methodName,
             'METHOD_PARAMETERS' => $additionalParameters,
-        ));
+        ]);
         $requestResult = $this->executeRequest($url, $additionalParameters);
         // check errors and throw exception if errors exists
         $this->handleBitrix24APILevelErrors($requestResult, $methodName, $additionalParameters);
@@ -1329,7 +1373,7 @@ class Bitrix24 implements iBitrix24
      * @throws Bitrix24EmptyResponseException
      * @throws Bitrix24PortalRenamedException
      */
-    protected function _call_webhook($methodName, array $additionalParameters = array())
+    protected function _call_webhook($methodName, array $additionalParameters = [])
     {
         if (null === $this->getDomain()) {
             throw new Bitrix24Exception('domain not found, you must call setDomain method before');
@@ -1349,12 +1393,12 @@ class Bitrix24 implements iBitrix24
         $this->methodParameters = $additionalParameters;
 
         // execute request
-        $this->log->info('call bitrix24 method', array(
+        $this->log->info('call bitrix24 method', [
             'BITRIX24_WEBHOOK_URL' => $url,
             'BITRIX24_DOMAIN'      => $this->domain,
             'METHOD_NAME'          => $methodName,
             'METHOD_PARAMETERS'    => $additionalParameters,
-        ));
+        ]);
         $requestResult = $this->executeRequest($url, $additionalParameters);
 
         // check errors and throw exception if errors exists
