@@ -30,12 +30,24 @@ interface BatchInterface
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator;
 
     /**
-     * batch wrapper for *.add methods
+     * Add entity items with batch call
      *
-     * @param string $apiMethod
-     * @param array  $entityItems
+     * @param string            $apiMethod
+     * @param array<int, array> $entityItems
      *
-     * @return Generator<int, ResponseData>
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws BaseException
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator;
+
+    /**
+     * Delete entity items with batch call
+     *
+     * @param string          $apiMethod
+     * @param array<int, int> $entityItemId
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator;
 }

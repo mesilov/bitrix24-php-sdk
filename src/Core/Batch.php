@@ -46,7 +46,7 @@ class Batch implements BatchInterface
     /**
      * Clear api commands collection
      */
-    public function clearCommands(): void
+    protected function clearCommands(): void
     {
         $this->log->debug(
             'clearCommands.start',
@@ -59,12 +59,12 @@ class Batch implements BatchInterface
     }
 
     /**
-     * add entity items with batch call
+     * Add entity items with batch call
      *
      * @param string            $apiMethod
      * @param array<int, array> $entityItems
      *
-     * @return Generator<int, ResponseData>
+     * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
@@ -80,7 +80,7 @@ class Batch implements BatchInterface
         try {
             $this->clearCommands();
             foreach ($entityItems as $cnt => $item) {
-                $this->addCommand($apiMethod, $item);
+                $this->registerCommand($apiMethod, $item);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $addedItemResult) {
@@ -102,7 +102,50 @@ class Batch implements BatchInterface
     }
 
     /**
-     * add api command to commands collection for batch calls
+     * Delete entity items with batch call
+     *
+     * @param string          $apiMethod
+     * @param array<int, int> $entityItemId
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
+    {
+        $this->log->debug(
+            'deleteEntityItems.start',
+            [
+                'apiMethod'   => $apiMethod,
+                'entityItems' => $entityItemId,
+            ]
+        );
+
+        try {
+            $this->clearCommands();
+            foreach ($entityItemId as $cnt => $itemId) {
+                $this->registerCommand($apiMethod, ['ID' => $itemId]);
+            }
+
+            foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
+                yield $cnt => $deletedItemResult;
+            }
+        } catch (\Throwable $exception) {
+            $errorMessage = sprintf('batch delete entity items: %s', $exception->getMessage());
+            $this->log->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+
+            throw new BaseException($errorMessage, $exception->getCode(), $exception);
+        }
+
+        $this->log->debug('deleteEntityItems.finish');
+    }
+
+    /**
+     * Register api command to command collection for batch calls
      *
      * @param string        $apiMethod
      * @param array         $parameters
@@ -111,14 +154,14 @@ class Batch implements BatchInterface
      *
      * @throws \Exception
      */
-    public function addCommand(
+    protected function registerCommand(
         string $apiMethod,
         array $parameters = [],
         ?string $commandName = null,
         callable $callback = null
-    ) {
+    ): void {
         $this->log->debug(
-            'addCommand.start',
+            'registerCommand.start',
             [
                 'apiMethod'   => $apiMethod,
                 'parameters'  => $parameters,
@@ -129,7 +172,7 @@ class Batch implements BatchInterface
         $this->commands->attach(new Command($apiMethod, $parameters, $commandName));
 
         $this->log->debug(
-            'addCommand.finish',
+            'registerCommand.finish',
             [
                 'commandsCount' => $this->commands->count(),
             ]
@@ -190,6 +233,7 @@ class Batch implements BatchInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
      */
     public function getTraversableListWithoutCount(
         string $apiMethod,
@@ -249,7 +293,7 @@ class Batch implements BatchInterface
 
             //more than one page in results -  register list commands
             for ($startId = $firstId; $startId <= $lastId; $startId += self::MAX_ELEMENTS_IN_PAGE) {
-                $this->addCommand(
+                $this->registerCommand(
                     $apiMethod,
                     [
                         'order'  => [],
@@ -293,7 +337,7 @@ class Batch implements BatchInterface
             }
         } else {
             // one page in results
-            $this->addCommand(
+            $this->registerCommand(
                 $apiMethod,
                 [
                     'order'  => $order,
@@ -323,6 +367,7 @@ class Batch implements BatchInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
      */
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
@@ -363,7 +408,7 @@ class Batch implements BatchInterface
         if ($total > self::MAX_ELEMENTS_IN_PAGE && $nextItem !== null) {
             //more than one page in results -  register list commands
             for ($startItem = 0; $startItem <= $total; $startItem += $nextItem) {
-                $this->addCommand(
+                $this->registerCommand(
                     $apiMethod,
                     [
                         'order'  => $order,
@@ -378,7 +423,7 @@ class Batch implements BatchInterface
             }
         } else {
             // one page in results
-            $this->addCommand(
+            $this->registerCommand(
                 $apiMethod,
                 [
                     'order'  => $order,
@@ -434,8 +479,9 @@ class Batch implements BatchInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
      */
-    public function getTraversable(bool $isHaltOnError): Generator
+    protected function getTraversable(bool $isHaltOnError): Generator
     {
         $this->log->debug(
             'getTraversable.start',

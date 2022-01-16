@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Stubs;
 
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
 
 /**
@@ -29,12 +31,29 @@ class NullBatch implements BatchInterface
     }
 
     /**
-     * @param string $apiMethod
-     * @param array  $entityItems
+     * Add entity items with batch call
      *
-     * @return Generator
+     * @param string            $apiMethod
+     * @param array<int, array> $entityItems
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws BaseException
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
+    {
+        yield [];
+    }
+
+    /**
+     * Delete entity items with batch call
+     *
+     * @param string          $apiMethod
+     * @param array<int, int> $entityItemId
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
     {
         yield [];
     }

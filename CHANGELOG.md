@@ -1,5 +1,20 @@
 # bitrix24-php-sdk change log
 
+## 2.0-alpha.6 — 16.01.2021
+
+### Added
+
+* add «fast» batch-query without counting elements in result
+  recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов (-1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
+* add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
+
+### Changed
+
+* switch `symfony/http-client` to `5.4.*` version requirement.
+* switch `symfony/http-client-contracts` to `^2.5` version requirement.
+* switch `symfony/event-dispatcher` to `5.4.*` version requirement.
+* switch `ramsey/uuid` to `^4.2.3` version requirement.
+
 ## 2.0-alpha.5 – 28.11.2021
 
 ### Added
@@ -11,7 +26,7 @@
   issue [Добавить сервис по работе с юзерфилдами контакта #231](https://github.com/mesilov/bitrix24-php-sdk/issues/231)
 * add method getUserfieldByFieldName for `ContactItemResult`
 * add in scope «CRM» DealUserfield service and integration test, see
-  issue [Добавить сервис по работе с юзерфилдами cделки #232](https://github.com/mesilov/bitrix24-php-sdk/issues/232) 
+  issue [Добавить сервис по работе с юзерфилдами cделки #232](https://github.com/mesilov/bitrix24-php-sdk/issues/232)
 * add method getUserfieldByFieldName for `DealItemResult`
 * add exception `UserfieldNotFoundException`
 
