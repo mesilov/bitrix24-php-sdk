@@ -11,18 +11,9 @@ namespace Bitrix24\SDK\Core\Response\DTO;
  */
 class ResponseData
 {
-    /**
-     * @var Result
-     */
-    protected $result;
-    /**
-     * @var Time
-     */
-    protected $time;
-    /**
-     * @var Pagination
-     */
-    protected $pagination;
+    protected Result $result;
+    protected Time $time;
+    protected Pagination $pagination;
 
     /**
      * ResponseData constructor.
