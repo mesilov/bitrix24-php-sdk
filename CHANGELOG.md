@@ -1,12 +1,13 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.6 — 16.01.2021
+## 2.0-alpha.6 — 20.01.2021
 
 ### Added
 
 * add «fast» batch-query without counting elements in result
   recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов (-1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
 * add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
+* add `symfony/stopwatch` component for integration tests
 
 ### Changed
 
