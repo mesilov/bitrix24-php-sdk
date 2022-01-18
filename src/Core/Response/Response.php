@@ -7,6 +7,8 @@ namespace Bitrix24\SDK\Core\Response;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO;
+use Bitrix24\SDK\Infrastructure\HttpClient\TransportLayer\NetworkTimingsParser;
+use Bitrix24\SDK\Infrastructure\HttpClient\TransportLayer\ResponseInfoParser;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
@@ -54,6 +56,27 @@ class Response
         return $this->apiCommand;
     }
 
+    public function __destruct()
+    {
+        // пишем эту информацию в деструкторе, т.к. метод getResponseData может и не быть вызван
+        // логировать в конструкторе смысла нет, т.к. запрос ещё может не завершиться из-за того,
+        // что он асинхронный и неблокирующий
+        $restTimings = null;
+        if ($this->responseData !== null) {
+            $restTimings = [
+                'rest_query_duration'   => $this->responseData->getTime()->getDuration(),
+                'rest_query_processing' => $this->responseData->getTime()->getProcessing(),
+                'rest_query_start'      => $this->responseData->getTime()->getStart(),
+                'rest_query_finish'     => $this->responseData->getTime()->getFinish(),
+            ];
+        }
+        $this->logger->debug('Response.responseInfo', [
+            'restTimings'    => $restTimings,
+            'networkTimings' => (new NetworkTimingsParser($this->httpResponse->getInfo()))->toArrayWithMicroseconds(),
+            'responseInfo'   => (new ResponseInfoParser($this->httpResponse->getInfo()))->toArray(),
+        ]);
+    }
+
     /**
      * @return DTO\ResponseData
      * @throws BaseException
@@ -64,6 +87,7 @@ class Response
 
         if ($this->responseData === null) {
             try {
+                $this->logger->debug('getResponseData.parseResponse.start');
                 $responseResult = $this->httpResponse->toArray(true);
                 // try to handle api-level errors
                 $this->handleApiLevelErrors($responseResult);
@@ -86,6 +110,7 @@ class Response
                     DTO\Time::initFromResponse($responseResult['time']),
                     new DTO\Pagination($nextItem, $total)
                 );
+                $this->logger->debug('getResponseData.parseResponse.finish');
             } catch (Throwable $exception) {
                 $this->logger->error(
                     $exception->getMessage(),

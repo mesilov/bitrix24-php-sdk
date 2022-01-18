@@ -8,6 +8,12 @@
   recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов (-1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
 * add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
 * add `symfony/stopwatch` component for integration tests
+* add `/Infrastructure/HttpClient/TransportLayer/NetworkTimingsParser` for parse `curl_info` network data structures for debug logs
+  in `Bitrix24\SDK\Core\Response::__destruct()`
+* add `/Infrastructure/HttpClient/TransportLayer/ResponseInfoParser` for parse `bitrix24_rest_api` timing info for debug logs
+  in `Bitrix24\SDK\Core\Response::__destruct()`
+* add `Bitrix24\SDK\Core\BulkItemsReader` for data-intensive applications for bulk export data from Bitrix24, read strategies located in
+  folder `ReadStrategies`, in services read model **must** use most effective read strategy.
 
 ### Changed
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration;
 
 use Bitrix24\SDK\Core\Batch;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Monolog\Handler\StreamHandler;
@@ -24,22 +25,25 @@ class Fabric
      */
     public static function getServiceBuilder(): ServiceBuilder
     {
-        $log = self::getLogger();
+        return new ServiceBuilder(self::getCore(), self::getBatchService(), self::getLogger());
+    }
 
-        $log->debug('==============================================================');
-        $core = (new CoreBuilder())
-            ->withLogger($log)
+    /**
+     * @return \Bitrix24\SDK\Core\Contracts\CoreInterface
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public static function getCore(): CoreInterface
+    {
+        return (new CoreBuilder())
+            ->withLogger(self::getLogger())
             ->withWebhookUrl($_ENV['BITRIX24_WEBHOOK'])
             ->build();
-        $batch = new Batch($core, $log);
-
-        return new ServiceBuilder($core, $batch, $log);
     }
 
     /**
      * @return \Psr\Log\LoggerInterface
      */
-    private static function getLogger(): LoggerInterface
+    public static function getLogger(): LoggerInterface
     {
         $log = new Logger('integration-test');
         $log->pushHandler(new StreamHandler(STDOUT, (int)$_ENV['INTEGRATION_TEST_LOG_LEVEL']));
@@ -55,13 +59,6 @@ class Fabric
      */
     public static function getBatchService(): Batch
     {
-        $log = self::getLogger();
-
-        return new Batch(
-            (new CoreBuilder())
-                ->withLogger($log)
-                ->withWebhookUrl($_ENV['BITRIX24_WEBHOOK'])
-                ->build(), $log
-        );
+        return new Batch(self::getCore(), self::getLogger());
     }
 }
