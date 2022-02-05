@@ -21,7 +21,7 @@ class Batch extends AbstractBatchService
      * batch list method
      *
      * @param array{
-     *                         ID?: int
+     *                         ID?: string
      *                         } $order
      *
      * @param array{

@@ -1,5 +1,31 @@
 # bitrix24-php-sdk change log
 
+## 2.0-alpha.6 — 20.01.2021
+
+### Added
+
+* add «fast» batch-query without counting elements in result
+  recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов (-1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
+* add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
+* add integration test for read strategy `FilterWithBatchWithoutCountOrderTest`
+* add type check in method `Core\Batch::deleteEntityItems` - only integer id allowed
+* add interface `Core\Contracts\DeletedItemResultInterface`
+* add in scope «CRM» `Services\CRM\Deal\Service\Batch::delete` batch delete deals
+* add `symfony/stopwatch` component for integration tests
+* add `/Infrastructure/HttpClient/TransportLayer/NetworkTimingsParser` for parse `curl_info` network data structures for debug logs
+  in `Bitrix24\SDK\Core\Response::__destruct()`
+* add `/Infrastructure/HttpClient/TransportLayer/ResponseInfoParser` for parse `bitrix24_rest_api` timing info for debug logs
+  in `Bitrix24\SDK\Core\Response::__destruct()`
+* add `Bitrix24\SDK\Core\BulkItemsReader` for data-intensive applications for bulk export data from Bitrix24, read strategies located in
+  folder `ReadStrategies`, in services read model **must** use most effective read strategy.
+
+### Changed
+
+* switch `symfony/http-client` to `5.4.*` version requirement.
+* switch `symfony/http-client-contracts` to `^2.5` version requirement.
+* switch `symfony/event-dispatcher` to `5.4.*` version requirement.
+* switch `ramsey/uuid` to `^4.2.3` version requirement.
+
 ## 2.0-alpha.5 – 28.11.2021
 
 ### Added
@@ -11,7 +37,7 @@
   issue [Добавить сервис по работе с юзерфилдами контакта #231](https://github.com/mesilov/bitrix24-php-sdk/issues/231)
 * add method getUserfieldByFieldName for `ContactItemResult`
 * add in scope «CRM» DealUserfield service and integration test, see
-  issue [Добавить сервис по работе с юзерфилдами cделки #232](https://github.com/mesilov/bitrix24-php-sdk/issues/232) 
+  issue [Добавить сервис по работе с юзерфилдами cделки #232](https://github.com/mesilov/bitrix24-php-sdk/issues/232)
 * add method getUserfieldByFieldName for `DealItemResult`
 * add exception `UserfieldNotFoundException`
 

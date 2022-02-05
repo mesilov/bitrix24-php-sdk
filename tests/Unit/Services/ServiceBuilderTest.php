@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services;
 
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
+use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -48,6 +49,11 @@ class ServiceBuilderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->serviceBuilder = new ServiceBuilder(new NullCore(), new NullBatch(), new NullLogger());
+        $this->serviceBuilder = new ServiceBuilder(
+            new NullCore(),
+            new NullBatch(),
+            new NullBulkItemsReader(),
+            new NullLogger()
+        );
     }
 }
