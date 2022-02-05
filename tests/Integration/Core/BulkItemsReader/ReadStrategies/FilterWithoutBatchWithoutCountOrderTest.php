@@ -14,7 +14,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 
 class FilterWithoutBatchWithoutCountOrderTest extends TestCase
 {
-    private const DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_BATCH_PAGE_SIZE = 2555;
+    private const DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_BATCH_PAGE_SIZE = 65;
     private BulkItemsReaderInterface $bulkItemsReader;
     private ServiceBuilder $serviceBuilder;
     private Stopwatch $stopwatch;

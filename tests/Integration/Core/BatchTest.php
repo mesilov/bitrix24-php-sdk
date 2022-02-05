@@ -18,7 +18,6 @@ class BatchTest extends TestCase
     private Stopwatch $stopwatch;
     private const DEMO_DATA_ARRAY_SIZE_LESS_THAN_PAGE = 35;
     private const DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_PAGE_SIZE = 65;
-    private const DEMO_DATA_ARRAY_SIZE_MORE_THAN_MAX_BATCH_PAGE_COUNT = 2735;
     private const LIMIT_ELEMENTS_IN_RESULT = 10;
 
     /**
@@ -42,7 +41,7 @@ class BatchTest extends TestCase
 
         // add deals to bitrix24
         $rawDeals = [];
-        for ($i = 0; $i < self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_MAX_BATCH_PAGE_COUNT; $i++) {
+        for ($i = 0; $i < self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_PAGE_SIZE; $i++) {
             $rawDeals[] = [
                 'TITLE'                 => sprintf('deal-%s', $i),
                 'IS_MANUAL_OPPORTUNITY' => 'Y',
@@ -55,7 +54,7 @@ class BatchTest extends TestCase
         foreach ($this->serviceBuilder->getCRMScope()->deal()->batch->add($rawDeals) as $addDealResult) {
             $dealIdList[] = $addDealResult->getId();
         }
-        $this->assertCount(self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_MAX_BATCH_PAGE_COUNT, $dealIdList);
+        $this->assertCount(self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_PAGE_SIZE, $dealIdList);
 
 
         // count added deals by default deal service
@@ -64,7 +63,7 @@ class BatchTest extends TestCase
         ];
 
         $elementsCountByFilter = $this->serviceBuilder->getCRMScope()->deal()->countByFilter($filter);
-        $this->assertEquals(self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_MAX_BATCH_PAGE_COUNT, $elementsCountByFilter);
+        $this->assertEquals(self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_PAGE_SIZE, $elementsCountByFilter);
 
         $select = [
             '*',
@@ -76,18 +75,10 @@ class BatchTest extends TestCase
         foreach ($this->batch->getTraversableList('crm.deal.list', [], $filter, $select) as $cnt => $dealItem) {
             $batchElementsCount++;
             $dealIdListFromBatch[] = $dealItem['ID'];
-            print(sprintf(
-                    '%s-%s| %s | %s - %s',
-                    $cnt,
-                    self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_MAX_BATCH_PAGE_COUNT,
-                    $dealItem['ID'],
-                    $dealItem['TITLE'],
-                    $dealItem['OPPORTUNITY'],
-                ) . PHP_EOL);
         }
         $this->stopwatch->stop('getTraversableList');
         $this->assertEquals(
-            self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_MAX_BATCH_PAGE_COUNT,
+            self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_PAGE_SIZE,
             $batchElementsCount,
             sprintf(
                 'elements count by filter %s not equals elements count from batch getTraversableList  %s',
@@ -109,7 +100,7 @@ class BatchTest extends TestCase
             $deletedItemsCount++;
         }
         $this->assertEquals(
-            self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_MAX_BATCH_PAGE_COUNT,
+            self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_PAGE_SIZE,
             $deletedItemsCount,
             sprintf(
                 'elements count by filter %s not equals deleted elements count from batch deleteEntityItems  %s',

@@ -21,7 +21,7 @@ class FilterWithBatchWithoutCountOrderTest extends TestCase
      * @var int[]
      */
     private array $dealId;
-    private const DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_BATCH_PAGE_SIZE = 2555;
+    private const DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_BATCH_PAGE_SIZE = 65;
     /**
      * @var array<string,mixed>
      */
