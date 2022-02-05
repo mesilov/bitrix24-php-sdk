@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tools\DemoDataGenerators\CRM\Contacts;
 
 use Bitrix24\SDK\Core\Batch;
+use Bitrix24\SDK\Core\BulkItemsReader\BulkItemsReaderBuilder;
 use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Services\ServiceBuilder;
@@ -110,13 +111,24 @@ class GenerateContactsCommand extends Command
         );
 
         try {
+            // todo create service builder factory
             $core = (new CoreBuilder())
                 ->withLogger($this->logger)
                 ->withWebhookUrl($b24Webhook)
                 ->build();
+            $batch = new Batch(
+                $core,
+                $this->logger
+            );
             $services = new ServiceBuilder(
                 $core,
-                new Batch($core, $this->logger),
+                $batch,
+                (new BulkItemsReaderBuilder(
+                    $core,
+                    $batch,
+                    $this->logger
+                ))
+                    ->build(),
                 $this->logger
             );
 
