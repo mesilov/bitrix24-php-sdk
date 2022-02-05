@@ -9,6 +9,7 @@ use Bitrix24\SDK\Core\Commands\CommandCollection;
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Result;
@@ -123,12 +124,31 @@ class Batch implements BatchInterface
         try {
             $this->clearCommands();
             foreach ($entityItemId as $cnt => $itemId) {
+                if (!is_int($itemId)) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'invalid type «%s» of entity id «%s» at position %s, entity id must be integer type',
+                            gettype($itemId),
+                            $itemId,
+                            $cnt
+                        )
+                    );
+                }
                 $this->registerCommand($apiMethod, ['ID' => $itemId]);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
                 yield $cnt => $deletedItemResult;
             }
+        } catch (InvalidArgumentException $exception) {
+            $errorMessage = sprintf('batch delete entity items: %s', $exception->getMessage());
+            $this->logger->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+            throw $exception;
         } catch (\Throwable $exception) {
             $errorMessage = sprintf('batch delete entity items: %s', $exception->getMessage());
             $this->logger->error(
