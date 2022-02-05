@@ -16,7 +16,7 @@ use Generator;
 interface BatchInterface
 {
     /**
-     * batch wrapper for *.list methods
+     * Batch wrapper for *.list methods without counting elements on every api-call
      *
      * @param string   $apiMethod
      * @param array    $order
@@ -27,7 +27,35 @@ interface BatchInterface
      * @return Generator
      * @throws BaseException
      */
-    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator;
+    public function getTraversableList(
+        string $apiMethod,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null
+    ): Generator;
+
+    /**
+     * Batch wrapper for *.list methods with counting elements on every api-call
+     *
+     * ⚠️ Call this wrapper is more expensive than getTraversableList method, use this method carefully
+     *
+     * @param string   $apiMethod
+     * @param array    $order
+     * @param array    $filter
+     * @param array    $select
+     * @param int|null $limit
+     *
+     * @return Generator
+     * @throws BaseException
+     */
+    public function getTraversableListWithCount(
+        string $apiMethod,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null
+    ): Generator;
 
     /**
      * Add entity items with batch call
@@ -47,7 +75,9 @@ interface BatchInterface
      * @param array<int, int> $entityItemId
      *
      * @return Generator<int, ResponseData>|ResponseData[]
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws BaseException
      */
     public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator;
+
+    //todo add updateEntityItems
 }
