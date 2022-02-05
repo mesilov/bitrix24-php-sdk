@@ -63,7 +63,7 @@ class Batch implements BatchInterface
      * Add entity items with batch call
      *
      * @param string            $apiMethod
-     * @param array<int, array> $entityItems
+     * @param array<int, mixed> $entityItems
      *
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
@@ -167,10 +167,10 @@ class Batch implements BatchInterface
     /**
      * Register api command to command collection for batch calls
      *
-     * @param string        $apiMethod
-     * @param array         $parameters
-     * @param string|null   $commandName
-     * @param callable|null $callback not implemented
+     * @param string             $apiMethod
+     * @param array<mixed,mixed> $parameters
+     * @param string|null        $commandName
+     * @param callable|null      $callback not implemented
      *
      * @throws \Exception
      */
@@ -200,7 +200,7 @@ class Batch implements BatchInterface
     }
 
     /**
-     * @param array $order
+     * @param array<string,string> $order
      *
      * @return array|string[]
      */
@@ -240,20 +240,19 @@ class Batch implements BatchInterface
     /**
      * Get traversable list without count elements
      *
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
+     * @param string               $apiMethod
+     * @param array<string,string> $order
+     * @param array<string,mixed>  $filter
+     * @param array<string,mixed>  $select
+     * @param int|null             $limit
      *
-     * @return Generator
-     * @throws BaseException
-     * @throws Exceptions\TransportException
+     * @return \Generator<mixed>
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     * @throws \Exception
      */
     public function getTraversableList(
         string $apiMethod,
@@ -421,12 +420,12 @@ class Batch implements BatchInterface
     }
 
     /**
-     * @param int   $startElementId
-     * @param int   $lastElementId
-     * @param bool  $isLastPage
-     * @param array $oldFilter
+     * @param int                 $startElementId
+     * @param int                 $lastElementId
+     * @param bool                $isLastPage
+     * @param array<string,mixed> $oldFilter
      *
-     * @return array
+     * @return array<string,mixed>
      */
     protected function updateFilterForBatch(int $startElementId, int $lastElementId, bool $isLastPage, array $oldFilter): array
     {
@@ -456,13 +455,13 @@ class Batch implements BatchInterface
      *
      * work with start item position and elements count
      *
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
+     * @param string               $apiMethod
+     * @param array<string,string> $order
+     * @param array<string,mixed>  $filter
+     * @param array<string,mixed>  $select
+     * @param int|null             $limit
      *
-     * @return Generator|[]
+     * @return Generator<mixed>
      * @throws BaseException
      * @throws Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
@@ -652,7 +651,7 @@ class Batch implements BatchInterface
     /**
      * @param bool $isHaltOnError
      *
-     * @return Generator
+     * @return Generator<Response>
      * @throws BaseException
      * @throws Exceptions\TransportException
      */
@@ -690,7 +689,7 @@ class Batch implements BatchInterface
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     private function convertToApiCommands(): array
     {

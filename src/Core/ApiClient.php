@@ -48,7 +48,7 @@ class ApiClient implements ApiClientInterface
     }
 
     /**
-     * @return array
+     * @return array<string,string>
      */
     protected function getDefaultHeaders(): array
     {
@@ -113,7 +113,7 @@ class ApiClient implements ApiClientInterface
 
     /**
      * @param string $apiMethod
-     * @param array  $parameters
+     * @param array<mixed>  $parameters
      *
      * @return ResponseInterface
      * @throws TransportExceptionInterface

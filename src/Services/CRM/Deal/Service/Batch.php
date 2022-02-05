@@ -38,7 +38,7 @@ class Batch
      * Batch list method for deals
      *
      * @param array{
-     *                         ID?: int,
+     *                         ID?: string,
      *                         TITLE?: string,
      *                         TYPE_ID?: string,
      *                         CATEGORY_ID?: string,
@@ -48,7 +48,7 @@ class Batch
      *                         IS_RECURRING?: string,
      *                         IS_RETURN_CUSTOMER?: string,
      *                         IS_REPEATED_APPROACH?: string,
-     *                         PROBABILITY?: int,
+     *                         PROBABILITY?: string,
      *                         CURRENCY_ID?: string,
      *                         OPPORTUNITY?: string,
      *                         IS_MANUAL_OPPORTUNITY?: string,
