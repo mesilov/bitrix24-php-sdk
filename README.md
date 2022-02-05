@@ -1,12 +1,12 @@
-bitrix24-php-sdk – PHP7.4|8.x Bitrix24 REST API SDK
+bitrix24-php-sdk – Bitrix24 REST API PHP SDK
 ================
 [![License](https://poser.pugx.org/mesilov/bitrix24-php-sdk/license.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk) [![Total Downloads](https://poser.pugx.org/mesilov/bitrix24-php-sdk/downloads.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
-
+[![Latest Stable Version](https://img.shields.io/packagist/v/mesilov/bitrix24-php-sdk.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
 A powerful PHP library for the Bitrix24 REST API
 
 ### Build status
 
-![phpstan check](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml/badge.svg)
+[![phpstan check](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml)
 
 ### BITRIX24-PHP-SDK Documentation
 
