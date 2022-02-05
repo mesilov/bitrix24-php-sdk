@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tools\PerformanceBenchmarks;
 
-use Bitrix24\SDK\Core\Core;
+use Bitrix24\SDK\Core\Batch;
+use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Psr\Log\LoggerInterface;
@@ -28,7 +31,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class ListCommand extends Command
 {
     protected LoggerInterface $logger;
-    protected Core $core;
+    protected CoreInterface $core;
+    protected BatchInterface $batch;
     /**
      * @var string
      */
@@ -141,10 +145,14 @@ class ListCommand extends Command
                 ]
             );
 
-            $this->core = (new \Bitrix24\SDK\Core\CoreBuilder())
+            $this->core = (new CoreBuilder())
                 ->withLogger($this->logger)
                 ->withWebhookUrl($b24Webhook)
                 ->build();
+            $this->batch = new Batch(
+                $this->core,
+                $this->logger
+            );
 
             $countResult = $this->core->call('crm.contact.list');
             $output->writeln(['======', '']);
@@ -168,9 +176,14 @@ class ListCommand extends Command
                 $table = new Table($output);
                 $table->setHeaders(['Mode', 'Time']);
                 $table->addRow([$this->benchmarkItems['order_count'], round($result['order_count'], self::TIME_PRECISION)]);
-                $table->addRow([$this->benchmarkItems['order_without_count'], 'not implemented']);
+                $table->addRow([$this->benchmarkItems['order_without_count'], round($result['order_without_count'], self::TIME_PRECISION)]);
                 $table->addRow([$this->benchmarkItems['without_order_count'], round($result['without_order_count'], self::TIME_PRECISION)]);
-                $table->addRow([$this->benchmarkItems['without_order_without_count'], 'not implemented']);
+                $table->addRow(
+                    [
+                        $this->benchmarkItems['without_order_without_count'],
+                        round($result['without_order_without_count'], self::TIME_PRECISION),
+                    ]
+                );
                 $table->render();
             } else {
                 $output->writeln('crm.contact.list - get first 50 elements...');
@@ -244,16 +257,16 @@ class ListCommand extends Command
         $result = [];
 
         $output->writeln(['', '1. batch requests - ordered, count total elements...', '']);
-        $result['order_count'] = $this->getBatchQueryTime($output, $order, $filter, $select, $elementsCount);
+        $result['order_count'] = $this->getBatchWithCountQueryTime($output, $order, $filter, $select, $elementsCount);
 
-        $output->writeln(['', '2. batch requests - ordered, without count total elements | NOT IMPLEMENTED', '']);
-        $result['order_without_count'] = null;
+        $output->writeln(['', '2. batch requests - ordered, without count total elements...', '']);
+        $result['order_without_count'] = $this->getBatchWithoutCountQueryTime($output, $order, $filter, $select, $elementsCount);
 
         $output->writeln(['', '3. batch requests - default order, count total elements...', '']);
-        $result['without_order_count'] = $this->getBatchQueryTime($output, [], $filter, $select, $elementsCount);
+        $result['without_order_count'] = $this->getBatchWithCountQueryTime($output, [], $filter, $select, $elementsCount);
 
-        $output->writeln(['', '4. batch requests - default order, without count total elements | NOT IMPLEMENTED', '']);
-        $result['without_order_without_count'] = null;
+        $output->writeln(['', '4. batch requests - default order, without count total elements...', '']);
+        $result['without_order_without_count'] = $this->getBatchWithoutCountQueryTime($output, [], $filter, $select, $elementsCount);;
 
         return $result;
     }
@@ -273,17 +286,72 @@ class ListCommand extends Command
      * @throws TransportException
      * @throws TransportExceptionInterface
      */
-    protected function getBatchQueryTime(OutputInterface $output, array $order, array $filter, array $select, int $elementsCount): float
-    {
+    protected function getBatchWithCountQueryTime(
+        OutputInterface $output,
+        array $order,
+        array $filter,
+        array $select,
+        int $elementsCount
+    ): float {
         $timeStart = microtime(true);
-        $batch = new \Bitrix24\SDK\Core\Batch($this->core, $this->logger);
         $progressBar = new ProgressBar($output, $elementsCount);
         $progressBar->setFormat("%current%/%max% [%bar%] %percent:3s%%\n %memory:6s% | %status%\n");
         $progressBar->setMessage('wait first batch query result...', 'status');
         $progressBar->start();
 
         $elementsFromBatchCount = 0;
-        foreach ($batch->getTraversableList('crm.contact.list', $order, $filter, $select, $elementsCount) as $queryItem) {
+        foreach ($this->batch->getTraversableListWithCount('crm.contact.list', $order, $filter, $select, $elementsCount) as $queryItem) {
+            $curTime = microtime(true);
+            $elementsFromBatchCount++;
+            $progressBar->advance();
+
+            $progressBar->setMessage(
+                sprintf(
+                    ' %s sec |# %s | %s - %s ',
+                    round($curTime - $timeStart, 2),
+                    $elementsFromBatchCount,
+                    $queryItem['ID'],
+                    $queryItem['NAME']
+                ),
+                'status'
+            );
+        }
+        $timeEnd = microtime(true);
+        $progressBar->finish();
+
+        return $timeEnd - $timeStart;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param array           $order
+     * @param array           $filter
+     * @param array           $select
+     * @param int             $elementsCount
+     *
+     * @return float
+     * @throws BaseException
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportException
+     * @throws TransportExceptionInterface
+     */
+    protected function getBatchWithoutCountQueryTime(
+        OutputInterface $output,
+        array $order,
+        array $filter,
+        array $select,
+        int $elementsCount
+    ): float {
+        $timeStart = microtime(true);
+        $progressBar = new ProgressBar($output, $elementsCount);
+        $progressBar->setFormat("%current%/%max% [%bar%] %percent:3s%%\n %memory:6s% | %status%\n");
+        $progressBar->setMessage('wait first batch query result...', 'status');
+        $progressBar->start();
+
+        $elementsFromBatchCount = 0;
+        foreach ($this->batch->getTraversableList('crm.contact.list', $order, $filter, $select, $elementsCount) as $queryItem) {
             $curTime = microtime(true);
             $elementsFromBatchCount++;
             $progressBar->advance();

@@ -21,7 +21,7 @@ class ServiceBuilder extends AbstractServiceBuilder
     public function getCRMScope(): CRMServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new CRMServiceBuilder($this->core, $this->batch, $this->log);
+            $this->serviceCache[__METHOD__] = new CRMServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
@@ -33,7 +33,7 @@ class ServiceBuilder extends AbstractServiceBuilder
     public function getIMScope(): IMServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new IMServiceBuilder($this->core, $this->batch, $this->log);
+            $this->serviceCache[__METHOD__] = new IMServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
@@ -45,7 +45,7 @@ class ServiceBuilder extends AbstractServiceBuilder
     public function getMainScope(): MainServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new MainServiceBuilder($this->core, $this->batch, $this->log);
+            $this->serviceCache[__METHOD__] = new MainServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

@@ -48,7 +48,7 @@ class ApiClient implements ApiClientInterface
     }
 
     /**
-     * @return array
+     * @return array<string,string>
      */
     protected function getDefaultHeaders(): array
     {
@@ -112,8 +112,8 @@ class ApiClient implements ApiClientInterface
     }
 
     /**
-     * @param string $apiMethod
-     * @param array  $parameters
+     * @param string       $apiMethod
+     * @param array<mixed> $parameters
      *
      * @return ResponseInterface
      * @throws TransportExceptionInterface
@@ -121,9 +121,10 @@ class ApiClient implements ApiClientInterface
      */
     public function getResponse(string $apiMethod, array $parameters = []): ResponseInterface
     {
-        $this->logger->debug(
-            sprintf('getResponse.start %s', $apiMethod),
+        $this->logger->info(
+            'getResponse.start',
             [
+                'apiMethod'  => $apiMethod,
                 'domainUrl'  => $this->credentials->getDomainUrl(),
                 'parameters' => $parameters,
             ]
@@ -147,9 +148,10 @@ class ApiClient implements ApiClientInterface
         ];
         $response = $this->client->request($method, $url, $requestOptions);
 
-        $this->logger->debug(
-            sprintf('getResponse.end [%s]', $apiMethod),
+        $this->logger->info(
+            'getResponse.end',
             [
+                'apiMethod'    => $apiMethod,
                 'responseInfo' => $response->getInfo(),
             ]
         );

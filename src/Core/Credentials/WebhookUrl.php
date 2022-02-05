@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Credentials;
 
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+
 /**
  * Class WebhookUrl
  *
@@ -11,18 +13,18 @@ namespace Bitrix24\SDK\Core\Credentials;
  */
 class WebhookUrl
 {
-    /**
-     * @var string
-     */
-    protected $url;
+    protected string $url;
 
     /**
-     * WebHookToken constructor.
-     *
      * @param string $webhookUrl
+     *
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
     public function __construct(string $webhookUrl)
     {
+        if (filter_var($webhookUrl, FILTER_VALIDATE_URL) === false) {
+            throw new InvalidArgumentException(sprintf('webhook URL %s is invalid', $webhookUrl));
+        }
         $this->url = $webhookUrl;
     }
 

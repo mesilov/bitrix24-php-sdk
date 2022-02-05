@@ -1,8 +1,15 @@
-bitrix24-php-sdk [![Build Status](https://travis-ci.org/mesilov/bitrix24-php-sdk.svg?branch=master)](https://travis-ci.org/mesilov/bitrix24-php-sdk)
+bitrix24-php-sdk – Bitrix24 REST API PHP SDK
 ================
 [![License](https://poser.pugx.org/mesilov/bitrix24-php-sdk/license.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk) [![Total Downloads](https://poser.pugx.org/mesilov/bitrix24-php-sdk/downloads.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
+[![Latest Stable Version](https://img.shields.io/packagist/v/mesilov/bitrix24-php-sdk.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
 
 A powerful PHP library for the Bitrix24 REST API
+
+### Build status
+
+[![phpstan check](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml)
+[![phpunit unit-tests status](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml)
+
 ### BITRIX24-PHP-SDK Documentation
 
 - [Russian](/docs/RU/documentation.md)
@@ -42,23 +49,23 @@ Performance improvements 🚀
 ### Development principles
 
 - Good developer experience
-  - auto-completion of methods at the IDE
-  - typed method call signatures
-  - typed results of method calls
-  - helpers for typical operations
+    - auto-completion of methods at the IDE
+    - typed method call signatures
+    - typed results of method calls
+    - helpers for typical operations
 - Good documentation
-  - documentation on the operation of a specific method containing a link to the official documentation
-  - documentation for working with the SDK
+    - documentation on the operation of a specific method containing a link to the official documentation
+    - documentation for working with the SDK
 - Performance first:
-  - minimal impact on client code
-  - ability to work with large amounts of data with constant memory consumption
-  - efficient operation of the API using butch requests
+    - minimal impact on client code
+    - ability to work with large amounts of data with constant memory consumption
+    - efficient operation of the API using butch requests
 - Modern technology stack
-  - based on [Symfony HttpClient](https://symfony.com/doc/current/http_client.html)
-  - actual PHP versions language features
+    - based on [Symfony HttpClient](https://symfony.com/doc/current/http_client.html)
+    - actual PHP versions language features
 - Reliable:
-  - test coverage: unit, integration, contract
-  - typical examples typical for different modes of operation and they are optimized for memory \ performance
+    - test coverage: unit, integration, contract
+    - typical examples typical for different modes of operation and they are optimized for memory \ performance
 
 ### Architecture
 
@@ -107,22 +114,25 @@ Performance improvements 🚀
 Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
 
 ### Tests
+
 Tests locate in folder `tests` and we have two test types
 
 #### Unit tests
-**Fast**, in-memory tests without a network I\O
-For run unit tests you must call in command line
+
+**Fast**, in-memory tests without a network I\O For run unit tests you must call in command line
 
 ```shell
 composer phpunit-run-unit-test
 ```
 
 #### Integration tests
+
 **Slow** tests with full lifecycle with your **test** Bitrix24 portal via webhook.
 
 ❗️Do not run integration tests with production portals ❗️
 
 For run integration test you must:
+
 1. Create [new Bitrix24 portal](https://www.bitrix24.ru/create.php?p=255670) for development tests
 2. Go to left menu, click «Sitemap»
 3. Find menu item «Developer resources»
@@ -130,11 +140,13 @@ For run integration test you must:
 5. Click on menu item «Inbound webhook»
 6. Assign all permisions with webhook and click «save» button
 7. Create file `/tests/.env.local` with same settings, see comments in `/tests/.env` file.
+
 ```yaml
 APP_ENV=dev
 BITRIX24_WEBHOOK=https:// your portal webhook url
 INTEGRATION_TEST_LOG_LEVEL=500
 ```
+
 8. call in command line
 
 ```shell
@@ -142,11 +154,12 @@ composer composer phpunit-run-integration-tests
 ```
 
 #### PHP Static Analysis Tool – phpstan
+
 Call in command line
+
 ```shell
  composer phpstan-analyse
 ```
-
 
 ### Submitting bugs and feature requests
 
