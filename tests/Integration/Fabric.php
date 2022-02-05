@@ -12,6 +12,8 @@ use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Monolog\Processor\IntrospectionProcessor;
+use Monolog\Processor\MemoryUsageProcessor;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -58,8 +60,8 @@ class Fabric
     {
         $log = new Logger('integration-test');
         $log->pushHandler(new StreamHandler(STDOUT, (int)$_ENV['INTEGRATION_TEST_LOG_LEVEL']));
-        $log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor(true, true));
-        $log->pushProcessor(new \Monolog\Processor\IntrospectionProcessor());
+        $log->pushProcessor(new MemoryUsageProcessor(true, true));
+        $log->pushProcessor(new IntrospectionProcessor());
 
         return $log;
     }
