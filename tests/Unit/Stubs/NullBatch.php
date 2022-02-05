@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Stubs;
 
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
 
 /**
@@ -16,14 +14,9 @@ use Generator;
  */
 class NullBatch implements BatchInterface
 {
+
     /**
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
-     *
-     * @return Generator
+     * @inheritDoc
      */
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
@@ -31,13 +24,20 @@ class NullBatch implements BatchInterface
     }
 
     /**
-     * Add entity items with batch call
-     *
-     * @param string            $apiMethod
-     * @param array<int, array> $entityItems
-     *
-     * @return Generator<int, ResponseData>|ResponseData[]
-     * @throws BaseException
+     * @inheritDoc
+     */
+    public function getTraversableListWithCount(
+        string $apiMethod,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null
+    ): Generator {
+        yield [];
+    }
+
+    /**
+     * @inheritDoc
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
     {
@@ -45,13 +45,7 @@ class NullBatch implements BatchInterface
     }
 
     /**
-     * Delete entity items with batch call
-     *
-     * @param string          $apiMethod
-     * @param array<int, int> $entityItemId
-     *
-     * @return Generator<int, ResponseData>|ResponseData[]
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @inheritDoc
      */
     public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
     {
