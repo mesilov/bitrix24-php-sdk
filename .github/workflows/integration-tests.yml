@@ -6,7 +6,6 @@ on:
       - 'master'
       - 'dev'
       - '2.x'
-      - '248-fast-batch'
     paths:
       - 'src/**'
       - 'tests/**'
