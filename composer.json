@@ -22,18 +22,19 @@
     "ext-curl": "*",
     "psr/log": "1.1.3",
     "fig/http-message-util": "1.1.*",
-    "symfony/http-client": "5.2.*",
-    "symfony/http-client-contracts": "^2.1",
-    "symfony/event-dispatcher": "5.2.*",
-    "ramsey/uuid": "^3.9.3"
+    "symfony/http-client": "5.4.*",
+    "symfony/http-client-contracts": "^2.5",
+    "symfony/event-dispatcher": "5.4.*",
+    "ramsey/uuid": "^4.2.3"
   },
   "require-dev": {
     "monolog/monolog": "2.1.*",
-    "symfony/console": "5.2.*",
-    "symfony/dotenv": "5.2.*",
-    "symfony/debug-bundle": "5.2.*",
+    "symfony/console": "5.4.*",
+    "symfony/dotenv": "5.4.*",
+    "symfony/debug-bundle": "5.4.*",
     "phpstan/phpstan": "1.1.*",
     "phpunit/phpunit": "9.5.*",
+    "symfony/stopwatch": "5.4.*",
     "roave/security-advisories": "dev-master"
   },
   "autoload": {
@@ -48,11 +49,14 @@
     }
   },
   "scripts": {
-    "unit-tests": [
-      "phpunit --colors=always --verbose"
+    "phpunit-run-unit-tests": [
+      "phpunit --testsuite unit_tests"
+    ],
+    "phpunit-run-integration-tests": [
+      "phpunit --testsuite integration_tests"
     ],
     "phpstan-analyse": [
-      "vendor/bin/phpstan analyse"
+      "vendor/bin/phpstan analyse --memory-limit 1G"
     ]
   }
 }

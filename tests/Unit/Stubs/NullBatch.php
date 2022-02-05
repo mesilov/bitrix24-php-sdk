@@ -14,14 +14,9 @@ use Generator;
  */
 class NullBatch implements BatchInterface
 {
+
     /**
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
-     *
-     * @return Generator
+     * @inheritDoc
      */
     public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
@@ -29,12 +24,30 @@ class NullBatch implements BatchInterface
     }
 
     /**
-     * @param string $apiMethod
-     * @param array  $entityItems
-     *
-     * @return Generator
+     * @inheritDoc
+     */
+    public function getTraversableListWithCount(
+        string $apiMethod,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null
+    ): Generator {
+        yield [];
+    }
+
+    /**
+     * @inheritDoc
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
+    {
+        yield [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
     {
         yield [];
     }

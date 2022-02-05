@@ -236,7 +236,7 @@ class Deal extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
-    public function update(int $id, array $fields, array $params): UpdatedItemResult
+    public function update(int $id, array $fields, array $params = []): UpdatedItemResult
     {
         return new UpdatedItemResult(
             $this->core->call(
@@ -248,5 +248,55 @@ class Deal extends AbstractService
                 ]
             )
         );
+    }
+
+    /**
+     * Count deals by filter
+     *
+     * @param array{
+     *   ID?: int,
+     *   TITLE?: string,
+     *   TYPE_ID?: string,
+     *   CATEGORY_ID?: string,
+     *   STAGE_ID?: string,
+     *   STAGE_SEMANTIC_ID?: string,
+     *   IS_NEW?: string,
+     *   IS_RECURRING?: string,
+     *   PROBABILITY?: string,
+     *   CURRENCY_ID?: string,
+     *   OPPORTUNITY?: string,
+     *   IS_MANUAL_OPPORTUNITY?: string,
+     *   TAX_VALUE?: string,
+     *   LEAD_ID?: string,
+     *   COMPANY_ID?: string,
+     *   CONTACT_ID?: string,
+     *   QUOTE_ID?: string,
+     *   BEGINDATE?: string,
+     *   CLOSEDATE?: string,
+     *   OPENED?: string,
+     *   CLOSED?: string,
+     *   COMMENTS?: string,
+     *   ADDITIONAL_INFO?: string,
+     *   LOCATION_ID?: string,
+     *   IS_RETURN_CUSTOMER?: string,
+     *   IS_REPEATED_APPROACH?: string,
+     *   SOURCE_ID?: string,
+     *   SOURCE_DESCRIPTION?: string,
+     *   ORIGINATOR_ID?: string,
+     *   ORIGIN_ID?: string,
+     *   UTM_SOURCE?: string,
+     *   UTM_MEDIUM?: string,
+     *   UTM_CAMPAIGN?: string,
+     *   UTM_CONTENT?: string,
+     *   UTM_TERM?: string
+     *   } $filter
+     *
+     * @return int
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     */
+    public function countByFilter(array $filter = []): int
+    {
+        return $this->list([], $filter, ['ID'], 1)->getCoreResponse()->getResponseData()->getPagination()->getTotal();
     }
 }

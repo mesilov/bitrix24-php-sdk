@@ -160,6 +160,7 @@ class Core implements CoreInterface
                 'call.unknownException',
                 [
                     'message' => $exception->getMessage(),
+                    'trace'   => $exception->getTrace(),
                 ]
             );
             throw new BaseException(sprintf('unknown error - %s', $exception->getMessage()), $exception->getCode(), $exception);

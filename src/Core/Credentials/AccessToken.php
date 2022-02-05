@@ -11,18 +11,9 @@ namespace Bitrix24\SDK\Core\Credentials;
  */
 class AccessToken
 {
-    /**
-     * @var string
-     */
-    protected $accessToken;
-    /**
-     * @var string
-     */
-    protected $refreshToken;
-    /**
-     * @var int
-     */
-    protected $expires;
+    protected string $accessToken;
+    protected string $refreshToken;
+    protected int $expires;
 
     /**
      * AccessToken constructor.
@@ -73,7 +64,7 @@ class AccessToken
     /**
      * @param array $request
      *
-     * @return static
+     * @return self
      */
     public static function initFromArray(array $request): self
     {

@@ -1,6 +1,68 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.3(14.11.2021)
+## 2.0-alpha.6 — 20.01.2021
+
+### Added
+
+* add «fast» batch-query without counting elements in result
+  recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов (-1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
+* add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
+* add integration test for read strategy `FilterWithBatchWithoutCountOrderTest`
+* add type check in method `Core\Batch::deleteEntityItems` - only integer id allowed
+* add interface `Core\Contracts\DeletedItemResultInterface`
+* add in scope «CRM» `Services\CRM\Deal\Service\Batch::delete` batch delete deals
+* add `symfony/stopwatch` component for integration tests
+* add `/Infrastructure/HttpClient/TransportLayer/NetworkTimingsParser` for parse `curl_info` network data structures for debug logs
+  in `Bitrix24\SDK\Core\Response::__destruct()`
+* add `/Infrastructure/HttpClient/TransportLayer/ResponseInfoParser` for parse `bitrix24_rest_api` timing info for debug logs
+  in `Bitrix24\SDK\Core\Response::__destruct()`
+* add `Bitrix24\SDK\Core\BulkItemsReader` for data-intensive applications for bulk export data from Bitrix24, read strategies located in
+  folder `ReadStrategies`, in services read model **must** use most effective read strategy.
+
+### Changed
+
+* switch `symfony/http-client` to `5.4.*` version requirement.
+* switch `symfony/http-client-contracts` to `^2.5` version requirement.
+* switch `symfony/event-dispatcher` to `5.4.*` version requirement.
+* switch `ramsey/uuid` to `^4.2.3` version requirement.
+
+## 2.0-alpha.5 – 28.11.2021
+
+### Added
+
+* add method `countByFilter` for all related services, see
+  issue [Добавить для всех сущностей метод подсчёта количества элементов по фильтру #228](https://github.com/mesilov/bitrix24-php-sdk/issues/228)
+* add in scope «CRM» Userfield service and integration test
+* add in scope «CRM» ContactUserfield service and integration test, see
+  issue [Добавить сервис по работе с юзерфилдами контакта #231](https://github.com/mesilov/bitrix24-php-sdk/issues/231)
+* add method getUserfieldByFieldName for `ContactItemResult`
+* add in scope «CRM» DealUserfield service and integration test, see
+  issue [Добавить сервис по работе с юзерфилдами cделки #232](https://github.com/mesilov/bitrix24-php-sdk/issues/232)
+* add method getUserfieldByFieldName for `DealItemResult`
+* add exception `UserfieldNotFoundException`
+
+### Removed
+
+* remove all `0.*` and `1.*` code from `2.*` branch
+
+### Changed
+
+* update type definition for `ContactItemResult`, now return types will be cast to real types: DateTimeInterface, int, boolean etc
+
+## 2.0-alpha.4 – 25.11.2021
+
+### Changed
+
+* switch `symfony/http-client` to `5.3` version requirement.
+* switch `symfony/http-client-contracts` to `^2.4` version requirement.
+* switch `symfony/event-dispatcher` to `5.3.*` version requirement.
+* switch `ramsey/uuid` to `^4.0` version requirement.
+
+### Fixed
+
+* issue [Несовместимость с Laravel 8 #224](https://github.com/mesilov/bitrix24-php-sdk/issues/224)
+
+## 2.0-alpha.3 – 14.11.2021
 
 * add php8 version support
 * change in scope «CRM» Product service and integration tests
@@ -11,7 +73,7 @@
 * bump phpunit version
 * bump phpstan version
 
-## 2.0-alpha.2 (31.01.2021)
+## 2.0-alpha.2 – 31.01.2021
 
 * remove Travis CI and migrate to Github Actions
 * add unit-tests in independent github action
@@ -26,7 +88,7 @@
 * add in scope «IM» IM service and integration test
 * add in default scope «Main» default service
 
-## 2.0-alpha.1 (11.07.2020)
+## 2.0-alpha.1 – 11.07.2020
 
 * remove all v1 code
 * migrate to Symfony HttpClient
@@ -35,6 +97,7 @@
 * add Events support
 
 ## 0.1.0 (14.11.2021)
+
 branch version 1.x – bugfix and security releases only
 
 ## 0.7.0 (11.07.2020)
