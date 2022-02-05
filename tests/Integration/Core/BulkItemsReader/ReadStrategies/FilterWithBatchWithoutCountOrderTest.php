@@ -22,7 +22,6 @@ class FilterWithBatchWithoutCountOrderTest extends TestCase
      */
     private array $dealId;
     private const DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_BATCH_PAGE_SIZE = 2555;
-
     /**
      * @var array<string,mixed>
      */
@@ -38,8 +37,6 @@ class FilterWithBatchWithoutCountOrderTest extends TestCase
      */
     public function testGetTraversableListBatchWithoutCountElementsOnEveryApiCallWithMoreThanBatchPageSizeFilterResult(): void
     {
-        $this->assertTrue(true);
-
         $elementsCountByFilter = $this->serviceBuilder->getCRMScope()->deal()->countByFilter($this->filter);
         $this->assertEquals(self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_BATCH_PAGE_SIZE, $elementsCountByFilter);
 
