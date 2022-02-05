@@ -3,12 +3,7 @@ name: "Integration tests"
 on:
   push:
     branches:
-      - 'master'
       - 'dev'
-      - '2.x'
-    paths:
-      - 'src/**'
-      - 'tests/**'
 
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
