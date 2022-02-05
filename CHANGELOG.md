@@ -7,6 +7,7 @@
 * add «fast» batch-query without counting elements in result
   recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов (-1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
 * add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
+* add integration test for read strategy `FilterWithBatchWithoutCountOrderTest`
 * add type check in method `Core\Batch::deleteEntityItems` - only integer id allowed
 * add interface `Core\Contracts\DeletedItemResultInterface`
 * add in scope «CRM» `Services\CRM\Deal\Service\Batch::delete` batch delete deals

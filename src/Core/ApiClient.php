@@ -112,8 +112,8 @@ class ApiClient implements ApiClientInterface
     }
 
     /**
-     * @param string $apiMethod
-     * @param array<mixed>  $parameters
+     * @param string       $apiMethod
+     * @param array<mixed> $parameters
      *
      * @return ResponseInterface
      * @throws TransportExceptionInterface
@@ -122,8 +122,9 @@ class ApiClient implements ApiClientInterface
     public function getResponse(string $apiMethod, array $parameters = []): ResponseInterface
     {
         $this->logger->info(
-            sprintf('getResponse.start %s', $apiMethod),
+            'getResponse.start',
             [
+                'apiMethod'  => $apiMethod,
                 'domainUrl'  => $this->credentials->getDomainUrl(),
                 'parameters' => $parameters,
             ]
@@ -148,8 +149,9 @@ class ApiClient implements ApiClientInterface
         $response = $this->client->request($method, $url, $requestOptions);
 
         $this->logger->info(
-            sprintf('getResponse.end [%s]', $apiMethod),
+            'getResponse.end',
             [
+                'apiMethod'    => $apiMethod,
                 'responseInfo' => $response->getInfo(),
             ]
         );
