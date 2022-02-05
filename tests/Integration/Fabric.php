@@ -50,6 +50,7 @@ class Fabric
         print(print_r($_ENV, true));
         print(print_r($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK']));
         print(print_r($_ENV['BITRIX24_WEBHOOK']));
+        exit();
 
         return (new CoreBuilder())
             ->withLogger(self::getLogger())
