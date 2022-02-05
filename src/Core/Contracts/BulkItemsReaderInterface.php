@@ -10,7 +10,9 @@ use Generator;
 interface BulkItemsReaderInterface
 {
     /**
-     * wrapper for *.list methods for bulk items read
+     * Wrapper for *.list methods for optimized bulk items read
+     *
+     * This reader used performance optimized read strategy selected by integrations tests
      *
      * @param string   $apiMethod *.list method
      * @param array    $order     elements order

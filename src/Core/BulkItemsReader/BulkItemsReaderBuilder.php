@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\BulkItemsReader;
 
-use Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies\FilterWithoutBatchWithoutCountOrder;
+use Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies\FilterWithBatchWithoutCountOrder;
+use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Psr\Log\LoggerInterface;
@@ -12,16 +13,19 @@ use Psr\Log\LoggerInterface;
 class BulkItemsReaderBuilder
 {
     protected CoreInterface $core;
+    protected BatchInterface $batch;
     protected LoggerInterface $logger;
     protected BulkItemsReaderInterface $readStrategy;
 
     /**
-     * @param \Bitrix24\SDK\Core\Contracts\CoreInterface $core
-     * @param \Psr\Log\LoggerInterface                   $logger
+     * @param \Bitrix24\SDK\Core\Contracts\CoreInterface  $core
+     * @param \Bitrix24\SDK\Core\Contracts\BatchInterface $batch
+     * @param \Psr\Log\LoggerInterface                    $logger
      */
-    public function __construct(CoreInterface $core, LoggerInterface $logger)
+    public function __construct(CoreInterface $core, BatchInterface $batch, LoggerInterface $logger)
     {
         $this->core = $core;
+        $this->batch = $batch;
         $this->logger = $logger;
         $this->readStrategy = $this->getOptimalReadStrategy();
     }
@@ -39,11 +43,13 @@ class BulkItemsReaderBuilder
     }
 
     /**
+     * Get optimal read strategy based on integration tests with time and performance benchmarks
+     *
      * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
      */
     protected function getOptimalReadStrategy(): BulkItemsReaderInterface
     {
-        return new FilterWithoutBatchWithoutCountOrder($this->core, $this->logger);
+        return new FilterWithBatchWithoutCountOrder($this->batch, $this->logger);
     }
 
     /**
