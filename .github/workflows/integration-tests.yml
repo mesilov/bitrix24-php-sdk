@@ -12,7 +12,7 @@ on:
 
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
-
+  BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
 jobs:
   tests:
     name: "Integration tests"
