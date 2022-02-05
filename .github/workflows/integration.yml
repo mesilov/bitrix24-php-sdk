@@ -1,8 +1,8 @@
-on:
-  push:
-  pull_request:
-
 name: "Integration tests"
+
+on:
+  - push
+  - pull_request
 
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
