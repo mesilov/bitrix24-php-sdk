@@ -56,7 +56,7 @@
       "phpunit --testsuite integration_tests"
     ],
     "phpstan-analyse": [
-      "vendor/bin/phpstan analyse"
+      "vendor/bin/phpstan analyse --memory-limit 1G"
     ]
   }
 }
