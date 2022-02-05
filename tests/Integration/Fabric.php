@@ -47,7 +47,7 @@ class Fabric
     {
         return (new CoreBuilder())
             ->withLogger(self::getLogger())
-            ->withWebhookUrl($_ENV['BITRIX24_WEBHOOK'])
+            ->withWebhookUrl($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK'])
             ->build();
     }
 
