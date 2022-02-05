@@ -121,7 +121,7 @@ class ApiClient implements ApiClientInterface
      */
     public function getResponse(string $apiMethod, array $parameters = []): ResponseInterface
     {
-        $this->logger->debug(
+        $this->logger->info(
             sprintf('getResponse.start %s', $apiMethod),
             [
                 'domainUrl'  => $this->credentials->getDomainUrl(),
@@ -147,7 +147,7 @@ class ApiClient implements ApiClientInterface
         ];
         $response = $this->client->request($method, $url, $requestOptions);
 
-        $this->logger->debug(
+        $this->logger->info(
             sprintf('getResponse.end [%s]', $apiMethod),
             [
                 'responseInfo' => $response->getInfo(),
