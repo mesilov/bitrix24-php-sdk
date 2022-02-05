@@ -45,7 +45,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             'limit'     => $limit,
         ]);
 
-        // дефолтная стратегия из документации https://dev.1c-bitrix.ru/rest_help/rest_sum/start.php
+        // Дефолтная стратегия из документации https://dev.1c-bitrix.ru/rest_help/rest_sum/start.php
         //
         //Особенности:
         //— ✅ отключён подсчёт количества элементов в выборке
