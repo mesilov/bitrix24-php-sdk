@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration;
 
 use Bitrix24\SDK\Core\Batch;
+use Bitrix24\SDK\Core\BulkItemsReader\BulkItemsReaderBuilder;
+use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
@@ -25,7 +27,16 @@ class Fabric
      */
     public static function getServiceBuilder(): ServiceBuilder
     {
-        return new ServiceBuilder(self::getCore(), self::getBatchService(), self::getLogger());
+        return new ServiceBuilder(self::getCore(), self::getBatchService(), self::getBulkItemsReader(), self::getLogger());
+    }
+
+    /**
+     * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public static function getBulkItemsReader(): BulkItemsReaderInterface
+    {
+        return (new BulkItemsReaderBuilder(self::getCore(), self::getBatchService(), self::getLogger()))->build();
     }
 
     /**
