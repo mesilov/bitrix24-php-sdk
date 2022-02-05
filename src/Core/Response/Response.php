@@ -70,7 +70,7 @@ class Response
                 'rest_query_finish'     => $this->responseData->getTime()->getFinish(),
             ];
         }
-        $this->logger->debug('Response.responseInfo', [
+        $this->logger->info('Response.TransportInfo', [
             'restTimings'    => $restTimings,
             'networkTimings' => (new NetworkTimingsParser($this->httpResponse->getInfo()))->toArrayWithMicroseconds(),
             'responseInfo'   => (new ResponseInfoParser($this->httpResponse->getInfo()))->toArray(),
@@ -89,6 +89,9 @@ class Response
             try {
                 $this->logger->debug('getResponseData.parseResponse.start');
                 $responseResult = $this->httpResponse->toArray(true);
+                $this->logger->info('getResponseData.responseBody', [
+                    'responseBody' => $responseResult,
+                ]);
                 // try to handle api-level errors
                 $this->handleApiLevelErrors($responseResult);
 
