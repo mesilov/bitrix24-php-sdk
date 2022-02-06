@@ -25,6 +25,7 @@ class AbstractItemTest extends TestCase
         };
         $testItem->ID = 2;
     }
+
     /**
      * @covers \Bitrix24\SDK\Core\Result\AbstractItem::__unset
      */

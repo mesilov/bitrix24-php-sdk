@@ -7,8 +7,14 @@ A powerful PHP library for the Bitrix24 REST API
 
 ### Build status
 
-[![phpstan check](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml)
-[![phpunit unit-tests status](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml)
+| CI\CD [status](https://github.com/mesilov/bitrix24-php-sdk/actions)                                                                                                                                   | 
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
+| [![phpstan check](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml)                    | 
+| [![unit-tests status](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml)                | 
+| [![integration-tests status](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/integration.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/integration.yml) | 
+
+Integration tests run in GitHub actions with real Bitrix24 portal 
+
 
 ### BITRIX24-PHP-SDK Documentation
 

@@ -35,3 +35,13 @@ jobs:
 
       - name: "run unit tests"
         run: "composer phpunit-run-unit-tests"
+
+      - name: "is unit tests tests succeeded"
+        if: ${{ success() }}
+        run: |
+          echo '✅ unit tests pass, congratulations!'
+
+      - name: "is unit tests tests failed"
+        if: ${{ failure() }}
+        run: |
+          echo '::error:: ❗️ unit tests tests failed (╯°益°)╯彡┻━┻'
