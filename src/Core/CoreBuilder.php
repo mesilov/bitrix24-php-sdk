@@ -51,6 +51,17 @@ class CoreBuilder
     }
 
     /**
+     * @param Credentials $credentials
+     *
+     * @return $this
+     */
+    public function withCredentials(Credentials $credentials): self
+    {
+        $this->credentials = $credentials;
+        return $this;
+    }
+
+    /**
      * @param string $webhookUrl
      *
      * @return $this
