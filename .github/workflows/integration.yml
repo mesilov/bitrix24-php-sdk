@@ -31,6 +31,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
+          ini-values: variables_order=EGPCS
         env:
           BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
 
@@ -41,4 +42,5 @@ jobs:
       - name: "Run integration tests"
         run: |
           printenv
+          printenv BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK
           composer phpunit-run-integration-tests
