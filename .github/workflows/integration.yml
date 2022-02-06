@@ -23,27 +23,10 @@ jobs:
 
     steps:
       - name: "debug env"
-          run: |
-            echo " "
-            echo "$(cat TAG_EDGE_VERSION_HASH) < TAG_EDGE_VERSION_HASH"
-            echo "$(cat TAG_EDGE_VERSION) < TAG_EDGE_VERSION"
-            echo "$(cat TAG_EDGE) < TAG_EDGE"
-            echo " "
-            echo "$(cat TAG_EDGE_VERSION_HASH_GPR) < TAG_EDGE_VERSION_HASH_GPR"
-            echo "$(cat TAG_EDGE_VERSION_GPR) < TAG_EDGE_VERSION_GPR"
-            echo "$(cat TAG_EDGE_GPR) < TAG_EDGE_GPR"
-            echo " "
-            echo "$(cat APP_NAME) < APP_NAME"
-            echo "$(cat VERSION) < VERSION"
-            echo "$(cat DOCKERFILE_NAME) < DOCKERFILE_NAME"
-            echo " "
-            echo "$(cat DATE_TIME) < DATE_TIME"
-            echo "$(cat SHORT_COMMIT_HASH) < SHORT_COMMIT_HASH"
-            echo "$(cat DOCKERHUB_USER) < DOCKERHUB_USER"
-            echo "$(cat GITHUB_ORG) < GITHUB_ORG"
-            echo "$(cat DKR_HUB_URL) < DKR_HUB_URL"
-            echo "$(cat GPR_URL) < GPR_URL"
-            echo "$(cat GITHUB_REGISTRY) < GITHUB_REGISTRY"
+        run: |
+          echo " "
+          printenv BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK
+          printenv
 
       - name: "Checkout"
         uses: "actions/checkout@v2"
