@@ -25,6 +25,7 @@ class AbstractItemTest extends TestCase
         };
         $testItem->ID = 2;
     }
+
     /**
      * @covers \Bitrix24\SDK\Core\Result\AbstractItem::__unset
      */
@@ -34,5 +35,13 @@ class AbstractItemTest extends TestCase
         $testItem = new class (['ID' => 1]) extends AbstractItem {
         };
         unset($testItem->ID);
+    }
+
+    /**
+     * @covers \Bitrix24\SDK\Core\Result\AbstractItem::__unset
+     */
+    public function testFailure(): void
+    {
+        $this->assertTrue(false);
     }
 }

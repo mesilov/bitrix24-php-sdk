@@ -58,4 +58,4 @@ jobs:
       - name: "is integration tests failed"
         if: ${{ failure() }}
         run: |
-          echo '::error:: ❗️teintegration tests failed'
+          echo '::error:: ❗️iteintegration tests failed '
