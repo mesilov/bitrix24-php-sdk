@@ -49,3 +49,13 @@ jobs:
       - name: "Run integration tests"
         run: |
           composer phpunit-run-integration-tests
+
+      - name: "is integration tests succeeded"
+        if: ${{ success() }}
+        run: |
+          echo '✅ integration tests pass, congratulations!'
+
+      - name: "is integration tests failed"
+        if: ${{ failure() }}
+        run: |
+          echo '::error:: ❗️teintegration tests failed'
