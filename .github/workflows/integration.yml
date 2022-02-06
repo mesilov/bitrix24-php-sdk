@@ -22,11 +22,6 @@ jobs:
         dependencies: [ highest ]
 
     steps:
-      - name: "debug env"
-        run: |
-          echo " "
-          printenv BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK
-          printenv
 
       - name: "Checkout"
         uses: "actions/checkout@v2"
