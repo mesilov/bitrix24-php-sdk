@@ -12,6 +12,8 @@ use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Monolog\Processor\IntrospectionProcessor;
+use Monolog\Processor\MemoryUsageProcessor;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -45,6 +47,12 @@ class Fabric
      */
     public static function getCore(): CoreInterface
     {
+
+        print(print_r($_ENV, true));
+        print(print_r($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK']));
+        print(print_r($_ENV['BITRIX24_WEBHOOK']));
+        exit();
+
         return (new CoreBuilder())
             ->withLogger(self::getLogger())
             ->withWebhookUrl($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK'])
@@ -58,8 +66,8 @@ class Fabric
     {
         $log = new Logger('integration-test');
         $log->pushHandler(new StreamHandler(STDOUT, (int)$_ENV['INTEGRATION_TEST_LOG_LEVEL']));
-        $log->pushProcessor(new \Monolog\Processor\MemoryUsageProcessor(true, true));
-        $log->pushProcessor(new \Monolog\Processor\IntrospectionProcessor());
+        $log->pushProcessor(new MemoryUsageProcessor(true, true));
+        $log->pushProcessor(new IntrospectionProcessor());
 
         return $log;
     }

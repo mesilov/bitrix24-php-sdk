@@ -608,6 +608,7 @@ class Batch implements BatchInterface
                     'batchApiCommandUuid' => $batchResult->getApiCommand()->getUuid()->toString(),
                 ]
             );
+            // todo try to multiplex requests
             $response = $batchResult->getResponseData();
 
             // single queries
