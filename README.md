@@ -7,7 +7,7 @@ A powerful PHP library for the Bitrix24 REST API
 
 ### Build status
 
-| Master branch tests status                                                                                                                                                                            | 
+| CI\CD [status](https://github.com/mesilov/bitrix24-php-sdk/actions)                                                                                                                                   | 
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 | [![phpstan check](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml)                    | 
 | [![unit-tests status](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml)                | 
