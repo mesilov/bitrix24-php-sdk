@@ -1,4 +1,4 @@
-bitrix24-php-sdk – Bitrix24 REST API PHP SDK
+Bitrix24 REST API PHP SDK
 ================
 [![License](https://poser.pugx.org/mesilov/bitrix24-php-sdk/license.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk) [![Total Downloads](https://poser.pugx.org/mesilov/bitrix24-php-sdk/downloads.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
 [![Latest Stable Version](https://img.shields.io/packagist/v/mesilov/bitrix24-php-sdk.svg)](https://packagist.org/packages/mesilov/bitrix24-php-sdk)
