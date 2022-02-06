@@ -22,4 +22,7 @@ if ($input->hasParameterOption('--no-debug', true)) {
 
 (new Dotenv())->loadEnv(dirname(__DIR__) . '/tests/.env');
 
-phpinfo();
+
+print('ENV_VARS');
+print_r($_ENV);
+print('ENV_VARS_END');
