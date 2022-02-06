@@ -1,11 +1,12 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.6 — 20.01.2021
+## 2.0-alpha.6 — 7.02.2021
 
 ### Added
 
 * add «fast» batch-query without counting elements in result
-  recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов (-1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
+  recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов -1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
+* add `Credentials` in CoreBuilder [set credentials from core builder](https://github.com/mesilov/bitrix24-php-sdk/pull/246)
 * add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
 * add integration test for read strategy `FilterWithBatchWithoutCountOrderTest`
 * add type check in method `Core\Batch::deleteEntityItems` - only integer id allowed
@@ -19,7 +20,7 @@
 * add `Bitrix24\SDK\Core\BulkItemsReader` for data-intensive applications for bulk export data from Bitrix24, read strategies located in
   folder `ReadStrategies`, in services read model **must** use most effective read strategy.
 * add integration tests in GitHub Actions pipeline 🎉, now integration tests run on push on `dev-branch`
-* add incoming webhook for run integration tests `vendor-check.yml` from vendor CI\CD pipeline 
+* add incoming webhook for run integration tests `vendor-check.yml` from vendor CI\CD pipeline
 
 ### Changed
 
