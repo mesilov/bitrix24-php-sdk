@@ -28,6 +28,7 @@
 * switch `symfony/http-client-contracts` to `^2.5` version requirement.
 * switch `symfony/event-dispatcher` to `5.4.*` version requirement.
 * switch `ramsey/uuid` to `^4.2.3` version requirement.
+* switch `psr/log` to `^1.1.4 || ^2.0 || ^3.0` [version requirement](https://github.com/mesilov/bitrix24-php-sdk/issues/245).
 
 ## 2.0-alpha.5 – 28.11.2021
 
