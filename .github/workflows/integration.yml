@@ -40,6 +40,5 @@ jobs:
 
       - name: "Run integration tests"
         run: |
-          printenv BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK
           printenv
           composer phpunit-run-integration-tests
