@@ -21,8 +21,3 @@ if ($input->hasParameterOption('--no-debug', true)) {
 }
 
 (new Dotenv())->loadEnv(dirname(__DIR__) . '/tests/.env');
-
-
-print('ENV_VARS');
-print_r($_ENV);
-print('ENV_VARS_END');
