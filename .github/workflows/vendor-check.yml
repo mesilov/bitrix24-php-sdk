@@ -1,10 +1,9 @@
-name: "Integration tests"
+name: "Vendor integration tests"
 
 on:
-  push:
-    branches:
-      - dev
-  pull_request:
+  # run integration tests from vendor CI\CD pipeline with webhook
+  repository_dispatch:
+    types: [ run_vendor_integration_tests ]
 
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
@@ -13,7 +12,7 @@ env:
 
 jobs:
   tests:
-    name: "Integration tests"
+    name: "Vendor integration tests"
 
     runs-on: ubuntu-latest
 
@@ -58,4 +57,4 @@ jobs:
       - name: "integration tests failed"
         if: ${{ failure() }}
         run: |
-          echo '::error:: ❗️iteintegration tests failed (╯°益°)╯彡┻━┻ '
+          echo '::error:: ❗️iteintegration tests failed  (╯°益°)╯彡┻━┻'

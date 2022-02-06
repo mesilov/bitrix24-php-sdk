@@ -19,6 +19,7 @@
 * add `Bitrix24\SDK\Core\BulkItemsReader` for data-intensive applications for bulk export data from Bitrix24, read strategies located in
   folder `ReadStrategies`, in services read model **must** use most effective read strategy.
 * add integration tests in GitHub Actions pipeline 🎉, now integration tests run on push on `dev-branch`
+* add incoming webhook for run integration tests `vendor-check.yml` from vendor CI\CD pipeline 
 
 ### Changed
 
