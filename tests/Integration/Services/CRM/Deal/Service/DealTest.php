@@ -83,36 +83,28 @@ class DealTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\CRM\Contact\Service\Batch::list()
-     * @throws BaseException
-     * @throws TransportException
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\Deal::countByFilter
      */
-    public function testBatchList(): void
+    public function testCountByFilter(): void
     {
-        $this->dealService->add(['TITLE' => 'test deal']);
-        $cnt = 0;
+        $before = $this->dealService->countByFilter();
 
-        foreach ($this->dealService->batch->list([], ['>ID' => '1'], ['ID', 'NAME'], 1) as $item) {
-            $cnt++;
-        }
-        self::assertGreaterThanOrEqual(1, $cnt);
-    }
-
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\Batch::add()
-     */
-    public function testBatchAdd(): void
-    {
+        $newDealsCount = 60;
         $deals = [];
-        for ($i = 1; $i < 60; $i++) {
+        for ($i = 1; $i <= $newDealsCount; $i++) {
             $deals[] = ['TITLE' => 'TITLE-' . $i];
         }
         $cnt = 0;
         foreach ($this->dealService->batch->add($deals) as $item) {
             $cnt++;
         }
-
         self::assertEquals(count($deals), $cnt);
+
+        $after = $this->dealService->countByFilter();
+
+        $this->assertEquals($before + $newDealsCount, $after);
     }
 
     public function setUp(): void

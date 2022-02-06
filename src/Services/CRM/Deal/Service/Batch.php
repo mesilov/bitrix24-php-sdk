@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Services\CRM\Deal\Service;
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
+use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
@@ -34,10 +35,10 @@ class Batch
     }
 
     /**
-     * batch list method for deals
+     * Batch list method for deals
      *
      * @param array{
-     *                         ID?: int,
+     *                         ID?: string,
      *                         TITLE?: string,
      *                         TYPE_ID?: string,
      *                         CATEGORY_ID?: string,
@@ -47,7 +48,7 @@ class Batch
      *                         IS_RECURRING?: string,
      *                         IS_RETURN_CUSTOMER?: string,
      *                         IS_REPEATED_APPROACH?: string,
-     *                         PROBABILITY?: int,
+     *                         PROBABILITY?: string,
      *                         CURRENCY_ID?: string,
      *                         OPPORTUNITY?: string,
      *                         IS_MANUAL_OPPORTUNITY?: string,
@@ -193,6 +194,7 @@ class Batch
      *   }> $deals
      *
      * @return Generator<int, AddedItemBatchResult>|AddedItemBatchResult[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     public function add(array $deals): Generator
     {
@@ -204,6 +206,21 @@ class Batch
         }
         foreach ($this->batch->addEntityItems('crm.deal.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
+        }
+    }
+
+    /**
+     * Batch delete deals
+     *
+     * @param int[] $dealId
+     *
+     * @return \Generator|\Bitrix24\SDK\Core\Contracts\DeletedItemResultInterface[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function delete(array $dealId): Generator
+    {
+        foreach ($this->batch->deleteEntityItems('crm.deal.delete', $dealId) as $key => $item) {
+            yield $key => new DeletedItemBatchResult($item);
         }
     }
 }

@@ -360,7 +360,7 @@ class Contact extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
-    public function update(int $contactId, array $fields, array $params): UpdatedItemResult
+    public function update(int $contactId, array $fields, array $params = []): UpdatedItemResult
     {
         return new UpdatedItemResult(
             $this->core->call(

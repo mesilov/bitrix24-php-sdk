@@ -21,7 +21,7 @@ class Batch extends AbstractBatchService
      * batch list method
      *
      * @param array{
-     *                         ID?: int,
+     *                         ID?: string,
      *                         HONORIFIC?: string,
      *                         NAME?: string,
      *                         SECOND_NAME?: string,
@@ -40,7 +40,7 @@ class Batch extends AbstractBatchService
      *                         ADDRESS_PROVINCE?: string,
      *                         ADDRESS_COUNTRY?: string,
      *                         ADDRESS_COUNTRY_CODE?: string,
-     *                         ADDRESS_LOC_ADDR_ID?: int,
+     *                         ADDRESS_LOC_ADDR_ID?: string,
      *                         COMMENTS?: string,
      *                         OPENED?: string,
      *                         EXPORT?: string,
@@ -58,7 +58,7 @@ class Batch extends AbstractBatchService
      *                         ORIGINATOR_ID?: string,
      *                         ORIGIN_ID?: string,
      *                         ORIGIN_VERSION?: string,
-     *                         FACE_ID?: int,
+     *                         FACE_ID?: string,
      *                         UTM_SOURCE?: string,
      *                         UTM_MEDIUM?: string,
      *                         UTM_CAMPAIGN?: string,

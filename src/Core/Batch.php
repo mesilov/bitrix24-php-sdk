@@ -9,6 +9,7 @@ use Bitrix24\SDK\Core\Commands\CommandCollection;
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Result;
@@ -25,7 +26,7 @@ use Psr\Log\LoggerInterface;
 class Batch implements BatchInterface
 {
     private CoreInterface $core;
-    private LoggerInterface $log;
+    private LoggerInterface $logger;
     protected const MAX_BATCH_PACKET_SIZE = 50;
     protected const MAX_ELEMENTS_IN_PAGE = 50;
     protected CommandCollection $commands;
@@ -39,37 +40,37 @@ class Batch implements BatchInterface
     public function __construct(CoreInterface $core, LoggerInterface $log)
     {
         $this->core = $core;
-        $this->log = $log;
+        $this->logger = $log;
         $this->commands = new CommandCollection();
     }
 
     /**
      * Clear api commands collection
      */
-    public function clearCommands(): void
+    protected function clearCommands(): void
     {
-        $this->log->debug(
+        $this->logger->debug(
             'clearCommands.start',
             [
                 'commandsCount' => $this->commands->count(),
             ]
         );
         $this->commands = new CommandCollection();
-        $this->log->debug('clearCommands.finish');
+        $this->logger->debug('clearCommands.finish');
     }
 
     /**
-     * add entity items with batch call
+     * Add entity items with batch call
      *
      * @param string            $apiMethod
-     * @param array<int, array> $entityItems
+     * @param array<int, mixed> $entityItems
      *
-     * @return Generator<int, ResponseData>
+     * @return Generator<int, ResponseData>|ResponseData[]
      * @throws BaseException
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
     {
-        $this->log->debug(
+        $this->logger->debug(
             'addEntityItems.start',
             [
                 'apiMethod'   => $apiMethod,
@@ -80,7 +81,7 @@ class Batch implements BatchInterface
         try {
             $this->clearCommands();
             foreach ($entityItems as $cnt => $item) {
-                $this->addCommand($apiMethod, $item);
+                $this->registerCommand($apiMethod, $item);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $addedItemResult) {
@@ -88,7 +89,7 @@ class Batch implements BatchInterface
             }
         } catch (\Throwable $exception) {
             $errorMessage = sprintf('batch add entity items: %s', $exception->getMessage());
-            $this->log->error(
+            $this->logger->error(
                 $errorMessage,
                 [
                     'trace' => $exception->getTrace(),
@@ -98,27 +99,89 @@ class Batch implements BatchInterface
             throw new BaseException($errorMessage, $exception->getCode(), $exception);
         }
 
-        $this->log->debug('addEntityItems.finish');
+        $this->logger->debug('addEntityItems.finish');
     }
 
     /**
-     * add api command to commands collection for batch calls
+     * Delete entity items with batch call
      *
-     * @param string        $apiMethod
-     * @param array         $parameters
-     * @param string|null   $commandName
-     * @param callable|null $callback
+     * @param string          $apiMethod
+     * @param array<int, int> $entityItemId
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
+    {
+        $this->logger->debug(
+            'deleteEntityItems.start',
+            [
+                'apiMethod'   => $apiMethod,
+                'entityItems' => $entityItemId,
+            ]
+        );
+
+        try {
+            $this->clearCommands();
+            foreach ($entityItemId as $cnt => $itemId) {
+                if (!is_int($itemId)) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'invalid type «%s» of entity id «%s» at position %s, entity id must be integer type',
+                            gettype($itemId),
+                            $itemId,
+                            $cnt
+                        )
+                    );
+                }
+                $this->registerCommand($apiMethod, ['ID' => $itemId]);
+            }
+
+            foreach ($this->getTraversable(true) as $cnt => $deletedItemResult) {
+                yield $cnt => $deletedItemResult;
+            }
+        } catch (InvalidArgumentException $exception) {
+            $errorMessage = sprintf('batch delete entity items: %s', $exception->getMessage());
+            $this->logger->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+            throw $exception;
+        } catch (\Throwable $exception) {
+            $errorMessage = sprintf('batch delete entity items: %s', $exception->getMessage());
+            $this->logger->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+
+            throw new BaseException($errorMessage, $exception->getCode(), $exception);
+        }
+
+        $this->logger->debug('deleteEntityItems.finish');
+    }
+
+    /**
+     * Register api command to command collection for batch calls
+     *
+     * @param string             $apiMethod
+     * @param array<mixed,mixed> $parameters
+     * @param string|null        $commandName
+     * @param callable|null      $callback not implemented
      *
      * @throws \Exception
      */
-    public function addCommand(
+    protected function registerCommand(
         string $apiMethod,
         array $parameters = [],
         ?string $commandName = null,
         callable $callback = null
-    ) {
-        $this->log->debug(
-            'addCommand.start',
+    ): void {
+        $this->logger->debug(
+            'registerCommand.start',
             [
                 'apiMethod'   => $apiMethod,
                 'parameters'  => $parameters,
@@ -128,8 +191,8 @@ class Batch implements BatchInterface
 
         $this->commands->attach(new Command($apiMethod, $parameters, $commandName));
 
-        $this->log->debug(
-            'addCommand.finish',
+        $this->logger->debug(
+            'registerCommand.finish',
             [
                 'commandsCount' => $this->commands->count(),
             ]
@@ -137,13 +200,13 @@ class Batch implements BatchInterface
     }
 
     /**
-     * @param array $order
+     * @param array<string,string> $order
      *
      * @return array|string[]
      */
     protected function getReverseOrder(array $order): array
     {
-        $this->log->debug(
+        $this->logger->debug(
             'getReverseOrder.start',
             [
                 'order' => $order,
@@ -153,18 +216,18 @@ class Batch implements BatchInterface
 
         if ($order === []) {
             $reverseOrder = ['ID' => 'DESC'];
-        }
-
-        $order = array_change_key_case($order, CASE_UPPER);
-        $oldDirection = array_values($order)[0];
-        if ($oldDirection === 'ASC') {
-            $newOrderDirection = 'DESC';
         } else {
-            $newOrderDirection = 'ASC';
+            $order = array_change_key_case($order, CASE_UPPER);
+            $oldDirection = array_values($order)[0];
+            if ($oldDirection === 'ASC') {
+                $newOrderDirection = 'DESC';
+            } else {
+                $newOrderDirection = 'ASC';
+            }
+            $reverseOrder[array_key_first($order)] = $newOrderDirection;
         }
-        $reverseOrder[array_key_first($order)] = $newOrderDirection;
 
-        $this->log->debug(
+        $this->logger->debug(
             'getReverseOrder.finish',
             [
                 'order' => $reverseOrder,
@@ -175,225 +238,158 @@ class Batch implements BatchInterface
     }
 
     /**
-     * WORK IN PROGRESS
+     * Get traversable list without count elements
      *
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
+     * @param string               $apiMethod
+     * @param array<string,string> $order
+     * @param array<string,mixed>  $filter
+     * @param array<string,mixed>  $select
+     * @param int|null             $limit
      *
-     * @return Generator
-     * @throws BaseException
-     * @throws Exceptions\TransportException
+     * @return \Generator<mixed>
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function getTraversableListWithoutCount(
+    public function getTraversableList(
         string $apiMethod,
         array $order,
         array $filter,
         array $select,
         ?int $limit = null
     ): Generator {
-        $this->log->debug(
-            'getTraversableListWithoutCount.start',
+        $this->logger->debug('getTraversableList.start',
+                             [
+                                 'apiMethod' => $apiMethod,
+                                 'order'     => $order,
+                                 'filter'    => $filter,
+                                 'select'    => $select,
+                                 'limit'     => $limit,
+                             ]
+        );
+
+        // strategy.3 — ID filter, batch, no count, order
+        // — ✅ отключён подсчёт количества элементов в выборке
+        // — ⚠️ ID элементов в выборке возрастает, т.е. была сделана сортировка результатов по ID
+        // — используем batch
+        // — последовательное выполнение запросов
+        //
+        // Задел по оптимизации
+        // — ограниченное использование параллельных запросов
+        //
+        // Запросы отправляются к серверу последовательно с параметром "order": {"ID": "ASC"} (сортировка по возрастанию ID).
+        // Т.к. результаты отсортированы по возрастанию ID, то их можно объеденить в батч-запросы с отключённым подсчётом количества элементов в каждом.
+        //
+        // Порядок формирования фильтра:
+        //
+        // взяли фильтр с «прямой» сортировкой и получили первый ID
+        // взяли фильтр с «обратной» сортировкой и получили последний ID
+        // Т.к. ID монотонно возрастает, то делаем предположение, что все страницы заполнены элементами равномерно, на самом деле там будут «дыры» из-за мастер-мастер репликации и удалённых элементов. т.е. в результирующих выборках не всегда будет ровно 50 элементов.
+        // из готовых фильтров формируем выборки и упаковываем их в батч-команды.
+        // по возможности, батч-запросы выполняются параллельно
+
+        // получили первый id элемента в выборке по фильтру
+        // todo проверили, что это *.list команда
+        // todo проверили, что в селекте есть ID, т.е. разработчик понимает, что ID используется
+        // todo проверили, что сортировка задана как "order": {"ID": "ASC"} т.е. разработчик понимает, что данные придут в таком порядке
+        // todo проверили, что если есть limit, то он >1
+        // todo проверили, что в фильтре нет поля ID, т.к. мы с ним будем работать
+
+
+        $firstResultPage = $this->core->call(
+            $apiMethod,
             [
-                'apiMethod' => $apiMethod,
-                'order'     => $order,
-                'filter'    => $filter,
-                'select'    => $select,
-                'limit'     => $limit,
+                'order'  => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'start'  => 0,
             ]
         );
-        $this->clearCommands();
+        $totalElementsCount = $firstResultPage->getResponseData()->getPagination()->getTotal();
+        // filtered elements count less than or equal one result page(50 elements)
+        $elementsCounter = 0;
+        if ($totalElementsCount <= self::MAX_ELEMENTS_IN_PAGE) {
+            foreach ($firstResultPage->getResponseData()->getResult()->getResultData() as $cnt => $listElement) {
+                $elementsCounter++;
+                if ($limit !== null && $elementsCounter > $limit) {
+                    return;
+                }
+                yield $listElement;
+            }
+            $this->logger->debug('getTraversableList.finish');
 
+            return;
+        }
+
+        // filtered elements count more than one result page(50 elements)
+        // return first page
+        $lastElementIdInFirstPage = null;
+        foreach ($firstResultPage->getResponseData()->getResult()->getResultData() as $cnt => $listElement) {
+            $elementsCounter++;
+            $lastElementIdInFirstPage = $listElement['ID'];
+            if ($limit !== null && $elementsCounter > $limit) {
+                return;
+            }
+            yield $listElement;
+        }
+
+        $this->clearCommands();
         if (!in_array('ID', $select, true)) {
             $select[] = 'ID';
         }
-        // get total elements count
-        $firstResult = $this->core->call(
+
+        // getLastElementId in filtered result
+        $lastResultPage = $this->core->call(
             $apiMethod,
             [
-                'order'  => $order,
-                'filter' => $filter,
-                'select' => $select,
-                'start'  => 0,
-            ]
-        );
-        $nextItem = $firstResult->getResponseData()->getPagination()->getNextItem();
-        $total = $firstResult->getResponseData()->getPagination()->getTotal();
-        $this->log->debug(
-            'getTraversableListWithoutCount.calculateCommandsRange',
-            [
-                'totalItems' => $total,
-            ]
-        );
-
-        if ($total > self::MAX_ELEMENTS_IN_PAGE && $nextItem !== null) {
-            //more than one page in results -  register list commands
-            $reverseOrder = $this->getReverseOrder($order);
-            $firstId = $firstResult->getResponseData()->getResult()->getResultData()[0]['ID'];
-
-            $lastId = $this->core->call(
-                $apiMethod,
-                [
-                    'order'  => $reverseOrder,
-                    'filter' => $filter,
-                    'select' => $select,
-                    'start'  => 0,
-                ]
-            )->getResponseData()->getResult()->getResultData()[0]['ID'];
-
-            //more than one page in results -  register list commands
-            for ($startId = $firstId; $startId <= $lastId; $startId += self::MAX_ELEMENTS_IN_PAGE) {
-                $this->addCommand(
-                    $apiMethod,
-                    [
-                        'order'  => [],
-                        'filter' => ['>=ID' => $startId],
-                        'select' => $select,
-                        'start'  => -1,
-                    ]
-                );
-            }
-
-            $this->log->debug(
-                'getTraversableList.commandsRegistered',
-                [
-                    'commandsCount'      => $this->commands->count(),
-                    'totalItemsToSelect' => $total,
-                ]
-            );
-
-            // iterate batch queries, max:  50 results per 50 elements in each result
-            $elementsCounter = 0;
-            foreach ($this->getTraversable(true) as $queryCnt => $queryResultData) {
-                /**
-                 * @var $queryResultData ResponseData
-                 */
-                $this->log->debug(
-                    'getTraversableList.batchResultItem',
-                    [
-                        'batchCommandItemNumber' => $queryCnt,
-                        'nextItem'               => $queryResultData->getPagination()->getNextItem(),
-                        'durationTime'           => $queryResultData->getTime()->getDuration(),
-                    ]
-                );
-                // iterate items in batch query result
-                foreach ($queryResultData->getResult()->getResultData() as $cnt => $listElement) {
-                    $elementsCounter++;
-                    if ($limit !== null && $elementsCounter > $limit) {
-                        return;
-                    }
-                    yield $listElement;
-                }
-            }
-        } else {
-            // one page in results
-            $this->addCommand(
-                $apiMethod,
-                [
-                    'order'  => $order,
-                    'filter' => $filter,
-                    'select' => $select,
-                    'start'  => 0,
-                ]
-            );
-        }
-    }
-
-    /**
-     * batch wrapper for *.list methods
-     *
-     * work with start item position and elements count
-     *
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
-     *
-     * @return Generator
-     * @throws BaseException
-     * @throws Exceptions\TransportException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     */
-    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
-    {
-        $this->log->debug(
-            'getTraversableList.start',
-            [
-                'apiMethod' => $apiMethod,
-                'order'     => $order,
-                'filter'    => $filter,
-                'select'    => $select,
-                'limit'     => $limit,
-            ]
-        );
-        $this->clearCommands();
-
-        // get total elements count
-        $firstResult = $this->core->call(
-            $apiMethod,
-            [
-                'order'  => $order,
+                'order'  => $this->getReverseOrder($order),
                 'filter' => $filter,
                 'select' => $select,
                 'start'  => 0,
             ]
         );
 
-        $nextItem = $firstResult->getResponseData()->getPagination()->getNextItem();
-        $total = $firstResult->getResponseData()->getPagination()->getTotal();
+        $lastElementId = (int)$lastResultPage->getResponseData()->getResult()->getResultData()[0]['ID'];
 
-        $this->log->debug(
-            'getTraversableList.calculateCommandsRange',
-            [
-                'nextItem'   => $nextItem,
-                'totalItems' => $total,
-            ]
-        );
+        // register commands with updated filter
+        //more than one page in results -  register list commands
+        $lastElementIdInFirstPage++;
+        for ($startId = $lastElementIdInFirstPage; $startId <= $lastElementId; $startId += self::MAX_ELEMENTS_IN_PAGE) {
+            $this->logger->debug('registerCommand.item', [
+                'startId'       => $startId,
+                'lastElementId' => $lastElementId,
+                'delta'         => $lastElementId - $startId,
+            ]);
 
-        if ($total > self::MAX_ELEMENTS_IN_PAGE && $nextItem !== null) {
-            //more than one page in results -  register list commands
-            for ($startItem = 0; $startItem <= $total; $startItem += $nextItem) {
-                $this->addCommand(
-                    $apiMethod,
-                    [
-                        'order'  => $order,
-                        'filter' => $filter,
-                        'select' => $select,
-                        'start'  => $startItem,
-                    ]
-                );
-                if ($limit !== null && $limit < $startItem) {
-                    break;
-                }
+            $delta = $lastElementId - $startId;
+            $isLastPage = false;
+            if ($delta > self::MAX_ELEMENTS_IN_PAGE) {
+                // ignore
+                // - master–master replication with id
+                // - deleted elements
+                $lastElementIdInPage = $startId + self::MAX_ELEMENTS_IN_PAGE;
+            } else {
+                $lastElementIdInPage = $lastElementId;
+                $isLastPage = true;
             }
-        } else {
-            // one page in results
-            $this->addCommand(
+
+            $this->registerCommand(
                 $apiMethod,
                 [
-                    'order'  => $order,
-                    'filter' => $filter,
+                    'order'  => [],
+                    'filter' => $this->updateFilterForBatch($startId, $lastElementIdInPage, $isLastPage, $filter),
                     'select' => $select,
-                    'start'  => 0,
+                    'start'  => -1,
                 ]
             );
         }
-
-        $this->log->debug(
+        $this->logger->debug(
             'getTraversableList.commandsRegistered',
             [
-                'commandsCount'      => $this->commands->count(),
-                'totalItemsToSelect' => $total,
+                'commandsCount' => $this->commands->count(),
             ]
         );
 
@@ -403,7 +399,7 @@ class Batch implements BatchInterface
             /**
              * @var $queryResultData ResponseData
              */
-            $this->log->debug(
+            $this->logger->debug(
                 'getTraversableList.batchResultItem',
                 [
                     'batchCommandItemNumber' => $queryCnt,
@@ -420,8 +416,163 @@ class Batch implements BatchInterface
                 yield $listElement;
             }
         }
+        $this->logger->debug('getTraversableList.finish');
+    }
 
-        $this->log->debug('getTraversableList.finish');
+    /**
+     * @param int                 $startElementId
+     * @param int                 $lastElementId
+     * @param bool                $isLastPage
+     * @param array<string,mixed> $oldFilter
+     *
+     * @return array<string,mixed>
+     */
+    protected function updateFilterForBatch(int $startElementId, int $lastElementId, bool $isLastPage, array $oldFilter): array
+    {
+        $this->logger->debug('updateFilterForBatch.start', [
+            'startElementId' => $startElementId,
+            'lastElementId'  => $lastElementId,
+            'isLastPage'     => $isLastPage,
+            'oldFilter'      => $oldFilter,
+        ]);
+
+        $filter = array_merge(
+            $oldFilter,
+            [
+                '>=ID'                       => $startElementId,
+                $isLastPage ? '<=ID' : '<ID' => $lastElementId,
+            ]
+        );
+        $this->logger->debug('updateFilterForBatch.finish', [
+            'filter' => $filter,
+        ]);
+
+        return $filter;
+    }
+
+    /**
+     * batch wrapper for *.list methods
+     *
+     * work with start item position and elements count
+     *
+     * @param string               $apiMethod
+     * @param array<string,string> $order
+     * @param array<string,mixed>  $filter
+     * @param array<string,mixed>  $select
+     * @param int|null             $limit
+     *
+     * @return Generator<mixed>
+     * @throws BaseException
+     * @throws Exceptions\TransportException
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
+     */
+    public function getTraversableListWithCount(
+        string $apiMethod,
+        array $order,
+        array $filter,
+        array $select,
+        ?int $limit = null
+    ): Generator {
+        $this->logger->debug(
+            'getTraversableListWithCount.start',
+            [
+                'apiMethod' => $apiMethod,
+                'order'     => $order,
+                'filter'    => $filter,
+                'select'    => $select,
+                'limit'     => $limit,
+            ]
+        );
+        $this->clearCommands();
+
+        // get total elements count
+        $firstResult = $this->core->call(
+            $apiMethod,
+            [
+                'order'  => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'start'  => 0,
+            ]
+        );
+
+        $nextItem = $firstResult->getResponseData()->getPagination()->getNextItem();
+        $total = $firstResult->getResponseData()->getPagination()->getTotal();
+
+        $this->logger->debug(
+            'getTraversableListWithCount.calculateCommandsRange',
+            [
+                'nextItem'   => $nextItem,
+                'totalItems' => $total,
+            ]
+        );
+
+        if ($total > self::MAX_ELEMENTS_IN_PAGE && $nextItem !== null) {
+            //more than one page in results -  register list commands
+            for ($startItem = 0; $startItem <= $total; $startItem += $nextItem) {
+                $this->registerCommand(
+                    $apiMethod,
+                    [
+                        'order'  => $order,
+                        'filter' => $filter,
+                        'select' => $select,
+                        'start'  => $startItem,
+                    ]
+                );
+                if ($limit !== null && $limit < $startItem) {
+                    break;
+                }
+            }
+        } else {
+            // one page in results
+            $this->registerCommand(
+                $apiMethod,
+                [
+                    'order'  => $order,
+                    'filter' => $filter,
+                    'select' => $select,
+                    'start'  => 0,
+                ]
+            );
+        }
+
+        $this->logger->debug(
+            'getTraversableListWithCount.commandsRegistered',
+            [
+                'commandsCount'      => $this->commands->count(),
+                'totalItemsToSelect' => $total,
+            ]
+        );
+
+        // iterate batch queries, max:  50 results per 50 elements in each result
+        $elementsCounter = 0;
+        foreach ($this->getTraversable(true) as $queryCnt => $queryResultData) {
+            /**
+             * @var $queryResultData ResponseData
+             */
+            $this->logger->debug(
+                'getTraversableListWithCount.batchResultItem',
+                [
+                    'batchCommandItemNumber' => $queryCnt,
+                    'nextItem'               => $queryResultData->getPagination()->getNextItem(),
+                    'durationTime'           => $queryResultData->getTime()->getDuration(),
+                ]
+            );
+            // iterate items in batch query result
+            foreach ($queryResultData->getResult()->getResultData() as $cnt => $listElement) {
+                $elementsCounter++;
+                if ($limit !== null && $elementsCounter > $limit) {
+                    return;
+                }
+                yield $listElement;
+            }
+        }
+
+        $this->logger->debug('getTraversableListWithCount.finish');
     }
 
     /**
@@ -434,10 +585,11 @@ class Batch implements BatchInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws \Exception
      */
-    public function getTraversable(bool $isHaltOnError): Generator
+    protected function getTraversable(bool $isHaltOnError): Generator
     {
-        $this->log->debug(
+        $this->logger->debug(
             'getTraversable.start',
             [
                 'isHaltOnError' => $isHaltOnError,
@@ -448,7 +600,7 @@ class Batch implements BatchInterface
             /**
              * @var $batchResult Response
              */
-            $this->log->debug(
+            $this->logger->debug(
                 'getTraversable.batchResultItem.processStart',
                 [
                     'batchItemNumber'     => $batchItem,
@@ -456,6 +608,7 @@ class Batch implements BatchInterface
                     'batchApiCommandUuid' => $batchResult->getApiCommand()->getUuid()->toString(),
                 ]
             );
+            // todo try to multiplex requests
             $response = $batchResult->getResponseData();
 
             // single queries
@@ -476,7 +629,7 @@ class Batch implements BatchInterface
                 }
 
                 $nextItem = null;
-                if ($resultNextItems !== null && array_key_exists($singleQueryKey, $resultNextItems) && count($resultNextItems) > 0) {
+                if ($resultNextItems !== null && array_key_exists($singleQueryKey, $resultNextItems)) {
                     $nextItem = $resultNextItems[$singleQueryKey];
                 }
 
@@ -491,21 +644,21 @@ class Batch implements BatchInterface
                     new Pagination($nextItem, $total)
                 );
             }
-            $this->log->debug('getTraversable.batchResult.processFinish');
+            $this->logger->debug('getTraversable.batchResult.processFinish');
         }
-        $this->log->debug('getTraversable.finish');
+        $this->logger->debug('getTraversable.finish');
     }
 
     /**
      * @param bool $isHaltOnError
      *
-     * @return Generator
+     * @return Generator<Response>
      * @throws BaseException
      * @throws Exceptions\TransportException
      */
     private function getTraversableBatchResults(bool $isHaltOnError): Generator
     {
-        $this->log->debug(
+        $this->logger->debug(
             'getTraversableBatchResults.start',
             [
                 'commandsCount' => $this->commands->count(),
@@ -519,7 +672,7 @@ class Batch implements BatchInterface
         $batchQueryCounter = 0;
         while (count($apiCommands)) {
             $batchQuery = array_splice($apiCommands, 0, self::MAX_BATCH_PACKET_SIZE);
-            $this->log->debug(
+            $this->logger->debug(
                 'getTraversableBatchResults.batchQuery',
                 [
                     'batchQueryNumber' => $batchQueryCounter,
@@ -533,18 +686,18 @@ class Batch implements BatchInterface
             $batchQueryCounter++;
             yield $batchResult;
         }
-        $this->log->debug('getTraversableBatchResults.finish');
+        $this->logger->debug('getTraversableBatchResults.finish');
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     private function convertToApiCommands(): array
     {
         $apiCommands = [];
         foreach ($this->commands as $itemCommand) {
             /**
-             * @var $itemCommand Command
+             * @var Command $itemCommand
              */
             $apiCommands[$itemCommand->getName() ?? $itemCommand->getUuid()->toString()] = sprintf(
                 '%s?%s',

@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="vendor/autoload.php"
+         bootstrap="tests/bootstrap.php"
          failOnRisky="true"
          failOnWarning="true">
     <coverage>
@@ -15,8 +15,11 @@
         <ini name="error_reporting" value="-1"/>
     </php>
     <testsuites>
-        <testsuite name="Bitrix24 PHP SDK unit tests suite">
+        <testsuite name="unit_tests">
             <directory>./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration_tests">
+            <directory>./tests/Integration</directory>
         </testsuite>
     </testsuites>
 </phpunit>

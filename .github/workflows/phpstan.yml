@@ -5,16 +5,49 @@ on:
 name: PHPStan checks
 
 jobs:
-  phpstan:
-    name: PHPStan
+  static-analysis:
+    name: "PHPStan"
+    runs-on: "ubuntu-latest"
 
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+        dependencies:
+          - "lowest"
+          - "highest"
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: "actions/checkout@v2"
 
-      - name: PHPStan
-        uses: docker://oskarstark/phpstan-ga
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
         with:
-          args: analyse
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          extensions: mbstring
+          tools: composer:v2
+
+      - name: "Install lowest dependencies"
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest"
+
+      - name: "Install highest dependencies"
+        if: ${{ matrix.dependencies == 'highest' }}
+        run: "composer update --no-interaction --no-progress --no-suggest"
+
+      - name: "PHPStan"
+        run: "composer phpstan-analyse"
+
+      - name: "is PHPStan check succeeded"
+        if: ${{ success() }}
+        run: |
+          echo '✅ PHPStan check pass, congratulations!'
+
+      - name: "is PHPStan check failed"
+        if: ${{ failure() }}
+        run: |
+          echo '::error:: ❗️ PHPStan check failed (╯°益°)╯彡┻━┻'

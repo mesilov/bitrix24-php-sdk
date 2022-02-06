@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Tests\Unit\Services\CRM;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullBatch;
+use Bitrix24\SDK\Tests\Unit\Stubs\NullBulkItemsReader;
 use Bitrix24\SDK\Tests\Unit\Stubs\NullCore;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -85,6 +86,11 @@ class CRMServiceBuilderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->serviceBuilder = (new ServiceBuilder(new NullCore(), new NullBatch(), new NullLogger()))->getCRMScope();
+        $this->serviceBuilder = (new ServiceBuilder(
+            new NullCore(),
+            new NullBatch(),
+            new NullBulkItemsReader(),
+            new NullLogger()
+        ))->getCRMScope();
     }
 }

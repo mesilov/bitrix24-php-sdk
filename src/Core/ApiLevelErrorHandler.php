@@ -33,7 +33,7 @@ class ApiLevelErrorHandler
     }
 
     /**
-     * @param array $responseBody
+     * @param array<string,string> $responseBody
      *
      * @throws QueryLimitExceededException
      * @throws BaseException
