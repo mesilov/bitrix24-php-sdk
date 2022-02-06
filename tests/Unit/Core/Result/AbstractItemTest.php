@@ -36,12 +36,4 @@ class AbstractItemTest extends TestCase
         };
         unset($testItem->ID);
     }
-
-    /**
-     * @covers \Bitrix24\SDK\Core\Result\AbstractItem::__unset
-     */
-    public function testFailure(): void
-    {
-        $this->assertTrue(false);
-    }
 }

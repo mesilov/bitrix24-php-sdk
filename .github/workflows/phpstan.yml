@@ -47,7 +47,7 @@ jobs:
         run: |
           echo '✅ PHPStan check pass, congratulations!'
 
-      - name: "is unit tests tests failed"
+      - name: "is PHPStan check failed"
         if: ${{ failure() }}
         run: |
           echo '::error:: ❗️ PHPStan check failed (╯°益°)╯彡┻━┻'
