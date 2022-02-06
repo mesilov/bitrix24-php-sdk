@@ -8,7 +8,7 @@ on:
 
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
-  BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
+
 jobs:
   tests:
     name: "Integration tests"
@@ -36,11 +36,15 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
+        env:
+          BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
 
       - name: "Install dependencies"
         run: |
-          printenv BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK
           composer update ${{ env.COMPOSER_FLAGS }}
 
-      - name: "run unit tests"
-        run: "composer phpunit-run-integration-tests"
+      - name: "Run integration tests"
+        run: |
+          printenv BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK
+          printenv
+          composer phpunit-run-integration-tests
