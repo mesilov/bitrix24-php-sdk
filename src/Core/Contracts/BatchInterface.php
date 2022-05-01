@@ -79,5 +79,14 @@ interface BatchInterface
      */
     public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator;
 
-    //todo add updateEntityItems
+    /**
+     * Update entity items with batch call
+     *
+     * @param string            $apiMethod
+     * @param array<int, array> $entityItems
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws BaseException
+     */
+    public function updateEntityItems(string $apiMethod, array $entityItems): Generator;
 }

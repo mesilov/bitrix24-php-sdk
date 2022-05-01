@@ -1,5 +1,14 @@
 # bitrix24-php-sdk change log
 
+## 2.0-alpha.7 — 2.05.2022
+
+### Added
+
+* add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and integration test
+* add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
+* add in scope «CRM» `Services\CRM\Deal\Service\Batch::update` batch update deals
+
+
 ## 2.0-alpha.6 — 7.02.2021
 
 ### Added

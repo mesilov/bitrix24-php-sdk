@@ -165,6 +165,83 @@ class Batch implements BatchInterface
     }
 
     /**
+     * Update entity items with batch call
+     *
+     * Update elements in array with structure
+     * element_id => [
+     *  'fields' => [], // required element fields to update
+     *  'params' => []  // optional fields
+     * ]
+     *
+     * @param string            $apiMethod
+     * @param array<int, array> $entityItems
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function updateEntityItems(string $apiMethod, array $entityItems): Generator
+    {
+        $this->logger->debug(
+            'updateEntityItems.start',
+            [
+                'apiMethod'   => $apiMethod,
+                'entityItems' => $entityItems,
+            ]
+        );
+
+        try {
+            $this->clearCommands();
+            foreach ($entityItems as $entityItemId => $entityItem) {
+                if (!is_int($entityItemId)) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'invalid type «%s» of entity id «%s», entity id must be integer type',
+                            gettype($entityItemId),
+                            $entityItemId
+                        )
+                    );
+                }
+                if (!array_key_exists('fields', $entityItem)) {
+                    throw new InvalidArgumentException(
+                        sprintf('array key «fields» not found in entity item with id %s', $entityItemId)
+                    );
+                }
+
+                $this->registerCommand($apiMethod, [
+                    'id'     => $entityItemId,
+                    'fields' => $entityItem['fields'],
+                    'params' => $entityItem['params'],
+                ]);
+            }
+
+            foreach ($this->getTraversable(true) as $cnt => $updatedItemResult) {
+                yield $cnt => $updatedItemResult;
+            }
+        } catch (InvalidArgumentException $exception) {
+            $errorMessage = sprintf('batch update entity items: %s', $exception->getMessage());
+            $this->logger->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+            throw $exception;
+        } catch (\Throwable $exception) {
+            $errorMessage = sprintf('batch update entity items: %s', $exception->getMessage());
+            $this->logger->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+
+            throw new BaseException($errorMessage, $exception->getCode(), $exception);
+        }
+
+        $this->logger->debug('updateEntityItems.finish');
+    }
+
+    /**
      * Register api command to command collection for batch calls
      *
      * @param string             $apiMethod
@@ -261,14 +338,15 @@ class Batch implements BatchInterface
         array $select,
         ?int $limit = null
     ): Generator {
-        $this->logger->debug('getTraversableList.start',
-                             [
-                                 'apiMethod' => $apiMethod,
-                                 'order'     => $order,
-                                 'filter'    => $filter,
-                                 'select'    => $select,
-                                 'limit'     => $limit,
-                             ]
+        $this->logger->debug(
+            'getTraversableList.start',
+            [
+                'apiMethod' => $apiMethod,
+                'order'     => $order,
+                'filter'    => $filter,
+                'select'    => $select,
+                'limit'     => $limit,
+            ]
         );
 
         // strategy.3 — ID filter, batch, no count, order
