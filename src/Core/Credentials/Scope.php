@@ -17,11 +17,12 @@ class Scope
      * @var string[]
      */
     protected array $availableScope = [
-        'app',
         'bizproc',
         'calendar',
         'call',
+        'cashbox',
         'catalog',
+        'configuration.import',
         'contact_center',
         'crm',
         'delivery',
@@ -31,6 +32,7 @@ class Scope
         'entity',
         'faceid',
         'forum',
+        'iblock',
         'im',
         'imbot',
         'imopenlines',
@@ -47,15 +49,23 @@ class Scope
         'pull',
         'pull_channel',
         'rating',
+        'rpa',
         'sale',
+        'salescenter',
         'smile',
+        'socialnetwork',
         'sonet_group',
         'task',
+        'tasks',
         'tasks_extended',
         'telephony',
         'timeman',
         'user',
+        'user.userfield',
+        'user_basic',
+        'user_brief',
         'userconsent',
+        'userfieldconfig',
     ];
 
     /**

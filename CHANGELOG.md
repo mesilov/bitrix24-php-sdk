@@ -1,6 +1,14 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.6 — 7.02.2021
+## 2.0-alpha.7 — 02.05.2022
+
+
+### Changed
+* update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
+
+
+
+## 2.0-alpha.6 — 7.02.2022
 
 ### Added
 
