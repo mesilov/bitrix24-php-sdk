@@ -1,6 +1,11 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.6 — 7.02.2021
+## 2.0-alpha.7 — 7.05.2022
+
+### Added
+* add `Leads` [добавить поддержку лидов](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
+
+## 2.0-alpha.6 — 7.02.2022
 
 ### Added
 
