@@ -1,6 +1,17 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.6 — 7.02.2021
+## 2.0-alpha.7 — 7.05.2022
+
+### Added
+
+* add CRM Activity support [добавить поддержку дел](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add in scope «CRM» `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
+
+### Bugfix
+
+* add bugfix for batch method for reverse order queries
+
+## 2.0-alpha.6 — 7.02.2022
 
 ### Added
 

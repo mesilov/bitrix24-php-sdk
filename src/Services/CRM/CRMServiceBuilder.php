@@ -170,4 +170,20 @@ class CRMServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    /**
+     * @return Activity\Service\Activity
+     */
+    public function activity(): Activity\Service\Activity
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Activity\Service\Activity(
+                new Activity\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
