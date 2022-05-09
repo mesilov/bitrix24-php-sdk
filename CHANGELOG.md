@@ -7,7 +7,7 @@
 * add CRM Activity support [добавить поддержку дел](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
 * add in scope «CRM» `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
 * add service for work with user consent agreement [добавить поддержку сущности «Соглашения»](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
-* add scope `UserConsent` 
+* add scope `UserConsent` for ServiceBuilder
 
 ### Bugfix
 
