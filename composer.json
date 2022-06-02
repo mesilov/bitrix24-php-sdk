@@ -22,19 +22,19 @@
     "ext-curl": "*",
     "psr/log": "^1.1.4 || ^2.0 || ^3.0",
     "fig/http-message-util": "1.1.*",
-    "symfony/http-client": "5.4.*",
+    "symfony/http-client": "5.4.* || 6.*",
     "symfony/http-client-contracts": "^2.5",
-    "symfony/event-dispatcher": "5.4.*",
+    "symfony/event-dispatcher": "5.4.* || 6.*",
     "ramsey/uuid": "^4.2.3"
   },
   "require-dev": {
     "monolog/monolog": "2.1.*",
-    "symfony/console": "5.4.*",
-    "symfony/dotenv": "5.4.*",
-    "symfony/debug-bundle": "5.4.*",
-    "phpstan/phpstan": "1.1.*",
+    "symfony/console": "5.4.* || 6.*",
+    "symfony/dotenv": "5.4.* || 6.*",
+    "symfony/debug-bundle": "5.4.* || 6.*",
+    "phpstan/phpstan": "1.*",
     "phpunit/phpunit": "9.5.*",
-    "symfony/stopwatch": "5.4.*",
+    "symfony/stopwatch": "5.4.* || 6.*",
     "roave/security-advisories": "dev-master"
   },
   "autoload": {

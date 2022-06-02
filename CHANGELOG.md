@@ -1,6 +1,16 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.6 — 7.02.2021
+## 2.0-alpha.7 — 7.06.2022
+
+### Added
+
+* add `Placements` [add placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
+
+### Changed
+
+* bump `symfony/*` to `6.*` version requirement.
+
+## 2.0-alpha.6 — 7.02.2022
 
 ### Added
 
