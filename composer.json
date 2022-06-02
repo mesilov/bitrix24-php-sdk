@@ -23,7 +23,7 @@
     "psr/log": "^1.1.4 || ^2.0 || ^3.0",
     "fig/http-message-util": "1.1.*",
     "symfony/http-client": "5.4.* || 6.*",
-    "symfony/http-client-contracts": "^2.5",
+    "symfony/http-client-contracts": "^2.5 || ^3.*",
     "symfony/event-dispatcher": "5.4.* || 6.*",
     "ramsey/uuid": "^4.2.3"
   },
