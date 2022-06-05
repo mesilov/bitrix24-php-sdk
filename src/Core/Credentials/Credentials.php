@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core\Credentials;
 
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Application\Requests\Placement\PlacementRequest;
 
 /**
  * Class Credentials
@@ -127,6 +128,22 @@ class Credentials
             $accessToken,
             $applicationProfile,
             $domainUrl
+        );
+    }
+
+    /**
+     * @param \Bitrix24\SDK\Application\Requests\Placement\PlacementRequest $placementRequest
+     * @param \Bitrix24\SDK\Core\Credentials\ApplicationProfile             $applicationProfile
+     *
+     * @return self
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public static function initFromPlacementRequest(PlacementRequest $placementRequest, ApplicationProfile $applicationProfile): self
+    {
+        return self::createForOAuth(
+            $placementRequest->getAccessToken(),
+            $applicationProfile,
+            $placementRequest->getDomainUrl()
         );
     }
 }

@@ -5,12 +5,13 @@
 ### Added
 
 * WIP!!1111 add `Placements` [add placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
-*
+* 
 * add `ApplicationStatus` with application status codes description
 * add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
 * add fabric method `ApplicationProfile::initFromArray` when application profile stored in ENV-variables
 * add `Bitrix24\SDK\Application\Requests\Placement\PlacementRequest` for application data from placements
-
+* add fabric method `Credentials::initFromPlacementRequest` when application init form placement request
+* 
 ### Changed
 
 * bump `symfony/*` to `6.*` version requirement.
