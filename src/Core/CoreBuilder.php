@@ -58,6 +58,7 @@ class CoreBuilder
     public function withCredentials(Credentials $credentials): self
     {
         $this->credentials = $credentials;
+
         return $this;
     }
 
@@ -118,7 +119,7 @@ class CoreBuilder
         if ($this->webhookUrl !== null) {
             $this->credentials = Credentials::createForWebHook($this->webhookUrl);
         } elseif ($this->credentials === null) {
-            throw new InvalidArgumentException('you must set webhook url or oauth credentials');
+            throw new InvalidArgumentException('you must set webhook url or oauth credentials before call method build');
         }
 
         if ($this->apiClient === null) {
