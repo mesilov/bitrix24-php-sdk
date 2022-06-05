@@ -9,6 +9,7 @@
 ### Changed
 
 * bump `symfony/*` to `6.*` version requirement.
+* fix type compatible errors for `Core\Result\AbstractItem`
 
 ## 2.0-alpha.6 — 7.02.2022
 
