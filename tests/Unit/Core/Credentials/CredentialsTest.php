@@ -30,6 +30,42 @@ class CredentialsTest extends TestCase
     }
 
     /**
+     * @return void
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     */
+    public function testDomainUrlWithoutProtocol(): void
+    {
+        $credentials = Credentials::createForOAuth(
+            new AccessToken('', '', 0),
+            new ApplicationProfile('', '', new Scope(['crm'])),
+            'bitrix24-php-sdk-playground.bitrix24.ru'
+        );
+        $this->assertEquals(
+            'https://bitrix24-php-sdk-playground.bitrix24.ru',
+            $credentials->getDomainUrl()
+        );
+    }
+
+    /**
+     * @return void
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     */
+    public function testDomainUrlWithProtocol(): void
+    {
+        $credentials = Credentials::createForOAuth(
+            new AccessToken('', '', 0),
+            new ApplicationProfile('', '', new Scope(['crm'])),
+            'https://bitrix24-php-sdk-playground.bitrix24.ru'
+        );
+        $this->assertEquals(
+            'https://bitrix24-php-sdk-playground.bitrix24.ru',
+            $credentials->getDomainUrl()
+        );
+    }
+
+    /**
      * @return \Generator
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException

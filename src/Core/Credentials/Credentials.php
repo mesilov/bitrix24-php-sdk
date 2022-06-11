@@ -39,6 +39,12 @@ class Credentials
         $this->accessToken = $accessToken;
         $this->applicationProfile = $applicationProfile;
 
+        if ($domainUrl !== null) {
+            $parseResult = parse_url($domainUrl);
+            if (!array_key_exists('scheme', $parseResult)) {
+                $domainUrl = 'https://' . $domainUrl;
+            }
+        }
         if (($domainUrl !== null) && filter_var($domainUrl, FILTER_VALIDATE_URL) === false) {
             throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl));
         }
