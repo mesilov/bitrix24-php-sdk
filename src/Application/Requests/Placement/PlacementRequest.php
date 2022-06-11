@@ -44,6 +44,10 @@ class PlacementRequest extends AbstractRequest
         if ($options === null) {
             throw new InvalidArgumentException('invalid data in PLACEMENT_OPTIONS json payload');
         }
+        // fix "undefined" string in options when placement loaded in telephony settings
+        if (!is_array($options)) {
+            $options = [];
+        }
         $this->placementOptions = $options;
     }
 

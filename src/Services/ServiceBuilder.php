@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Services;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\Main\MainServiceBuilder;
+use Bitrix24\SDK\Services\Placement\PlacementServiceBuilder;
 
 /**
  * Class ServiceBuilder
@@ -46,6 +47,18 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new MainServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    /**
+     * @return PlacementServiceBuilder
+     */
+    public function getPlacementScope(): PlacementServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new PlacementServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
