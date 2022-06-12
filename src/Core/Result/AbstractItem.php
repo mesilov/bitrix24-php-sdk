@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Result;
 
+use ArrayIterator;
 use Bitrix24\SDK\Core\Exceptions\ImmutableResultViolationException;
+use IteratorAggregate;
+use Traversable;
 
 /**
  * Class AbstractItem
  *
  * @package Bitrix24\SDK\Core\Result
  */
-abstract class AbstractItem implements \IteratorAggregate
+abstract class AbstractItem implements IteratorAggregate
 {
     protected array $data;
 
@@ -71,9 +74,9 @@ abstract class AbstractItem implements \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator():Traversable
     {
-        return new \ArrayIterator($this->data);
+        return new ArrayIterator($this->data);
     }
 
     /**

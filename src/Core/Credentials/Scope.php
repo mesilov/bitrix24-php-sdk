@@ -61,9 +61,9 @@ class Scope
         'telephony',
         'timeman',
         'user',
-        'user.userfield',
         'user_basic',
         'user_brief',
+        'user.userfield',
         'userconsent',
         'userfieldconfig',
     ];

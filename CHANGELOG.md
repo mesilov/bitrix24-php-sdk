@@ -12,9 +12,18 @@
 * add in scope «CRM» `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
 * add service for work with user consent agreement [добавить поддержку сущности «Соглашения»](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
 * add scope `UserConsent` for ServiceBuilder
+* add `Placements` [add placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
+* add `Placement\Service\UserFieldType` service for work with user fields embedding
+* add `ApplicationStatus` with application status codes description
+* add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
+* add fabric method `ApplicationProfile::initFromArray` when application profile stored in ENV-variables
+* add `Bitrix24\SDK\Application\Requests\Placement\PlacementRequest` for application data from placements
+* add fabric method `Credentials::initFromPlacementRequest` when application init form placement request
 
 ### Changed
 * update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
+* bump `symfony/*` to `6.*` version requirement.
+* fix type compatible errors for `Core\Result\AbstractItem`
 
 ### Bugfix
 
