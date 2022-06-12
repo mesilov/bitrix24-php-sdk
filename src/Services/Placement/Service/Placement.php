@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Placement\Service;
 
-use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Placement\Result\PlacementBindResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementLocationCodesResult;
-use Bitrix24\SDK\Services\Placement\Result\PlacementLocationInformationResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementsLocationInformationResult;
 use Bitrix24\SDK\Services\Placement\Result\PlacementUnbindResult;
 
@@ -51,7 +49,7 @@ class Placement extends AbstractService
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @link https://training.bitrix24.com/rest_help/application_embedding/metods/placement_unbind.php
      */
-    public function unbind(string $placementCode, ?string $handlerUrl): PlacementUnbindResult
+    public function unbind(string $placementCode, ?string $handlerUrl = null): PlacementUnbindResult
     {
         return new PlacementUnbindResult(
             $this->core->call(
