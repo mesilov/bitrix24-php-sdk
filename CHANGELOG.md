@@ -5,7 +5,7 @@
 ### Added
 
 * WIP!!1111 add `Placements` [add placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
-* 
+* add `Placement\Service\UserFieldType` service for work with user fields embedding
 * add `ApplicationStatus` with application status codes description
 * add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
 * add fabric method `ApplicationProfile::initFromArray` when application profile stored in ENV-variables
