@@ -7,6 +7,8 @@
 * add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
 * add in scope «CRM» `Services\CRM\Deal\Service\Batch::update` batch update deals
+* add `Leads` [добавить поддержку лидов](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
+ 
 
 ### Changed
 * update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
