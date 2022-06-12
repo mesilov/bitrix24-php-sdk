@@ -8,12 +8,18 @@
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
 * add in scope «CRM» `Services\CRM\Deal\Service\Batch::update` batch update deals
 * add `Leads` [добавить поддержку лидов](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
+* add CRM Activity support [добавить поддержку дел](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add in scope «CRM» `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
  
 
 ### Changed
 * update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
 
-## 2.0-alpha.6 — 7.02.2021
+### Bugfix
+
+* add bugfix for batch method for reverse order queries
+
+## 2.0-alpha.6 — 7.02.2022
 
 ### Added
 

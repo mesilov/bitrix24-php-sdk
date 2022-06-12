@@ -376,7 +376,6 @@ class Batch implements BatchInterface
         // todo проверили, что если есть limit, то он >1
         // todo проверили, что в фильтре нет поля ID, т.к. мы с ним будем работать
 
-
         $firstResultPage = $this->core->call(
             $apiMethod,
             [
@@ -387,6 +386,9 @@ class Batch implements BatchInterface
             ]
         );
         $totalElementsCount = $firstResultPage->getResponseData()->getPagination()->getTotal();
+        $this->logger->debug('getTraversableList.totalElementsCount', [
+            'totalElementsCount' => $totalElementsCount,
+        ]);
         // filtered elements count less than or equal one result page(50 elements)
         $elementsCounter = 0;
         if ($totalElementsCount <= self::MAX_ELEMENTS_IN_PAGE) {
@@ -407,7 +409,7 @@ class Batch implements BatchInterface
         $lastElementIdInFirstPage = null;
         foreach ($firstResultPage->getResponseData()->getResult()->getResultData() as $cnt => $listElement) {
             $elementsCounter++;
-            $lastElementIdInFirstPage = $listElement['ID'];
+            $lastElementIdInFirstPage = (int)$listElement['ID'];
             if ($limit !== null && $elementsCounter > $limit) {
                 return;
             }
@@ -429,8 +431,17 @@ class Batch implements BatchInterface
                 'start'  => 0,
             ]
         );
-
         $lastElementId = (int)$lastResultPage->getResponseData()->getResult()->getResultData()[0]['ID'];
+        // reverse order if you need
+        if ($lastElementIdInFirstPage > $lastElementId) {
+            $tmp = $lastElementIdInFirstPage;
+            $lastElementIdInFirstPage = $lastElementId;
+            $lastElementId = $tmp;
+        }
+        $this->logger->debug('getTraversableList.lastElementsId', [
+            'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
+            'lastElementId'            => $lastElementId,
+        ]);
 
         // register commands with updated filter
         //more than one page in results -  register list commands
