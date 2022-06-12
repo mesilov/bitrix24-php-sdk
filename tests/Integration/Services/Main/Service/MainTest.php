@@ -40,13 +40,13 @@ class MainTest extends TestCase
     }
 
     /**
-     * @covers  Bitrix24\SDK\Services\Main\Service\Main::getAvailableMethods
+     * @covers \Bitrix24\SDK\Services\Main\Service\Main::getAvailableMethods
      * @testdox test methods list
      * @return void
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
-    public function testList(): void
+    public function testGetAvailableMethods(): void
     {
         $this->assertIsArray($this->mainService->getAvailableMethods()->getResponseData()->getResult()->getResultData());
     }
