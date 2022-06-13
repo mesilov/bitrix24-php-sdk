@@ -4,30 +4,40 @@
 
 ### Added
 
-* add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and integration test
+* add new scope `UserConsent` and services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
+* add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
+* add new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
+* add new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
+  integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
-* add in scope «CRM» `Services\CRM\Deal\Service\Batch::update` batch update deals
-* add `Leads` [добавить поддержку лидов](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
-* add CRM Activity support [добавить поддержку дел](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
-* add in scope «CRM» `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
-* add service for work with user consent agreement [добавить поддержку сущности «Соглашения»](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
-* add scope `UserConsent` for ServiceBuilder
-* add `Placements` [add placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
-* add `Placement\Service\UserFieldType` service for work with user fields embedding
+* add in scope `CRM` for entity Deal method `Services\CRM\Deal\Service\Batch::update` batch update deals
+* add in scope `CRM` for entity Contact method `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
+* add in scope `Placements` service `Placement\Service\UserFieldType` for work with user fields embedding
 * add `ApplicationStatus` with application status codes description
 * add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
 * add fabric method `ApplicationProfile::initFromArray` when application profile stored in ENV-variables
 * add `Bitrix24\SDK\Application\Requests\Placement\PlacementRequest` for application data from placements
 * add fabric method `Credentials::initFromPlacementRequest` when application init form placement request
+* add method `Services\Main\Service::getServerTime` returns current server time in the format YYYY-MM-DDThh:mm:ss±hh:mm.
+* add method `Services\Main\Service::getCurrentUserProfile` return basic Information about the current user without any scopes
+* add method `Services\Main\Service::getAccessName` returns access permission names.
+* add method `Services\Main\Service::checkUserAccess` Checks if the current user has at least one permission of those specified by the
+  ACCESS parameter.
+* add method `Services\Main\Service::getMethodAffordability` Method returns 2 parameters - isExisting and isAvailable
 
 ### Changed
+
 * update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
 * bump `symfony/*` to `6.*` version requirement.
-* fix type compatible errors for `Core\Result\AbstractItem`
+* method `Services\Main\Service::getAvailableMethods` marks as deprecated
+* method `Services\Main\Service::getAllMethods` marks as deprecated
+* method `Services\Main\Service::getMethodsByScope` marks as deprecated
 
 ### Bugfix
 
 * add bugfix for batch method for reverse order queries
+* fix type compatible errors for `Core\Result\AbstractItem`
 
 ## 2.0-alpha.6 — 7.02.2022
 

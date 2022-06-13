@@ -16,6 +16,9 @@ class PlacementRequest extends AbstractRequest
     private string $memberId;
     private ApplicationStatus $applicationStatus;
     private string $code;
+    /**
+     * @var array<string, mixed>
+     */
     private array $placementOptions;
     private string $domainUrl;
     private string $languageCode;

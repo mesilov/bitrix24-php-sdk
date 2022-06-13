@@ -173,8 +173,8 @@ class Batch implements BatchInterface
      *  'params' => []  // optional fields
      * ]
      *
-     * @param string            $apiMethod
-     * @param array<int, array> $entityItems
+     * @param string                           $apiMethod
+     * @param array<int, array<string, mixed>> $entityItems
      *
      * @return Generator<int, ResponseData>|ResponseData[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
