@@ -83,7 +83,7 @@ class Core implements CoreInterface
                     break;
                 case StatusCodeInterface::STATUS_UNAUTHORIZED:
                     $body = $apiCallResponse->toArray(false);
-                    $this->logger->notice(
+                    $this->logger->debug(
                         'UNAUTHORIZED request',
                         [
                             'body' => $body,
