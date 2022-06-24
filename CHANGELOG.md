@@ -8,6 +8,8 @@
 * add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
 * add new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
 * add new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add support Application level events: `ONAPPINSTALL`
+  and `ONAPPUNINSTALL` [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
 * add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
   integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
@@ -38,7 +40,8 @@
 
 * add bugfix for batch method for reverse order queries
 * fix type compatible errors for `Core\Result\AbstractItem`
-* fix error in `RenewedAccessToken` DTO, remove `Scope` enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
+* fix error in `RenewedAccessToken` DTO, remove `Scope`
+  enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
 
 ## 2.0-alpha.6 — 7.02.2022
 
