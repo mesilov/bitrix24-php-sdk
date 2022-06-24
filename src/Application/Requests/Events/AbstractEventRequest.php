@@ -19,7 +19,9 @@ abstract class AbstractEventRequest extends AbstractRequest
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        parse_str($request->getContent(), $this->eventPayload);
+        $payload = [];
+        parse_str($request->getContent(), $payload);
+        $this->eventPayload = $payload;
 
         $this->eventCode = $this->eventPayload['event'];
         $this->timestamp = (int)$this->eventPayload['ts'];
