@@ -121,7 +121,8 @@ Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. 
 
 ### Tests
 
-Tests locate in folder `tests` and we have two test types
+Tests locate in folder `tests` and we have two test types.
+In folder tests create file `.env.local` and fill environment variables from `.env`.
 
 #### Unit tests
 
