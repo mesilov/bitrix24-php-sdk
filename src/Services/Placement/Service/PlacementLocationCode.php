@@ -72,7 +72,7 @@ class PlacementLocationCode
     public const CRM_DETAIL_SEARCH = 'CRM_DETAIL_SEARCH';
 
 
-    // Telephony scope
+    // ExternalLine scope
     public const CALL_CARD = 'CALL_CARD'; // Call ID screen
     public const TELEPHONY_ANALYTICS_MENU = 'TELEPHONY_ANALYTICS_MENU';
 

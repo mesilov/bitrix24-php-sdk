@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\Telephony;
+
+use Bitrix24\SDK\Services\AbstractServiceBuilder;
+use Bitrix24\SDK\Services\Telephony\Service\ExternalLine;
+
+
+class TelephonyServiceBuilder extends AbstractServiceBuilder
+{
+    /**
+     * @return ExternalLine
+     */
+    public function externalline(): ExternalLine
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new ExternalLine($this->core, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+}
