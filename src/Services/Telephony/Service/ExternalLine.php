@@ -6,29 +6,30 @@ namespace Bitrix24\SDK\Services\Telephony\Service;
 
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Telephony\Result\ExternalLineAddResult;
+use Bitrix24\SDK\Services\Telephony\Result\ExternalLinesResult;
 
 
 class ExternalLine extends AbstractService{
     /**
      * The method adds an outer line
      *
-     * @param string $number
-     * @param string $name
+     * @param string $lineNumber
+     * @param string $nameLine
      *
      * @return \Bitrix24\SDK\Services\Telephony\Result\ExternalLineAddResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @link https://dev.1c-bitrix.ru/rest_help/scope_telephony/telephony/telephony_externalLine_add.php
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_add.php
      */
 
-    public function add(string $number , string $name): ExternalLineAddResult
+    public function add(string $lineNumber , string $nameLine): ExternalLineAddResult
     {
         return new ExternalLineAddResult(
           $this->core->call(
               'telephony.externalLine.add',
               [
-                  'NUMBER' => $number,
-                  'NAME' => $name,
+                  'NUMBER' => $lineNumber,
+                  'NAME' => $nameLine,
               ]
           )
         );
@@ -37,15 +38,15 @@ class ExternalLine extends AbstractService{
     /**
      * The method adds an outer line
      *
-     * @return \Bitrix24\SDK\Services\Telephony\Result\ExternalLineAddResult
+     * @return ExternalLinesResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @link https://dev.1c-bitrix.ru/rest_help/scope_telephony/telephony/telephony_externalLine_get.php
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_get.php
      */
 
-    public function get(): ExternalLineAddResult
+    public function get(): ExternalLinesResult
     {
-        return new ExternalLineAddResult(
+        return new ExternalLinesResult(
           $this->core->call(
               'telephony.externalLine.get',
               [

@@ -20,8 +20,7 @@ class ExternalLineTest extends TestCase {
      */
     public function testAdd(): void
     {
-       // self::assertEquals(1, $this->externalLineService->add('79117654321','newline')->isSuccess());
-       self::assertTrue($this->externalLineService->add('79117654321','newline')->isSuccess());
+       self::assertGreaterThan(1,$this->externalLineService->add((string)time(),sprintf('phpUnit-%s',time()))->getId());
 
     }
 
@@ -32,7 +31,10 @@ class ExternalLineTest extends TestCase {
      */
     public function testGet(): void
     {
-        self::assertTrue((bool)$this->externalLineService->get()->getCoreResponse()->getResponseData()->getResult()->getResultData());
+
+        $this->externalLineService->add((string)time(),sprintf('phpUnit-%s',time()));
+        $this->externalLineService->add((string)time(),sprintf('phpUnit-%s',time()));
+        self::assertGreaterThanOrEqual(2, $this->externalLineService->get()->getExternalLines());
     }
 
     /**

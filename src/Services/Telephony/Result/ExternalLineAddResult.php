@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Telephony\Result;
 
+use Bitrix24\SDK\Core\Contracts\AddedItemIdResultInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
 
-class ExternalLineAddResult extends AbstractResult
+class ExternalLineAddResult extends AbstractResult implements AddedItemIdResultInterface
 {
     /**
-     * @return bool
+     * @return int
      * @throws BaseException
      */
-    public function isSuccess(): bool
+    public function getId(): int
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()['ID'];
     }
 
 }
