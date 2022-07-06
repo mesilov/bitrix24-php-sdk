@@ -7,6 +7,8 @@ namespace Bitrix24\SDK\Services\Telephony\Service;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Telephony\Result\ExternalLineAddResult;
 use Bitrix24\SDK\Services\Telephony\Result\ExternalLinesResult;
+use Bitrix24\SDK\Services\Telephony\Result\ExternalLineDeleteResult;
+use Bitrix24\SDK\Services\Telephony\Result\ExternalLineUpdateResult;
 
 
 class ExternalLine extends AbstractService{
@@ -53,6 +55,60 @@ class ExternalLine extends AbstractService{
 
               ]
           )
+        );
+    }
+
+    /**
+     * The method allows you to change the name of the external line
+     *
+     * @param string $lineNumber
+     * @param string $nameLine
+     *
+     * @return ExternalLineUpdateResult
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_update.php
+     */
+
+    public function update(string $lineNumber , string $nameLine): ExternalLineUpdateResult
+    {
+      /*  var_dump($this->core->call('telephony.externalLine.update',
+            [
+                'NUMBER'=>$lineNumber,
+                'NAME'=>$nameLine,
+            ]
+        )
+            ->getResponseData()->getResult()->getResultData()
+        );exit();*/
+        return new ExternalLineUpdateResult(
+            $this->core->call('telephony.externalLine.update',
+            [
+                'NUMBER'=>$lineNumber,
+                'NAME'=>$nameLine,
+            ]
+            )
+        );
+    }
+
+    /**
+     * The method for removing an external line.
+     *
+     * @param string $lineNumber
+     *
+     * @return ExternalLineDeleteResult
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_delete.php
+     */
+
+    public function delete(string $lineNumber): ExternalLineDeleteResult
+    {
+        return new ExternalLineDeleteResult(
+            $this->core->call('telephony.externalLine.delete',
+                [
+                    'NUMBER'=>$lineNumber,
+                ]
+            )
         );
     }
 }
