@@ -72,14 +72,6 @@ class ExternalLine extends AbstractService{
 
     public function update(string $lineNumber , string $nameLine): ExternalLineUpdateResult
     {
-      /*  var_dump($this->core->call('telephony.externalLine.update',
-            [
-                'NUMBER'=>$lineNumber,
-                'NAME'=>$nameLine,
-            ]
-        )
-            ->getResponseData()->getResult()->getResultData()
-        );exit();*/
         return new ExternalLineUpdateResult(
             $this->core->call('telephony.externalLine.update',
             [
