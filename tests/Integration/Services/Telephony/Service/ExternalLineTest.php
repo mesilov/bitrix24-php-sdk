@@ -58,11 +58,6 @@ class ExternalLineTest extends TestCase {
         var_dump($externalLineNameAfter);
         self::assertFalse(in_array($lineNameBefore,$externalLineNameAfter),sprintf('expected update %s line name see %s name',$lineNameBefore,$lineNameAfter));
 
-      /*
-      self::assertGreaterThan(1,$this->externalLineService->add('8765890978','oldName')->getId());
-      self::assertGreaterThan(1,$this->externalLineService->update('8765890978','newTestLine')->updateExternalLineId());
-      self::assertGreaterThan(1,$this->externalLineService->get()->getExternalLines());
-      */
     }
 
     /**
@@ -73,7 +68,7 @@ class ExternalLineTest extends TestCase {
     public function testDelete():void
     {
         $lineNumber = (string)time().(string)random_int(1,PHP_INT_MAX);
-var_dump($lineNumber);
+
         self::assertGreaterThan(1,$this->externalLineService->add($lineNumber,sprintf('phpUnit-%s',time()))->getId());
         $externalLineNumbersBefore = array_column($this->externalLineService->get()->getExternalLines(),'NUMBER');
 
@@ -81,7 +76,7 @@ var_dump($lineNumber);
         $externalLineNumbersAfter = array_column($this->externalLineService->get()->getExternalLines(),'NUMBER');
 
         $deletedLineNumber = array_values(array_diff($externalLineNumbersBefore,$externalLineNumbersAfter))[0];
-      var_dump(array_values(array_diff($externalLineNumbersBefore,$externalLineNumbersAfter)));
+     // var_dump(array_values(array_diff($externalLineNumbersBefore,$externalLineNumbersAfter)));
         self::assertEquals($lineNumber,$deletedLineNumber,sprintf('expected deleted %s number see %s number',$lineNumber,$deletedLineNumber));
     }
 
