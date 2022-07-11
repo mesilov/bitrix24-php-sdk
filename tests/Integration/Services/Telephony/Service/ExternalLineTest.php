@@ -21,6 +21,8 @@ class ExternalLineTest extends TestCase {
     public function testAdd(): void
     {
        self::assertGreaterThan(1,$this->externalLineService->add((string)time(),sprintf('phpUnit-%s',time()))->getId());
+       $res = $this->externalLineService->add((string)time(),sprintf('phpUnit-%s',time()))->getId();
+       var_dump($res);
 
     }
 
@@ -34,6 +36,8 @@ class ExternalLineTest extends TestCase {
       //  $this->externalLineService->add((string)time(),sprintf('phpUnit-%s',time()));
       //  $this->externalLineService->add((string)time(),sprintf('phpUnit-%s',time()));
         self::assertGreaterThanOrEqual(2, $this->externalLineService->get()->getExternalLines());
+        $res = $this->externalLineService->get()->getExternalLines();
+        var_dump($res);
     }
 
     /**

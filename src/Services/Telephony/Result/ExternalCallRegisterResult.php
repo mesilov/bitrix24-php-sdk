@@ -10,12 +10,12 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class ExternalCallRegisterResult extends AbstractResult
 {
     /**
-     * @return array
+     * @return \Bitrix24\SDK\Services\Telephony\Result\ExternalCallRegisterItemResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-
-    public function getExternalCallRegister(): array
+    public function getExternalCallRegister(): ExternalCallRegisterItemResult
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+        return new ExternalCallRegisterItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
     }
+
 }
