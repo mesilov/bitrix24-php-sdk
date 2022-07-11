@@ -39,7 +39,7 @@
 * add bugfix for batch method for reverse order queries
 * fix type compatible errors for `Core\Result\AbstractItem`
 * fix error in `RenewedAccessToken` DTO, remove `Scope` enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
-
+* fix error in `NetworkTimingParser`, [error in NetworkTimingsErrorInfo](https://github.com/mesilov/bitrix24-php-sdk/issues/277)
 ## 2.0-alpha.6 — 7.02.2022
 
 ### Added
