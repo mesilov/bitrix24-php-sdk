@@ -21,7 +21,6 @@ class NetworkTimingsParser
         // time_starttransfer:  0.092s
         //                   ----------
         //        time_total:  0.164s
-        var_dump($httpClientResponseInfo);
         $this->networkTimings = [
             // name lookup time in MICROSECONDS
             // https://curl.se/libcurl/c/CURLINFO_NAMELOOKUP_TIME.html
