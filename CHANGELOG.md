@@ -1,13 +1,14 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.7 — 13.06.2022
+## 2.0-alpha.7 — 15.07.2022
 
 ### Added
 
 * add new scope `UserConsent` and services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
 * add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
-* add new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
-* add new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add in scope `CRM` new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
+* add in scope `CRM` new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add in scope «Main» new service `Events`  [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
 * add support Application level events: `ONAPPINSTALL`
   and `ONAPPUNINSTALL` [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
 * add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
