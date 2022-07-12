@@ -49,12 +49,7 @@ class ExternalLine extends AbstractService{
     public function get(): ExternalLinesResult
     {
         return new ExternalLinesResult(
-          $this->core->call(
-              'telephony.externalLine.get',
-              [
-
-              ]
-          )
+            $this->core->call('telephony.externalLine.get')
         );
     }
 
@@ -70,14 +65,14 @@ class ExternalLine extends AbstractService{
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_update.php
      */
 
-    public function update(string $lineNumber , string $nameLine): ExternalLineUpdateResult
+    public function update(string $lineNumber, string $nameLine): ExternalLineUpdateResult
     {
         return new ExternalLineUpdateResult(
             $this->core->call('telephony.externalLine.update',
-            [
-                'NUMBER'=>$lineNumber,
-                'NAME'=>$nameLine,
-            ]
+                [
+                    'NUMBER' => $lineNumber,
+                    'NAME' => $nameLine,
+                ]
             )
         );
     }
@@ -98,7 +93,7 @@ class ExternalLine extends AbstractService{
         return new ExternalLineDeleteResult(
             $this->core->call('telephony.externalLine.delete',
                 [
-                    'NUMBER'=>$lineNumber,
+                    'NUMBER' => $lineNumber,
                 ]
             )
         );
