@@ -9,12 +9,14 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 
 class ExternalCallShowResult extends AbstractResult
 {
+    /*
     /**
-     * @return array
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @return bool
+     * @throws BaseException
      */
-    public function getExternalCalls(): array
+    /*
+    public function getExternalCalls(): bool
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
-    }
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+    }*/
 }

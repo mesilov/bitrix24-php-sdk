@@ -10,11 +10,11 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class ExternalCallHideResult extends AbstractResult
 {
     /**
-     * @return array
+     * @return bool
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function getExternalHideCalls(): array
+    public function getExternalHideCalls(): bool
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()->getResultData();
     }
 }

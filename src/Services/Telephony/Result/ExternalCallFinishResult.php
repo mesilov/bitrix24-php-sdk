@@ -10,11 +10,11 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class ExternalCallFinishResult extends AbstractResult
 {
     /**
-     * @return array
+     * @return \Bitrix24\SDK\Services\Telephony\Result\ExternalCallFinishItemResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function getFinishCallResult():array
+    public function getExternalCallFinish(): ExternalCallFinishItemResult
     {
-     return   $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+        return new ExternalCallFinishItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
     }
 }

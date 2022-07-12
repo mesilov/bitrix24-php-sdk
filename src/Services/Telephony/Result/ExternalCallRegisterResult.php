@@ -11,7 +11,7 @@ class ExternalCallRegisterResult extends AbstractResult
 {
     /**
      * @return \Bitrix24\SDK\Services\Telephony\Result\ExternalCallRegisterItemResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws BaseException
      */
     public function getExternalCallRegister(): ExternalCallRegisterItemResult
     {
