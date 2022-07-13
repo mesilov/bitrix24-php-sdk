@@ -31,27 +31,40 @@ class ExternalCallTest extends TestCase
     {
         //Подготовка данных
         // Тест
-       (string)$datetime = new DateTime('now');
-       $callStartDate = $datetime->format(DateTimeInterface::ATOM);
-       $leadId =  $this->leadService->add(['TITLE' => 'test lead'])->getId();
-       $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
-       $res =  $this->externalCallService->registerCall([
+        (string)$datetime = new DateTime('now');
+        $callStartDate = $datetime->format(DateTimeInterface::ATOM);
+        $phoneNumber = sprintf('+7%s',time());
+        $leadId = $this->leadService->add(
+            [
+                'TITLE' => 'test lead',
+                'PHONE' => [
+                    [
+                        'VALUE' => $phoneNumber,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
+        $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
+        $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
             'USER_ID' => $userId,
-            'PHONE_NUMBER' => '+79788045001',
+            'PHONE_NUMBER' => $phoneNumber,
             'CALL_START_DATE' => $callStartDate,
-            'CRM_CREATE' => 1,
+            'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
             'CRM_ENTITY_TYPE' => 'LEAD',
             'CRM_ENTITY_ID' => $leadId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
-            'LINE_NUMBER' => '+79767867656',
+            'LINE_NUMBER' => $phoneNumber,
             'TYPE' => 1,
         ])->getExternalCallRegister();
-        var_dump($res);
-        self::assertGreaterThan(1,$res);
-        self::assertTrue((bool)$res);
+
+        self::assertTrue((bool)$registerCallResult);
+        self::assertEquals($registerCallResult->CRM_ENTITY_ID,$leadId,sprintf('registered entity id : %s , and lead id: %s, should not differ',
+                $registerCallResult->CRM_ENTITY_ID,$leadId));
+
 
     }
 
@@ -59,106 +72,143 @@ class ExternalCallTest extends TestCase
      * @throws BaseException
      * @throws TransportException
      * @throws Exception
-     * @covers ExternalCall::showCallCard
+     * @covers ExternalCall::show
      */
     public function testShowCallCard(): void
     {
         (string)$datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
-        $leadId =  $this->leadService->add(['TITLE' => 'test lead'])->getId();
+        $phoneNumber = '+79788045001';
+        $leadId = $this->leadService->add(
+            [
+                'TITLE' => 'test lead',
+                'PHONE' => [
+                    [
+                        'VALUE' => $phoneNumber,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
-        $res =  $this->externalCallService->registerCall([
+        $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
             'USER_ID' => $userId,
-            'PHONE_NUMBER' => '+79788045001',
+            'PHONE_NUMBER' => $phoneNumber,
             'CALL_START_DATE' => $callStartDate,
-            'CRM_CREATE' => 1,
+            'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
             'CRM_ENTITY_TYPE' => 'LEAD',
             'CRM_ENTITY_ID' => $leadId,
-            'SHOW' => 1,
+            'SHOW' => 0,
             'CALL_LIST_ID' => 1,
-            'LINE_NUMBER' => '+79767867656',
-            'TYPE' => 1
-        ])->getExternalCallRegister()->CALL_ID;
-        $newRes = $this->externalCallService->showCallCard($res, 1);
-        var_dump($newRes);
-        self::assertGreaterThan(1,$this->externalCallService->showCallCard($res, 1));
+            'LINE_NUMBER' => $phoneNumber,
+            'TYPE' => 1,
+        ])->getExternalCallRegister();
+        self::assertTrue($this->externalCallService->show($registerCallResult->CALL_ID,$userId )->isShown());
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
      * @throws Exception
-     * @covers ExternalCall::hideCallCard
+     * @covers ExternalCall::hide
      */
     public function testHideCallCard(): void
     {
         (string)$datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
-        $leadId =  $this->leadService->add(['TITLE' => 'test lead'])->getId();
+        $phoneNumber = '+79788045001';
+        $leadId = $this->leadService->add(
+            [
+                'TITLE' => 'test lead',
+                'PHONE' => [
+                    [
+                        'VALUE' => $phoneNumber,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
-        $res =  $this->externalCallService->registerCall([
+        $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
-            'user_id' => $userId,
-            'PHONE_NUMBER' => '+79788045001',
+            'USER_ID' => $userId,
+            'PHONE_NUMBER' => $phoneNumber,
             'CALL_START_DATE' => $callStartDate,
-            'CRM_CREATE' => 1,
+            'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
             'CRM_ENTITY_TYPE' => 'LEAD',
             'CRM_ENTITY_ID' => $leadId,
-            'SHOW' => 1,
+            'SHOW' => 0,
             'CALL_LIST_ID' => 1,
-            'LINE_NUMBER' => '+79767867656',
-            'TYPE' => 1
-        ])->getExternalCallRegister()->CALL_ID;
-        $newRes = $this->externalCallService->hideCallCard($res, 1)->getExternalHideCalls();
-        var_dump($newRes);
-        self::assertTrue($this->externalCallService->hideCallCard($res, 1)->getExternalHideCalls());
+            'LINE_NUMBER' => $phoneNumber,
+            'TYPE' => 1,
+        ])->getExternalCallRegister();
+        self::assertTrue($this->externalCallService->hide($registerCallResult->CALL_ID, $userId)->isHided());
     }
 
     /**
      * @throws TransportException
      * @throws BaseException
      * @throws Exception
-     * @covers ExternalCall::finishСall
+     * @covers ExternalCall::finish
      */
-    public function testFinishCall(): void
+    public function testFinish(): void
     {
         (string)$datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
-        $leadId =  $this->leadService->add(['TITLE' => 'test lead'])->getId();
+        $phoneNumber = sprintf('+7%s', time());
+        $leadId = $this->leadService->add(
+            [
+                'TITLE' => 'test lead',
+                'PHONE' => [
+                    [
+                        'VALUE' => $phoneNumber,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
-        $res =  $this->externalCallService->registerCall([
+        $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
-            'user_id' => $userId,
-            'PHONE_NUMBER' => '+79788045001',
+            'USER_ID' => $userId,
+            'PHONE_NUMBER' => $phoneNumber,
             'CALL_START_DATE' => $callStartDate,
-            'CRM_CREATE' => 1,
+            'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
             'CRM_ENTITY_TYPE' => 'LEAD',
             'CRM_ENTITY_ID' => $leadId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
-            'LINE_NUMBER' => '+79767867656',
-            'TYPE' => 1
+            'LINE_NUMBER' => $phoneNumber,
+            'TYPE' => 1,
         ])->getExternalCallRegister();
 
-        $newRes = $this->externalCallService->finishCall([
-            'CALL_ID'=>$res->CALL_ID,
-            'USER_ID'=>$userId,
-            'DURATION'=>255,
-            'COST'=>5000,
-            'COST_CURRENCY'=>'RUB',
-            'STATUS_CODE'=>'VI_STATUS_304',
-            'FAILED_REASON'=>'',
-            'RECORD_URL'=>'',
-            'VOTE'=>5,
-            'ADD_TO_CHAT'=>1
-            ])->getExternalCallFinish();
-        var_dump($newRes);
-        self::assertTrue((bool)$newRes);
-        self::assertContains($res->CALL_ID,$newRes);
+        $finishCallResult = $this->externalCallService->finish([
+            'CALL_ID' => $registerCallResult->CALL_ID,
+            'USER_ID' => $userId,
+            'DURATION' => 255,
+            'COST' => 250,
+            'COST_CURRENCY' => 'RUB',
+            'STATUS_CODE' => 'VI_STATUS_200',
+            'FAILED_REASON' => '',
+            'RECORD_URL' => '',
+            'VOTE' => 5,
+            'ADD_TO_CHAT' => 1
+        ])->getExternalCallFinish();
+
+        self::assertEquals($registerCallResult->CALL_ID, $finishCallResult->CALL_ID, sprintf('registered: %s , and finish: %s, CALL_ID do not match',
+            $registerCallResult->CALL_ID, $finishCallResult->CALL_ID));
+
+        self::assertEquals($registerCallResult->CRM_ENTITY_ID, $finishCallResult->CRM_ENTITY_ID, sprintf('registered: %s , and finish: %s, ENTITY_ID do not match',
+            $registerCallResult->CRM_ENTITY_ID, $finishCallResult->CRM_ENTITY_ID));
+
+        self::assertNotEmpty($finishCallResult->CALL_DURATION, 'call time cannot be empty');
+        self::assertNotEmpty($finishCallResult->COST, 'call cost cannot be empty');
+        self::assertNotEmpty($finishCallResult->CALL_STATUS, 'status code must return call code and cannot be empty');
+        self::assertNotEmpty($finishCallResult->PHONE_NUMBER,'phone number cannot be empty');
     }
 
     /**
@@ -167,45 +217,56 @@ class ExternalCallTest extends TestCase
      * @throws Exception
      * @covers ExternalCall::attachRecord
      */
-    public function testRecordCall(): void
+    public function testAttachRecord(): void
     {
         (string)$datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
-        $leadId =  $this->leadService->add(['TITLE' => 'test lead'])->getId();
+        $phoneNumber = sprintf('+7%s', time());
+        $leadId = $this->leadService->add(
+            [
+                'TITLE' => 'test lead',
+                'PHONE' => [
+                    [
+                        'VALUE' => $phoneNumber,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
-        $res =  $this->externalCallService->registerCall([
+        $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
-            'user_id' => $userId,
-            'PHONE_NUMBER' => '+79788045001',
+            'USER_ID' => $userId,
+            'PHONE_NUMBER' => $phoneNumber,
             'CALL_START_DATE' => $callStartDate,
-            'CRM_CREATE' => 1,
+            'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
             'CRM_ENTITY_TYPE' => 'LEAD',
             'CRM_ENTITY_ID' => $leadId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
-            'LINE_NUMBER' => '+79767867656',
-            'TYPE' => 1
-        ])->getExternalCallRegister()->CALL_ID;
+            'LINE_NUMBER' => $phoneNumber,
+            'TYPE' => 1,
+        ])->getExternalCallRegister();
 
-        $newRes = $this->externalCallService->finishCall([
-            'CALL_ID'=>$res,
-            'USER_ID'=>$userId,
-            'DURATION'=>255,
-            'COST'=>5000,
-            'COST_CURRENCY'=>'RUB',
-            'STATUS_CODE'=>'VI_STATUS_304',
-            'FAILED_REASON'=>'',
-            'RECORD_URL'=>'',
-            'VOTE'=>5,
-            'ADD_TO_CHAT'=>1
+        $finishCallResult = $this->externalCallService->finish([
+            'CALL_ID' => $registerCallResult->CALL_ID,
+            'USER_ID' => $userId,
+            'DURATION' => 255,
+            'COST' => 250,
+            'COST_CURRENCY' => 'RUB',
+            'STATUS_CODE' => 'VI_STATUS_200',
+            'FAILED_REASON' => '',
+            'RECORD_URL' => '',
+            'VOTE' => 5,
+            'ADD_TO_CHAT' => 1
         ])->getExternalCallFinish();
 
-        $fileName = sprintf('test%s', time());
-        //Декодирование в base64 разобраться с этим.
-        $content = 'filesss';
+        $fileName = sprintf('test%s.mp3', time());
+        // todo Декодирование в base64 разобраться с этим.
+        $content = sprintf('newContent%s',time());
         $url = 'https://vk.com/audio172690992_456241640_4836017d770715b9af';
-        self::assertGreaterThan(1, $this->externalCallService->attachRecord($res, $fileName, $content, $url)->getRecord());
+        self::assertGreaterThan(1, $this->externalCallService->attachRecord($registerCallResult->CALL_ID, $fileName, $content)->getFileId());
     }
 
     /**

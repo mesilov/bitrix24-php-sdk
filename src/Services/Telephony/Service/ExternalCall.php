@@ -61,7 +61,7 @@ class ExternalCall extends  AbstractService{
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_show.php
      */
-    public function showCallCard(string $callId, int $userId):ExternalCallShowResult{
+    public function show(string $callId, int $userId):ExternalCallShowResult{
         return new ExternalCallShowResult(
             $this->core->call(
                 'telephony.externalcall.show',
@@ -86,7 +86,7 @@ class ExternalCall extends  AbstractService{
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_hide.php
      */
-    public function hideCallCard(string $callId, int $userId):ExternalCallHideResult{
+    public function hide(string $callId, int $userId):ExternalCallHideResult{
         return new ExternalCallHideResult(
             $this->core->call(
                 'telephony.externalcall.hide',
@@ -119,7 +119,7 @@ class ExternalCall extends  AbstractService{
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php
      */
-    public function finishCall(array $fields):ExternalCallFinishResult
+    public function finish(array $fields):ExternalCallFinishResult
     {
         return new ExternalCallFinishResult(
             $this->core->call(
@@ -142,7 +142,7 @@ class ExternalCall extends  AbstractService{
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php
      */
-    public function attachRecord(string $callId, string $fileName, string $fileContent,string $recordUrl):ExternalCallRecordResult
+    public function attachRecord(string $callId, string $fileName, string $fileContent,?string $recordUrl = null):ExternalCallRecordResult
     {
         return new ExternalCallRecordResult(
             $this->core->call(

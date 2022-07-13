@@ -9,11 +9,11 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class ExternalCallRecordResult extends AbstractResult
 {
     /**
-     * @return array
+     * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function getRecord():array
+    public function getFileId():int
     {
-     return  $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+     return  $this->getCoreResponse()->getResponseData()->getResult()->getResultData()['FILE_ID'];
     }
 }
