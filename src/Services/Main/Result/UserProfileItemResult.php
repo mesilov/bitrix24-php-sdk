@@ -22,6 +22,19 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  */
 class UserProfileItemResult extends AbstractItem
 {
+    public function __get($offset)
+    {
+        switch ($offset) {
+            case 'ID':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    return (int)$this->data[$offset];
+                }
+                return null;
+            default:
+                return parent::__get($offset);
+        }
+    }
+
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
