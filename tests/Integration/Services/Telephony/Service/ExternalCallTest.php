@@ -29,11 +29,9 @@ class ExternalCallTest extends TestCase
      */
     public function testRegisterCall(): void
     {
-        //Подготовка данных
-        // Тест
         (string)$datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
-        $phoneNumber = sprintf('+7%s',time());
+        $phoneNumber = sprintf('+7%s', time());
         $leadId = $this->leadService->add(
             [
                 'TITLE' => 'test lead',
@@ -62,10 +60,8 @@ class ExternalCallTest extends TestCase
         ])->getExternalCallRegister();
 
         self::assertTrue((bool)$registerCallResult);
-        self::assertEquals($registerCallResult->CRM_ENTITY_ID,$leadId,sprintf('registered entity id : %s , and lead id: %s, should not differ',
-                $registerCallResult->CRM_ENTITY_ID,$leadId));
-
-
+        self::assertEquals($registerCallResult->CRM_ENTITY_ID, $leadId, sprintf('registered entity id : %s , and lead id: %s, should not differ',
+            $registerCallResult->CRM_ENTITY_ID, $leadId));
     }
 
     /**
@@ -105,7 +101,7 @@ class ExternalCallTest extends TestCase
             'LINE_NUMBER' => $phoneNumber,
             'TYPE' => 1,
         ])->getExternalCallRegister();
-        self::assertTrue($this->externalCallService->show($registerCallResult->CALL_ID,$userId )->isShown());
+        self::assertTrue($this->externalCallService->show($registerCallResult->CALL_ID, $userId)->isShown());
     }
 
     /**
@@ -208,7 +204,7 @@ class ExternalCallTest extends TestCase
         self::assertNotEmpty($finishCallResult->CALL_DURATION, 'call time cannot be empty');
         self::assertNotEmpty($finishCallResult->COST, 'call cost cannot be empty');
         self::assertNotEmpty($finishCallResult->CALL_STATUS, 'status code must return call code and cannot be empty');
-        self::assertNotEmpty($finishCallResult->PHONE_NUMBER,'phone number cannot be empty');
+        self::assertNotEmpty($finishCallResult->PHONE_NUMBER, 'phone number cannot be empty');
     }
 
     /**
@@ -252,7 +248,7 @@ class ExternalCallTest extends TestCase
         $finishCallResult = $this->externalCallService->finish([
             'CALL_ID' => $registerCallResult->CALL_ID,
             'USER_ID' => $userId,
-            'DURATION' => 255,
+            'DURATION' => 10,
             'COST' => 250,
             'COST_CURRENCY' => 'RUB',
             'STATUS_CODE' => 'VI_STATUS_200',
@@ -263,9 +259,7 @@ class ExternalCallTest extends TestCase
         ])->getExternalCallFinish();
 
         $fileName = sprintf('test%s.mp3', time());
-        // todo Декодирование в base64 разобраться с этим.
-        $content = sprintf('newContent%s',time());
-        $url = 'https://vk.com/audio172690992_456241640_4836017d770715b9af';
+        $content = $this->getFileInBase64();
         self::assertGreaterThan(1, $this->externalCallService->attachRecord($registerCallResult->CALL_ID, $fileName, $content)->getFileId());
     }
 
@@ -277,5 +271,21 @@ class ExternalCallTest extends TestCase
         $this->externalCallService = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
         $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
         $this->mainService = Fabric::getServiceBuilder()->getMainScope()->main();
+    }
+
+
+    private function getFileInBase64(): string
+    {
+        $filePath = 'C:/users/admin/downloads/';
+        $fileName = 'newFile.mp3';
+        $resBase64 = '';
+        $handle = fopen($filePath . $fileName, "rb");
+        if ($handle) {
+            $buffer = fread($handle, filesize($filePath.$fileName));
+             $resBase64 =   base64_encode($buffer);
+       }
+        fclose($handle);
+
+        return $resBase64;
     }
 }
