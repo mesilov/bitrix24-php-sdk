@@ -73,6 +73,10 @@ Performance improvements 🚀
     - test coverage: unit, integration, contract
     - typical examples typical for different modes of operation and they are optimized for memory \ performance
 
+### Sponsors
+
+Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk) its development!
+
 ### Architecture
 
 ### Abstraction layers
@@ -184,7 +188,6 @@ See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/
 
 email: <mesilov.maxim@gmail.com>
 
-### Sponsors
 
 ### Documentation
 
@@ -216,6 +219,10 @@ email: <mesilov.maxim@gmail.com>
 - надёжной:
     - покрытие тестами: unit, интеграционные, контрактные
     - есть типовые примеры характерные для разных режимов работы и они оптимизированы по памяти \ быстродействию
+
+### Спонсоры
+
+Помогите развитию bitrix24-php-sdk подписавшись  на [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)!
 
 ### Ключевые особенности
 

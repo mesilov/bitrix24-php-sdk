@@ -44,6 +44,10 @@
 * fix error in `RenewedAccessToken` DTO, remove `Scope`
   enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
 
+### etc
+
+* add link to [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk) for sponsoring development
+
 ## 2.0-alpha.6 — 7.02.2022
 
 ### Added
