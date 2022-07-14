@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Service;
 
+
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\Main\Service\Main;
+use Bitrix24\SDK\Services\Telephony\Common\CallType;
+use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
+use Bitrix24\SDK\Services\Telephony\Common\StatusCodeInterface;
 use Bitrix24\SDK\Services\Telephony\Service\ExternalCall;
-use _PHPStan_59fb0a3b2\Nette\Utils\DateTime;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use DateTime;
 use DateTimeInterface;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -27,9 +31,10 @@ class ExternalCallTest extends TestCase
      * @throws Exception
      * @covers ExternalCall::registerCall
      */
+
     public function testRegisterCall(): void
     {
-        (string)$datetime = new DateTime('now');
+        $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = sprintf('+7%s', time());
         $leadId = $this->leadService->add(
@@ -43,6 +48,7 @@ class ExternalCallTest extends TestCase
                 ]
             ]
         )->getId();
+
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
         $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
@@ -51,7 +57,7 @@ class ExternalCallTest extends TestCase
             'CALL_START_DATE' => $callStartDate,
             'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => 'LEAD',
+            'CRM_ENTITY_TYPE' => CrmEntityType::lead(),
             'CRM_ENTITY_ID' => $leadId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
@@ -70,9 +76,11 @@ class ExternalCallTest extends TestCase
      * @throws Exception
      * @covers ExternalCall::show
      */
+
+
     public function testShowCallCard(): void
     {
-        (string)$datetime = new DateTime('now');
+        $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = '+79788045001';
         $leadId = $this->leadService->add(
@@ -94,7 +102,7 @@ class ExternalCallTest extends TestCase
             'CALL_START_DATE' => $callStartDate,
             'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => 'LEAD',
+            'CRM_ENTITY_TYPE' => CrmEntityType::lead(),
             'CRM_ENTITY_ID' => $leadId,
             'SHOW' => 0,
             'CALL_LIST_ID' => 1,
@@ -112,7 +120,7 @@ class ExternalCallTest extends TestCase
      */
     public function testHideCallCard(): void
     {
-        (string)$datetime = new DateTime('now');
+        $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = '+79788045001';
         $leadId = $this->leadService->add(
@@ -134,7 +142,7 @@ class ExternalCallTest extends TestCase
             'CALL_START_DATE' => $callStartDate,
             'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => 'LEAD',
+            'CRM_ENTITY_TYPE' => CrmEntityType::lead(),
             'CRM_ENTITY_ID' => $leadId,
             'SHOW' => 0,
             'CALL_LIST_ID' => 1,
@@ -152,7 +160,7 @@ class ExternalCallTest extends TestCase
      */
     public function testFinish(): void
     {
-        (string)$datetime = new DateTime('now');
+        $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = sprintf('+7%s', time());
         $leadId = $this->leadService->add(
@@ -188,7 +196,7 @@ class ExternalCallTest extends TestCase
             'DURATION' => 255,
             'COST' => 250,
             'COST_CURRENCY' => 'RUB',
-            'STATUS_CODE' => 'VI_STATUS_200',
+            'STATUS_CODE' => StatusCodeInterface::statusSuccessfulCall,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',
             'VOTE' => 5,
@@ -215,7 +223,7 @@ class ExternalCallTest extends TestCase
      */
     public function testAttachRecord(): void
     {
-        (string)$datetime = new DateTime('now');
+        $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = sprintf('+7%s', time());
         $leadId = $this->leadService->add(
@@ -229,6 +237,7 @@ class ExternalCallTest extends TestCase
                 ]
             ]
         )->getId();
+        var_dump(CallType::one());
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
         $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
@@ -259,8 +268,7 @@ class ExternalCallTest extends TestCase
         ])->getExternalCallFinish();
 
         $fileName = sprintf('test%s.mp3', time());
-        $content = $this->getFileInBase64();
-        self::assertGreaterThan(1, $this->externalCallService->attachRecord($registerCallResult->CALL_ID, $fileName, $content)->getFileId());
+        self::assertGreaterThan(1, $this->externalCallService->attachRecord($registerCallResult->CALL_ID, $fileName, $this->getFileInBase64())->getFileId());
     }
 
     /**
@@ -276,8 +284,8 @@ class ExternalCallTest extends TestCase
 
     private function getFileInBase64(): string
     {
-        $filePath = 'C:/users/admin/downloads/';
-        $fileName = 'newFile.mp3';
+        $filePath = __DIR__ . '/TestFile/';
+        $fileName = 'callRecording.mp3';
         $resBase64 = '';
         $handle = fopen($filePath . $fileName, "rb");
         if ($handle) {
