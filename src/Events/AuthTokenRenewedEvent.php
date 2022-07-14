@@ -14,10 +14,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class AuthTokenRenewedEvent extends Event
 {
-    /**
-     * @var RenewedAccessToken
-     */
-    private $renewedToken;
+    private RenewedAccessToken $renewedToken;
 
     /**
      * AuthTokenRenewedEvent constructor.

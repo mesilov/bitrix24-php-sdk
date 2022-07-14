@@ -1,6 +1,6 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.7 — 15.07.2022
+## 2.0-alpha.7 — 25.07.2022
 
 ### Added
 
@@ -11,6 +11,7 @@
 * add in scope «Main» new service `Events`  [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
 * add support Application level events: `ONAPPINSTALL`
   and `ONAPPUNINSTALL` [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
+* add support Application level event: `PortalDomainUrlChangedEvent`
 * add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
   integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
