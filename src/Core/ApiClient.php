@@ -143,8 +143,10 @@ class ApiClient implements ApiClientInterface
         }
 
         $requestOptions = [
-            'json'    => $parameters,
-            'headers' => $this->getDefaultHeaders(),
+            'json'          => $parameters,
+            'headers'       => $this->getDefaultHeaders(),
+            // disable redirects, try to catch portal change domain name event
+            'max_redirects' => 0,
         ];
         $response = $this->client->request($method, $url, $requestOptions);
 
