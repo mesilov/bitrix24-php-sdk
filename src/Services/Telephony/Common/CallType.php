@@ -8,25 +8,24 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class CallType
 {
-
-    private const outboundCall = '1';
-    private const inboundCall = '2';
-    private const inboundCallWithRedirection = '3';
-    private const backCall = '4';
-    private string $code;
+    private const OUTBOUND_CALL = 1;
+    private const INBOUND_CALL = 2;
+    private const INBOUND_CALL_WITH_REDIRECTION = 3;
+    private const CALLBACK = 4;
+    private int $code;
 
     /**
-     * @param string $typeCode
+     * @param int $typeCode
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
 
-    private function __construct(string $typeCode)
+    private function __construct(int $typeCode)
     {
         switch ($typeCode) {
-            case $this::inboundCall:
-            case $this::outboundCall:
-            case $this::inboundCallWithRedirection:
-            case $this::backCall:
+            case $this::INBOUND_CALL:
+            case $this::OUTBOUND_CALL:
+            case $this::INBOUND_CALL_WITH_REDIRECTION:
+            case $this::CALLBACK:
                 $this->code = $typeCode;
                 break;
             default:
@@ -62,17 +61,17 @@ class CallType
     }
 
     /**
-     * @return string
+     * @return self
      */
 
     public static function backCall(): string
     {
-        return self::backCall;
+        return new self( self::CALLBACK);
     }
 
     public function __toString(): string
     {
-        return $this->code;
+        return (string)$this->code;
     }
 
 }

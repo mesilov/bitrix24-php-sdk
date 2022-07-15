@@ -11,7 +11,7 @@ use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Telephony\Common\CallType;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
-use Bitrix24\SDK\Services\Telephony\Common\StatusCodeInterface;
+use Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface;
 use Bitrix24\SDK\Services\Telephony\Service\ExternalCall;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use DateTime;
@@ -107,7 +107,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 0,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => CallType::one,
+            'TYPE' => (string)CallType::inboundCall(),
         ])->getExternalCallRegister();
         self::assertTrue($this->externalCallService->show($registerCallResult->CALL_ID, $userId)->isShown());
     }
@@ -147,7 +147,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 0,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => CallType::one,
+            'TYPE' => (string)CallType::inboundCall(),
         ])->getExternalCallRegister();
         self::assertTrue($this->externalCallService->hide($registerCallResult->CALL_ID, $userId)->isHided());
     }
@@ -187,7 +187,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => CallType::one,
+            'TYPE' => (string)CallType::inboundCall(),
         ])->getExternalCallRegister();
 
         $finishCallResult = $this->externalCallService->finish([
@@ -196,7 +196,7 @@ class ExternalCallTest extends TestCase
             'DURATION' => 255,
             'COST' => 250,
             'COST_CURRENCY' => 'RUB',
-            'STATUS_CODE' => StatusCodeInterface::STATUS_OK,
+            'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',
             'VOTE' => 5,
@@ -250,7 +250,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => CallType::one,
+            'TYPE' => (string)CallType::inboundCall(),
         ])->getExternalCallRegister();
 
         $finishCallResult = $this->externalCallService->finish([
@@ -268,6 +268,11 @@ class ExternalCallTest extends TestCase
 
         $fileName = sprintf('test%s.mp3', time());
         self::assertGreaterThan(1, $this->externalCallService->attachRecord($registerCallResult->CALL_ID, $fileName, $this->getFileInBase64())->getFileId());
+    }
+
+    public function testSearchCrmEntities():void
+    {
+
     }
 
     /**
