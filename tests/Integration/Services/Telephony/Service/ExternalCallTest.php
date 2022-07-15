@@ -270,9 +270,61 @@ class ExternalCallTest extends TestCase
         self::assertGreaterThan(1, $this->externalCallService->attachRecord($registerCallResult->CALL_ID, $fileName, $this->getFileInBase64())->getFileId());
     }
 
+    /**
+     * @throws TransportException
+     * @throws BaseException
+     * @throws Exception
+     * @covers ExternalCall::searchCrmEntities
+     */
     public function testSearchCrmEntities():void
     {
+        $datetime = new DateTime('now');
+        $callStartDate = $datetime->format(DateTimeInterface::ATOM);
+        $phoneNumber = sprintf('+7%s', time());
+        $leadId = $this->leadService->add(
+            [
+                'TITLE' => 'test lead',
+                'PHONE' => [
+                    [
+                        'VALUE' => $phoneNumber,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
+        $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
+        $registerCallResult = $this->externalCallService->registerCall([
+            'USER_PHONE_INNER' => '14',
+            'USER_ID' => $userId,
+            'PHONE_NUMBER' => $phoneNumber,
+            'CALL_START_DATE' => $callStartDate,
+            'CRM_CREATE' => 0,
+            'CRM_SOURCE' => '1',
+            'CRM_ENTITY_TYPE' => 'LEAD',
+            'CRM_ENTITY_ID' => $leadId,
+            'SHOW' => 1,
+            'CALL_LIST_ID' => 1,
+            'LINE_NUMBER' => $phoneNumber,
+            'TYPE' => (string)CallType::inboundCall(),
+        ])->getExternalCallRegister();
 
+        $finishCallResult = $this->externalCallService->finish([
+            'CALL_ID' => $registerCallResult->CALL_ID,
+            'USER_ID' => $userId,
+            'DURATION' => 255,
+            'COST' => 250,
+            'COST_CURRENCY' => 'RUB',
+            'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
+            'FAILED_REASON' => '',
+            'RECORD_URL' => '',
+            'VOTE' => 5,
+            'ADD_TO_CHAT' => 1
+        ])->getExternalCallFinish();
+
+
+        $infoAboutClientResult = $this->externalCallService->searchCrmEntities($phoneNumber)->getCrmEntitiesClient();
+        self::assertNotEmpty($phoneNumber);
+        self::assertTrue((bool)$infoAboutClientResult);
     }
 
     /**

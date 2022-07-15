@@ -9,10 +9,12 @@ use Bitrix24\SDK\Services\Telephony\Result\ExternalCallFinishResult;
 use Bitrix24\SDK\Services\Telephony\Result\ExternalCallRecordResult;
 use Bitrix24\SDK\Services\Telephony\Result\ExternalCallRegisterResult;
 use Bitrix24\SDK\Services\Telephony\Result\ExternalCallHideResult;
+use Bitrix24\SDK\Services\Telephony\Result\ExternalCallSearchCrmEntitiesResult;
 use Bitrix24\SDK\Services\Telephony\Result\ExternalCallShowResult;
 
 
-class ExternalCall extends  AbstractService{
+class ExternalCall extends AbstractService
+{
     /**
      * The method registers a call in Bitrix24
      *
@@ -42,8 +44,8 @@ class ExternalCall extends  AbstractService{
     {
         return new ExternalCallRegisterResult(
             $this->core->call(
-                    'telephony.externalcall.register',
-                    $fields,
+                'telephony.externalcall.register',
+                $fields,
             )
         );
     }
@@ -61,13 +63,14 @@ class ExternalCall extends  AbstractService{
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_show.php
      */
-    public function show(string $callId, int $userId):ExternalCallShowResult{
+    public function show(string $callId, int $userId): ExternalCallShowResult
+    {
         return new ExternalCallShowResult(
             $this->core->call(
                 'telephony.externalcall.show',
                 [
-                   'CALL_ID'=>$callId,
-                    'USER_ID'=>$userId,
+                    'CALL_ID' => $callId,
+                    'USER_ID' => $userId,
                 ]
             )
         );
@@ -86,13 +89,14 @@ class ExternalCall extends  AbstractService{
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_hide.php
      */
-    public function hide(string $callId, int $userId):ExternalCallHideResult{
+    public function hide(string $callId, int $userId): ExternalCallHideResult
+    {
         return new ExternalCallHideResult(
             $this->core->call(
                 'telephony.externalcall.hide',
                 [
-                    'CALL_ID'=>$callId,
-                    'USER_ID'=>$userId,
+                    'CALL_ID' => $callId,
+                    'USER_ID' => $userId,
                 ]
             )
         );
@@ -119,7 +123,7 @@ class ExternalCall extends  AbstractService{
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php
      */
-    public function finish(array $fields):ExternalCallFinishResult
+    public function finish(array $fields): ExternalCallFinishResult
     {
         return new ExternalCallFinishResult(
             $this->core->call(
@@ -135,23 +139,46 @@ class ExternalCall extends  AbstractService{
      * @param string $callId
      * @param string $fileName
      * @param string $fileContent
-     * @param string $recordUrl
+     * @param string|null $recordUrl
      *
      * @return ExternalCallRecordResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php
      */
-    public function attachRecord(string $callId, string $fileName, string $fileContent,?string $recordUrl = null):ExternalCallRecordResult
+    public function attachRecord(string $callId, string $fileName, string $fileContent, ?string $recordUrl = null): ExternalCallRecordResult
     {
         return new ExternalCallRecordResult(
             $this->core->call(
                 'telephony.externalCall.attachRecord',
                 [
-                    'CALL_ID'=>$callId,
-                    'FILENAME'=>$fileName,
-                    'FILE_CONTENT'=>$fileContent,
-                    'RECORD_URL'=>$recordUrl,
+                    'CALL_ID' => $callId,
+                    'FILENAME' => $fileName,
+                    'FILE_CONTENT' => $fileContent,
+                    'RECORD_URL' => $recordUrl,
+                ]
+            )
+        );
+    }
+
+    /**
+     * This method allows to retrieve information about a client from CRM by a telephone number via single request.
+     *
+     * @param string $phoneNumber
+     *
+     * @return ExternalCallSearchCrmEntitiesResult
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_searchCrmEntities.php
+     */
+
+    public function searchCrmEntities(string $phoneNumber): ExternalCallSearchCrmEntitiesResult
+    {
+        return new ExternalCallSearchCrmEntitiesResult(
+            $this->core->call(
+                'telephony.externalCall.searchCrmEntities',
+                [
+                    'PHONE_NUMBER'=>$phoneNumber,
                 ]
             )
         );
