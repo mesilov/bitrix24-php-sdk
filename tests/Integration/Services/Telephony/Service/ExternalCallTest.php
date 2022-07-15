@@ -62,7 +62,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => CallType::one,
+            'TYPE' => CallType::inboundCall(),
         ])->getExternalCallRegister();
 
         self::assertTrue((bool)$registerCallResult);
@@ -196,7 +196,7 @@ class ExternalCallTest extends TestCase
             'DURATION' => 255,
             'COST' => 250,
             'COST_CURRENCY' => 'RUB',
-            'STATUS_CODE' => StatusCodeInterface::statusSuccessfulCall,
+            'STATUS_CODE' => StatusCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',
             'VOTE' => 5,
@@ -284,7 +284,7 @@ class ExternalCallTest extends TestCase
     private function getFileInBase64(): string
     {
         $filePath = __DIR__ . '/TestFile/';
-        $fileName = 'callRecording.mp3';
+        $fileName = 'test-phone-record.mp3';
         $resBase64 = '';
         $handle = fopen($filePath . $fileName, "rb");
         if ($handle) {
