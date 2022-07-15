@@ -8,62 +8,40 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class CallType
 {
-    private const one = 1;
-    private const two = 2;
-    private const three = 3;
-    private const four = 4;
+
+    public const one = 1;
+    public const two = 2;
+    public const three = 3;
+    public const four = 4;
+
     private int $code;
 
     /**
-     *
+     * @param int $code
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    private function __construct($typeCall)
+
+    private function __construct(int $code)
     {
-        switch ($typeCall) {
-            case $this::one:
-            case $this::two:
-            case $this::three:
-            case $this::four:
-                $this->code = $typeCall ;
-                break;
-            default:
-                throw new InvalidArgumentException(sprintf('unknown type call %s', $typeCall));
+        if
+        (
+            self::one !== $code &&
+            self::two !== $code &&
+            self::three !== $code &&
+            self::four !== $code
+        ) {
+            throw new InvalidArgumentException(sprintf('unknown type call %s', $code));
         }
+        $this->code = $code;
+
     }
 
     /**
-     * @return self
+     * @return int
      */
-    public static function one(): self
+    public function getValue(): int
     {
-        return new self(self::one);
+        return $this->code;
     }
-
-    /**
-     * @return self
-     */
-    public static function two(): self
-    {
-        return new self(self::two);
-    }
-
-    /**
-     * @return self
-     */
-    public static function three(): self
-    {
-        return new self(self::three);
-    }
-
-    /**
-     * @return self
-     */
-    public static function four(): self
-    {
-        return new self(self::four);
-    }
-
-
 }
 

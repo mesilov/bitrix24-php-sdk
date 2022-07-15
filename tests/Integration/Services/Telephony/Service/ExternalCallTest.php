@@ -62,7 +62,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => 1,
+            'TYPE' => CallType::one,
         ])->getExternalCallRegister();
 
         self::assertTrue((bool)$registerCallResult);
@@ -107,7 +107,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 0,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => 1,
+            'TYPE' => CallType::one,
         ])->getExternalCallRegister();
         self::assertTrue($this->externalCallService->show($registerCallResult->CALL_ID, $userId)->isShown());
     }
@@ -147,7 +147,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 0,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => 1,
+            'TYPE' => CallType::one,
         ])->getExternalCallRegister();
         self::assertTrue($this->externalCallService->hide($registerCallResult->CALL_ID, $userId)->isHided());
     }
@@ -187,7 +187,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => 1,
+            'TYPE' => CallType::one,
         ])->getExternalCallRegister();
 
         $finishCallResult = $this->externalCallService->finish([
@@ -237,7 +237,6 @@ class ExternalCallTest extends TestCase
                 ]
             ]
         )->getId();
-        var_dump(CallType::one());
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
         $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
@@ -251,7 +250,7 @@ class ExternalCallTest extends TestCase
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => 1,
+            'TYPE' => CallType::one,
         ])->getExternalCallRegister();
 
         $finishCallResult = $this->externalCallService->finish([
@@ -289,9 +288,9 @@ class ExternalCallTest extends TestCase
         $resBase64 = '';
         $handle = fopen($filePath . $fileName, "rb");
         if ($handle) {
-            $buffer = fread($handle, filesize($filePath.$fileName));
-             $resBase64 =   base64_encode($buffer);
-       }
+            $buffer = fread($handle, filesize($filePath . $fileName));
+            $resBase64 = base64_encode($buffer);
+        }
         fclose($handle);
 
         return $resBase64;
