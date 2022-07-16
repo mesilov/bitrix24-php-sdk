@@ -36,13 +36,13 @@ use DateTimeInterface;
  * @property-read string $AUTHOR_ID                 // Activity author ID
  * @property-read string $LAST_UPDATED              // Date of the last update date
  * @property-read string $EDITOR_ID                 // Editor
- * @property-read string $SETTINGS
+ * @property-read array  $SETTINGS
  * @property-read string $ORIGIN_ID
  * @property-read string $ORIGINATOR_ID
  * @property-read int    $RESULT_STATUS
  * @property-read int    $RESULT_STREAM
  * @property-read string $RESULT_SOURCE_ID
- * @property-read string $PROVIDER_PARAMS
+ * @property-read array  $PROVIDER_PARAMS
  * @property-read string $PROVIDER_DATA
  * @property-read int    $RESULT_MARK
  * @property-read string $RESULT_VALUE
@@ -50,8 +50,8 @@ use DateTimeInterface;
  * @property-read string $RESULT_CURRENCY_ID
  * @property-read int    $AUTOCOMPLETE_RULE         // Autocompletion
  * @property-read string $BINDINGS                  // Bindings
- * @property-read string $COMMUNICATIONS            // type crm_activity_communication
- * @property-read string $FILES                     // Added files with diskfile type
+ * @property-read array  $COMMUNICATIONS            // type crm_activity_communication
+ * @property-read array  $FILES                     // Added files with diskfile type
  * @property-read string $WEBDAV_ELEMENTS
  */
 class ActivityItemResult extends AbstractCrmItem

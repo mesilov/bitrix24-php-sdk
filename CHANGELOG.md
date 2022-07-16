@@ -8,6 +8,10 @@
 * add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
 * add in scope `CRM` new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
 * add in scope `CRM` new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add in scope `CRM` for entity Deal method `Services\CRM\Deal\Service\Batch::update` batch update deals
+* add in scope `CRM` for entity Contact method `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
+* add in scope `CRM` [read models](https://github.com/mesilov/bitrix24-php-sdk/issues/300) for activity `Services\CRM\Activity\ReadModel`
+  for activity types: `EmailFetcher`, `OpenLineFetcher`, `VoximplantFetcher`, `WebFormFetcher`
 * add in scope «Main» new service `Events`  [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
 * add support Application level events: `ONAPPINSTALL`
   and `ONAPPUNINSTALL` [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
@@ -15,8 +19,6 @@
 * add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
   integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
-* add in scope `CRM` for entity Deal method `Services\CRM\Deal\Service\Batch::update` batch update deals
-* add in scope `CRM` for entity Contact method `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
 * add in scope `Placements` service `Placement\Service\UserFieldType` for work with user fields embedding
 * add `ApplicationStatus` with application status codes description
 * add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
