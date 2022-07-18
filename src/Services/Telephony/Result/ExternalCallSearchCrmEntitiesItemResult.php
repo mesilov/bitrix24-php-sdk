@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
  * @property-read string $CRM_ENTITY_TYPE
  * @property-read int $CRM_ENTITY_ID
  * @property-read int $ASSIGNED_BY_ID
- * @property-read string $NAME
  * @property-read array $ASSIGNED_BY
  */
 

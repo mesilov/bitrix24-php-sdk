@@ -9,11 +9,12 @@ use  Bitrix24\SDK\Core\Result\AbstractResult;
 class ExternalCallSearchCrmEntitiesResult extends AbstractResult
 {
     /**
-     * @return \Bitrix24\SDK\Services\Telephony\Result\ExternalCallSearchCrmEntitiesItemResult
+     * @return \Bitrix24\SDK\Services\Telephony\Result\ExternalCallSearchCrmEntitiesItemResult[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
-    public function getCrmEntitiesClient(): ExternalCallSearchCrmEntitiesItemResult
+
+    public function getCrmEntitiesClient(): array
     {
-        return new ExternalCallSearchCrmEntitiesItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return $this->coreResponse->getResponseData()->getResult()->getResultData();
     }
 }
