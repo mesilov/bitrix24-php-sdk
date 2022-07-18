@@ -34,37 +34,37 @@ class CallType
     }
 
     /**
-     * @return string
+     * @return self
      */
 
-    public static function outboundCall(): string
+    public static function outboundCall(): self
     {
-        return self::outboundCall;
-    }
-
-    /**
-     * @return string
-     */
-
-    public static function inboundCall(): string
-    {
-        return self::inboundCall;
-    }
-
-    /**
-     * @return string
-     */
-
-    public static function inboundCallWithRedirection(): string
-    {
-        return self::inboundCallWithRedirection;
+        return new self(self::OUTBOUND_CALL);
     }
 
     /**
      * @return self
      */
 
-    public static function backCall(): string
+    public static function inboundCall(): self
+    {
+        return new self( self::INBOUND_CALL);
+    }
+
+    /**
+     * @return self
+     */
+
+    public static function inboundCallWithRedirection(): self
+    {
+        return new self( self::INBOUND_CALL_WITH_REDIRECTION);
+
+    }
+
+    /**
+     * @return self
+     */
+    public static function backCall(): self
     {
         return new self( self::CALLBACK);
     }
