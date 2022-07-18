@@ -39,6 +39,7 @@ class ExternalLineTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
+     * @throws \Exception
      * @covers ExternalLine::update
      */
     public function testUpdateExternalLineName(): void
@@ -64,6 +65,7 @@ class ExternalLineTest extends TestCase
     /**
      * @throws BaseException
      * @throws TransportException
+     * @throws \Exception
      * @covers ExternalLine::delete
      */
     public function testDelete(): void
