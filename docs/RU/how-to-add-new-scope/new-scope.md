@@ -71,5 +71,40 @@ composer install
          }
 
          }
-      4. Также в папке `src/Services/Telephony` размещаем TelephonyServiceBuilder.php. Этот сервис нужен для подключения нашего скоупа с тестами.
+      4. Также в папке `src/Services/(название вашего сервиса)` размещаем (название вашего сервиса)ServiceBuilder.php. Этот сервис нужен для подключения нашего скоупа с тестами.
 6. После того как мы добавили наши методы для работы с Телефонией нужно их затестить. Создадим в папке `tests/Integration/Services/Telephony/Service/` наши тесты и проверим все ли работает как надо ExternalLineTest.php.
+    ```php
+    <?php
+    
+    declare(strict_types=1);
+    
+    namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Service;
+    
+    use Bitrix24\SDK\Core\Exceptions\BaseException;
+    use Bitrix24\SDK\Core\Exceptions\TransportException;
+    use Bitrix24\SDK\Services\Telephony\Service\ExternalLine;
+    use Bitrix24\SDK\Tests\Integration\Fabric;
+    use PHPUnit\Framework\TestCase;
+    
+    class ExternalLineTest extends TestCase
+    {
+        protected ExternalLine $externalLineService;
+    
+        /**
+         * @throws BaseException
+         * @throws TransportException
+         * @covers ExternalLine::add
+         */
+        public function testAdd(): void
+        {
+            self::assertGreaterThan(1, $this->externalLineService->add((string)time(), sprintf('phpUnit-%s', time()))->getId());
+        }
+       /**
+         * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+         */
+        public function setUp(): void
+        {
+          $this->externalLineService = Fabric::getServiceBuilder()->getTelephonyScope()->externalline();
+        }
+   }
+    ```
