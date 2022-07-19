@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Service;
 
-
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Telephony\Common\CallType;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
+use Bitrix24\SDK\Services\Telephony\Common\CurrencyList;
 use Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface;
 use Bitrix24\SDK\Services\Telephony\Service\Call;
 use Bitrix24\SDK\Services\Telephony\Service\ExternalCall;
@@ -52,6 +52,33 @@ class CallTest extends TestCase
         )->getId();
 
         $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
+
+        $messages = [
+            [
+                'SIDE'=>'User',
+                'START_TIME'=>1,
+                'STOP_TIME'=>3,
+                'MESSAGE'=>'HELLO WORLD'
+            ],
+            [
+                'SIDE'=> "Client",
+                'START_TIME'=>4,
+                'STOP_TIME'=>8,
+                'MESSAGE'=>"Здравствуйте, вы продаете пылесосы?"
+            ],
+            [
+                'SIDE'=>'User',
+                'START_TIME'=>1,
+                'STOP_TIME'=>3,
+                'MESSAGE'=>'HELLO WORLD'
+            ],
+            [
+                'SIDE'=> "Client",
+                'START_TIME'=>4,
+                'STOP_TIME'=>8,
+                'MESSAGE'=>"Здравствуйте, вы продаете пылесосы?"
+            ]
+        ];
         $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
             'USER_ID' => $userId,
@@ -64,7 +91,7 @@ class CallTest extends TestCase
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => (string)CallType::inboundCall(),
+            'TYPE' => (string)CallType::outboundCall(),
         ])->getExternalCallRegister();
 
         $finishCallResult = $this->externalCallService->finish([
@@ -72,7 +99,7 @@ class CallTest extends TestCase
             'USER_ID' => $userId,
             'DURATION' => 255,
             'COST' => 250,
-            'COST_CURRENCY' => 'RUB',
+            'COST_CURRENCY' => (string)CurrencyList::rub(),
             'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',
@@ -80,22 +107,12 @@ class CallTest extends TestCase
             'ADD_TO_CHAT' => 1
         ])->getExternalCallFinish();
 
-        $message = [
-            [
-            'SIDE'=>'User',
-            'START_TIME'=>1,
-            'STOP_TIME'=>3,
-            'MESSAGE'=>'HELLO WORLD'
-            ],
-            [
-                'SIDE'=> "Client",
-                'START_TIME'=>4,
-                'STOP_TIME'=>8,
-                'MESSAGE'=>"Здравствуйте, вы продаете пылесосы?"
-            ]
-        ];
-        var_dump($message);
-        self::assertTrue((bool)$this->callService->attachTranscription($registerCallResult->CALL_ID, 500, 'RUB',$message)->getCallTranscription());
+        $TranscriptionResult = $this->callService->attachTranscription($registerCallResult->CALL_ID, 50, (string)CurrencyList::rub(), $messages)->getCallTranscription();
+        if ($messages[0]['SIDE'] === 'User'){
+            self::assertEquals('User', $messages[0]['SIDE']);
+        }
+        self::assertGreaterThan(1,$TranscriptionResult);
+        self::assertNotEmpty($messages);
     }
 
     /**

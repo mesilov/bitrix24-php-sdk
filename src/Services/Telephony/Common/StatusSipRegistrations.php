@@ -8,10 +8,10 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class StatusSipRegistrations
 {
-    private const success = 'success';
-    private const error = 'error';
-    private const in_progress = 'in_progress';
-    private const wait = 'wait';
+    private const SUCCESS = 'success';
+    private const ERROR = 'error';
+    private const IN_PROGRESS = 'in_progress';
+    private const WAIT = 'wait';
     private string $code;
 
     /**
@@ -21,10 +21,10 @@ class StatusSipRegistrations
     private function __construct(string $typeSip)
     {
         switch ($typeSip) {
-            case $this::success:
-            case $this::error:
-            case $this::in_progress:
-            case $this::wait:
+            case $this::SUCCESS:
+            case $this::ERROR:
+            case $this::IN_PROGRESS:
+            case $this::WAIT:
                 $this->code = $typeSip;
                 break;
             default:
@@ -37,7 +37,7 @@ class StatusSipRegistrations
      */
     public static function success(): self
     {
-        return new self(self::success);
+        return new self(self::SUCCESS);
     }
 
     /**
@@ -45,7 +45,7 @@ class StatusSipRegistrations
      */
     public static function error(): self
     {
-        return new self(self::error);
+        return new self(self::ERROR);
     }
 
     /**
@@ -53,7 +53,7 @@ class StatusSipRegistrations
      */
     public static function in_progress(): self
     {
-        return new self(self::in_progress);
+        return new self(self::IN_PROGRESS);
     }
 
     /**
@@ -61,7 +61,7 @@ class StatusSipRegistrations
      */
     public static function wait(): self
     {
-        return new self(self::wait);
+        return new self(self::WAIT);
     }
 
     /**

@@ -6,8 +6,8 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class TypeAtc
 {
-    private const cloudAtc = 'cloud';
-    private const officeAtc = 'office';
+    private const CLOUD = 'cloud';
+    private const OFFICE = 'office';
     private string $code;
 
     /**
@@ -17,8 +17,8 @@ class TypeAtc
     private function __construct(string $typeAtc)
     {
         switch ($typeAtc) {
-            case $this::cloudAtc:
-            case $this::officeAtc:
+            case $this::CLOUD:
+            case $this::OFFICE:
                 $this->code = $typeAtc;
                 break;
             default:
@@ -31,7 +31,7 @@ class TypeAtc
      */
     public static function cloud(): self
     {
-        return new self(self::cloudAtc);
+        return new self(self::CLOUD);
     }
 
     /**
@@ -39,7 +39,7 @@ class TypeAtc
      */
     public static function office(): self
     {
-        return new self(self::officeAtc);
+        return new self(self::OFFICE);
     }
 
     /**

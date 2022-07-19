@@ -69,7 +69,7 @@ class SearchCrmEntitiesTest extends TestCase{
             'CALL_START_DATE' => $callStartDate,
             'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => CrmEntityType::contact(),
+            'CRM_ENTITY_TYPE' => CrmEntityType::lead(),
             'CRM_ENTITY_ID' => $contactId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
@@ -94,12 +94,10 @@ class SearchCrmEntitiesTest extends TestCase{
         self::assertEmpty($infoAboutClientThatIsNot);
 
         $infoAboutClientLeadResult = $this->externalCallService->searchCrmEntities($phoneNumber)->getCrmEntitiesClient();
+        self::assertNotEmpty($infoAboutClientLeadResult);
         $typeName = $infoAboutClientLeadResult[0]['CRM_ENTITY_TYPE'];
         self::assertEquals('CONTACT',$typeName,sprintf('name type incorrect, expected: CONTACT , and your type: %s',$typeName));
-      //self::assertEquals('LEAD',$typeName,sprintf('name type incorrect, expected: LEAD , and your type: %s',$typeName));
-
-        self::assertNotEmpty($infoAboutClientLeadResult);
-
+        //self::assertEquals('LEAD',$typeName,sprintf('name type incorrect, expected: LEAD , and your type: %s',$typeName));
     }
 
     /**
@@ -112,4 +110,5 @@ class SearchCrmEntitiesTest extends TestCase{
         $this->mainService = Fabric::getServiceBuilder()->getMainScope()->main();
         $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
     }
+
 }

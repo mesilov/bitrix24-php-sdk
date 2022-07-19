@@ -31,7 +31,7 @@ class Call extends AbstractService
                     'CALL_ID' => $call_id,
                     'COST'=> $cost,
                     'COST_CURRENCY'=>$cost_currency,
-                    'MESSAGE'=>$messages,
+                    'MESSAGES'=>$messages,
                 ]
             )
         );

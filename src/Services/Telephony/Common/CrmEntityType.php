@@ -8,9 +8,9 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 
 class CrmEntityType
 {
-    private const contact = 'CONTACT';
-    private const company = 'COMPANY';
-    private const lead = 'LEAD';
+    private const CONTACT = 'CONTACT';
+    private const COMPANY = 'COMPANY';
+    private const LEAD = 'LEAD';
     private string $code;
 
     /**
@@ -20,9 +20,9 @@ class CrmEntityType
     private function __construct(string $typeCode)
     {
         switch ($typeCode) {
-            case $this::company:
-            case $this::contact:
-            case $this::lead:
+            case $this::COMPANY:
+            case $this::CONTACT:
+            case $this::LEAD:
                 $this->code = $typeCode;
                 break;
             default:
@@ -35,7 +35,7 @@ class CrmEntityType
      */
     public static function contact(): self
     {
-        return new self(self::contact);
+        return new self(self::CONTACT);
     }
 
     /**
@@ -43,7 +43,7 @@ class CrmEntityType
      */
     public static function company(): self
     {
-        return new self(self::company);
+        return new self(self::COMPANY);
     }
 
     /**
@@ -51,7 +51,7 @@ class CrmEntityType
      */
     public static function lead(): self
     {
-        return new self(self::lead);
+        return new self(self::LEAD);
     }
 
     /**

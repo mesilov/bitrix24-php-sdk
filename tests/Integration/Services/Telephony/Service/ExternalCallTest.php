@@ -12,6 +12,7 @@ use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Telephony\Common\CallType;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
+use Bitrix24\SDK\Services\Telephony\Common\CurrencyList;
 use Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface;
 use Bitrix24\SDK\Services\Telephony\Service\ExternalCall;
 use Bitrix24\SDK\Tests\Integration\Fabric;
@@ -196,7 +197,7 @@ class ExternalCallTest extends TestCase
             'USER_ID' => $userId,
             'DURATION' => 255,
             'COST' => 250,
-            'COST_CURRENCY' => 'RUB',
+            'COST_CURRENCY' => CurrencyList::rub(),
             'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',
@@ -259,7 +260,7 @@ class ExternalCallTest extends TestCase
             'USER_ID' => $userId,
             'DURATION' => 10,
             'COST' => 250,
-            'COST_CURRENCY' => 'RUB',
+            'COST_CURRENCY' => CurrencyList::rub(),
             'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',
@@ -284,7 +285,7 @@ class ExternalCallTest extends TestCase
 
     private function getFileInBase64(): string
     {
-        $filePath = __DIR__ . '/TestFile/';
+        $filePath = __DIR__ . '/voice/';
         $fileName = 'test-phone-record.mp3';
         $resBase64 = '';
         $handle = fopen($filePath . $fileName, "rb");
