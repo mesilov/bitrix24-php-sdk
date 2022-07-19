@@ -11,6 +11,7 @@ use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Telephony\Common\CallType;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
+use Bitrix24\SDK\Services\Telephony\Common\CurrencyList;
 use Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface;
 use Bitrix24\SDK\Services\Telephony\Service\ExternalCall;
 use Bitrix24\SDK\Tests\Integration\Fabric;
@@ -69,7 +70,7 @@ class SearchCrmEntitiesTest extends TestCase{
             'CALL_START_DATE' => $callStartDate,
             'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => CrmEntityType::lead(),
+            'CRM_ENTITY_TYPE' => (string)CrmEntityType::lead(),
             'CRM_ENTITY_ID' => $contactId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
@@ -82,7 +83,7 @@ class SearchCrmEntitiesTest extends TestCase{
             'USER_ID' => $userId,
             'DURATION' => 255,
             'COST' => 250,
-            'COST_CURRENCY' => 'RUB',
+            'COST_CURRENCY' => (string)CurrencyList::rub(),
             'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',

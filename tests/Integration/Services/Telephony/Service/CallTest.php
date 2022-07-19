@@ -86,7 +86,7 @@ class CallTest extends TestCase
             'CALL_START_DATE' => $callStartDate,
             'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => CrmEntityType::lead(),
+            'CRM_ENTITY_TYPE' => (string)CrmEntityType::lead(),
             'CRM_ENTITY_ID' => $leadId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
