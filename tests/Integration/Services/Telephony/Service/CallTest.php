@@ -27,6 +27,11 @@ use Bitrix24\SDK\Tests\Integration\Fabric;
 use DateTime;
 use DateTimeInterface;
 use Exception;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Formatter\IntlMoneyFormatter;
+use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 class CallTest extends TestCase
@@ -49,6 +54,12 @@ class CallTest extends TestCase
         $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = sprintf('+7%s', time());
+        $money = new Money(100, new Currency('RUB'));
+        $currencies = new ISOCurrencies();
+
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+
+        echo $moneyFormatter->format($money); // outputs 1.00
         $contactId = $this->contactService->add(
             [
                 'NAME' => 'Глеб',
@@ -110,7 +121,7 @@ class CallTest extends TestCase
             'CALL_ID' => $registerCallResult->CALL_ID,
             'USER_ID' => $userId,
             'DURATION' => 255,
-            'COST' => 250,
+            'COST' => $moneyFormatter->format($money),
             'COST_CURRENCY' => (string)CurrencyList::rub(),
             'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
@@ -119,7 +130,7 @@ class CallTest extends TestCase
             'ADD_TO_CHAT' => 1
         ])->getExternalCallFinish();
 
-        $TranscriptionResult = $this->callService->attachTranscription($registerCallResult->CALL_ID, 50, (string)CurrencyList::rub(), $messages)->getCallTranscription();
+        $TranscriptionResult = $this->callService->attachTranscription($registerCallResult->CALL_ID, $moneyFormatter->format($money),(string)CurrencyList::rub(), $messages)->getCallTranscription();
         if ($messages[0]['SIDE'] === 'User'){
             self::assertEquals('User', $messages[0]['SIDE']);
         }
