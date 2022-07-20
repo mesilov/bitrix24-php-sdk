@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ *  Kirill  Кhramov <k_hram@mail.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
@@ -20,11 +29,11 @@ use DateTimeInterface;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
-class SearchCrmEntitiesTest extends TestCase{
+class SearchCrmEntitiesTest extends TestCase
+{
 
     protected Lead $leadService;
     protected ExternalCall $externalCallService;
-    private Main $mainService;
     protected Contact $contactService;
 
     /**
@@ -33,78 +42,96 @@ class SearchCrmEntitiesTest extends TestCase{
      * @throws Exception
      * @covers ExternalCall::searchCrmEntities
      */
-    public function testSearchCrmEntities():void
+    public function testSearchCrmEntities(): void
     {
-        $unusedPhone = sprintf('+8%s', time());
-        $datetime = new DateTime('now');
-        $callStartDate = $datetime->format(DateTimeInterface::ATOM);
-        $phoneNumber = sprintf('+7%s', time());
-        $contactId = $this->contactService->add(
+        //Не зарегистрированный телефон
+        $unusedPhone = '+51045005010';
+        $infoAboutNotExistingCustomerResult = $this->externalCallService->searchCrmEntities($unusedPhone)->getCrmEntities();
+        self::assertEmpty($infoAboutNotExistingCustomerResult,sprintf('No customers can be found for this number: %s',$unusedPhone));
+
+        //Зарегистрированный контакт
+        $phoneNumberClient1 = sprintf('+7%s', time());
+        $contactId1 = $this->contactService->add(
             [
-                'TITLE' => 'test contact',
+                'NAME' => 'Глеб',
+                'SECOND_NAME' => 'Егорович',
                 'PHONE' => [
                     [
-                        'VALUE' => $phoneNumber,
+                        'VALUE' => $phoneNumberClient1,
                         'VALUE_TYPE' => 'WORK'
                     ]
                 ]
             ]
         )->getId();
-        $leadId = $this->leadService->add(
+        $infoAboutClientResult1 = $this->externalCallService->searchCrmEntities($phoneNumberClient1)->getCrmEntities();
+        self::assertNotEmpty($infoAboutClientResult1);
+        $entityType = $infoAboutClientResult1[0]['CRM_ENTITY_TYPE'];
+        self::assertEquals('CONTACT', $entityType, sprintf('name type incorrect, expected: CONTACT , and your type: %s', $entityType));
+        $this->contactService->delete($contactId1)->isSuccess();
+
+        //Зарегистрированный лид
+        $phoneNumberLead1 = sprintf('+7%s', time());
+        $leadId1 = $this->leadService->add(
             [
-                'TITLE' => 'test lead',
+                'TITLE' => 'ИП Титов',
+                'NAME' => 'Кирилл',
                 'PHONE' => [
                     [
-                        'VALUE' => $phoneNumber,
+                        'VALUE' => $phoneNumberLead1,
                         'VALUE_TYPE' => 'WORK'
                     ]
                 ]
             ]
         )->getId();
-        $userId = $this->mainService->getCurrentUserProfile()->getUserProfile()->ID;
+        $infoAboutLeadResult = $this->externalCallService->searchCrmEntities($phoneNumberLead1)->getCrmEntities();
+        self::assertNotEmpty($infoAboutLeadResult);
+        $entityType = $infoAboutLeadResult[0]['CRM_ENTITY_TYPE'];
+        self::assertEquals('LEAD', $entityType, sprintf('name type incorrect, expected: LEAD , and your type: %s', $entityType));
+        $this->leadService->delete($leadId1);
 
-        $registerCallResult = $this->externalCallService->registerCall([
-            'USER_PHONE_INNER' => '14',
-            'USER_ID' => $userId,
-            'PHONE_NUMBER' => $phoneNumber,
-            'CALL_START_DATE' => $callStartDate,
-            'CRM_CREATE' => 0,
-            'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => (string)CrmEntityType::lead(),
-            'CRM_ENTITY_ID' => $contactId,
-            'SHOW' => 1,
-            'CALL_LIST_ID' => 1,
-            'LINE_NUMBER' => $phoneNumber,
-            'TYPE' => (string)CallType::inboundCall(),
-        ])->getExternalCallRegister();
 
-        $finishCallResult = $this->externalCallService->finish([
-            'CALL_ID' => $registerCallResult->CALL_ID,
-            'USER_ID' => $userId,
-            'DURATION' => 255,
-            'COST' => 250,
-            'COST_CURRENCY' => (string)CurrencyList::rub(),
-            'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
-            'FAILED_REASON' => '',
-            'RECORD_URL' => '',
-            'VOTE' => 5,
-            'ADD_TO_CHAT' => 1
-        ])->getExternalCallFinish();
+        $onePhoneTwoContact = sprintf('+7%s', time());
+        $contactId2 = $this->contactService->add(
+            [
+                'NAME' => 'Глеб',
+                'SECOND_NAME' => 'Егорович',
+                'PHONE' => [
+                    [
+                        'VALUE' => $onePhoneTwoContact,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
+        $contactId3 = $this->contactService->add(
+            [
+                'NAME' => 'Хлеб',
+                'SECOND_NAME' => 'Олегович',
+                'PHONE' => [
+                    [
+                        'VALUE' => $onePhoneTwoContact,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
+        $infoAboutTwoContactResult = $this->externalCallService->searchCrmEntities($onePhoneTwoContact)->getCrmEntities();
+        var_dump($infoAboutTwoContactResult);
+        self::assertNotEmpty($infoAboutTwoContactResult);
+        $entityTypeContact1 = $infoAboutLeadResult[0]['CRM_ENTITY_TYPE'];
+        $entityTypeContact2 = $infoAboutLeadResult[1]['CRM_ENTITY_TYPE'];
+        self::assertEquals('CONTACT', $entityTypeContact1, sprintf('name type incorrect, expected: CONTACT , and your type: %s', $entityTypeContact1));
+        self::assertEquals('CONTACT', $entityTypeContact2, sprintf('name type incorrect, expected: CONTACT , and your type: %s', $entityTypeContact2));
+        $this->contactService->delete($contactId2);
+        $this->contactService->delete($contactId3);
 
-        $infoAboutClientThatIsNot = $this->externalCallService->searchCrmEntities($unusedPhone)->getCrmEntitiesClient();
-        self::assertEmpty($infoAboutClientThatIsNot);
-
-        $infoAboutClientLeadResult = $this->externalCallService->searchCrmEntities($phoneNumber)->getCrmEntitiesClient();
-        self::assertNotEmpty($infoAboutClientLeadResult);
-        $typeName = $infoAboutClientLeadResult[0]['CRM_ENTITY_TYPE'];
-        self::assertEquals('CONTACT',$typeName,sprintf('name type incorrect, expected: CONTACT , and your type: %s',$typeName));
-        //self::assertEquals('LEAD',$typeName,sprintf('name type incorrect, expected: LEAD , and your type: %s',$typeName));
     }
 
     /**
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public function setUp(): void
+    public
+    function setUp(): void
     {
         $this->externalCallService = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
         $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();

@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ *  Kirill  Кhramov <k_hram@mail.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Service;
 
 
@@ -285,7 +294,7 @@ class ExternalCallTest extends TestCase
 
     private function getFileInBase64(): string
     {
-        $filePath = __DIR__ . '/voice/';
+        $filePath = __DIR__ . '/TestFile/';
         $fileName = 'test-phone-record.mp3';
         $resBase64 = '';
         $handle = fopen($filePath . $fileName, "rb");

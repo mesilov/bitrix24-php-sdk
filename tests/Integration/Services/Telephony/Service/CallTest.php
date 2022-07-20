@@ -1,10 +1,20 @@
 <?php
 declare(strict_types=1);
 
+/*
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ *  Kirill  Кhramov <k_hram@mail.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Telephony\Common\CallType;
@@ -25,23 +35,24 @@ class CallTest extends TestCase
     protected Lead $leadService;
     protected ExternalCall $externalCallService;
     protected Main $mainService;
+    protected Contact $contactService;
 
 
     /**
      * @throws BaseException
      * @throws TransportException
      * @throws Exception
-     * @covers ExternalCall::attachTranscription
+     * @covers Call::attachTranscription
      */
-
-    public function testAttachTranscription():void
+    public function testAttachTranscription(): void
     {
         $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = sprintf('+7%s', time());
-        $leadId = $this->leadService->add(
+        $contactId = $this->contactService->add(
             [
-                'TITLE' => 'test lead',
+                'NAME' => 'Глеб',
+                'SECOND_NAME' => 'Егорович',
                 'PHONE' => [
                     [
                         'VALUE' => $phoneNumber,
@@ -68,17 +79,18 @@ class CallTest extends TestCase
             ],
             [
                 'SIDE'=>'User',
-                'START_TIME'=>1,
-                'STOP_TIME'=>3,
+                'START_TIME'=>8,
+                'STOP_TIME'=>10,
                 'MESSAGE'=>'HELLO WORLD'
             ],
             [
                 'SIDE'=> "Client",
-                'START_TIME'=>4,
-                'STOP_TIME'=>8,
+                'START_TIME'=>12,
+                'STOP_TIME'=>15,
                 'MESSAGE'=>"Здравствуйте, вы продаете пылесосы?"
             ]
         ];
+
         $registerCallResult = $this->externalCallService->registerCall([
             'USER_PHONE_INNER' => '14',
             'USER_ID' => $userId,
@@ -86,8 +98,8 @@ class CallTest extends TestCase
             'CALL_START_DATE' => $callStartDate,
             'CRM_CREATE' => 0,
             'CRM_SOURCE' => '1',
-            'CRM_ENTITY_TYPE' => (string)CrmEntityType::lead(),
-            'CRM_ENTITY_ID' => $leadId,
+            'CRM_ENTITY_TYPE' => (string)CrmEntityType::contact(),
+            'CRM_ENTITY_ID' => $contactId,
             'SHOW' => 1,
             'CALL_LIST_ID' => 1,
             'LINE_NUMBER' => $phoneNumber,
@@ -123,6 +135,7 @@ class CallTest extends TestCase
         $this->callService = Fabric::getServiceBuilder()->getTelephonyScope()->call();
         $this->externalCallService = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
         $this->leadService = Fabric::getServiceBuilder()->getCRMScope()->lead();
+        $this->contactService = Fabric::getServiceBuilder()->getCRMScope()->contact();
         $this->mainService = Fabric::getServiceBuilder()->getMainScope()->main();
     }
 
