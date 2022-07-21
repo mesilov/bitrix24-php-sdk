@@ -22,7 +22,7 @@ class ExternalCallSearchCrmEntitiesResult extends AbstractResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
 
-    public function getCrmEntities():array
+    public function getCrmEntitiesSearchResult():array
     {
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {

@@ -173,6 +173,9 @@ class ExternalCall extends AbstractService
     /**
      * This method allows to retrieve information about a client from CRM by a telephone number via single request.
      *
+     * If CRM has duplicates by phone, method find and return ONLY one of duplicates
+     * Method do NOT FIND phones with different phone prefixes +7 or +8 or without it, all phones must by standardised
+     *
      * @param string $phoneNumber
      *
      * @return ExternalCallSearchCrmEntitiesResult

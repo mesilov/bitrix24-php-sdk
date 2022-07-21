@@ -36,6 +36,54 @@ class SearchCrmEntitiesTest extends TestCase
     protected Contact $contactService;
 
     /**
+     * @throws Exception
+     * @covers ExternalCall::searchCrmEntities
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function testSearchCrmEntitiesWithEmptyResult(): void
+    {
+        //Не зарегистрированный телефон
+        $unusedPhone = '+51045005010';
+        $infoAboutNotExistingCustomerResult = $this->externalCallService->searchCrmEntities($unusedPhone)->getCrmEntitiesSearchResult();
+        self::assertEmpty($infoAboutNotExistingCustomerResult, sprintf('No customers can be found for this number: %s', $unusedPhone));
+    }
+
+    /**
+     * @throws Exception
+     * @covers ExternalCall::searchCrmEntities
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function testSearchCrmEntitiesContactFound(): void
+    {
+        //Зарегистрированный контакт
+        $phoneNumberClient = sprintf('+7%s', time());
+        $contactId = $this->contactService->add(
+            [
+                'NAME' => 'Глеб',
+                'SECOND_NAME' => 'Егорович',
+                'PHONE' => [
+                    [
+                        'VALUE' => $phoneNumberClient,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
+        $infoAboutClientResult = $this->externalCallService->searchCrmEntities($phoneNumberClient)->getCrmEntitiesSearchResult();
+        $this->assertCount(1, $infoAboutClientResult);
+
+        self::assertEquals('CONTACT', $infoAboutClientResult[0]->CRM_ENTITY_TYPE,
+            sprintf('name type incorrect, expected: CONTACT , and your type: %s',
+                $infoAboutClientResult[0]->CRM_ENTITY_TYPE));
+
+        $this->assertEquals($contactId, $infoAboutClientResult[0]->CRM_ENTITY_ID);
+
+        $this->contactService->delete($contactId);
+    }
+
+    /**
      * @throws TransportException
      * @throws BaseException
      * @throws Exception
@@ -96,19 +144,19 @@ class SearchCrmEntitiesTest extends TestCase
                 'SECOND_NAME' => 'Егорович',
                 'PHONE' => [
                     [
-                        'VALUE' => $onePhoneTwoContact,
+                        'VALUE' => $contactPhone,
                         'VALUE_TYPE' => 'WORK'
                     ]
                 ]
             ]
         )->getId();
-        $contactId3 = $this->contactService->add(
+        $contactId2 = $this->contactService->add(
             [
                 'NAME' => 'Хлеб',
                 'SECOND_NAME' => 'Олегович',
                 'PHONE' => [
                     [
-                        'VALUE' => $onePhoneTwoContact,
+                        'VALUE' => $contactPhone,
                         'VALUE_TYPE' => 'WORK'
                     ]
                 ]
@@ -123,6 +171,40 @@ class SearchCrmEntitiesTest extends TestCase
         self::assertEquals('CONTACT', $entityTypeContact2, sprintf('name type incorrect, expected: CONTACT , and your type: %s', $entityTypeContact2));
         $this->contactService->delete($contactId2);
         $this->contactService->delete($contactId3);
+
+    }
+
+    /**
+     * @throws Exception
+     * @covers ExternalCall::searchCrmEntities
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     */
+    public function testSearchCrmEntitiesWithDifferentPhonePrefix(): void
+    {
+        $phoneBody = sprintf('%s', time());
+        $contactPhone1 = sprintf('+7%s', $phoneBody);
+        $contactPhone2 = sprintf('+8%s', $phoneBody);
+        $contactId1 = $this->contactService->add(
+            [
+                'NAME' => 'Глеб',
+                'SECOND_NAME' => 'Егорович',
+                'PHONE' => [
+                    [
+                        'VALUE' => $contactPhone1,
+                        'VALUE_TYPE' => 'WORK'
+                    ]
+                ]
+            ]
+        )->getId();
+
+        $infoAboutTwoContactsResult1 = $this->externalCallService->searchCrmEntities($contactPhone1)->getCrmEntitiesSearchResult();
+        $infoAboutTwoContactsResult2 = $this->externalCallService->searchCrmEntities($contactPhone2)->getCrmEntitiesSearchResult();
+        $infoAboutTwoContactsResult3 = $this->externalCallService->searchCrmEntities($phoneBody)->getCrmEntitiesSearchResult();
+        $this->assertEquals($contactId1, $infoAboutTwoContactsResult1[0]->CRM_ENTITY_ID);
+        $this->assertEmpty($infoAboutTwoContactsResult2);
+        $this->assertEmpty($infoAboutTwoContactsResult3);
+        $this->contactService->delete($contactId1);
 
     }
 
