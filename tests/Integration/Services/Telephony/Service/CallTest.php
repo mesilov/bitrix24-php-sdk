@@ -58,7 +58,7 @@ class CallTest extends TestCase
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);
 
-        echo $moneyFormatter->format($money); // outputs 1.00
+
         $contactId = $this->contactService->add(
             [
                 'NAME' => 'Глеб',
