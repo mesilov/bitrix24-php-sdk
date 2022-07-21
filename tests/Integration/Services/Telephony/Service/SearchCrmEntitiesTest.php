@@ -119,7 +119,7 @@ class SearchCrmEntitiesTest extends TestCase
         var_dump($infoAboutTwoContactResult);
         self::assertNotEmpty($infoAboutTwoContactResult);
         $entityTypeContact1 = $infoAboutLeadResult[0]['CRM_ENTITY_TYPE'];
-        $entityTypeContact2 = $infoAboutLeadResult[1]['CRM_ENTITY_TYPE'];
+                           $entityTypeContact2 = $infoAboutLeadResult[1]['CRM_ENTITY_TYPE'];
         self::assertEquals('CONTACT', $entityTypeContact1, sprintf('name type incorrect, expected: CONTACT , and your type: %s', $entityTypeContact1));
         self::assertEquals('CONTACT', $entityTypeContact2, sprintf('name type incorrect, expected: CONTACT , and your type: %s', $entityTypeContact2));
         $this->contactService->delete($contactId2);

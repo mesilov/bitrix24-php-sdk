@@ -19,7 +19,6 @@ use Bitrix24\SDK\Services\CRM\Lead\Service\Lead;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Services\Telephony\Common\CallType;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
-use Bitrix24\SDK\Services\Telephony\Common\CurrencyList;
 use Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface;
 use Bitrix24\SDK\Services\Telephony\Service\Call;
 use Bitrix24\SDK\Services\Telephony\Service\ExternalCall;
@@ -54,7 +53,7 @@ class CallTest extends TestCase
         $datetime = new DateTime('now');
         $callStartDate = $datetime->format(DateTimeInterface::ATOM);
         $phoneNumber = sprintf('+7%s', time());
-        $money = new Money(100, new Currency('RUB'));
+        $callCosts = new Money(1000, new Currency('RUB'));
         $currencies = new ISOCurrencies();
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);
@@ -77,29 +76,17 @@ class CallTest extends TestCase
 
         $messages = [
             [
-                'SIDE'=>'User',
-                'START_TIME'=>1,
-                'STOP_TIME'=>3,
-                'MESSAGE'=>'HELLO WORLD'
+                'SIDE' => 'User',
+                'START_TIME' => 1,
+                'STOP_TIME' => 3,
+                'MESSAGE' => 'HELLO WORLD'
             ],
             [
-                'SIDE'=> "Client",
-                'START_TIME'=>4,
-                'STOP_TIME'=>8,
-                'MESSAGE'=>"Здравствуйте, вы продаете пылесосы?"
+                'SIDE' => "Client",
+                'START_TIME' => 4,
+                'STOP_TIME' => 8,
+                'MESSAGE' => "Здравствуйте, вы продаете пылесосы?"
             ],
-            [
-                'SIDE'=>'User',
-                'START_TIME'=>8,
-                'STOP_TIME'=>10,
-                'MESSAGE'=>'HELLO WORLD'
-            ],
-            [
-                'SIDE'=> "Client",
-                'START_TIME'=>12,
-                'STOP_TIME'=>15,
-                'MESSAGE'=>"Здравствуйте, вы продаете пылесосы?"
-            ]
         ];
 
         $registerCallResult = $this->externalCallService->registerCall([
@@ -116,13 +103,12 @@ class CallTest extends TestCase
             'LINE_NUMBER' => $phoneNumber,
             'TYPE' => (string)CallType::outboundCall(),
         ])->getExternalCallRegister();
-
         $finishCallResult = $this->externalCallService->finish([
             'CALL_ID' => $registerCallResult->CALL_ID,
             'USER_ID' => $userId,
             'DURATION' => 255,
-            'COST' => $moneyFormatter->format($money),
-            'COST_CURRENCY' => (string)CurrencyList::rub(),
+            'COST' => $moneyFormatter->format($callCosts),
+            'COST_CURRENCY' => $callCosts->getCurrency()->getCode(),
             'STATUS_CODE' => StatusSipCodeInterface::STATUS_OK,
             'FAILED_REASON' => '',
             'RECORD_URL' => '',
@@ -130,12 +116,12 @@ class CallTest extends TestCase
             'ADD_TO_CHAT' => 1
         ])->getExternalCallFinish();
 
-        $TranscriptionResult = $this->callService->attachTranscription($registerCallResult->CALL_ID, $moneyFormatter->format($money),(string)CurrencyList::rub(), $messages)->getCallTranscription();
-        if ($messages[0]['SIDE'] === 'User'){
-            self::assertEquals('User', $messages[0]['SIDE']);
-        }
-        self::assertGreaterThan(1,$TranscriptionResult);
-        self::assertNotEmpty($messages);
+        self::assertGreaterThan(1,
+            $this->callService->attachTranscription(
+                $registerCallResult->CALL_ID,
+                $callCosts,
+               $messages)->getId()
+        );
     }
 
     /**
