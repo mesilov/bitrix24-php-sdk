@@ -18,7 +18,7 @@ use  Bitrix24\SDK\Core\Result\AbstractResult;
 class ExternalCallSearchCrmEntitiesResult extends AbstractResult
 {
     /**
-     * @return array
+     * @return ExternalCallSearchCrmEntitiesItemResult[]
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
 
@@ -26,7 +26,7 @@ class ExternalCallSearchCrmEntitiesResult extends AbstractResult
     {
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
-            $res[] = $item;
+            $res[] = new ExternalCallSearchCrmEntitiesItemResult($item);
         }
 
         return $res;
