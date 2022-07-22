@@ -66,7 +66,7 @@ class ExternalLine extends AbstractService{
      * The method allows you to change the name of the external line
      *
      * @param string $lineNumber
-     * @param string $nameLine
+     * @param string $newLineName
      *
      * @return ExternalLineUpdateResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
@@ -74,13 +74,13 @@ class ExternalLine extends AbstractService{
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_update.php
      */
 
-    public function update(string $lineNumber, string $nameLine): ExternalLineUpdateResult
+    public function update(string $lineNumber, string $newLineName): ExternalLineUpdateResult
     {
         return new ExternalLineUpdateResult(
             $this->core->call('telephony.externalLine.update',
                 [
                     'NUMBER' => $lineNumber,
-                    'NAME' => $nameLine,
+                    'NAME' => $newLineName,
                 ]
             )
         );

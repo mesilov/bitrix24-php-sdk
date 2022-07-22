@@ -293,7 +293,7 @@ class ExternalCallTest extends TestCase
 
     private function getFileInBase64(): string
     {
-        $filePath = __DIR__ . '/TestFile/';
+        $filePath = __DIR__ . '/assets/';
         $fileName = 'test-phone-record.mp3';
         $resBase64 = '';
         $handle = fopen($filePath . $fileName, "rb");
