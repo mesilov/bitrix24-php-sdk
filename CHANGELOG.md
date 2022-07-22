@@ -32,6 +32,7 @@
   ACCESS parameter.
 * add method `Services\Main\Service::getMethodAffordability` Method returns 2 parameters - isExisting and isAvailable
 * add money type support by [phpmoney](https://github.com/moneyphp/money)
+
 ### Changed
 
 * update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
