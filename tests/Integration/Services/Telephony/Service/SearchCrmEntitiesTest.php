@@ -52,25 +52,30 @@ class SearchCrmEntitiesTest extends TestCase
     public function testSearchCrmEntitiesContactFound(): void
     {
         //Зарегистрированный контакт
-        $phoneNumberClient = sprintf('+7%s', time());
+        $phoneNumberClient = sprintf('+7%s%s', time(), random_int(1, PHP_INT_MAX));
         $contactId = $this->contactService->add(
             [
-                'NAME' => 'Глеб',
+                'NAME'        => 'Глеб',
                 'SECOND_NAME' => 'Егорович',
-                'PHONE' => [
+                'PHONE'       => [
                     [
-                        'VALUE' => $phoneNumberClient,
-                        'VALUE_TYPE' => 'WORK'
-                    ]
-                ]
+                        'VALUE'      => $phoneNumberClient,
+                        'VALUE_TYPE' => 'WORK',
+                    ],
+                ],
             ]
         )->getId();
         $infoAboutClientResult = $this->externalCallService->searchCrmEntities($phoneNumberClient)->getCrmEntitiesSearchResult();
         $this->assertCount(1, $infoAboutClientResult);
 
-        self::assertEquals('CONTACT', $infoAboutClientResult[0]->CRM_ENTITY_TYPE,
-            sprintf('name type incorrect, expected: CONTACT , and your type: %s',
-                $infoAboutClientResult[0]->CRM_ENTITY_TYPE));
+        self::assertEquals(
+            'CONTACT',
+            $infoAboutClientResult[0]->CRM_ENTITY_TYPE,
+            sprintf(
+                'name type incorrect, expected: CONTACT , and your type: %s',
+                $infoAboutClientResult[0]->CRM_ENTITY_TYPE
+            )
+        );
 
         $this->assertEquals($contactId, $infoAboutClientResult[0]->CRM_ENTITY_ID);
 
@@ -86,23 +91,27 @@ class SearchCrmEntitiesTest extends TestCase
     public function testSearchCrmEntitiesLeadFound(): void
     {
         //Зарегистрированный лид
-        $phoneNumberLead = sprintf('+7%s', time());
+        $phoneNumberLead = sprintf('+7%s%s', time(), random_int(1, PHP_INT_MAX));
         $leadId1 = $this->leadService->add(
             [
                 'TITLE' => 'ИП Титов',
-                'NAME' => 'Кирилл',
+                'NAME'  => 'Кирилл',
                 'PHONE' => [
                     [
-                        'VALUE' => $phoneNumberLead,
-                        'VALUE_TYPE' => 'WORK'
-                    ]
-                ]
+                        'VALUE'      => $phoneNumberLead,
+                        'VALUE_TYPE' => 'WORK',
+                    ],
+                ],
             ]
         )->getId();
         $infoAboutLeadResult = $this->externalCallService->searchCrmEntities($phoneNumberLead)->getCrmEntitiesSearchResult();
-        $this->assertCount(1,$infoAboutLeadResult);
+        $this->assertCount(1, $infoAboutLeadResult);
 
-        self::assertEquals('LEAD', $infoAboutLeadResult[0]->CRM_ENTITY_TYPE, sprintf('name type incorrect, expected: LEAD , and your type: %s', $infoAboutLeadResult[0]->CRM_ENTITY_TYPE));
+        self::assertEquals(
+            'LEAD',
+            $infoAboutLeadResult[0]->CRM_ENTITY_TYPE,
+            sprintf('name type incorrect, expected: LEAD , and your type: %s', $infoAboutLeadResult[0]->CRM_ENTITY_TYPE)
+        );
         $this->leadService->delete($leadId1);
     }
 
@@ -114,32 +123,32 @@ class SearchCrmEntitiesTest extends TestCase
      */
     public function testSearchCrmEntitiesMultipleContactsFound(): void
     {
-        $contactPhone = sprintf('+7%s', time());
+        $contactPhone = sprintf('+7%s%s', time(), random_int(1, PHP_INT_MAX));
         $contactId1 = $this->contactService->add(
             [
-                'NAME' => 'Глеб',
+                'NAME'        => 'Глеб',
                 'SECOND_NAME' => 'Егорович',
-                'PHONE' => [
+                'PHONE'       => [
                     [
-                        'VALUE' => $contactPhone,
-                        'VALUE_TYPE' => 'WORK'
-                    ]
-                ]
+                        'VALUE'      => $contactPhone,
+                        'VALUE_TYPE' => 'WORK',
+                    ],
+                ],
             ]
         )->getId();
         $contactId2 = $this->contactService->add(
             [
-                'NAME' => 'Хлеб',
+                'NAME'        => 'Хлеб',
                 'SECOND_NAME' => 'Олегович',
-                'PHONE' => [
+                'PHONE'       => [
                     [
-                        'VALUE' => $contactPhone,
-                        'VALUE_TYPE' => 'WORK'
-                    ]
-                ]
+                        'VALUE'      => $contactPhone,
+                        'VALUE_TYPE' => 'WORK',
+                    ],
+                ],
             ]
         )->getId();
-        $contactIds = [$contactId1,$contactId2];
+        $contactIds = [$contactId1, $contactId2];
         $this->externalCallService->searchCrmEntities($contactPhone)->getCrmEntitiesSearchResult();
         $this->assertTrue(in_array($contactId1, $contactIds, true));
         $this->contactService->delete($contactId1);
@@ -154,19 +163,19 @@ class SearchCrmEntitiesTest extends TestCase
      */
     public function testSearchCrmEntitiesWithDifferentPhonePrefix(): void
     {
-        $phoneBody = sprintf('%s', time());
+        $phoneBody = sprintf('+7%s%s', time(), random_int(1, PHP_INT_MAX));
         $contactPhone1 = sprintf('+7%s', $phoneBody);
         $contactPhone2 = sprintf('+8%s', $phoneBody);
         $contactId1 = $this->contactService->add(
             [
-                'NAME' => 'Глеб',
+                'NAME'        => 'Глеб',
                 'SECOND_NAME' => 'Егорович',
-                'PHONE' => [
+                'PHONE'       => [
                     [
-                        'VALUE' => $contactPhone1,
-                        'VALUE_TYPE' => 'WORK'
-                    ]
-                ]
+                        'VALUE'      => $contactPhone1,
+                        'VALUE_TYPE' => 'WORK',
+                    ],
+                ],
             ]
         )->getId();
 
@@ -177,7 +186,6 @@ class SearchCrmEntitiesTest extends TestCase
         $this->assertEmpty($infoAboutTwoContactsResult2);
         $this->assertEmpty($infoAboutTwoContactsResult3);
         $this->contactService->delete($contactId1);
-
     }
 
     /**
