@@ -3,7 +3,7 @@
 ## 2.0-alpha.7 — 13.06.2022
 
 ### Added
-
+* add new scope `Telephony` and services [add Telephony support](https://github.com/mesilov/bitrix24-php-sdk/issues/291)
 * add new scope `UserConsent` and services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
 * add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
 * add new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
@@ -25,7 +25,7 @@
 * add method `Services\Main\Service::checkUserAccess` Checks if the current user has at least one permission of those specified by the
   ACCESS parameter.
 * add method `Services\Main\Service::getMethodAffordability` Method returns 2 parameters - isExisting and isAvailable
-
+* add money type support by [phpmoney](https://github.com/moneyphp/money)
 ### Changed
 
 * update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
