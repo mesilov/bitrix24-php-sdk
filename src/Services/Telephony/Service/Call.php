@@ -25,7 +25,7 @@ class Call extends AbstractService
      *
      * @param string $callId
      * @param Money $callCosts
-     * @param array<int, <array<string,string>>> $messages
+     * @param array<int, array<string,string>> $messages
      * @return \Bitrix24\SDK\Services\Telephony\Result\CallAttachTranscriptionResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
