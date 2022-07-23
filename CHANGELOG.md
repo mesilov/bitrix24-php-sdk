@@ -3,6 +3,7 @@
 ## 2.0-alpha.7 — 23.07.2022
 
 ### Added
+
 * add new scope `Telephony` and services [add Telephony support](https://github.com/mesilov/bitrix24-php-sdk/issues/291)
 * add new scope `UserConsent` and services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
 * add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
@@ -32,6 +33,7 @@
   ACCESS parameter.
 * add method `Services\Main\Service::getMethodAffordability` Method returns 2 parameters - isExisting and isAvailable
 * add money type support by [phpmoney](https://github.com/moneyphp/money)
+* add support fields `operating` and `operating_reset_at` at `Bitrix24\SDK\Core\Response\DTO\Time` datastructures
 
 ### Changed
 
@@ -45,7 +47,7 @@
 
 * add bugfix for batch method for reverse order queries
 * fix type compatible errors for `Core\Result\AbstractItem`
-* fix error in `NetworkTimingParser`, [error in NetworkTimingsErrorInfo](https://github.com/mesilov/bitrix24-php-sdk/issues/277) 
+* fix error in `NetworkTimingParser`, [error in NetworkTimingsErrorInfo](https://github.com/mesilov/bitrix24-php-sdk/issues/277)
 * fix error in `RenewedAccessToken` DTO, remove `Scope`
   enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
 
