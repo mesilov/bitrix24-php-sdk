@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Telephony\testSerializer;
+namespace Bitrix24\SDK\Tests\Unit\Services\TestPerson;
 
-class person
+class Person
 {
     private string $name;
     private string $lastName;
