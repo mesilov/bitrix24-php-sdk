@@ -21,6 +21,8 @@
   integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
 * add in scope `Placements` service `Placement\Service\UserFieldType` for work with user fields embedding
+* add in scope `Telephony` add events: `OnExternalCallBackStart`, `OnExternalCallStart`, `OnVoximplantCallEnd`, `OnVoximplantCallEnd`
+  , `OnVoximplantCallInit`, `OnVoximplantCallStart` see [add telephony events](https://github.com/mesilov/bitrix24-php-sdk/issues/304)
 * add `ApplicationStatus` with application status codes description
 * add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
 * add fabric method `ApplicationProfile::initFromArray` when application profile stored in ENV-variables
