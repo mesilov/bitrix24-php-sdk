@@ -25,6 +25,7 @@ class CallType
 
     /**
      * @param int $typeCode
+     *
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
 
@@ -45,37 +46,65 @@ class CallType
     /**
      * @return self
      */
-
     public static function outboundCall(): self
     {
         return new self(self::OUTBOUND_CALL);
     }
 
     /**
+     * @return bool
+     */
+    public function isOutboundCall(): bool
+    {
+        return $this->code === self::OUTBOUND_CALL;
+    }
+
+    /**
      * @return self
      */
-
     public static function inboundCall(): self
     {
-        return new self( self::INBOUND_CALL);
+        return new self(self::INBOUND_CALL);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInboundCall(): bool
+    {
+        return $this->code === self::INBOUND_CALL;
     }
 
     /**
      * @return self
      */
-
     public static function inboundCallWithRedirection(): self
     {
-        return new self( self::INBOUND_CALL_WITH_REDIRECTION);
+        return new self(self::INBOUND_CALL_WITH_REDIRECTION);
+    }
 
+    /**
+     * @return bool
+     */
+    public function isInboundCallWithRedirection(): bool
+    {
+        return $this->code === self::INBOUND_CALL_WITH_REDIRECTION;
     }
 
     /**
      * @return self
      */
-    public static function backCall(): self
+    public static function callback(): self
     {
-        return new self( self::CALLBACK);
+        return new self(self::CALLBACK);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCallback(): bool
+    {
+        return $this->code === self::CALLBACK;
     }
 
     public function __toString(): string
@@ -83,5 +112,12 @@ class CallType
         return (string)$this->code;
     }
 
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public static function initByTypeCode(int $callTypeCode): self
+    {
+        return new self($callTypeCode);
+    }
 }
 

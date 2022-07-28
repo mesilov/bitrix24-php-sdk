@@ -24,6 +24,7 @@ class CrmEntityType
 
     /**
      * @param string $typeCode
+     *
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
     private function __construct(string $typeCode)
@@ -48,11 +49,27 @@ class CrmEntityType
     }
 
     /**
+     * @return bool
+     */
+    public function isContact(): bool
+    {
+        return $this->code === $this::CONTACT;
+    }
+
+    /**
      * @return self
      */
     public static function company(): self
     {
         return new self(self::COMPANY);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompany(): bool
+    {
+        return $this->code === $this::COMPANY;
     }
 
     /**
@@ -64,10 +81,26 @@ class CrmEntityType
     }
 
     /**
+     * @return bool
+     */
+    public function isLead(): bool
+    {
+        return $this->code === $this::LEAD;
+    }
+
+    /**
      * @return string
      */
     public function __toString(): string
     {
         return $this->code;
+    }
+
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public static function initByCode(string $entityTypeCode): self
+    {
+        return new self($entityTypeCode);
     }
 }
