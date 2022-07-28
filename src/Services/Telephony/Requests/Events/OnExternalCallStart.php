@@ -17,7 +17,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getUserId(): int
     {
-        return (int)$this->eventPayload['USER_ID'];
+        return (int)$this->eventPayload['data']['USER_ID'];
     }
 
     /**
@@ -25,7 +25,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getPhoneNumber(): string
     {
-        return $this->eventPayload['PHONE_NUMBER'];
+        return $this->eventPayload['data']['PHONE_NUMBER'];
     }
 
     /**
@@ -33,7 +33,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getPhoneNumberInternational(): string
     {
-        return $this->eventPayload['PHONE_NUMBER_INTERNATIONAL'];
+        return $this->eventPayload['data']['PHONE_NUMBER_INTERNATIONAL'];
     }
 
     /**
@@ -42,7 +42,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getCrmEntityType(): CrmEntityType
     {
-        return CrmEntityType::initByCode($this->eventPayload['CRM_ENTITY_TYPE']);
+        return CrmEntityType::initByCode($this->eventPayload['data']['CRM_ENTITY_TYPE']);
     }
 
     /**
@@ -50,7 +50,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getCrmEntityId(): int
     {
-        return (int)$this->eventPayload['CRM_ENTITY_ID'];
+        return (int)$this->eventPayload['data']['CRM_ENTITY_ID'];
     }
 
     /**
@@ -58,7 +58,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getCallListId(): int
     {
-        return (int)$this->eventPayload['CALL_LIST_ID'];
+        return (int)$this->eventPayload['data']['CALL_LIST_ID'];
     }
 
     /**
@@ -66,7 +66,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getLineNumber(): string
     {
-        return $this->eventPayload['LINE_NUMBER'];
+        return $this->eventPayload['data']['LINE_NUMBER'];
     }
 
     /**
@@ -74,7 +74,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getCallId(): string
     {
-        return $this->eventPayload['CALL_ID'];
+        return $this->eventPayload['data']['CALL_ID'];
     }
 
     /**
@@ -82,7 +82,7 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function getExtension(): string
     {
-        return $this->eventPayload['EXTENSION'];
+        return $this->eventPayload['data']['EXTENSION'];
     }
 
     /**
@@ -90,6 +90,6 @@ class OnExternalCallStart extends AbstractEventRequest
      */
     public function isMobile(): bool
     {
-        return !($this->eventPayload['IS_MOBILE'] === '0');
+        return !($this->eventPayload['data']['IS_MOBILE'] === '0');
     }
 }

@@ -16,7 +16,7 @@ class OnVoximplantCallStart extends AbstractEventRequest
      */
     public function getCallId(): string
     {
-        return $this->eventPayload['CALL_ID'];
+        return $this->eventPayload['data']['CALL_ID'];
     }
 
     /**
@@ -24,6 +24,6 @@ class OnVoximplantCallStart extends AbstractEventRequest
      */
     public function getUserId(): int
     {
-        return (int)$this->eventPayload['USER_ID'];
+        return (int)$this->eventPayload['data']['USER_ID'];
     }
 }

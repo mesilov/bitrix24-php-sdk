@@ -17,7 +17,7 @@ class OnVoximplantCallInit extends AbstractEventRequest
      */
     public function getCallId(): string
     {
-        return $this->eventPayload['CALL_ID'];
+        return $this->eventPayload['data']['CALL_ID'];
     }
 
     /**
@@ -25,7 +25,7 @@ class OnVoximplantCallInit extends AbstractEventRequest
      */
     public function getCallType(): CallType
     {
-        return CallType::initByTypeCode((int)$this->eventPayload['CALL_TYPE']);
+        return CallType::initByTypeCode((int)$this->eventPayload['data']['CALL_TYPE']);
     }
 
     /**
@@ -33,7 +33,7 @@ class OnVoximplantCallInit extends AbstractEventRequest
      */
     public function getAccountSearchId(): string
     {
-        return $this->eventPayload['ACCOUNT_SEARCH_ID'];
+        return $this->eventPayload['data']['ACCOUNT_SEARCH_ID'];
     }
 
     /**
@@ -41,7 +41,7 @@ class OnVoximplantCallInit extends AbstractEventRequest
      */
     public function getPhoneNumber(): string
     {
-        return $this->eventPayload['PHONE_NUMBER'];
+        return $this->eventPayload['data']['PHONE_NUMBER'];
     }
 
     /**
@@ -49,6 +49,6 @@ class OnVoximplantCallInit extends AbstractEventRequest
      */
     public function getCallerId(): string
     {
-        return $this->eventPayload['CALLER_ID'];
+        return $this->eventPayload['data']['CALLER_ID'];
     }
 }

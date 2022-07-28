@@ -14,7 +14,7 @@ class OnExternalCallBackStart extends AbstractEventRequest
      */
     public function getPhoneNumber(): string
     {
-        return $this->eventPayload['PHONE_NUMBER'];
+        return $this->eventPayload['data']['PHONE_NUMBER'];
     }
 
     /**
@@ -22,7 +22,7 @@ class OnExternalCallBackStart extends AbstractEventRequest
      */
     public function getText(): string
     {
-        return $this->eventPayload['TEXT'];
+        return $this->eventPayload['data']['TEXT'];
     }
 
     /**
@@ -30,7 +30,7 @@ class OnExternalCallBackStart extends AbstractEventRequest
      */
     public function getVoiceId(): string
     {
-        return $this->eventPayload['VOICE'];
+        return $this->eventPayload['data']['VOICE'];
     }
 
     /**
@@ -39,7 +39,7 @@ class OnExternalCallBackStart extends AbstractEventRequest
      */
     public function getCrmEntityType(): CrmEntityType
     {
-        return CrmEntityType::initByCode($this->eventPayload['CRM_ENTITY_TYPE']);
+        return CrmEntityType::initByCode($this->eventPayload['data']['CRM_ENTITY_TYPE']);
     }
 
     /**
@@ -47,7 +47,7 @@ class OnExternalCallBackStart extends AbstractEventRequest
      */
     public function getCrmEntityId(): int
     {
-        return (int)$this->eventPayload['CRM_ENTITY_ID'];
+        return (int)$this->eventPayload['data']['CRM_ENTITY_ID'];
     }
 
     /**
@@ -55,6 +55,6 @@ class OnExternalCallBackStart extends AbstractEventRequest
      */
     public function getLineNumber(): string
     {
-        return $this->eventPayload['LINE_NUMBER'];
+        return $this->eventPayload['data']['LINE_NUMBER'];
     }
 }

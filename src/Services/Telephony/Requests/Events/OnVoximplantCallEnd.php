@@ -22,7 +22,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getCallId(): string
     {
-        return $this->eventPayload['CALL_ID'];
+        return $this->eventPayload['data']['CALL_ID'];
     }
 
     /**
@@ -30,7 +30,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getCallType(): CallType
     {
-        return CallType::initByTypeCode((int)$this->eventPayload['CALL_TYPE']);
+        return CallType::initByTypeCode((int)$this->eventPayload['data']['CALL_TYPE']);
     }
 
     /**
@@ -38,7 +38,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getPhoneNumber(): string
     {
-        return $this->eventPayload['PHONE_NUMBER'];
+        return $this->eventPayload['data']['PHONE_NUMBER'];
     }
 
     /**
@@ -46,7 +46,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getPortalNumber(): string
     {
-        return $this->eventPayload['PORTAL_NUMBER'];
+        return $this->eventPayload['data']['PORTAL_NUMBER'];
     }
 
     /**
@@ -54,7 +54,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getPortalUserId(): int
     {
-        return (int)$this->eventPayload['PORTAL_USER_ID'];
+        return (int)$this->eventPayload['data']['PORTAL_USER_ID'];
     }
 
     /**
@@ -62,7 +62,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getCallDuration(): int
     {
-        return (int)$this->eventPayload['CALL_DURATION'];
+        return (int)$this->eventPayload['data']['CALL_DURATION'];
     }
 
     /**
@@ -70,7 +70,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getCallStartDate(): DateTimeImmutable
     {
-        return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->eventPayload['CALL_START_DATE']);
+        return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->eventPayload['data']['CALL_START_DATE']);
     }
 
     /**
@@ -79,12 +79,12 @@ class OnVoximplantCallEnd extends AbstractEventRequest
     public function getCost(): Money
     {
         if ($this->eventPayload['COST'] === '') {
-            return new Money(0, new Currency($this->eventPayload['COST_CURRENCY']));
+            return new Money(0, new Currency($this->eventPayload['data']['COST_CURRENCY']));
         }
 
         return (new DecimalMoneyParser(new ISOCurrencies()))->parse(
-            $this->eventPayload['COST'],
-            $this->eventPayload['COST_CURRENCY']
+            $this->eventPayload['data']['COST'],
+            $this->eventPayload['data']['COST_CURRENCY']
         );
     }
 
@@ -93,7 +93,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getCallFailedCode(): int
     {
-        return (int)$this->eventPayload['CALL_FAILED_CODE'];
+        return (int)$this->eventPayload['data']['CALL_FAILED_CODE'];
     }
 
     /**
@@ -101,7 +101,7 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getCallFailedReason(): string
     {
-        return $this->eventPayload['CALL_FAILED_REASON'];
+        return $this->eventPayload['data']['CALL_FAILED_REASON'];
     }
 
     /**
@@ -109,6 +109,6 @@ class OnVoximplantCallEnd extends AbstractEventRequest
      */
     public function getCrmActivityId(): int
     {
-        return (int)$this->eventPayload['CRM_ACTIVITY_ID'];
+        return (int)$this->eventPayload['data']['CRM_ACTIVITY_ID'];
     }
 }
