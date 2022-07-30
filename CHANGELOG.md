@@ -7,6 +7,7 @@
 * add new scope `Telephony` and services [add Telephony support](https://github.com/mesilov/bitrix24-php-sdk/issues/291)
 * add new scope `UserConsent` and services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
 * add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
+* add new scope `IMOpenLines` and services [add IM Open Lines support](https://github.com/mesilov/bitrix24-php-sdk/issues/302)
 * add in scope `CRM` new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
 * add in scope `CRM` new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
 * add in scope `CRM` for entity Deal method `Services\CRM\Deal\Service\Batch::update` batch update deals

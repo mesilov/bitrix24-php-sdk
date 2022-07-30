@@ -33,6 +33,14 @@ class Fabric
     }
 
     /**
+     * @return string
+     */
+    public static function getOpenLineCode(): string
+    {
+        return (string)$_ENV['INTEGRATION_TEST_OPEN_LINE_CODE'];
+    }
+
+    /**
      * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
