@@ -47,6 +47,8 @@
 * method `Services\Main\Service::getMethodsByScope` marks as deprecated
 * fabric methods for `Bitrix24\SDK\Core\Credentials`
   are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`, `createFromPlacementRequest`
+* deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
+
 
 ### Bugfix
 
