@@ -66,6 +66,8 @@ class CoreBuilder
      * @param string $webhookUrl
      *
      * @return $this
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @deprecated use withCredentials
      */
     public function withWebhookUrl(string $webhookUrl): self
     {
@@ -117,7 +119,7 @@ class CoreBuilder
     public function build(): CoreInterface
     {
         if ($this->webhookUrl !== null) {
-            $this->credentials = Credentials::createForWebHook($this->webhookUrl);
+            $this->credentials = Credentials::createFromWebhook($this->webhookUrl);
         } elseif ($this->credentials === null) {
             throw new InvalidArgumentException('you must set webhook url or oauth credentials before call method build');
         }

@@ -124,7 +124,7 @@ class Credentials
      * @return self
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public static function createForWebHook(WebhookUrl $webhookUrl): self
+    public static function createFromWebhook(WebhookUrl $webhookUrl): self
     {
         return new self(
             $webhookUrl,
@@ -142,7 +142,7 @@ class Credentials
      * @return self
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public static function createForOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
+    public static function createFromOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
     {
         return new self(
             null,
@@ -159,9 +159,9 @@ class Credentials
      * @return self
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public static function initFromPlacementRequest(PlacementRequest $placementRequest, ApplicationProfile $applicationProfile): self
+    public static function createFromPlacementRequest(PlacementRequest $placementRequest, ApplicationProfile $applicationProfile): self
     {
-        return self::createForOAuth(
+        return self::createFromOAuth(
             $placementRequest->getAccessToken(),
             $applicationProfile,
             $placementRequest->getDomainUrl()
