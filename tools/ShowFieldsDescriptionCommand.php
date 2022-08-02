@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tools;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\CoreBuilder;
+use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\Response;
 use Psr\Log\LoggerInterface;
@@ -80,9 +83,9 @@ class ShowFieldsDescriptionCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
         try {
-            $this->core = (new \Bitrix24\SDK\Core\CoreBuilder())
+            $this->core = (new CoreBuilder())
                 ->withLogger($this->logger)
-                ->withWebhookUrl($b24Webhook)
+                ->withCredentials(Credentials::createFromWebhook(new WebhookUrl($b24Webhook)))
                 ->build();
 
             $methods = $this->core->call('methods', ['full' => true])->getResponseData()->getResult()->getResultData();
