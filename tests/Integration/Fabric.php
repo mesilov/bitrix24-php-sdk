@@ -10,6 +10,7 @@ use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -58,7 +59,11 @@ class Fabric
     {
         return (new CoreBuilder())
             ->withLogger(self::getLogger())
-            ->withCredentials(Credentials::createFromWebhook($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK']))
+            ->withCredentials(
+                Credentials::createFromWebhook(
+                    new WebhookUrl($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK'])
+                )
+            )
             ->build();
     }
 
