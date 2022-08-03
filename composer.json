@@ -42,7 +42,8 @@
     "phpunit/phpunit": "9.5.*",
     "symfony/stopwatch": "5.4.* || 6.*",
     "roave/security-advisories": "dev-master",
-    "ext-intl": "*"
+    "ext-intl": "*",
+    "ext-http": "*"
   },
   "autoload": {
     "psr-4": {

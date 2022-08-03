@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\TestPerson;
 
+use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
+use Bitrix24\SDK\Services\CRM\Product\Service\Product;
 use Money\Currency;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -18,6 +20,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class PersonTest extends TestCase
 {
+    protected Deal $deal;
+    protected Product $product;
     /**
      * @test
      */
@@ -74,7 +78,7 @@ class PersonTest extends TestCase
 
         $serializer = new Serializer($normalizers, $encoders);
 
-        $dollars = new Money(100,new Currency('USD'));
+        $dollars = new Money(100, new Currency('USD'));
 
         $numberFormatter = new \NumberFormatter('en_US', \NumberFormatter::CURRENCY);
         $intlFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
@@ -83,9 +87,10 @@ class PersonTest extends TestCase
             'USD' => $intlFormatter,
         ]);
 
-        $money =  $moneyFormatter->format($dollars);
-        $jsonContent = $serializer->normalize($money,null, [AbstractNormalizer::ATTRIBUTES => ['amount']]);
+        $money = $moneyFormatter->format($dollars);
+        $jsonContent = $serializer->normalize($money, null, [AbstractNormalizer::ATTRIBUTES => ['amount']]);
         var_dump($jsonContent);
         self::assertNotEmpty($money);
     }
+
 }
