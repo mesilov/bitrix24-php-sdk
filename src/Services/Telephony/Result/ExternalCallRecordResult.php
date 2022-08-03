@@ -23,6 +23,6 @@ class ExternalCallRecordResult extends AbstractResult
      */
     public function getFileId():int
     {
-     return  $this->getCoreResponse()->getResponseData()->getResult()->getResultData()['FILE_ID'];
+     return $this->getCoreResponse()->getResponseData()->getResult()['FILE_ID'];
     }
 }

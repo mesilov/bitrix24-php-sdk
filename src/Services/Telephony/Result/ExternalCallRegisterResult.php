@@ -24,7 +24,7 @@ class ExternalCallRegisterResult extends AbstractResult
      */
     public function getExternalCallRegister(): ExternalCallRegisterItemResult
     {
-        return new ExternalCallRegisterItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new ExternalCallRegisterItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 
 }

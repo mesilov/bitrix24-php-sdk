@@ -15,6 +15,6 @@ class EventListResult extends AbstractResult
      */
     public function getEvents(): array
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+        return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }

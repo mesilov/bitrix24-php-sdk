@@ -29,6 +29,6 @@ class AddedItemBatchResult implements AddedItemIdResultInterface
 
     public function getId(): int
     {
-        return (int)$this->getResponseData()->getResult()->getResultData()[0];
+        return (int)$this->getResponseData()->getResult()[0];
     }
 }

@@ -25,7 +25,7 @@ class ExternalLineAddResult extends AbstractResult implements AddedItemIdResultI
      */
     public function getId(): int
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()['ID'];
+        return $this->getCoreResponse()->getResponseData()->getResult()['ID'];
     }
 
 }

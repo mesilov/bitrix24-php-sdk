@@ -1,6 +1,6 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.7 — 23.07.2022
+## 2.0-alpha.7 — 8.08.2022
 
 ### Added
 
@@ -45,11 +45,12 @@
 * method `Services\Main\Service::getAvailableMethods` marks as deprecated
 * method `Services\Main\Service::getAllMethods` marks as deprecated
 * method `Services\Main\Service::getMethodsByScope` marks as deprecated
-* fabric methods for `Bitrix24\SDK\Core\Credentials`
-  are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
+* ❗️fabric methods `Bitrix24\SDK\Core\Credentials`
+   renamed and now are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
   , `createFromPlacementRequest`
-* deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
-* deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
+* ❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
+* ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result` 
+* ❗️deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
   method `CoreBuilder::withCredentials`
 
 ### Bugfix

@@ -15,6 +15,6 @@ class EventHandlerUnbindResult extends AbstractResult
      */
     public function getUnbindedHandlersCount(): int
     {
-        return (int)$this->getCoreResponse()->getResponseData()->getResult()->getResultData()['count'];
+        return (int)$this->getCoreResponse()->getResponseData()->getResult()['count'];
     }
 }

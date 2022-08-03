@@ -15,6 +15,6 @@ class UserConsentAgreementTextResult extends AbstractResult
      */
     public function text(): UserConsentAgreementTextItemResult
     {
-        return new UserConsentAgreementTextItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new UserConsentAgreementTextItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

@@ -26,6 +26,6 @@ class ExternalCallHideResult extends AbstractResult
 
     public function isHided(): bool
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0];
+        return $this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

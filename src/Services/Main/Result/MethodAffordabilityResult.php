@@ -15,7 +15,7 @@ class MethodAffordabilityResult extends AbstractResult
      */
     public function isExisting(): bool
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()['isExisting'];
+        return $this->getCoreResponse()->getResponseData()->getResult()['isExisting'];
     }
 
     /**
@@ -24,6 +24,6 @@ class MethodAffordabilityResult extends AbstractResult
      */
     public function isAvailable(): bool
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()['isAvailable'];
+        return $this->getCoreResponse()->getResponseData()->getResult()['isAvailable'];
     }
 }

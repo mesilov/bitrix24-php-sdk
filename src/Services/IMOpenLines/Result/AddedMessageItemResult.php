@@ -16,6 +16,6 @@ class AddedMessageItemResult extends AbstractResult
      */
     public function isSuccess(): bool
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0];
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

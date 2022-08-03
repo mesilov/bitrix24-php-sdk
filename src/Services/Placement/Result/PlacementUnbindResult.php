@@ -15,6 +15,6 @@ class PlacementUnbindResult extends AbstractResult
      */
     public function getDeletedPlacementHandlersCount(): int
     {
-        return (int)$this->getCoreResponse()->getResponseData()->getResult()->getResultData()['count'];
+        return (int)$this->getCoreResponse()->getResponseData()->getResult()['count'];
     }
 }

@@ -24,6 +24,6 @@ class ExternalCallFinishResult extends AbstractResult
      */
     public function getExternalCallFinish(): ExternalCallFinishItemResult
     {
-        return new ExternalCallFinishItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new ExternalCallFinishItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

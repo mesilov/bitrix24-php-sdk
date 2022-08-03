@@ -16,7 +16,7 @@ class PlacementsLocationInformationResult extends AbstractResult
     public function getPlacementsLocationInformation(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new PlacementLocationItemResult($item);
         }
 

@@ -17,7 +17,7 @@ class UserConsentAgreementsResult extends AbstractResult
     public function getAgreements(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new UserConsentAgreementItemResult($item);
         }
 

@@ -22,7 +22,7 @@ class ContactsResult extends AbstractResult
     public function getContacts(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new ContactItemResult($item);
         }
 

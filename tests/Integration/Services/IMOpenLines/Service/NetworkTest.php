@@ -36,7 +36,7 @@ class NetworkTest extends TestCase
     {
         $res = $this->networkService->messageAdd(
             Fabric::getOpenLineCode(),
-            (int)$this->networkService->core->call('PROFILE')->getResponseData()->getResult()->getResultData()['ID'],
+            (int)$this->networkService->core->call('PROFILE')->getResponseData()->getResult()['ID'],
             sprintf('Test message at %s', time())
         );
 

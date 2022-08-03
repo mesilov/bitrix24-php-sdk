@@ -88,7 +88,7 @@ class ShowFieldsDescriptionCommand extends Command
                 ->withCredentials(Credentials::createFromWebhook(new WebhookUrl($b24Webhook)))
                 ->build();
 
-            $methods = $this->core->call('methods', ['full' => true])->getResponseData()->getResult()->getResultData();
+            $methods = $this->core->call('methods', ['full' => true])->getResponseData()->getResult();
             $fieldsMethods = [];
             foreach ($methods as $method) {
                 if (strpos($method, 'fields') !== false) {
@@ -167,7 +167,7 @@ class ShowFieldsDescriptionCommand extends Command
     private function showFieldsAsPhpDocFunctionSelectSuggest(OutputInterface $output, Response $fields): void
     {
         $fieldsList = [];
-        foreach ($fields->getResponseData()->getResult()->getResultData() as $fieldCode => $fieldDescription) {
+        foreach ($fields->getResponseData()->getResult() as $fieldCode => $fieldDescription) {
             $fieldsList[] = sprintf("'%s'", $fieldCode);
         }
         $output->writeln(' * @param array $select = [' . implode(',', $fieldsList) . ']');
@@ -182,7 +182,7 @@ class ShowFieldsDescriptionCommand extends Command
     private function showFieldsAsPhpDocFunctionProperty(OutputInterface $output, Response $fields): void
     {
         $fieldsList = ['*', '* @param array{'];
-        foreach ($fields->getResponseData()->getResult()->getResultData() as $fieldCode => $fieldDescription) {
+        foreach ($fields->getResponseData()->getResult() as $fieldCode => $fieldDescription) {
             switch (strtolower($fieldDescription['type'])) {
                 case 'integer':
                     $phpDocType = 'int';
@@ -209,7 +209,7 @@ class ShowFieldsDescriptionCommand extends Command
     private function showFieldsAsPhpDocClassHeader(OutputInterface $output, Response $fields): void
     {
         $fieldsList = ['/**', '*'];
-        foreach ($fields->getResponseData()->getResult()->getResultData() as $fieldCode => $fieldDescription) {
+        foreach ($fields->getResponseData()->getResult() as $fieldCode => $fieldDescription) {
             switch (strtolower($fieldDescription['type'])) {
                 case 'integer':
                     $phpDocType = 'int';
@@ -236,7 +236,7 @@ class ShowFieldsDescriptionCommand extends Command
     {
         $fieldsTable = [];
         // some methods return description in upper case
-        $fields = array_change_key_case($fields->getResponseData()->getResult()->getResultData(), CASE_LOWER);
+        $fields = array_change_key_case($fields->getResponseData()->getResult(), CASE_LOWER);
 
         foreach ($fields as $fieldCode => $fieldDescription) {
             $fieldDescription = array_change_key_case($fieldDescription, CASE_LOWER);

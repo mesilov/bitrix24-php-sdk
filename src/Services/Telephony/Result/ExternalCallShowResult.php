@@ -27,7 +27,7 @@ class ExternalCallShowResult extends AbstractResult
 
     public function isShown(): bool
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0];
+        return $this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 
 

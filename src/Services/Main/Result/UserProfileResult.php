@@ -11,6 +11,6 @@ class UserProfileResult extends AbstractResult
 {
     public function getUserProfile(): UserProfileItemResult
     {
-        return new UserProfileItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new UserProfileItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

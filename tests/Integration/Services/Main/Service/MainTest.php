@@ -79,7 +79,7 @@ class MainTest extends TestCase
      */
     public function testGetAvailableScope(): void
     {
-        $scope = new Scope($this->mainService->getAvailableScope()->getResponseData()->getResult()->getResultData());
+        $scope = new Scope($this->mainService->getAvailableScope()->getResponseData()->getResult());
         $this->assertIsArray($scope->getScopeCodes());
     }
 
@@ -92,8 +92,8 @@ class MainTest extends TestCase
     public function testGetCurrentScope(): void
     {
         $this->assertGreaterThanOrEqual(
-            count((new Scope($this->mainService->getCurrentScope()->getResponseData()->getResult()->getResultData()))->getScopeCodes()),
-            count((new Scope($this->mainService->getAvailableScope()->getResponseData()->getResult()->getResultData()))->getScopeCodes())
+            count((new Scope($this->mainService->getCurrentScope()->getResponseData()->getResult()))->getScopeCodes()),
+            count((new Scope($this->mainService->getAvailableScope()->getResponseData()->getResult()))->getScopeCodes())
         );
     }
 
@@ -106,7 +106,7 @@ class MainTest extends TestCase
      */
     public function testGetAvailableMethods(): void
     {
-        $this->assertIsArray($this->mainService->getAvailableMethods()->getResponseData()->getResult()->getResultData());
+        $this->assertIsArray($this->mainService->getAvailableMethods()->getResponseData()->getResult());
     }
 
     public function setUp(): void

@@ -24,6 +24,6 @@ class ExternalLineUpdateResult extends AbstractResult
      */
     public function updateExternalLineId():int
     {
-        return (int)$this->getCoreResponse()->getResponseData()->getResult()->getResultData()['ID'];
+        return (int)$this->getCoreResponse()->getResponseData()->getResult()['ID'];
     }
 }

@@ -25,7 +25,7 @@ class ExternalCallSearchCrmEntitiesResult extends AbstractResult
     public function getCrmEntitiesSearchResult():array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new ExternalCallSearchCrmEntitiesItemResult($item);
         }
 

@@ -22,7 +22,7 @@ class LeadsResult extends AbstractResult
     public function getLeads(): array
     {
         $items = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $items[] = new LeadItemResult($item);
         }
 

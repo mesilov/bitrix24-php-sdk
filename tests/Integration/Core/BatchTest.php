@@ -296,7 +296,7 @@ class BatchTest extends TestCase
         // add deals to bitrix24
         $dealIdList = [];
         foreach ($this->batch->addEntityItems('crm.deal.add', $rawDeals) as $cnt => $addDealResult) {
-            $dealIdList[] = $addDealResult->getResult()->getResultData()[0];
+            $dealIdList[] = $addDealResult->getResult()[0];
         }
         $this->assertCount(self::DEMO_DATA_ARRAY_SIZE_LESS_THAN_PAGE, $dealIdList);
     }
@@ -335,14 +335,14 @@ class BatchTest extends TestCase
         // add deals to bitrix24
         $dealIdList = [];
         foreach ($this->batch->addEntityItems('crm.deal.add', $rawDeals) as $cnt => $addDealResult) {
-            $dealIdList[] = $addDealResult->getResult()->getResultData()[0];
+            $dealIdList[] = $addDealResult->getResult()[0];
         }
         $this->assertCount(self::DEMO_DATA_ARRAY_SIZE_LESS_THAN_PAGE, $dealIdList);
 
         // delete deals from bitrix24
         $dealsDeleteResult = [];
         foreach ($this->batch->deleteEntityItems('crm.deal.delete', $dealIdList) as $cnt => $deleteDealResult) {
-            $dealsDeleteResult[] = $deleteDealResult->getResult()->getResultData()[0];
+            $dealsDeleteResult[] = $deleteDealResult->getResult()[0];
         }
         $this->assertCount(self::DEMO_DATA_ARRAY_SIZE_LESS_THAN_PAGE, $dealsDeleteResult);
     }
@@ -356,7 +356,7 @@ class BatchTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         foreach ($this->batch->deleteEntityItems('crm.deal.delete', [1, 2, '3', 4, 5]) as $cnt => $deleteDealResult) {
-            $dealsDeleteResult[] = $deleteDealResult->getResult()->getResultData()[0];
+            $dealsDeleteResult[] = $deleteDealResult->getResult()[0];
         }
     }
 

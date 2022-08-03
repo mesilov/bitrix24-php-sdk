@@ -21,9 +21,9 @@ use Throwable;
 class Response
 {
     protected ResponseInterface $httpResponse;
-    protected LoggerInterface $logger;
     protected ?DTO\ResponseData $responseData;
     protected Command $apiCommand;
+    protected LoggerInterface $logger;
 
     /**
      * Response constructor.
@@ -109,7 +109,7 @@ class Response
                 }
 
                 $this->responseData = new DTO\ResponseData(
-                    new DTO\Result($responseResult['result']),
+                    $responseResult['result'],
                     DTO\Time::initFromResponse($responseResult['time']),
                     new DTO\Pagination($nextItem, $total)
                 );

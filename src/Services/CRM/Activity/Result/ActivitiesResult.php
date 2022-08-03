@@ -17,7 +17,7 @@ class ActivitiesResult extends AbstractResult
     public function getActivities(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new ActivityItemResult($item);
         }
 

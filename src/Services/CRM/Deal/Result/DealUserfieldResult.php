@@ -14,6 +14,6 @@ class DealUserfieldResult extends AbstractResult
      */
     public function userfieldItem(): DealUserfieldItemResult
     {
-        return new DealUserfieldItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new DealUserfieldItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

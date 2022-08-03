@@ -11,6 +11,6 @@ class ApplicationInfoResult extends AbstractResult
 {
     public function applicationInfo(): ApplicationInfoItemResult
     {
-        return new ApplicationInfoItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new ApplicationInfoItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

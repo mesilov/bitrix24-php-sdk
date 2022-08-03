@@ -16,7 +16,7 @@ class EventHandlersResult extends AbstractResult
     public function getEventHandlers(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $event) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $event) {
             $res[] = new EventHandlerItemResult($event);
         }
 

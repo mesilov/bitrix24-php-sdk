@@ -25,6 +25,6 @@ class CallAttachTranscriptionResult extends AbstractResult implements AddedItemI
 
     public function getId():int
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()['TRANSCRIPT_ID'];
+        return $this->getCoreResponse()->getResponseData()->getResult()['TRANSCRIPT_ID'];
     }
 }

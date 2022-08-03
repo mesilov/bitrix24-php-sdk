@@ -23,7 +23,7 @@ class DealCategoryStagesResult extends AbstractResult
     public function getDealCategoryStages(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $deal) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $deal) {
             $res[] = new DealCategoryStageItemResult($deal);
         }
 

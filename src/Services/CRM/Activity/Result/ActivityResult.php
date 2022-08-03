@@ -11,6 +11,6 @@ class ActivityResult extends AbstractResult
 {
     public function activity(): ActivityItemResult
     {
-        return new ActivityItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new ActivityItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

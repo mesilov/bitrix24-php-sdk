@@ -15,7 +15,7 @@ class UserFieldTypesResult extends AbstractResult
     public function getUserFieldTypes(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new UserFieldTypeItemResult($item);
         }
 

@@ -15,6 +15,6 @@ class UserConsentAgreementResult extends AbstractResult
      */
     public function agreement(): UserConsentAgreementItemResult
     {
-        return new UserConsentAgreementItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new UserConsentAgreementItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }
