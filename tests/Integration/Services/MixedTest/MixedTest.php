@@ -10,7 +10,6 @@ use Bitrix24\SDK\Services\CRM\Product\Service\Product;
 use Monolog\Test\TestCase;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use http;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 
 
@@ -31,8 +30,8 @@ class MixedTest extends TestCase
         $dataProduct1 = array(
 
                 'NAME' => 'wine',
-                'CURRENCY_ID' => 'RUB',
-                'PRICE' => 475,
+                'CURRENCY_ID' => 'USD',
+                'PRICE' => 100,
                 'SORT' => 1
 
         );
@@ -42,8 +41,8 @@ class MixedTest extends TestCase
         $dataProduct2 = array(
 
                 'NAME' => 'vodka',
-                'CURRENCY_ID' => 'RUB',
-                'PRICE' => 675,
+                'CURRENCY_ID' => 'USD',
+                'PRICE' => 10,
                 'SORT' => 4
 
         );
@@ -61,7 +60,7 @@ class MixedTest extends TestCase
 
                 [
                     'PRODUCT_ID' => $productId1,
-                    'PRICE' => 400,
+                    'PRICE' => 5000,
                     'QUANTITY' => 1
                 ],
                 [
@@ -75,7 +74,11 @@ class MixedTest extends TestCase
         $addProductInDeal = $this->dealProductRows->set($dealId1, $productsForDeal);
 
 
+        self::assertEquals($productsForDeal[0]['PRICE'],$this->dealProductRows->get($dealId1)->getCoreResponse()->getResponseData()->getResult()->getResultData()[0]['PRICE']);
+        self::assertEquals($productsForDeal[1]['PRICE'],$this->dealProductRows->get($dealId1)->getCoreResponse()->getResponseData()->getResult()->getResultData()[1]['PRICE']);
         self::assertGreaterThanOrEqual(1, $productId1);
+        self::assertGreaterThanOrEqual(1, $productId2);
+        self::assertTrue((bool)$addProductInDeal);
     }
 
 
