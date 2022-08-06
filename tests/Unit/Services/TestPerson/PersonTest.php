@@ -16,6 +16,7 @@ use Money\Currencies\ISOCurrencies;
 use Money\Formatter\AggregateMoneyFormatter;
 use Money\Formatter\IntlMoneyFormatter;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Bitrix24\SDK\Tests\Unit\Services\TestPerson\PersonNormalizer;
 
 
 class PersonTest extends TestCase
@@ -65,6 +66,26 @@ class PersonTest extends TestCase
         $person = $serializer->deserialize($data, Person::class, 'xml');
       var_dump($person);
         self::assertNotEmpty($person);
+    }
+
+    /**
+     *@test
+     */
+    public function NormalizePersonTest():void
+    {
+        $person = new Person();
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new PersonNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $person->setName('Kirill');
+        $person->setLastName('Khramov');
+
+        $jsonContent = $serializer->serialize($person, 'json');
+        self::assertNotEmpty($jsonContent);
+        echo $jsonContent;
+
     }
 
     /**
