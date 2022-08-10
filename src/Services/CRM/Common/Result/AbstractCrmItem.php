@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Services\CRM\Common\Result;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeImmutable;
+use Money\Money;
 
 class AbstractCrmItem extends AbstractItem
 {
@@ -30,6 +31,8 @@ class AbstractCrmItem extends AbstractItem
             case 'LEAD_ID':
             case 'CONTACT_ID':
             case 'QUOTE_ID':
+                // productRow
+            case 'OWNER_ID':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
@@ -39,9 +42,7 @@ class AbstractCrmItem extends AbstractItem
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null && $this->data[$offset] !== '0') {
                     return (int)$this->data[$offset];
                 }
-
                 return null;
-
             // contact
             case 'EXPORT':
             case 'HAS_PHONE':

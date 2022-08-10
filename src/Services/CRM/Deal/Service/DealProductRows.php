@@ -9,6 +9,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult;
+use Money\Currency;
 
 /**
  * Class DealProductRows
@@ -36,7 +37,8 @@ class DealProductRows extends AbstractService
                 [
                     'id' => $dealId,
                 ]
-            )
+            ),
+            new Currency('RUB')
         );
     }
 

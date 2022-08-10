@@ -9,6 +9,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,6 +29,7 @@ class DealProductRowsTest extends TestCase
      */
     public function testSet(): void
     {
+
         $newDealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
         $this::assertCount(0, $this->dealProductRowsService->get($newDealId)->getProductRows());
         $this::assertTrue(
@@ -41,6 +43,12 @@ class DealProductRowsTest extends TestCase
             )->isSuccess()
         );
         $this::assertCount(1, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $mas = $this->dealProductRowsService->get($newDealId)->getProductRows()[0];
+        var_dump($mas);
+        var_dump($mas->ID);
+        var_dump($mas->OWNER_ID);
+        var_dump($mas->QUANTITY);
+        var_dump($mas->PRICE);
     }
 
     /**
