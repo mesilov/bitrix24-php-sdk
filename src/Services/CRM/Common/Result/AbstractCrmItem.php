@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Services\CRM\Common\Result;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeImmutable;
+use Money\Currency;
 use Money\Money;
 
 class AbstractCrmItem extends AbstractItem
@@ -50,6 +51,11 @@ class AbstractCrmItem extends AbstractItem
             case 'HAS_IMOL':
             case 'OPENED':
                 // deal
+            case 'PRICE':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    return new Money($this->data[$offset],new Currency('RUB'));
+                }
+                return null;
             case 'IS_MANUAL_OPPORTUNITY':
             case 'CLOSED':
             case 'IS_NEW':

@@ -31,7 +31,8 @@
     "moneyphp/money": "3.* || 4.*",
     "symfony/serializer": "6.*||^6.1",
     "symfony/routing": "^4.4|^5.3|^6.0",
-    "symfony/property-access": "6.* || 6.1.*"
+    "symfony/property-access": "6.* || 6.1.*",
+    "ext-intl": "*"
   },
   "require-dev": {
     "monolog/monolog": "2.1.*",
@@ -41,8 +42,7 @@
     "phpstan/phpstan": "1.*",
     "phpunit/phpunit": "9.5.*",
     "symfony/stopwatch": "5.4.* || 6.*",
-    "roave/security-advisories": "dev-master",
-    "ext-intl": "*"
+    "roave/security-advisories": "dev-master"
   },
   "autoload": {
     "psr-4": {
