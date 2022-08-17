@@ -33,7 +33,7 @@ class DealProductRowsTest extends TestCase
     public function testSet(): void
     {
 
-        $callCosts = new Money(1000, new Currency('RUB'));
+        $callCosts = new Money(1050, new Currency('RUB'));
         $currencies = new ISOCurrencies();
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);
@@ -52,9 +52,9 @@ class DealProductRowsTest extends TestCase
         );
         $this::assertCount(1, $this->dealProductRowsService->get($newDealId)->getProductRows());
         $mas = $this->dealProductRowsService->get($newDealId)->getProductRows()[0];
-        var_dump($mas);
-        $price =  $mas->PRICE;
-        var_dump($price);
+        $money =  $moneyFormatter->format($mas->PRICE);
+
+
     }
 
     /**

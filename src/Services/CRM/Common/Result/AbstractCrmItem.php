@@ -52,8 +52,10 @@ class AbstractCrmItem extends AbstractItem
             case 'OPENED':
                 // deal
             case 'PRICE':
+
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
-                    return new Money($this->data[$offset],new Currency('RUB'));
+                  $var = $this->data[$offset] * 100;
+                  return new Money((string)$var,new Currency('RUB'));
                 }
                 return null;
             case 'IS_MANUAL_OPPORTUNITY':
