@@ -33,7 +33,7 @@ class DealProductRowItemsResult extends AbstractResult
     {
         $res = [];
         foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $productRow) {
-            $res[] = new DealProductRowItemResult($productRow);
+            $res[] = new DealProductRowItemResult($productRow,$this->currency);
         }
 
         return $res;

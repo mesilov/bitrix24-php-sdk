@@ -9,6 +9,7 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult;
+use Bitrix24\SDK\Services\CRM\Deal\Result\DealResult;
 use Money\Currency;
 
 /**
@@ -29,7 +30,7 @@ class DealProductRows extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
-    public function get(int $dealId): DealProductRowItemsResult
+    public function getStupid(int $dealId, Currency $currency): DealProductRowItemsResult
     {
         return new DealProductRowItemsResult(
             $this->core->call(
@@ -38,9 +39,43 @@ class DealProductRows extends AbstractService
                     'id' => $dealId,
                 ]
             ),
-            new Currency('RUB')
+        $currency
         );
     }
+
+    public function getSmart(int $dealId): DealProductRowItemsResult
+    {
+        $deal = new DealResult($this->core->call('crm.deal.get', ['id' => $dealId]));
+        $currency = new Currency($deal->deal()->CURRENCY_ID);
+        return new DealProductRowItemsResult(
+            $this->core->call(
+                'crm.deal.productrows.get',
+                [
+                    'id' => $dealId,
+                ]
+            ),
+            $currency
+        );
+    }
+    public function getSuperSmart(int $dealId): DealProductRowItemsResult
+    {
+       /* $deal = new DealResult($this->core->call('crm.deal.get', ['id' => $dealId]));
+        $currency = new Currency($deal->deal()->CURRENCY_ID);
+        return new DealProductRowItemsResult(
+            $this->core->call(
+                'crm.deal.productrows.get',
+                [
+                    'id' => $dealId,
+                ]
+            ),
+            $currency
+        );*/
+        // todo Получить сделку и табличную часть за один запрос к Api
+    }
+
+   public function getSuperSuperSmart(){
+       // todo Метод позволяет экономить один запрос если мы уже знаем валюту, а если не знаем то делает этот запрос.
+   }
 
     /**
      * Creates or updates product entries inside the specified deal.

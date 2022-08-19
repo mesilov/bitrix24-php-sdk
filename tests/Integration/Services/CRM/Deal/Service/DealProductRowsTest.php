@@ -64,19 +64,26 @@ class DealProductRowsTest extends TestCase
      */
     public function testGet(): void
     {
-        $newDealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
-        $this::assertCount(0, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $callCosts = new Money(1050, new Currency('EUR'));
+        $currencies = new ISOCurrencies();
+
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+        $newDealId = $this->dealService->add(['TITLE' => 'test deal','CURRENCY_ID'=>$callCosts->getCurrency()->getCode()])->getId();
         $this::assertTrue(
             $this->dealProductRowsService->set(
                 $newDealId,
                 [
                     [
                         'PRODUCT_NAME' => 'qqqq',
+                        'PRICE'=> $moneyFormatter->format($callCosts),
                     ],
                 ]
             )->isSuccess()
         );
-        $this::assertCount(1, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $res = $this->dealProductRowsService->getSmart($newDealId);
+        foreach ($res->getProductRows() as $productRow){
+            var_dump($productRow->PRICE);
+        }
     }
 
     public function setUp(): void

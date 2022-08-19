@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Money\Currency;
 use Money\Money;
 
 /**
@@ -35,4 +35,28 @@ use Money\Money;
  */
 class DealProductRowItemResult extends AbstractCrmItem
 {
+    private Currency $currency;
+
+    /**
+     * @param \Money\Currency $currency
+     */
+    public function __construct(array $data,Currency $currency)
+    {
+        parent::__construct($data);
+        $this->currency = $currency;
+    }
+
+    public function __get($offset)
+    {
+
+        var_dump('Cтрока сделки');
+        var_dump(__METHOD__);
+        var_dump($offset);
+        var_dump($this->currency->getCode());
+
+       return parent::__get($offset);
+
+
+    }
+
 }

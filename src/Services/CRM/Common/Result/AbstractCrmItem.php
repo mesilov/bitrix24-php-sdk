@@ -21,6 +21,10 @@ class AbstractCrmItem extends AbstractItem
      */
     public function __get($offset)
     {
+
+        var_dump('Зашли в AbstractCrmItem');
+        var_dump(__METHOD__);
+        var_dump($offset);
         // todo унести в отдельный класс и покрыть тестами
         // приведение полей к реальным типам данных для основных сущностей CRM
         switch ($offset) {
@@ -55,7 +59,7 @@ class AbstractCrmItem extends AbstractItem
 
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                   $var = $this->data[$offset] * 100;
-                  return new Money((string)$var,new Currency('RUB'));
+                  return new Money((string)$var,new Currency('USD'));
                 }
                 return null;
             case 'IS_MANUAL_OPPORTUNITY':
