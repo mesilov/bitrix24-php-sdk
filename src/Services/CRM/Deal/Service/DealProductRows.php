@@ -25,10 +25,10 @@ class DealProductRows extends AbstractService
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_get.php
      *
      * @param int $dealId
-     *
+     * @param \Money\Currency $currency
      * @return DealProductRowItemsResult
-     * @throws BaseException
-     * @throws TransportException
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
     public function getStupid(int $dealId, Currency $currency): DealProductRowItemsResult
     {
@@ -39,10 +39,14 @@ class DealProductRows extends AbstractService
                     'id' => $dealId,
                 ]
             ),
-        $currency
+            $currency
         );
     }
 
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
     public function getSmart(int $dealId): DealProductRowItemsResult
     {
         $deal = new DealResult($this->core->call('crm.deal.get', ['id' => $dealId]));
@@ -57,25 +61,27 @@ class DealProductRows extends AbstractService
             $currency
         );
     }
+
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
     public function getSuperSmart(int $dealId): DealProductRowItemsResult
     {
-       /* $deal = new DealResult($this->core->call('crm.deal.get', ['id' => $dealId]));
-        $currency = new Currency($deal->deal()->CURRENCY_ID);
-        return new DealProductRowItemsResult(
-            $this->core->call(
-                'crm.deal.productrows.get',
-                [
-                    'id' => $dealId,
-                ]
-            ),
-            $currency
-        );*/
+      $data =  $this->core->call('batch',array(
+            'halt'=>0,
+            'cmd'=>array(
+                $deal = new DealResult($this->core->call('crm.deal.get', ['id' => $dealId])),
+              $dealProductRow = new DealProductRowItemsResult($this->core->call('crm.deal.productrows.get',['id' => $dealId,]),new Currency($deal->deal()->CURRENCY_ID))
+            )
+        ));
+        return $dealProductRow;
         // todo Получить сделку и табличную часть за один запрос к Api
     }
 
-   public function getSuperSuperSmart(){
-       // todo Метод позволяет экономить один запрос если мы уже знаем валюту, а если не знаем то делает этот запрос.
-   }
+    public function getSuperSuperSmart()
+    {
+        // todo Метод позволяет экономить один запрос если мы уже знаем валюту, а если не знаем то делает этот запрос.
+    }
 
     /**
      * Creates or updates product entries inside the specified deal.
@@ -115,7 +121,7 @@ class DealProductRows extends AbstractService
             $this->core->call(
                 'crm.deal.productrows.set',
                 [
-                    'id'   => $dealId,
+                    'id' => $dealId,
                     'rows' => $productRows,
                 ]
             )

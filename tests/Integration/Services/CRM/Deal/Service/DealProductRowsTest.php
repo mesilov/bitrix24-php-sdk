@@ -80,7 +80,7 @@ class DealProductRowsTest extends TestCase
                 ]
             )->isSuccess()
         );
-        $res = $this->dealProductRowsService->getSmart($newDealId);
+        $res = $this->dealProductRowsService->getSuperSmart($newDealId);
         foreach ($res->getProductRows() as $productRow){
             var_dump($productRow->PRICE);
         }

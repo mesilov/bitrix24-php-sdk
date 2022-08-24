@@ -38,9 +38,10 @@ class DealProductRowItemResult extends AbstractCrmItem
     private Currency $currency;
 
     /**
+     * @param array $data
      * @param \Money\Currency $currency
      */
-    public function __construct(array $data,Currency $currency)
+    public function __construct(array $data, Currency $currency)
     {
         parent::__construct($data);
         $this->currency = $currency;
@@ -48,14 +49,7 @@ class DealProductRowItemResult extends AbstractCrmItem
 
     public function __get($offset)
     {
-
-        var_dump('Cтрока сделки');
-        var_dump(__METHOD__);
-        var_dump($offset);
-        var_dump($this->currency->getCode());
-
        return parent::__get($offset);
-
 
     }
 
