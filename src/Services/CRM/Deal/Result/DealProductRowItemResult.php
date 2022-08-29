@@ -35,7 +35,7 @@ use Money\Money;
  */
 class DealProductRowItemResult extends AbstractCrmItem
 {
-    private Currency $currency;
+    protected Currency $currency;
 
     /**
      * @param array $data
@@ -50,7 +50,6 @@ class DealProductRowItemResult extends AbstractCrmItem
     public function __get($offset)
     {
        return parent::__get($offset);
-
     }
 
 }

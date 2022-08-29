@@ -67,14 +67,22 @@ class DealProductRows extends AbstractService
      */
     public function getSuperSmart(int $dealId): DealProductRowItemsResult
     {
-      $data =  $this->core->call('batch',array(
+        $res =  $this->core->call('batch',[
             'halt'=>0,
-            'cmd'=>array(
-                $deal = new DealResult($this->core->call('crm.deal.get', ['id' => $dealId])),
-              $dealProductRow = new DealProductRowItemsResult($this->core->call('crm.deal.productrows.get',['id' => $dealId,]),new Currency($deal->deal()->CURRENCY_ID))
-            )
-        ));
-        return $dealProductRow;
+            'cmd'=>[
+                $deal =  new DealResult( $this->core->call('crm.deal.get', ['id' => $dealId])),
+                $rows = new DealProductRowItemsResult($this->core->call('crm.deal.productrows.get',['id' => $dealId,]),new Currency($deal->deal()->CURRENCY_ID)),
+
+            ],
+        ]);
+        return $rows;
+       /*$data  = $res->getResponseData()->getResult();
+       $array = $data->getResultData()['result']['deal']['CURRENCY_ID'];
+        var_dump($array);
+        return new DealProductRowItemsResult(
+            $data->getResultData()['result']['deal']['ID'] ,
+           new Currency($array)
+        );*/
         // todo Получить сделку и табличную часть за один запрос к Api
     }
 

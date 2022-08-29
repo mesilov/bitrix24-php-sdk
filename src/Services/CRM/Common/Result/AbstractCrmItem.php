@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Common\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeImmutable;
 use Money\Currency;
@@ -19,6 +20,7 @@ class AbstractCrmItem extends AbstractItem
      *
      * @return bool|\DateTimeImmutable|int|mixed|null
      */
+
     public function __get($offset)
     {
 
@@ -56,7 +58,7 @@ class AbstractCrmItem extends AbstractItem
             case 'PRICE':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                   $var = $this->data[$offset] * 100;
-                  return new Money((string)$var,new Currency('USD'));
+                  return new Money((string)$var,new Currency($this->currency->getCode()));
                 }
                 return null;
             case 'IS_MANUAL_OPPORTUNITY':
