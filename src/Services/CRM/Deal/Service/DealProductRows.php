@@ -44,8 +44,10 @@ class DealProductRows extends AbstractService
     }
 
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @param int $dealId
+     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
     public function getSmart(int $dealId): DealProductRowItemsResult
     {
@@ -63,7 +65,10 @@ class DealProductRows extends AbstractService
     }
 
     /**
+     * @param int $dealId
+     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
     public function getSuperSmart(int $dealId): DealProductRowItemsResult
     {
@@ -86,8 +91,36 @@ class DealProductRows extends AbstractService
         // todo Получить сделку и табличную часть за один запрос к Api
     }
 
-    public function getSuperSuperSmart()
+    /**
+     * @param int $dealId
+     * @param \Money\Currency|null $currency
+     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     */
+    public function getSuperSuperSmart(int $dealId, Currency $currency = null): DealProductRowItemsResult
     {
+        if ($currency === null){
+            $res =  $this->core->call('batch',[
+                'halt'=>0,
+                'cmd'=>[
+                    $deal =  new DealResult( $this->core->call('crm.deal.get', ['id' => $dealId])),
+                    $rows = new DealProductRowItemsResult($this->core->call('crm.deal.productrows.get',['id' => $dealId,]),new Currency($deal->deal()->CURRENCY_ID)),
+
+                ],
+            ]);
+            return $rows;
+        }else{
+            return new DealProductRowItemsResult(
+                $this->core->call(
+                    'crm.deal.productrows.get',
+                    [
+                        'id' => $dealId,
+                    ]
+                ),
+                $currency
+            );
+        }
         // todo Метод позволяет экономить один запрос если мы уже знаем валюту, а если не знаем то делает этот запрос.
     }
 

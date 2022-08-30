@@ -38,7 +38,7 @@ class DealProductRowsTest extends TestCase
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);
         $newDealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
-        $this::assertCount(0, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $this::assertCount(0, $this->dealProductRowsService->getSuperSmart($newDealId)->getProductRows());
         $this::assertTrue(
             $this->dealProductRowsService->set(
                 $newDealId,
@@ -50,8 +50,8 @@ class DealProductRowsTest extends TestCase
                 ]
             )->isSuccess()
         );
-        $this::assertCount(1, $this->dealProductRowsService->get($newDealId)->getProductRows());
-        $mas = $this->dealProductRowsService->get($newDealId)->getProductRows()[0];
+        $this::assertCount(1, $this->dealProductRowsService->getSuperSmart($newDealId)->getProductRows());
+        $mas = $this->dealProductRowsService->getSuperSmart($newDealId)->getProductRows()[0];
         $money =  $moneyFormatter->format($mas->PRICE);
 
 
@@ -63,7 +63,7 @@ class DealProductRowsTest extends TestCase
      */
     public function testGet(): void
     {
-        $callCosts = new Money(1050, new Currency('EUR'));
+        $callCosts = new Money(1050, new Currency('USD'));
         $currencies = new ISOCurrencies();
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);
@@ -79,7 +79,8 @@ class DealProductRowsTest extends TestCase
                 ]
             )->isSuccess()
         );
-        $res = $this->dealProductRowsService->getSuperSmart($newDealId);
+        $currency = $callCosts->getCurrency();
+        $res = $this->dealProductRowsService->getStupid($newDealId,$currency);
         foreach ($res->getProductRows() as $productRow){
             var_dump($productRow->PRICE);
         }
