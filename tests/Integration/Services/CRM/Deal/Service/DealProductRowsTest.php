@@ -80,7 +80,7 @@ class DealProductRowsTest extends TestCase
             )->isSuccess()
         );
         $currency = $callCosts->getCurrency();
-        $res = $this->dealProductRowsService->getStupid($newDealId,$currency);
+        $res = $this->dealProductRowsService->getSuperSuperSmart($newDealId,$currency);
         foreach ($res->getProductRows() as $productRow){
             var_dump($productRow->PRICE);
         }

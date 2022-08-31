@@ -57,7 +57,6 @@ class AbstractCrmItem extends AbstractItem
             case 'PRICE':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                   $var = $this->data[$offset] * 100;
-                  var_dump($offset);
                   return new Money((string)$var,new Currency($this->currency->getCode()));
                 }
                 return null;
