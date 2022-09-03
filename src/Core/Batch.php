@@ -165,6 +165,83 @@ class Batch implements BatchInterface
     }
 
     /**
+     * Update entity items with batch call
+     *
+     * Update elements in array with structure
+     * element_id => [
+     *  'fields' => [], // required element fields to update
+     *  'params' => []  // optional fields
+     * ]
+     *
+     * @param string                           $apiMethod
+     * @param array<int, array<string, mixed>> $entityItems
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function updateEntityItems(string $apiMethod, array $entityItems): Generator
+    {
+        $this->logger->debug(
+            'updateEntityItems.start',
+            [
+                'apiMethod'   => $apiMethod,
+                'entityItems' => $entityItems,
+            ]
+        );
+
+        try {
+            $this->clearCommands();
+            foreach ($entityItems as $entityItemId => $entityItem) {
+                if (!is_int($entityItemId)) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            'invalid type «%s» of entity id «%s», entity id must be integer type',
+                            gettype($entityItemId),
+                            $entityItemId
+                        )
+                    );
+                }
+                if (!array_key_exists('fields', $entityItem)) {
+                    throw new InvalidArgumentException(
+                        sprintf('array key «fields» not found in entity item with id %s', $entityItemId)
+                    );
+                }
+
+                $this->registerCommand($apiMethod, [
+                    'id'     => $entityItemId,
+                    'fields' => $entityItem['fields'],
+                    'params' => $entityItem['params'],
+                ]);
+            }
+
+            foreach ($this->getTraversable(true) as $cnt => $updatedItemResult) {
+                yield $cnt => $updatedItemResult;
+            }
+        } catch (InvalidArgumentException $exception) {
+            $errorMessage = sprintf('batch update entity items: %s', $exception->getMessage());
+            $this->logger->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+            throw $exception;
+        } catch (\Throwable $exception) {
+            $errorMessage = sprintf('batch update entity items: %s', $exception->getMessage());
+            $this->logger->error(
+                $errorMessage,
+                [
+                    'trace' => $exception->getTrace(),
+                ]
+            );
+
+            throw new BaseException($errorMessage, $exception->getCode(), $exception);
+        }
+
+        $this->logger->debug('updateEntityItems.finish');
+    }
+
+    /**
      * Register api command to command collection for batch calls
      *
      * @param string             $apiMethod
@@ -261,14 +338,15 @@ class Batch implements BatchInterface
         array $select,
         ?int $limit = null
     ): Generator {
-        $this->logger->debug('getTraversableList.start',
-                             [
-                                 'apiMethod' => $apiMethod,
-                                 'order'     => $order,
-                                 'filter'    => $filter,
-                                 'select'    => $select,
-                                 'limit'     => $limit,
-                             ]
+        $this->logger->debug(
+            'getTraversableList.start',
+            [
+                'apiMethod' => $apiMethod,
+                'order'     => $order,
+                'filter'    => $filter,
+                'select'    => $select,
+                'limit'     => $limit,
+            ]
         );
 
         // strategy.3 — ID filter, batch, no count, order
@@ -298,7 +376,6 @@ class Batch implements BatchInterface
         // todo проверили, что если есть limit, то он >1
         // todo проверили, что в фильтре нет поля ID, т.к. мы с ним будем работать
 
-
         $firstResultPage = $this->core->call(
             $apiMethod,
             [
@@ -309,10 +386,13 @@ class Batch implements BatchInterface
             ]
         );
         $totalElementsCount = $firstResultPage->getResponseData()->getPagination()->getTotal();
+        $this->logger->debug('getTraversableList.totalElementsCount', [
+            'totalElementsCount' => $totalElementsCount,
+        ]);
         // filtered elements count less than or equal one result page(50 elements)
         $elementsCounter = 0;
         if ($totalElementsCount <= self::MAX_ELEMENTS_IN_PAGE) {
-            foreach ($firstResultPage->getResponseData()->getResult()->getResultData() as $cnt => $listElement) {
+            foreach ($firstResultPage->getResponseData()->getResult() as $cnt => $listElement) {
                 $elementsCounter++;
                 if ($limit !== null && $elementsCounter > $limit) {
                     return;
@@ -327,9 +407,9 @@ class Batch implements BatchInterface
         // filtered elements count more than one result page(50 elements)
         // return first page
         $lastElementIdInFirstPage = null;
-        foreach ($firstResultPage->getResponseData()->getResult()->getResultData() as $cnt => $listElement) {
+        foreach ($firstResultPage->getResponseData()->getResult() as $cnt => $listElement) {
             $elementsCounter++;
-            $lastElementIdInFirstPage = $listElement['ID'];
+            $lastElementIdInFirstPage = (int)$listElement['ID'];
             if ($limit !== null && $elementsCounter > $limit) {
                 return;
             }
@@ -351,8 +431,17 @@ class Batch implements BatchInterface
                 'start'  => 0,
             ]
         );
-
-        $lastElementId = (int)$lastResultPage->getResponseData()->getResult()->getResultData()[0]['ID'];
+        $lastElementId = (int)$lastResultPage->getResponseData()->getResult()[0]['ID'];
+        // reverse order if you need
+        if ($lastElementIdInFirstPage > $lastElementId) {
+            $tmp = $lastElementIdInFirstPage;
+            $lastElementIdInFirstPage = $lastElementId;
+            $lastElementId = $tmp;
+        }
+        $this->logger->debug('getTraversableList.lastElementsId', [
+            'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
+            'lastElementId'            => $lastElementId,
+        ]);
 
         // register commands with updated filter
         //more than one page in results -  register list commands
@@ -408,7 +497,7 @@ class Batch implements BatchInterface
                 ]
             );
             // iterate items in batch query result
-            foreach ($queryResultData->getResult()->getResultData() as $cnt => $listElement) {
+            foreach ($queryResultData->getResult() as $cnt => $listElement) {
                 $elementsCounter++;
                 if ($limit !== null && $elementsCounter > $limit) {
                     return;
@@ -563,7 +652,7 @@ class Batch implements BatchInterface
                 ]
             );
             // iterate items in batch query result
-            foreach ($queryResultData->getResult()->getResultData() as $cnt => $listElement) {
+            foreach ($queryResultData->getResult() as $cnt => $listElement) {
                 $elementsCounter++;
                 if ($limit !== null && $elementsCounter > $limit) {
                     return;
@@ -613,13 +702,13 @@ class Batch implements BatchInterface
 
             // single queries
             // todo handle error field
-            $resultDataItems = $response->getResult()->getResultData()['result'];
-            $resultQueryTimeItems = $response->getResult()->getResultData()['result_time'];
+            $resultDataItems = $response->getResult()['result'];
+            $resultQueryTimeItems = $response->getResult()['result_time'];
 
             // list queries
             //todo handle result_error for list queries
-            $resultNextItems = $response->getResult()->getResultData()['result_next'];
-            $totalItems = $response->getResult()->getResultData()['result_total'];
+            $resultNextItems = $response->getResult()['result_next'];
+            $totalItems = $response->getResult()['result_total'];
             foreach ($resultDataItems as $singleQueryKey => $singleQueryResult) {
                 if (!is_array($singleQueryResult)) {
                     $singleQueryResult = [$singleQueryResult];
@@ -639,7 +728,7 @@ class Batch implements BatchInterface
                 }
 
                 yield new ResponseData(
-                    new Result($singleQueryResult),
+                    $singleQueryResult,
                     Time::initFromResponse($resultQueryTimeItems[$singleQueryKey]),
                     new Pagination($nextItem, $total)
                 );

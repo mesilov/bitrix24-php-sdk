@@ -11,6 +11,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
+use Bitrix24\SDK\Events\PortalDomainUrlChangedEvent;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -81,9 +82,33 @@ class Core implements CoreInterface
                     //todo check with empty response size from server
                     $response = new Response($apiCallResponse, new Command($apiMethod, $parameters), $this->logger);
                     break;
+                case StatusCodeInterface::STATUS_FOUND:
+                    // change domain url
+                    $portalOldDomainUrlHost = $this->apiClient->getCredentials()->getDomainUrl();
+                    $newDomain = parse_url($apiCallResponse->getHeaders(false)['location'][0]);
+                    $portalNewDomainUrlHost = sprintf('%s://%s', $newDomain['scheme'], $newDomain['host']);
+                    $this->apiClient->getCredentials()->setDomainUrl($portalNewDomainUrlHost);
+                    $this->logger->debug('domain url changed', [
+                        'oldDomainUrl' => $portalOldDomainUrlHost,
+                        'newDomainUrl' => $portalNewDomainUrlHost,
+                    ]);
+
+                    // repeat api-call to new domain url
+                    $response = $this->call($apiMethod, $parameters);
+                    $this->logger->debug(
+                        'api call repeated to new domain url',
+                        [
+                            'domainUrl'         => $portalNewDomainUrlHost,
+                            'repeatedApiMethod' => $apiMethod,
+                            'httpStatusCode'    => $response->getHttpResponse()->getStatusCode(),
+                        ]
+                    );
+                    // dispatch event, application listeners update domain url host in accounts repository
+                    $this->eventDispatcher->dispatch(new PortalDomainUrlChangedEvent($portalOldDomainUrlHost, $portalNewDomainUrlHost));
+                    break;
                 case StatusCodeInterface::STATUS_UNAUTHORIZED:
                     $body = $apiCallResponse->toArray(false);
-                    $this->logger->notice(
+                    $this->logger->debug(
                         'UNAUTHORIZED request',
                         [
                             'body' => $body,

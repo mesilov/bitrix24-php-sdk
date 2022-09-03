@@ -16,7 +16,7 @@ class ContactUserfieldsResult extends AbstractResult
     public function getUserfields(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $item) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new ContactUserfieldItemResult($item);
         }
 

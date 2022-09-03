@@ -16,6 +16,6 @@ class DealCategoryResult extends AbstractResult
 {
     public function getDealCategoryFields(): DealCategoryItemResult
     {
-        return new DealCategoryItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new DealCategoryItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

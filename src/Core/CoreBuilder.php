@@ -27,7 +27,6 @@ class CoreBuilder
     protected HttpClientInterface $httpClient;
     protected EventDispatcherInterface $eventDispatcher;
     protected LoggerInterface $logger;
-    protected ?WebhookUrl $webhookUrl;
     protected ?Credentials $credentials;
     protected ApiLevelErrorHandler $apiLevelErrorHandler;
 
@@ -44,7 +43,6 @@ class CoreBuilder
                 'timeout'      => 120,
             ]
         );
-        $this->webhookUrl = null;
         $this->credentials = null;
         $this->apiClient = null;
         $this->apiLevelErrorHandler = new ApiLevelErrorHandler($this->logger);
@@ -58,17 +56,6 @@ class CoreBuilder
     public function withCredentials(Credentials $credentials): self
     {
         $this->credentials = $credentials;
-        return $this;
-    }
-
-    /**
-     * @param string $webhookUrl
-     *
-     * @return $this
-     */
-    public function withWebhookUrl(string $webhookUrl): self
-    {
-        $this->webhookUrl = new WebhookUrl($webhookUrl);
 
         return $this;
     }
@@ -115,10 +102,8 @@ class CoreBuilder
      */
     public function build(): CoreInterface
     {
-        if ($this->webhookUrl !== null) {
-            $this->credentials = Credentials::createForWebHook($this->webhookUrl);
-        } elseif ($this->credentials === null) {
-            throw new InvalidArgumentException('you must set webhook url or oauth credentials');
+        if ($this->credentials === null) {
+            throw new InvalidArgumentException('you must set credentials before call method build');
         }
 
         if ($this->apiClient === null) {

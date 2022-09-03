@@ -8,6 +8,8 @@ use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
+use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Psr\Log\LoggerInterface;
@@ -147,7 +149,7 @@ class ListCommand extends Command
 
             $this->core = (new CoreBuilder())
                 ->withLogger($this->logger)
-                ->withWebhookUrl($b24Webhook)
+                ->withCredentials(Credentials::createFromWebhook(new WebhookUrl($b24Webhook)))
                 ->build();
             $this->batch = new Batch(
                 $this->core,

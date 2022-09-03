@@ -21,7 +21,7 @@ class DealContactItemsResult extends AbstractResult
     public function getDealContacts(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $dealContact) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $dealContact) {
             $res[] = new DealContactItemResult($dealContact);
         }
 
