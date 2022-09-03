@@ -8,6 +8,7 @@ use Bitrix24\SDK\Core\Contracts\BatchInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
@@ -124,10 +125,10 @@ class Batch
      *                         UTM_CONTENT?: string,
      *                         UTM_TERM?: string,
      *                         } $filter
-     * @param array    $select = ['ID','TITLE','TYPE_ID','CATEGORY_ID','STAGE_ID','STAGE_SEMANTIC_ID','IS_NEW','IS_RECURRING','IS_RETURN_CUSTOMER','IS_REPEATED_APPROACH','PROBABILITY','CURRENCY_ID','OPPORTUNITY','IS_MANUAL_OPPORTUNITY','TAX_VALUE','COMPANY_ID','CONTACT_ID','CONTACT_IDS','QUOTE_ID','BEGINDATE','CLOSEDATE','OPENED','CLOSED','COMMENTS','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','DATE_CREATE','DATE_MODIFY','SOURCE_ID','SOURCE_DESCRIPTION','LEAD_ID','ADDITIONAL_INFO','LOCATION_ID','ORIGINATOR_ID','ORIGIN_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM']
-     * @param int|null $limit
+     * @param array              $select = ['ID','TITLE','TYPE_ID','CATEGORY_ID','STAGE_ID','STAGE_SEMANTIC_ID','IS_NEW','IS_RECURRING','IS_RETURN_CUSTOMER','IS_REPEATED_APPROACH','PROBABILITY','CURRENCY_ID','OPPORTUNITY','IS_MANUAL_OPPORTUNITY','TAX_VALUE','COMPANY_ID','CONTACT_ID','CONTACT_IDS','QUOTE_ID','BEGINDATE','CLOSEDATE','OPENED','CLOSED','COMMENTS','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','DATE_CREATE','DATE_MODIFY','SOURCE_ID','SOURCE_DESCRIPTION','LEAD_ID','ADDITIONAL_INFO','LOCATION_ID','ORIGINATOR_ID','ORIGIN_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM']
+     * @param int|null           $limit
      *
-     * @return Generator<int, DealItemResult>
+     * @return Generator<int, DealItemResult>|DealItemResult[]
      * @throws BaseException
      */
     public function list(array $order, array $filter, array $select, ?int $limit = null): Generator
@@ -221,6 +222,27 @@ class Batch
     {
         foreach ($this->batch->deleteEntityItems('crm.deal.delete', $dealId) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
+        }
+    }
+
+    /**
+     * Update deals
+     *
+     * Update elements in array with structure
+     * element_id => [  // deal id
+     *  'fields' => [], // deal fields to update
+     *  'params' => []
+     * ]
+     *
+     * @param array <int, array> $entityItems
+     *
+     * @return \Generator
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function update(array $entityItems): Generator
+    {
+        foreach ($this->batch->updateEntityItems('crm.deal.update', $entityItems) as $key => $item) {
+            yield $key => new UpdatedItemBatchResult($item);
         }
     }
 }

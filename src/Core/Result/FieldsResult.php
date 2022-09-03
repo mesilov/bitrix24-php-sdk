@@ -19,6 +19,6 @@ class FieldsResult extends AbstractResult
      */
     public function getFieldsDescription(): array
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+        return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }

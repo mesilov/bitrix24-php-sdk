@@ -25,7 +25,7 @@ class CoreTest extends TestCase
     public function testCallExistingApiMethod(): void
     {
         $response = $this->core->call('app.info');
-        $this->assertIsArray($response->getResponseData()->getResult()->getResultData());
+        $this->assertIsArray($response->getResponseData()->getResult());
     }
 
     /**

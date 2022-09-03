@@ -15,6 +15,6 @@ class SettingsModeResult extends AbstractResult
 {
     public function getModeId(): int
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0];
+        return $this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Unit\Stubs;
 
 use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
 
 /**
@@ -48,6 +50,14 @@ class NullBatch implements BatchInterface
      * @inheritDoc
      */
     public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
+    {
+        yield [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateEntityItems(string $apiMethod, array $entityItems): Generator
     {
         yield [];
     }

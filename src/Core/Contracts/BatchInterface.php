@@ -18,11 +18,11 @@ interface BatchInterface
     /**
      * Batch wrapper for *.list methods without counting elements on every api-call
      *
-     * @param string               $apiMethod
-     * @param array<string,string> $order
-     * @param array<string,mixed>  $filter
-     * @param array<string,mixed>  $select
-     * @param int|null             $limit
+     * @param string              $apiMethod
+     * @param array<string,mixed> $order
+     * @param array<string,mixed> $filter
+     * @param array<string,mixed> $select
+     * @param int|null            $limit
      *
      * @return Generator<mixed>
      * @throws BaseException
@@ -79,5 +79,14 @@ interface BatchInterface
      */
     public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator;
 
-    //todo add updateEntityItems
+    /**
+     * Update entity items with batch call
+     *
+     * @param string            $apiMethod
+     * @param array<int, array> $entityItems
+     *
+     * @return Generator<int, ResponseData>|ResponseData[]
+     * @throws BaseException
+     */
+    public function updateEntityItems(string $apiMethod, array $entityItems): Generator;
 }

@@ -11,18 +11,18 @@ namespace Bitrix24\SDK\Core\Response\DTO;
  */
 class ResponseData
 {
-    protected Result $result;
+    protected array $result;
     protected Time $time;
     protected Pagination $pagination;
 
     /**
      * ResponseData constructor.
      *
-     * @param Result     $result
+     * @param array      $result
      * @param Time       $time
      * @param Pagination $pagination
      */
-    public function __construct(Result $result, Time $time, Pagination $pagination)
+    public function __construct(array $result, Time $time, Pagination $pagination)
     {
         $this->result = $result;
         $this->time = $time;
@@ -46,9 +46,9 @@ class ResponseData
     }
 
     /**
-     * @return Result
+     * @return array
      */
-    public function getResult(): Result
+    public function getResult(): array
     {
         return $this->result;
     }

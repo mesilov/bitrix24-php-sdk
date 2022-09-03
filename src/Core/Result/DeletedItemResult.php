@@ -20,6 +20,6 @@ class DeletedItemResult extends AbstractResult implements DeletedItemResultInter
      */
     public function isSuccess(): bool
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0];
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

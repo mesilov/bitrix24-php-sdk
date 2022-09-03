@@ -11,14 +11,8 @@ namespace Bitrix24\SDK\Core\Response\DTO;
  */
 class Pagination
 {
-    /**
-     * @var int|null
-     */
-    private $nextItem;
-    /**
-     * @var int|null
-     */
-    private $total;
+    private ?int $nextItem;
+    private ?int $total;
 
     /**
      * Pagination constructor.

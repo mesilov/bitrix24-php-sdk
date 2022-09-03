@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Response\DTO;
 
+use DateTimeImmutable;
+
 /**
  * Class Time
  *
@@ -11,12 +13,22 @@ namespace Bitrix24\SDK\Core\Response\DTO;
  */
 class Time
 {
-    protected float $start;
-    protected float $finish;
-    protected float $duration;
-    protected float $processing;
-    protected \DateTimeImmutable $dateStart;
-    protected \DateTimeImmutable $dateFinish;
+    private float $start;
+    private float $finish;
+    private float $duration;
+    private float $processing;
+    /**
+     * @var float $operating sum of query execution time
+     * @see https://training.bitrix24.com/rest_help/rest_sum/operating.php
+     */
+    private float $operating; // time in seconds
+    private DateTimeImmutable $dateStart;
+    private DateTimeImmutable $dateFinish;
+    /**
+     * @var int|null time to reset nearest limit part
+     * @see https://training.bitrix24.com/rest_help/rest_sum/operating.php
+     */
+    private ?int $operatingResetAt;
 
     /**
      * Time constructor.
@@ -25,23 +37,29 @@ class Time
      * @param float              $finish
      * @param float              $duration
      * @param float              $processing
+     * @param float              $operating
      * @param \DateTimeImmutable $dateStart
      * @param \DateTimeImmutable $dateFinish
+     * @param int|null           $operatingResetAt
      */
     public function __construct(
         float $start,
         float $finish,
         float $duration,
         float $processing,
-        \DateTimeImmutable $dateStart,
-        \DateTimeImmutable $dateFinish
+        float $operating,
+        DateTimeImmutable $dateStart,
+        DateTimeImmutable $dateFinish,
+        ?int $operatingResetAt
     ) {
         $this->start = $start;
         $this->finish = $finish;
         $this->duration = $duration;
         $this->processing = $processing;
+        $this->operating = $operating;
         $this->dateStart = $dateStart;
         $this->dateFinish = $dateFinish;
+        $this->operatingResetAt = $operatingResetAt;
     }
 
     /**
@@ -77,9 +95,25 @@ class Time
     }
 
     /**
+     * @return float
+     */
+    public function getOperating(): float
+    {
+        return $this->operating;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOperatingResetAt(): ?int
+    {
+        return $this->operatingResetAt;
+    }
+
+    /**
      * @return \DateTimeImmutable
      */
-    public function getDateStart(): \DateTimeImmutable
+    public function getDateStart(): DateTimeImmutable
     {
         return $this->dateStart;
     }
@@ -87,7 +121,7 @@ class Time
     /**
      * @return \DateTimeImmutable
      */
-    public function getDateFinish(): \DateTimeImmutable
+    public function getDateFinish(): DateTimeImmutable
     {
         return $this->dateFinish;
     }
@@ -105,8 +139,10 @@ class Time
             (float)$response['finish'],
             (float)$response['duration'],
             (float)$response['processing'],
-            new \DateTimeImmutable($response['date_start']),
-            new \DateTimeImmutable($response['date_finish'])
+            (float)$response['operating'],
+            new DateTimeImmutable($response['date_start']),
+            new DateTimeImmutable($response['date_finish']),
+            $response['operating_reset_at'] ?? null
         );
     }
 }

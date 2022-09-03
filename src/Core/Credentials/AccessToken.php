@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Credentials;
 
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Class AccessToken
  *
@@ -72,6 +75,29 @@ class AccessToken
             (string)$request['access_token'],
             (string)$request['refresh_token'],
             (int)$request['expires']
+        );
+    }
+
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public static function initFromPlacementRequest(Request $request): self
+    {
+        $requestFields = $request->request->all();
+        if (!array_key_exists('AUTH_ID', $requestFields)) {
+            throw new InvalidArgumentException('field AUTH_ID not fount in request');
+        }
+        if (!array_key_exists('REFRESH_ID', $requestFields)) {
+            throw new InvalidArgumentException('field REFRESH_ID not fount in request');
+        }
+        if (!array_key_exists('AUTH_EXPIRES', $requestFields)) {
+            throw new InvalidArgumentException('field AUTH_EXPIRES not fount in request');
+        }
+
+        return new self(
+            (string)$request->request->get('AUTH_ID'),
+            (string)$request->request->get('REFRESH_ID'),
+            $request->request->getInt('AUTH_EXPIRES'),
         );
     }
 }

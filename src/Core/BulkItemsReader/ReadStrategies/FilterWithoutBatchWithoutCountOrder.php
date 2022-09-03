@@ -119,7 +119,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             );
 
 
-            foreach ($resultPage->getResponseData()->getResult()->getResultData() as $cnt => $item) {
+            foreach ($resultPage->getResponseData()->getResult() as $cnt => $item) {
 
 
                 $currentElementId = (int)$item['ID'];
@@ -167,7 +167,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             ]
         );
 
-        $elementId = $firstResultPage->getResponseData()->getResult()->getResultData()[0]['ID'];
+        $elementId = $firstResultPage->getResponseData()->getResult()[0]['ID'];
 
         $this->log->debug('FilterWithoutBatchWithoutCountOrder.getFirstElementId.finish', [
             'elementId' => $elementId,
@@ -206,7 +206,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             ]
         );
 
-        $elementId = $lastResultPage->getResponseData()->getResult()->getResultData()[0]['ID'];
+        $elementId = $lastResultPage->getResponseData()->getResult()[0]['ID'];
 
         $this->log->debug('FilterWithoutBatchWithoutCountOrder.getLastElementId.finish', [
             'elementId' => $elementId,

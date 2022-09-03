@@ -37,7 +37,7 @@ $result = json_decode($result->getContent(), true);
 var_dump($result);
 ```
 
-## подключение к Битрикс24 с использованием OAuth 2.0 
+## подключение к Битрикс24 с использованием OAuth 2.0
 
 ```php
 <?php
@@ -71,7 +71,7 @@ $token = new \Bitrix24\SDK\Core\Credentials\AccessToken(
     1604179882
 );
 $domain = 'https:// client portal address  .bitrix24.ru';
-$credentials = \Bitrix24\SDK\Core\Credentials\Credentials::createForOAuth($token, $appProfile, $domain);
+$credentials = \Bitrix24\SDK\Core\Credentials\Credentials::createFromOAuth($token, $appProfile, $domain);
 
 $apiClient = new \Bitrix24\SDK\Core\ApiClient($credentials, $traceableClient, $log);
 $app = new \Bitrix24\SDK\Services\Main($apiClient, $log);

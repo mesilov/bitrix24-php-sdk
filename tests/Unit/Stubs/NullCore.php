@@ -36,6 +36,6 @@ class NullCore implements CoreInterface
 
     public function getApiClient(): ApiClientInterface
     {
-        return new ApiClient(Credentials::createForWebHook(new WebhookUrl('')), new MockHttpClient(), new NullLogger());
+        return new ApiClient(Credentials::createFromWebhook(new WebhookUrl('')), new MockHttpClient(), new NullLogger());
     }
 }
