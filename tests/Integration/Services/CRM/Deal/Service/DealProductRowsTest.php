@@ -63,7 +63,7 @@ class DealProductRowsTest extends TestCase
      */
     public function testGet(): void
     {
-        $callCosts = new Money(1050, new Currency('USD'));
+        $callCosts = new Money(1050, new Currency('EUR'));
         $currencies = new ISOCurrencies();
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);
@@ -80,7 +80,7 @@ class DealProductRowsTest extends TestCase
             )->isSuccess()
         );
         $currency = $callCosts->getCurrency();
-        $res = $this->dealProductRowsService->getSuperSmart($newDealId);
+        $res = $this->dealProductRowsService->getSuperSuperSmart($newDealId);
         foreach ($res->getProductRows() as $productRow){
             var_dump($productRow->PRICE);
         }

@@ -46,10 +46,4 @@ class DealProductRowItemResult extends AbstractCrmItem
         parent::__construct($data);
         $this->currency = $currency;
     }
-
-    public function __get($offset)
-    {
-       return parent::__get($offset);
-    }
-
 }

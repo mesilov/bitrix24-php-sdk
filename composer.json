@@ -29,8 +29,6 @@
     "symfony/event-dispatcher": "5.4.* || 6.*",
     "ramsey/uuid": "^4.2.3",
     "moneyphp/money": "3.* || 4.*",
-    "symfony/serializer": "6.*||^6.1",
-    "symfony/property-access": "6.* || 6.1.*",
     "ext-intl": "*"
   },
   "require-dev": {

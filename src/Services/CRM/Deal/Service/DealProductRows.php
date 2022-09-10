@@ -80,11 +80,8 @@ class DealProductRows extends AbstractService
             ],
         ]);
         $data = $res->getResponseData()->getResult()->getResultData();
-        $currency =$data['result']['deal']['CURRENCY_ID'];
-        $deal_test_id = $data['result']['deal']['ID'];
-        // А как нам вернуть DealProductRowItemsResult????(первый параметр принимает coreResponse)
-        return new DealProductRowItemsResult($deal_test_id,$currency);
-        // todo Получить сделку и табличную часть за один запрос к Api
+        $currency = new Currency($data['result']['deal']['CURRENCY_ID']);
+        return new DealProductRowItemsResult($res,$currency);
     }
 
     /**
@@ -100,24 +97,24 @@ class DealProductRows extends AbstractService
             $res =  $this->core->call('batch',[
                 'halt'=>0,
                 'cmd'=>[
-                    $deal =  new DealResult( $this->core->call('crm.deal.get', ['id' => $dealId])),
-                    $rows = new DealProductRowItemsResult($this->core->call('crm.deal.productrows.get',['id' => $dealId,]),new Currency($deal->deal()->CURRENCY_ID)),
-
+                    'deal' => sprintf('crm.deal.get?ID=%s', $dealId),
+                    'rows' => sprintf('crm.deal.productrows.get?ID=%s', $dealId)
                 ],
             ]);
-            return $rows;
-        }else{
-            return new DealProductRowItemsResult(
-                $this->core->call(
-                    'crm.deal.productrows.get',
-                    [
-                        'id' => $dealId,
-                    ]
-                ),
-                $currency
-            );
+            $data = $res->getResponseData()->getResult()->getResultData();
+            $currency = new Currency($data['result']['deal']['CURRENCY_ID']);
+            return new DealProductRowItemsResult($res,$currency);
         }
-        // todo Метод позволяет экономить один запрос если мы уже знаем валюту, а если не знаем то делает этот запрос.
+
+        return new DealProductRowItemsResult(
+            $this->core->call(
+                'crm.deal.productrows.get',
+                [
+                    'id' => $dealId,
+                ]
+            ),
+            $currency
+        );
     }
 
     /**
