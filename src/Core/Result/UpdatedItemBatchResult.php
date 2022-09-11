@@ -32,6 +32,6 @@ class UpdatedItemBatchResult implements UpdatedItemResultInterface
      */
     public function isSuccess(): bool
     {
-        return (bool)$this->getResponseData()->getResult()->getResultData()[0];
+        return (bool)$this->getResponseData()->getResult()[0];
     }
 }

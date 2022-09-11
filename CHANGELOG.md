@@ -1,19 +1,29 @@
 # bitrix24-php-sdk change log
 
-## 2.0-alpha.7 — 13.06.2022
+## 2.0-alpha.7 — 8.08.2022
 
 ### Added
 
+* add new scope `Telephony` and services [add Telephony support](https://github.com/mesilov/bitrix24-php-sdk/issues/291)
 * add new scope `UserConsent` and services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
 * add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
-* add new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
-* add new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add new scope `IMOpenLines` and services [add IM Open Lines support](https://github.com/mesilov/bitrix24-php-sdk/issues/302)
+* add in scope `CRM` new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
+* add in scope `CRM` new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add in scope `CRM` for entity Deal method `Services\CRM\Deal\Service\Batch::update` batch update deals
+* add in scope `CRM` for entity Contact method `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
+* add in scope `CRM` [read models](https://github.com/mesilov/bitrix24-php-sdk/issues/300) for activity `Services\CRM\Activity\ReadModel`
+  for activity types: `EmailFetcher`, `OpenLineFetcher`, `VoximplantFetcher`, `WebFormFetcher`
+* add in scope «Main» new service `Events`  [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
+* add support Application level events: `ONAPPINSTALL`
+  and `ONAPPUNINSTALL` [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
+* add support Application level event: `PortalDomainUrlChangedEvent`
 * add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
   integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
-* add in scope `CRM` for entity Deal method `Services\CRM\Deal\Service\Batch::update` batch update deals
-* add in scope `CRM` for entity Contact method `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
 * add in scope `Placements` service `Placement\Service\UserFieldType` for work with user fields embedding
+* add in scope `Telephony` add events: `OnExternalCallBackStart`, `OnExternalCallStart`, `OnVoximplantCallEnd`, `OnVoximplantCallEnd`
+  , `OnVoximplantCallInit`, `OnVoximplantCallStart` see [add telephony events](https://github.com/mesilov/bitrix24-php-sdk/issues/304)
 * add `ApplicationStatus` with application status codes description
 * add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
 * add fabric method `ApplicationProfile::initFromArray` when application profile stored in ENV-variables
@@ -25,6 +35,8 @@
 * add method `Services\Main\Service::checkUserAccess` Checks if the current user has at least one permission of those specified by the
   ACCESS parameter.
 * add method `Services\Main\Service::getMethodAffordability` Method returns 2 parameters - isExisting and isAvailable
+* add money type support by [phpmoney](https://github.com/moneyphp/money)
+* add support fields `operating` and `operating_reset_at` at `Bitrix24\SDK\Core\Response\DTO\Time` datastructures
 
 ### Changed
 
@@ -33,12 +45,25 @@
 * method `Services\Main\Service::getAvailableMethods` marks as deprecated
 * method `Services\Main\Service::getAllMethods` marks as deprecated
 * method `Services\Main\Service::getMethodsByScope` marks as deprecated
+* ❗️fabric methods `Bitrix24\SDK\Core\Credentials`
+   renamed and now are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
+  , `createFromPlacementRequest`
+* ❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
+* ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result` 
+* ❗️deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
+  method `CoreBuilder::withCredentials`
 
 ### Bugfix
 
 * add bugfix for batch method for reverse order queries
 * fix type compatible errors for `Core\Result\AbstractItem`
-* fix error in `RenewedAccessToken` DTO, remove `Scope` enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
+* fix error in `NetworkTimingParser`, [error in NetworkTimingsErrorInfo](https://github.com/mesilov/bitrix24-php-sdk/issues/277)
+* fix error in `RenewedAccessToken` DTO, remove `Scope`
+  enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
+
+### etc
+
+* add link to [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk) for sponsoring development
 
 ## 2.0-alpha.6 — 7.02.2022
 

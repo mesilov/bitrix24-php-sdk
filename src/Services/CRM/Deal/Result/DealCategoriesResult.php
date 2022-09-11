@@ -22,7 +22,7 @@ class DealCategoriesResult extends AbstractResult
     public function getDealCategories(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult()->getResultData() as $dealCategory) {
+        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $dealCategory) {
             $res[] = new DealCategoryItemResult($dealCategory);
         }
 

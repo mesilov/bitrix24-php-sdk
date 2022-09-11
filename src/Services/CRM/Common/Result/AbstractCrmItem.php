@@ -22,8 +22,6 @@ class AbstractCrmItem extends AbstractItem
 
     public function __get($offset)
     {
-
-
         // todo унести в отдельный класс и покрыть тестами
         // приведение полей к реальным типам данных для основных сущностей CRM
         switch ($offset) {

@@ -32,6 +32,6 @@ class DeletedItemBatchResult implements DeletedItemResultInterface
      */
     public function isSuccess(): bool
     {
-        return (bool)$this->getResponseData()->getResult()->getResultData()[0];
+        return (bool)$this->getResponseData()->getResult()[0];
     }
 }

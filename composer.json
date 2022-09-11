@@ -39,7 +39,8 @@
     "phpstan/phpstan": "1.*",
     "phpunit/phpunit": "9.5.*",
     "symfony/stopwatch": "5.4.* || 6.*",
-    "roave/security-advisories": "dev-master"
+    "roave/security-advisories": "dev-master",
+    "ext-intl": "*"
   },
   "autoload": {
     "psr-4": {

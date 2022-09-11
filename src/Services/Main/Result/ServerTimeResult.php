@@ -16,6 +16,6 @@ class ServerTimeResult extends AbstractResult
      */
     public function time(): DateTimeImmutable
     {
-        return new DateTimeImmutable($this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0]);
+        return new DateTimeImmutable($this->getCoreResponse()->getResponseData()->getResult()[0]);
     }
 }

@@ -9,6 +9,8 @@ use Bitrix24\SDK\Core\BulkItemsReader\BulkItemsReaderBuilder;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
+use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -33,6 +35,14 @@ class Fabric
     }
 
     /**
+     * @return string
+     */
+    public static function getOpenLineCode(): string
+    {
+        return (string)$_ENV['INTEGRATION_TEST_OPEN_LINE_CODE'];
+    }
+
+    /**
      * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
@@ -49,7 +59,11 @@ class Fabric
     {
         return (new CoreBuilder())
             ->withLogger(self::getLogger())
-            ->withWebhookUrl($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK'])
+            ->withCredentials(
+                Credentials::createFromWebhook(
+                    new WebhookUrl($_ENV['BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK'] ?? $_ENV['BITRIX24_WEBHOOK'])
+                )
+            )
             ->build();
     }
 

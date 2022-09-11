@@ -36,7 +36,7 @@ class CredentialsTest extends TestCase
      */
     public function testDomainUrlWithoutProtocol(): void
     {
-        $credentials = Credentials::createForOAuth(
+        $credentials = Credentials::createFromOAuth(
             new AccessToken('', '', 0),
             new ApplicationProfile('', '', new Scope(['crm'])),
             'bitrix24-php-sdk-playground.bitrix24.ru'
@@ -54,7 +54,7 @@ class CredentialsTest extends TestCase
      */
     public function testDomainUrlWithProtocol(): void
     {
-        $credentials = Credentials::createForOAuth(
+        $credentials = Credentials::createFromOAuth(
             new AccessToken('', '', 0),
             new ApplicationProfile('', '', new Scope(['crm'])),
             'https://bitrix24-php-sdk-playground.bitrix24.ru'
@@ -73,11 +73,11 @@ class CredentialsTest extends TestCase
     public function credentialsDataProviderWithDomainUrlVariants(): Generator
     {
         yield 'with webhook walid domain url' => [
-            Credentials::createForWebHook(new WebhookUrl('https://bitrix24-php-sdk-playground.bitrix24.ru/rest/1/valid-webhook/')),
+            Credentials::createFromWebhook(new WebhookUrl('https://bitrix24-php-sdk-playground.bitrix24.ru/rest/1/valid-webhook/')),
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
         ];
         yield 'with oauth domain url with end /' => [
-            Credentials::createForOAuth(
+            Credentials::createFromOAuth(
                 new AccessToken('', '', 0),
                 new ApplicationProfile('', '', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru/'
@@ -85,7 +85,7 @@ class CredentialsTest extends TestCase
             'https://bitrix24-php-sdk-playground.bitrix24.ru',
         ];
         yield 'with oauth domain url without end /' => [
-            Credentials::createForOAuth(
+            Credentials::createFromOAuth(
                 new AccessToken('', '', 0),
                 new ApplicationProfile('', '', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru'

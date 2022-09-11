@@ -21,6 +21,6 @@ class DealCategoryStatusResult extends AbstractResult
      */
     public function getDealCategoryTypeId(): string
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0];
+        return $this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

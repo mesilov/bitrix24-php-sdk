@@ -19,6 +19,6 @@ class LeadResult extends AbstractResult
      */
     public function lead(): LeadItemResult
     {
-        return new LeadItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new LeadItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

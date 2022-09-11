@@ -11,6 +11,6 @@ class ProductResult extends AbstractResult
 {
     public function product(): ProductItemResult
     {
-        return new ProductItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new ProductItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

@@ -14,6 +14,6 @@ class PlacementLocationCodesResult extends AbstractResult
      */
     public function getLocationCodes(): array
     {
-        return $this->getCoreResponse()->getResponseData()->getResult()->getResultData();
+        return $this->getCoreResponse()->getResponseData()->getResult();
     }
 }

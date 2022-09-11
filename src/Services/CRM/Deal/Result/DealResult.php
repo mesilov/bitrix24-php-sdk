@@ -16,6 +16,6 @@ class DealResult extends AbstractResult
 {
     public function deal(): DealItemResult
     {
-        return new DealItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new DealItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }

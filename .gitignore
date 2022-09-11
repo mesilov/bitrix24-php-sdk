@@ -1,4 +1,5 @@
 /.idea*
+/app
 vendor
 composer.phar
 composer.lock

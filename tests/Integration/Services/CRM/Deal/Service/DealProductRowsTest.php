@@ -86,38 +86,6 @@ class DealProductRowsTest extends TestCase
         }
     }
 
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testBatch():void{
-        $callCosts = new Money(1050, new Currency('EUR'));
-        $currencies = new ISOCurrencies();
-
-        $moneyFormatter = new DecimalMoneyFormatter($currencies);
-        $newDealId = $this->dealService->add(['TITLE' => 'test deal','CURRENCY_ID'=>$callCosts->getCurrency()->getCode()])->getId();
-        $this::assertTrue(
-            $this->dealProductRowsService->set(
-                $newDealId,
-                [
-                    [
-                        'PRODUCT_NAME' => 'qqqq',
-                        'PRICE'=> $moneyFormatter->format($callCosts),
-                    ],
-                ]
-            )->isSuccess()
-        );
-     $data =   $this->core->call('batch',array(
-            'halt'=>0,
-            'cmd'=>array(
-                'deal'=>'crm.deal.get?id='.$newDealId,
-                'productrow'=>'crm.deal.productrows.get?ID=$result[deal]['.$newDealId.'][ID]',
-            )
-        ));
-      print_r($data);
-    }
-
-
     public function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();

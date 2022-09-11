@@ -15,6 +15,6 @@ class IsUserAdminResult extends AbstractResult
      */
     public function isAdmin(): bool
     {
-        return (bool)$this->getCoreResponse()->getResponseData()->getResult()->getResultData()[0];
+        return (bool)$this->getCoreResponse()->getResponseData()->getResult()[0];
     }
 }

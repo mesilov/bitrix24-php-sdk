@@ -40,15 +40,9 @@ class Credentials
         $this->applicationProfile = $applicationProfile;
 
         if ($domainUrl !== null) {
-            $parseResult = parse_url($domainUrl);
-            if (!array_key_exists('scheme', $parseResult)) {
-                $domainUrl = 'https://' . $domainUrl;
-            }
+            $this->setDomainUrl($domainUrl);
         }
-        if (($domainUrl !== null) && filter_var($domainUrl, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl));
-        }
-        $this->domainUrl = $domainUrl;
+
         if ($this->accessToken === null && $this->webhookUrl === null) {
             throw new \LogicException('you must set on of auth type: webhook or OAuth 2.0');
         }
@@ -63,6 +57,27 @@ class Credentials
     public function setAccessToken(AccessToken $accessToken): void
     {
         $this->accessToken = $accessToken;
+    }
+
+    /**
+     * Set domain url
+     *
+     * @param string $domainUrl
+     *
+     * @return void
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public function setDomainUrl(string $domainUrl): void
+    {
+        $parseResult = parse_url($domainUrl);
+        if (!array_key_exists('scheme', $parseResult)) {
+            $domainUrl = 'https://' . $domainUrl;
+        }
+
+        if (filter_var($domainUrl, FILTER_VALIDATE_URL) === false) {
+            throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl));
+        }
+        $this->domainUrl = $domainUrl;
     }
 
     /**
@@ -109,7 +124,7 @@ class Credentials
      * @return self
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public static function createForWebHook(WebhookUrl $webhookUrl): self
+    public static function createFromWebhook(WebhookUrl $webhookUrl): self
     {
         return new self(
             $webhookUrl,
@@ -127,7 +142,7 @@ class Credentials
      * @return self
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public static function createForOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
+    public static function createFromOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
     {
         return new self(
             null,
@@ -144,9 +159,9 @@ class Credentials
      * @return self
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public static function initFromPlacementRequest(PlacementRequest $placementRequest, ApplicationProfile $applicationProfile): self
+    public static function createFromPlacementRequest(PlacementRequest $placementRequest, ApplicationProfile $applicationProfile): self
     {
-        return self::createForOAuth(
+        return self::createFromOAuth(
             $placementRequest->getAccessToken(),
             $applicationProfile,
             $placementRequest->getDomainUrl()

@@ -79,7 +79,7 @@ class DealProductRows extends AbstractService
                 'rows' => sprintf('crm.deal.productrows.get?ID=%s', $dealId)
             ],
         ]);
-        $data = $res->getResponseData()->getResult()->getResultData();
+        $data = $res->getResponseData()->getResult();
         $currency = new Currency($data['result']['deal']['CURRENCY_ID']);
         return new DealProductRowItemsResult($res,$currency);
     }
@@ -101,7 +101,7 @@ class DealProductRows extends AbstractService
                     'rows' => sprintf('crm.deal.productrows.get?ID=%s', $dealId)
                 ],
             ]);
-            $data = $res->getResponseData()->getResult()->getResultData();
+            $data = $res->getResponseData()->getResult();
             $currency = new Currency($data['result']['deal']['CURRENCY_ID']);
             return new DealProductRowItemsResult($res,$currency);
         }

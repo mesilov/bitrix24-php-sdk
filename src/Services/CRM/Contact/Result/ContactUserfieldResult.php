@@ -13,6 +13,6 @@ class ContactUserfieldResult extends AbstractResult
      */
     public function userfieldItem(): ContactUserfieldItemResult
     {
-        return new ContactUserfieldItemResult($this->getCoreResponse()->getResponseData()->getResult()->getResultData());
+        return new ContactUserfieldItemResult($this->getCoreResponse()->getResponseData()->getResult());
     }
 }
