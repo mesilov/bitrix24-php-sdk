@@ -15,6 +15,20 @@ class AbstractCrmItem extends AbstractItem
     private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
+     * @var \Money\Currency
+     */
+    private Currency $currency ;
+
+    public function __construct(array $data, Currency $currency = null)
+    {
+        parent::__construct($data);
+        if ($currency !== null){
+            $this->currency = $currency;
+        }
+
+    }
+
+    /**
      * @param int|string $offset
      *
      * @return bool|\DateTimeImmutable|int|mixed|null

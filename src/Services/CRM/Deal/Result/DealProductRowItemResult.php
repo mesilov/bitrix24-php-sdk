@@ -35,15 +35,5 @@ use Money\Money;
  */
 class DealProductRowItemResult extends AbstractCrmItem
 {
-    protected Currency $currency;
 
-    /**
-     * @param array $data
-     * @param \Money\Currency $currency
-     */
-    public function __construct(array $data, Currency $currency)
-    {
-        parent::__construct($data);
-        $this->currency = $currency;
-    }
 }

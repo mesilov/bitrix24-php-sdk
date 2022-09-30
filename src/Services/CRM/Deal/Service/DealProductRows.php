@@ -49,27 +49,6 @@ class DealProductRows extends AbstractService
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
-    public function getSmart(int $dealId): DealProductRowItemsResult
-    {
-        $deal = new DealResult($this->core->call('crm.deal.get', ['id' => $dealId]));
-        $currency = new Currency($deal->deal()->CURRENCY_ID);
-        return new DealProductRowItemsResult(
-            $this->core->call(
-                'crm.deal.productrows.get',
-                [
-                    'id' => $dealId,
-                ]
-            ),
-            $currency
-        );
-    }
-
-    /**
-     * @param int $dealId
-     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     */
     public function getSuperSmart(int $dealId): DealProductRowItemsResult
     {
         $res =  $this->core->call('batch',[
