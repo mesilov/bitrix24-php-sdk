@@ -17,12 +17,12 @@ class AbstractCrmItem extends AbstractItem
     /**
      * @var \Money\Currency
      */
-    private Currency $currency ;
+    private Currency $currency;
 
     public function __construct(array $data, Currency $currency = null)
     {
         parent::__construct($data);
-        if ($currency !== null){
+        if ($currency !== null) {
             $this->currency = $currency;
         }
 
@@ -66,10 +66,13 @@ class AbstractCrmItem extends AbstractItem
             case 'HAS_IMOL':
             case 'OPENED':
                 // deal
+            case 'PRICE_EXCLUSIVE':
+            case 'PRICE_NETTO':
+            case 'PRICE_BRUTTO':
             case 'PRICE':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
-                  $var = $this->data[$offset] * 100;
-                  return new Money((string)$var,new Currency($this->currency->getCode()));
+                    $var = $this->data[$offset] * 100;
+                    return new Money((string)$var, new Currency($this->currency->getCode()));
                 }
                 return null;
             case 'IS_MANUAL_OPPORTUNITY':
