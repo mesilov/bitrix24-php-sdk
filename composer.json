@@ -28,7 +28,8 @@
     "symfony/http-foundation": "5.4.* || 6.*",
     "symfony/event-dispatcher": "5.4.* || 6.*",
     "ramsey/uuid": "^4.2.3",
-    "moneyphp/money": "3.* || 4.*"
+    "moneyphp/money": "3.* || 4.*",
+    "symfony/uid": "^6.0"
   },
   "require-dev": {
     "monolog/monolog": "2.1.*",
