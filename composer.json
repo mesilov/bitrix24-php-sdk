@@ -14,10 +14,14 @@
     {
       "name": "Maxim Mesilov",
       "homepage": "https://github.com/mesilov/"
+    },
+    {
+      "name": "Kirill Hramov",
+      "homepage": "https://github.com/KarlsonComplete"
     }
   ],
   "require": {
-    "php": "7.4.*|8.1*",
+    "php": "8.1.*",
     "ext-json": "*",
     "ext-bcmath": "*",
     "ext-curl": "*",
