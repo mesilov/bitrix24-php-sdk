@@ -3,6 +3,8 @@
 ## 2.0-beta.1 — 10.11.2022
 
 ### Added
+* add `Symfony\Component\Uid\Uuid` requirements
+* add contracts for bitrix24 applications based on bitrix24-php-sdk  - `Bitrix24\SDK\Application\Contracts`, now added `Bitrix24Account`
 
 ### Changed
 * ❗️Batch interface `BatchInterface` [renamed](https://github.com/mesilov/bitrix24-php-sdk/issues/324) to `Bitrix24\SDK\Core\Contracts\BatchOperationsInterface` 

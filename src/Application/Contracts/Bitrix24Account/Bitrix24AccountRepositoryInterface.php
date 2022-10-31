@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Application\Contracts;
+namespace Bitrix24\SDK\Application\Contracts\Bitrix24Account;
 
 use Symfony\Component\Uid\Uuid;
 
 interface Bitrix24AccountRepositoryInterface
 {
     /**
-     * Сохранение аккаунта
+     * Save account
      *
      * @param Bitrix24AccountInterface $entity
-     * @param bool            $flush
+     * @param bool                     $flush
      *
      * @return void
      */
     public function saveAccount(Bitrix24AccountInterface $entity, bool $flush = false): void;
 
     /**
-     * Получение аккаунта по его идентификатору
+     * Get by account id
      *
      * @param \Symfony\Component\Uid\Uuid $id
      *
@@ -28,24 +28,24 @@ interface Bitrix24AccountRepositoryInterface
     public function getById(Uuid $id): Bitrix24AccountInterface;
 
     /**
-     * Физическое удаление аккаунта
+     * Delete account
      *
      * @param Bitrix24AccountInterface $entity
-     * @param bool            $flush
+     * @param bool                     $flush
      *
      * @return void
      */
     public function deleteAccount(Bitrix24AccountInterface $entity, bool $flush = false): void;
 
     /**
-     * Поиск аккаунта по member_id
+     * Find account by member_id
      *
      * @return ?Bitrix24AccountInterface Returns an array of Bitrix24Account objects
      */
     public function findAccountByMemberId(string $memberId): ?Bitrix24AccountInterface;
 
     /**
-     * Получение аккаунта по member_id
+     * Get account by member_id
      *
      * @param string $memberId
      *
@@ -54,7 +54,7 @@ interface Bitrix24AccountRepositoryInterface
     public function getAccountByMemberId(string $memberId): Bitrix24AccountInterface;
 
     /**
-     * Поиск аккаунта по идентификатору контактного лица
+     * Find account by contact person id - person, who installed application
      *
      * @param \Symfony\Component\Uid\Uuid $contactPersonId
      *
@@ -63,7 +63,7 @@ interface Bitrix24AccountRepositoryInterface
     public function findAccountByContactPersonId(Uuid $contactPersonId): ?Bitrix24AccountInterface;
 
     /**
-     * Поиск аккаунта по URL домена
+     * Find account by domain url
      *
      * @param string $domainUrl
      *
