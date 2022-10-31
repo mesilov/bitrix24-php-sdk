@@ -116,7 +116,7 @@ class CallTest extends TestCase
             'ADD_TO_CHAT' => 1
         ])->getExternalCallFinish();
 
-        self::assertGreaterThan(1,
+        self::assertGreaterThanOrEqual(1,
             $this->callService->attachTranscription(
                 $registerCallResult->CALL_ID,
                 $callCosts,
