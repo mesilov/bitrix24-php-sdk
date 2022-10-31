@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -14,16 +14,16 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractBatchService
 {
-    protected BatchInterface $batch;
+    protected BatchOperationsInterface $batch;
     protected LoggerInterface $log;
 
     /**
      * Batch constructor.
      *
-     * @param BatchInterface  $batch
-     * @param LoggerInterface $log
+     * @param BatchOperationsInterface $batch
+     * @param LoggerInterface          $log
      */
-    public function __construct(BatchInterface $batch, LoggerInterface $log)
+    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
     {
         $this->batch = $batch;
         $this->log = $log;

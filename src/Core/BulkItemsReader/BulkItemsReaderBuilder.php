@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core\BulkItemsReader;
 
 use Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies\FilterWithBatchWithoutCountOrder;
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Psr\Log\LoggerInterface;
@@ -13,16 +13,16 @@ use Psr\Log\LoggerInterface;
 class BulkItemsReaderBuilder
 {
     protected CoreInterface $core;
-    protected BatchInterface $batch;
+    protected BatchOperationsInterface $batch;
     protected LoggerInterface $logger;
     protected BulkItemsReaderInterface $readStrategy;
 
     /**
-     * @param \Bitrix24\SDK\Core\Contracts\CoreInterface  $core
-     * @param \Bitrix24\SDK\Core\Contracts\BatchInterface $batch
-     * @param \Psr\Log\LoggerInterface                    $logger
+     * @param \Bitrix24\SDK\Core\Contracts\CoreInterface            $core
+     * @param \Bitrix24\SDK\Core\Contracts\BatchOperationsInterface $batch
+     * @param \Psr\Log\LoggerInterface                              $logger
      */
-    public function __construct(CoreInterface $core, BatchInterface $batch, LoggerInterface $logger)
+    public function __construct(CoreInterface $core, BatchOperationsInterface $batch, LoggerInterface $logger)
     {
         $this->core = $core;
         $this->batch = $batch;

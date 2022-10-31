@@ -9,11 +9,11 @@ use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
 
 /**
- * Interface BatchInterface
+ * Interface BatchOperationsInterface
  *
  * @package Bitrix24\SDK\Core\Contracts
  */
-interface BatchInterface
+interface BatchOperationsInterface
 {
     /**
      * Batch wrapper for *.list methods without counting elements on every api-call
