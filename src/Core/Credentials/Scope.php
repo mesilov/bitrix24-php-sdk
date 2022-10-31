@@ -18,6 +18,7 @@ class Scope
      */
     protected array $availableScope = [
         'bizproc',
+        'biconnector',
         'calendar',
         'call',
         'cashbox',
