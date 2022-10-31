@@ -9,6 +9,10 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
 use Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,46 +32,67 @@ class DealProductRowsTest extends TestCase
      */
     public function testSet(): void
     {
+
+        $callCosts = new Money(1050, new Currency('USD'));
+        $currencies = new ISOCurrencies();
+
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
         $newDealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
-        $this::assertCount(0, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $this::assertCount(5, $this->dealProductRowsService->get($newDealId)->getProductRows());
         $this::assertTrue(
             $this->dealProductRowsService->set(
                 $newDealId,
                 [
                     [
-                        'PRODUCT_NAME' => 'qqqq',
+                        'PRODUCT_NAME' => 'wine',
+                        'PRICE' => $moneyFormatter->format($callCosts),
                     ],
                 ]
             )->isSuccess()
         );
         $this::assertCount(1, $this->dealProductRowsService->get($newDealId)->getProductRows());
+
+
     }
 
     /**
      * @throws BaseException
      * @throws TransportException
-     * @covers \Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows::get
      */
     public function testGet(): void
     {
-        $newDealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
-        $this::assertCount(0, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $callCosts = new Money(1050, new Currency('USD'));
+        $currencies = new ISOCurrencies();
+
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+        $newDealId = $this->dealService->add(['TITLE' => 'test deal', 'CURRENCY_ID' => $callCosts->getCurrency()->getCode()])->getId();
         $this::assertTrue(
             $this->dealProductRowsService->set(
                 $newDealId,
                 [
                     [
-                        'PRODUCT_NAME' => 'qqqq',
+                        'PRODUCT_NAME' => 'wine',
+                        'PRICE' => $moneyFormatter->format($callCosts),
                     ],
                 ]
             )->isSuccess()
         );
-        $this::assertCount(1, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $currency = $callCosts->getCurrency();
+
+        $resultWithoutAvailableCurrency = $this->dealProductRowsService->get($newDealId);
+        $resultWithAvailableCurrency = $this->dealProductRowsService->get($newDealId, $currency);
+        foreach ($resultWithoutAvailableCurrency->getProductRows() as $productRow) {
+            $this::assertEquals($callCosts, $productRow->PRICE);
+        }
+       foreach ($resultWithAvailableCurrency->getProductRows() as $productRow) {
+            $this::assertEquals($callCosts, $productRow->PRICE);
+        }
     }
 
     public function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         $this->dealProductRowsService = Fabric::getServiceBuilder()->getCRMScope()->dealProductRows();
+        $this->core = Fabric::getCore();
     }
 }
