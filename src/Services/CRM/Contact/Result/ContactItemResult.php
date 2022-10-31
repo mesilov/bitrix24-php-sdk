@@ -43,7 +43,7 @@ use DateTimeInterface;
  * @property-read DateTimeInterface      $DATE_MODIFY
  * @property-read string                 $COMPANY_ID
  * @property-read string                 $COMPANY_IDS
- * @property-read string                 $LEAD_ID
+ * @property-read int                    $LEAD_ID
  * @property-read string                 $ORIGINATOR_ID
  * @property-read string                 $ORIGIN_ID
  * @property-read string                 $ORIGIN_VERSION

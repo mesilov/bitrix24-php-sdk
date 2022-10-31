@@ -1,5 +1,16 @@
 # bitrix24-php-sdk change log
 
+## 2.0-beta.1 — 10.11.2022
+
+### Added
+
+### Changed
+
+### Bugfix
+* fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
+
+### etc
+
 ## 2.0-alpha.7 — 8.08.2022
 
 ### Added
