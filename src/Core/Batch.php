@@ -6,7 +6,7 @@ namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Commands\CommandCollection;
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -23,7 +23,7 @@ use Psr\Log\LoggerInterface;
  *
  * @package Bitrix24\SDK\Core
  */
-class Batch implements BatchInterface
+class Batch implements BatchOperationsInterface
 {
     private CoreInterface $core;
     private LoggerInterface $logger;

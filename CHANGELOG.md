@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+* ❗️Batch interface `BatchInterface` [renamed](https://github.com/mesilov/bitrix24-php-sdk/issues/324) to `Bitrix24\SDK\Core\Contracts\BatchOperationsInterface` 
 
 ### Bugfix
 * fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)

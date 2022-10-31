@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tools\PerformanceBenchmarks;
 
 use Bitrix24\SDK\Core\Batch;
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
 use Bitrix24\SDK\Core\Credentials\Credentials;
@@ -34,7 +34,7 @@ class ListCommand extends Command
 {
     protected LoggerInterface $logger;
     protected CoreInterface $core;
-    protected BatchInterface $batch;
+    protected BatchOperationsInterface $batch;
     /**
      * @var string
      */
