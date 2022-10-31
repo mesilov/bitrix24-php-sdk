@@ -49,6 +49,8 @@ class AbstractCrmItem extends AbstractItem
             case 'QUOTE_ID':
                 // productRow
             case 'OWNER_ID':
+                // DealCategoryItem
+            case 'SORT':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
@@ -78,11 +80,13 @@ class AbstractCrmItem extends AbstractItem
             case 'IS_MANUAL_OPPORTUNITY':
             case 'CLOSED':
             case 'IS_NEW':
+            case 'IS_LOCKED':
             case 'IS_RECURRING':
             case 'IS_RETURN_CUSTOMER':
             case 'IS_REPEATED_APPROACH':
                 return $this->data[$offset] === 'Y';
             case 'DATE_CREATE':
+            case 'CREATED_DATE':
             case 'DATE_MODIFY':
             case 'BIRTHDATE':
             case 'BEGINDATE':

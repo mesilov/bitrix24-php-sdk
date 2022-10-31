@@ -8,6 +8,7 @@
 
 ### Bugfix
 * fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
+* fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
 
 ### etc
 
