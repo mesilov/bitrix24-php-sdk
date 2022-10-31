@@ -6,7 +6,9 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Deal\Result;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Core\Result\AbstractResult;
+use Money\Currency;
 
 /**
  * Class DealProductRowItemsResult
@@ -15,6 +17,14 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
  */
 class DealProductRowItemsResult extends AbstractResult
 {
+    private Currency $currency;
+
+    public function __construct(Response $coreResponse,Currency $currency)
+    {
+        parent::__construct($coreResponse);
+        $this->currency = $currency;
+    }
+
     /**
      * @return DealProductRowItemResult[]
      * @throws BaseException
@@ -22,8 +32,14 @@ class DealProductRowItemsResult extends AbstractResult
     public function getProductRows(): array
     {
         $res = [];
-        foreach ($this->getCoreResponse()->getResponseData()->getResult() as $productRow) {
-            $res[] = new DealProductRowItemResult($productRow);
+        if(!empty($this->getCoreResponse()->getResponseData()->getResult()['result']['rows'])) {
+            foreach ($this->getCoreResponse()->getResponseData()->getResult()['result']['rows'] as $productRow) {
+                $res[] = new DealProductRowItemResult($productRow, $this->currency);
+            }
+        } else {
+            foreach ($this->getCoreResponse()->getResponseData()->getResult() as $productRow) {
+                $res[] = new DealProductRowItemResult($productRow, $this->currency);
+            }
         }
 
         return $res;
