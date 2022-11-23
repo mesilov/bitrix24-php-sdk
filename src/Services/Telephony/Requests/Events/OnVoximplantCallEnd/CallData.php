@@ -62,7 +62,7 @@ class CallData extends AbstractItem
                     new Currency($this->data['COST_CURRENCY'])
                 );
             default:
-                parent::__get($offset);
+                return parent::__get($offset);
         }
     }
 }
