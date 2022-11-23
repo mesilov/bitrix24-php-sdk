@@ -116,4 +116,15 @@ class ApplicationStatus
     {
         return new self($request->request->getAlpha('status'));
     }
+
+    /**
+     * @param string $shortStatusCode
+     *
+     * @return static
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     */
+    public static function initFromString(string $shortStatusCode): self
+    {
+        return new self($shortStatusCode);
+    }
 }
