@@ -21,6 +21,8 @@
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallStart\OnVoximplantCallStart`
     * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart`
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
 
 ### Bugfix
 
