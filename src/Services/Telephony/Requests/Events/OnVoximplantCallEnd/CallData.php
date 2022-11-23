@@ -39,6 +39,8 @@ class CallData extends AbstractItem
     public function __get($offset)
     {
         switch ($offset) {
+            case 'CALL_ID':
+                return (string)$this->data[$offset];
             case 'CALL_START_DATE':
                 return new \DateTimeImmutable((string)$this->data[$offset]);
             case 'CALL_TYPE':
