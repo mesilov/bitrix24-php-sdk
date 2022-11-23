@@ -8,10 +8,13 @@ use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Telephony\Common\CallType;
 
 /**
- * @property-read string   $CALL_ID
- * @property-read string   $CALLER_ID
- * @property-read int      $REST_APP_ID
- * @property-read CallType $CALL_TYPE
+ * @property-read string|null $ACCOUNT_SEARCH_ID Line ID (numeric for leased PBX, regXXX for cloud hosted PBX, and sipXXX for office PBX).
+ * @property-read string      $CALL_ID           Call identifier.
+ * @property-read string|null $PHONE_NUMBER      Number called by the operator (if call type is: 1 – Outbound) or number called by the subscriber (if call type is: 2 – Inbound).
+ * @property-read string      $CALLER_ID         Line identifier (if call type is: 1 – Outbound) or telephone number used to make a call to the portal (if call type is: 2 – Inbound).
+ * @property-read int         $REST_APP_ID
+ * @property-read CallType    $CALL_TYPE         Call type (see Call Type Description). https://training.bitrix24.com/rest_help/scope_telephony/codes_and_types.php#call_type
+ * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/events/onvoximplantcallInit.php
  */
 class CallData extends AbstractItem
 {
