@@ -9,6 +9,7 @@
 * add [service builder factory](https://github.com/mesilov/bitrix24-php-sdk/issues/328)
 * add method `Bitrix24\SDK\Core\Credentials\Scope::initFromString`
 * add method `Bitrix24\SDK\Application\ApplicationStatus::initFromString`
+* ❗️add php 8.2 support
 
 ### Changed
 
