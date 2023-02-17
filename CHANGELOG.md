@@ -1,6 +1,6 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.1 — 10.11.2022
+## 2.0-beta.1 — 25.02.2023
 
 ### Added
 
@@ -30,7 +30,8 @@
 * fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
 * fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
 * fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
-
+* fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
+* 
 ### etc
 
 ## 2.0-alpha.7 — 8.08.2022
