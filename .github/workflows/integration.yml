@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.4"
+          - "8.1"
         dependencies: [ highest ]
 
     steps:
@@ -36,7 +36,6 @@ jobs:
           ini-values: variables_order=EGPCS
         env:
           BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
-          TEST2_ENV: 12345
 
       - name: "Install dependencies"
         run: |
