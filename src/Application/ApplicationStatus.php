@@ -20,7 +20,7 @@ class ApplicationStatus
     /**
      * @param string $statusShortCode
      *
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(string $statusShortCode)
     {
@@ -107,10 +107,10 @@ class ApplicationStatus
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      *
      * @return self
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function initFromRequest(Request $request): self
     {
@@ -120,8 +120,8 @@ class ApplicationStatus
     /**
      * @param string $shortStatusCode
      *
-     * @return static
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @return self
+     * @throws InvalidArgumentException
      */
     public static function initFromString(string $shortStatusCode): self
     {
