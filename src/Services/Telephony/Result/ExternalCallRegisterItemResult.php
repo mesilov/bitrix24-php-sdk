@@ -32,6 +32,9 @@ class ExternalCallRegisterItemResult extends AbstractItem
      */
     public function isError(): bool
     {
+        if (!$this->isKeyExists('LEAD_CREATION_ERROR')) {
+            return false;
+        }
         return $this->data['LEAD_CREATION_ERROR'] !== '' && $this->data['LEAD_CREATION_ERROR'] !== null;
     }
 }
