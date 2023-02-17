@@ -100,4 +100,12 @@ class Scope
     {
         return $this->currentScope;
     }
+
+    /**
+     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     */
+    public static function initFromString(string $scope): self
+    {
+        return new self(str_replace(' ', '', explode(',', $scope)));
+    }
 }

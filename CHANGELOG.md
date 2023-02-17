@@ -3,16 +3,33 @@
 ## 2.0-beta.1 — 10.11.2022
 
 ### Added
+
 * add `Symfony\Component\Uid\Uuid` requirements
-* add contracts for bitrix24 applications based on bitrix24-php-sdk  - `Bitrix24\SDK\Application\Contracts`, now added `Bitrix24Account`
+* add contracts for bitrix24 applications based on bitrix24-php-sdk - `Bitrix24\SDK\Application\Contracts`, now added `Bitrix24Account`
 * add [service builder factory](https://github.com/mesilov/bitrix24-php-sdk/issues/328)
+* add method `Bitrix24\SDK\Core\Credentials\Scope::initFromString`
+* add method `Bitrix24\SDK\Application\ApplicationStatus::initFromString`
+* ❗️add php 8.2 support
 
 ### Changed
-* ❗️Batch interface `BatchInterface` [renamed](https://github.com/mesilov/bitrix24-php-sdk/issues/324) to `Bitrix24\SDK\Core\Contracts\BatchOperationsInterface` 
+
+* ❗️Batch interface `BatchInterface` [renamed](https://github.com/mesilov/bitrix24-php-sdk/issues/324)
+  to `Bitrix24\SDK\Core\Contracts\BatchOperationsInterface`
+* ❗`Bitrix24\SDK\Services\Telephony\Requests\Events` moved to separated namespaces:
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallInit`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallInit\OnVoximplantCallInit`
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallStart`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallStart\OnVoximplantCallStart`
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
 
 ### Bugfix
+
 * fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
 * fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
+* fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
 
 ### etc
 
@@ -62,10 +79,10 @@
 * method `Services\Main\Service::getAllMethods` marks as deprecated
 * method `Services\Main\Service::getMethodsByScope` marks as deprecated
 * ❗️fabric methods `Bitrix24\SDK\Core\Credentials`
-   renamed and now are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
+  renamed and now are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
   , `createFromPlacementRequest`
 * ❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
-* ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result` 
+* ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result`
 * ❗️deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
   method `CoreBuilder::withCredentials`
 

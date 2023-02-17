@@ -82,4 +82,16 @@ class ScopeTest extends TestCase
 
         $this->assertEquals(['crm', 'call', 'im'], $scope->getScopeCodes());
     }
+
+    /**
+     * @return void
+     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @covers  \Bitrix24\SDK\Core\Credentials\Scope::initFromString
+     * @testdox Test init Scope from string
+     */
+    public function testInitFromString(): void
+    {
+        $scope = Scope::initFromString('crm,telephony,call,user_basic,placement,im,imopenlines');
+        $this->assertEquals(['crm', 'telephony', 'call', 'user_basic', 'placement', 'im', 'imopenlines'], $scope->getScopeCodes());
+    }
 }
