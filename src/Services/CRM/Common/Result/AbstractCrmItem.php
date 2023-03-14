@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Common\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeImmutable;
 use Money\Currency;
@@ -15,7 +17,7 @@ class AbstractCrmItem extends AbstractItem
     private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
-     * @var \Money\Currency
+     * @var Currency
      */
     private Currency $currency;
 
@@ -25,7 +27,6 @@ class AbstractCrmItem extends AbstractItem
         if ($currency !== null) {
             $this->currency = $currency;
         }
-
     }
 
     /**
@@ -67,16 +68,6 @@ class AbstractCrmItem extends AbstractItem
             case 'HAS_EMAIL':
             case 'HAS_IMOL':
             case 'OPENED':
-                // deal
-            case 'PRICE_EXCLUSIVE':
-            case 'PRICE_NETTO':
-            case 'PRICE_BRUTTO':
-            case 'PRICE':
-                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
-                    $var = $this->data[$offset] * 100;
-                    return new Money((string)$var, new Currency($this->currency->getCode()));
-                }
-                return null;
             case 'IS_MANUAL_OPPORTUNITY':
             case 'CLOSED':
             case 'IS_NEW':
@@ -96,6 +87,26 @@ class AbstractCrmItem extends AbstractItem
                 }
 
                 return null;
+            // deal
+            case 'PRICE_EXCLUSIVE':
+            case 'PRICE_NETTO':
+            case 'PRICE_BRUTTO':
+            case 'PRICE':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    $var = $this->data[$offset] * 100;
+                    return new Money((string)$var, new Currency($this->currency->getCode()));
+                }
+                return null;
+            case 'PHONE':
+                if (!$this->isKeyExists($offset)) {
+                    return [];
+                }
+
+                $items = [];
+                foreach ($this->data[$offset] as $phone) {
+                    $items[] = new Phone($phone);
+                }
+                return $items;
             default:
                 return $this->data[$offset] ?? null;
         }
@@ -107,7 +118,7 @@ class AbstractCrmItem extends AbstractItem
      * @param string $fieldName
      *
      * @return mixed|null
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
+     * @throws UserfieldNotFoundException
      */
     protected function getKeyWithUserfieldByFieldName(string $fieldName)
     {

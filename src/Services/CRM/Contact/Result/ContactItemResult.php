@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Contact\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
+use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeInterface;
 
 /**
@@ -53,7 +55,7 @@ use DateTimeInterface;
  * @property-read string                 $UTM_CAMPAIGN
  * @property-read string                 $UTM_CONTENT
  * @property-read string                 $UTM_TERM
- * @property-read string                 $PHONE
+ * @property-read Phone[]                $PHONE
  * @property-read string                 $EMAIL
  * @property-read string                 $WEB
  * @property-read string                 $IM
@@ -64,7 +66,7 @@ class ContactItemResult extends AbstractCrmItem
      * @param string $userfieldName
      *
      * @return mixed|null
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
+     * @throws UserfieldNotFoundException
      */
     public function getUserfieldByFieldName(string $userfieldName)
     {
