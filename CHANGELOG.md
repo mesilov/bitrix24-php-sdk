@@ -10,6 +10,14 @@
 * add method `Bitrix24\SDK\Core\Credentials\Scope::initFromString`
 * add method `Bitrix24\SDK\Application\ApplicationStatus::initFromString`
 * ❗️add php 8.2 support
+* add system CRM multi-field type `Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone`
+* add scope `user`,`user_basic`,`user_brief`,`user.userfield` and services [add scope user support](https://github.com/mesilov/bitrix24-php-sdk/issues/339)
+  * `Bitrix24\SDK\Services\User\Service\User::fields` - get user fields
+  * `Bitrix24\SDK\Services\User\Service\User::current` - get current user
+  * `Bitrix24\SDK\Services\User\Service\User::add` - add user
+  * `Bitrix24\SDK\Services\User\Service\User::get` - get user
+  * `Bitrix24\SDK\Services\User\Service\User::update` - update user
+  * `Bitrix24\SDK\Services\User\Service\User::search` - search users
 
 ### Changed
 
@@ -31,7 +39,9 @@
 * fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
 * fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
 * fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
-* 
+* fix [add return type for crm multifields phone, email, im](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
+* fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
+
 ### etc
 
 ## 2.0-alpha.7 — 8.08.2022
