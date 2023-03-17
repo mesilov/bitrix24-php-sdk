@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tools\PerformanceBenchmarks;
+namespace Bitrix24\SDK\Tools\Commands\PerformanceBenchmarks;
 
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
@@ -24,21 +24,19 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
-/**
- * Class ListCommand
- *
- * @package Bitrix24\SDK\Tools\PerformanceBenchmarks
- */
+
+#[AsCommand(
+    name: 'b24:benchmark:list',
+    description: 'performance benchmark for *.list method',
+    hidden: false
+)]
 class ListCommand extends Command
 {
     protected LoggerInterface $logger;
     protected CoreInterface $core;
     protected BatchOperationsInterface $batch;
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'benchmark:list';
     protected const TIME_PRECISION = 4;
     protected const SELECT_FIELDS_MODE = 'fields';
     protected const ELEMENTS_COUNT = 'count';

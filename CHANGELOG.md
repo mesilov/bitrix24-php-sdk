@@ -43,6 +43,7 @@
 * fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
 
 ### etc
+* move CLI entry point to `bin/console`
 
 ## 2.0-alpha.7 — 8.08.2022
 
