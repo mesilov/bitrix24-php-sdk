@@ -29,7 +29,7 @@ class OperatingTimingTest extends TestCase
     public function testOperatingTiming(): void
     {
         $masContacts = [];
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 10000; $i++) {
             $phoneNumberWork = sprintf('+7%s', time());
             $phoneNumberHome = sprintf('%s', microtime());
             $phoneNumberHome = implode("-", str_split(substr($phoneNumberHome, 2, -13), 2));
