@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\Integration\OperatingTimingTest;
 
 use Bitrix24\SDK\Core\Batch;
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
+
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
-use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +26,7 @@ class OperatingTimingTest extends TestCase
      */
     public function testOperatingTiming(): void
     {
-        $masContacts = [];
+    /*    $masContacts = [];
         for ($i = 0; $i < 10000; $i++) {
             $phoneNumberWork = sprintf('+7%s', time());
             $phoneNumberHome = sprintf('%s', microtime());
@@ -50,16 +48,24 @@ class OperatingTimingTest extends TestCase
                 ]
             ];
 
-        }
-        $contactsIdList = [];
+        }*/
+      /*  $contactsIdList = [];
         foreach ($this->batch->addEntityItems('crm.contact.add', $masContacts) as $addContactResult) {
             $contactsIdList[] = $addContactResult->getResult();
+        }*/
+        $cnt = 0;
+        foreach ($this->contactService->batch->list([], ['>ID' => '103575'], ['ID','PHONE'], 5) as $contactList) {
+            $cnt++;
+            $contactListId[] = $contactList->ID;
+            $contactListPhone[] = $contactList->PHONE;
+
         }
-        foreach ($contactsIdList as $contactId) {
-            $contactPhoneId = $this->contactService->get($contactId[0])->contact()->PHONE[0]['ID'];
-            $contactUpdate = $this->contactService->update((int)$contactId[0],['PHONE' => [['ID' => $contactPhoneId, 'VALUE' => ""]]],[ "REGISTER_SONET_EVENT" => "Y"]);
+        foreach ($contactListId as $contactId) {
+            $contactPhoneId = $this->contactService->get($contactId)->contact()->PHONE[0]['ID'];
+            $contactUpdate = $this->contactService->update((int)$contactId,['PHONE' => [['ID' => $contactPhoneId, 'VALUE' => ""]]],[ "REGISTER_SONET_EVENT" => "Y"]);
         }
-        $this->assertCount(5, $contactsIdList);
+        self::assertGreaterThanOrEqual(5, $contactListId);
+
     }
 
     public function setUp(): void

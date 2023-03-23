@@ -199,10 +199,11 @@ class GenerateContactsCommand extends Command
                 'SECOND_NAME' => sprintf('second_%s', $i),
                 'PHONE'       => [
                     ['VALUE' => sprintf('+7978%s', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'MOBILE'],
+                    ['VALUE' => implode("-", str_split(substr( sprintf('%s', microtime()), 2, -13), 2))],
                 ],
-                'EMAIL'       => [
+             /*   'EMAIL'       => [
                     ['VALUE' => sprintf('test-%s@gmail.com', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'WORK'],
-                ],
+                ],*/
             ];
         }
 
