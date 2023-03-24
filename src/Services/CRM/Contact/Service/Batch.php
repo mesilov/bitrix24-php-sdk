@@ -230,8 +230,8 @@ class Batch extends AbstractBatchService
      * Update contact
      *
      * Update elements in array with structure
-     * element_id => [  // deal id
-     *  'fields' => [], // deal fields to update
+     * element_id => [  // contact id
+     *  'fields' => [], // contact fields to update
      *  'params' => []
      * ]
      *
