@@ -34,7 +34,7 @@ class Batch implements BatchOperationsInterface
     /**
      * Batch constructor.
      *
-     * @param CoreInterface   $core
+     * @param CoreInterface $core
      * @param LoggerInterface $log
      */
     public function __construct(CoreInterface $core, LoggerInterface $log)
@@ -62,7 +62,7 @@ class Batch implements BatchOperationsInterface
     /**
      * Add entity items with batch call
      *
-     * @param string            $apiMethod
+     * @param string $apiMethod
      * @param array<int, mixed> $entityItems
      *
      * @return Generator<int, ResponseData>|ResponseData[]
@@ -73,7 +73,7 @@ class Batch implements BatchOperationsInterface
         $this->logger->debug(
             'addEntityItems.start',
             [
-                'apiMethod'   => $apiMethod,
+                'apiMethod' => $apiMethod,
                 'entityItems' => $entityItems,
             ]
         );
@@ -105,7 +105,7 @@ class Batch implements BatchOperationsInterface
     /**
      * Delete entity items with batch call
      *
-     * @param string          $apiMethod
+     * @param string $apiMethod
      * @param array<int, int> $entityItemId
      *
      * @return Generator<int, ResponseData>|ResponseData[]
@@ -116,7 +116,7 @@ class Batch implements BatchOperationsInterface
         $this->logger->debug(
             'deleteEntityItems.start',
             [
-                'apiMethod'   => $apiMethod,
+                'apiMethod' => $apiMethod,
                 'entityItems' => $entityItemId,
             ]
         );
@@ -173,7 +173,7 @@ class Batch implements BatchOperationsInterface
      *  'params' => []  // optional fields
      * ]
      *
-     * @param string                           $apiMethod
+     * @param string $apiMethod
      * @param array<int, array<string, mixed>> $entityItems
      *
      * @return Generator<int, ResponseData>|ResponseData[]
@@ -184,7 +184,7 @@ class Batch implements BatchOperationsInterface
         $this->logger->debug(
             'updateEntityItems.start',
             [
-                'apiMethod'   => $apiMethod,
+                'apiMethod' => $apiMethod,
                 'entityItems' => $entityItems,
             ]
         );
@@ -207,11 +207,14 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                $this->registerCommand($apiMethod, [
-                    'id'     => $entityItemId,
-                    'fields' => $entityItem['fields'],
-                    'params' => $entityItem['params'],
-                ]);
+                $cmdArguments = [
+                    'id' => $entityItemId,
+                    'fields' => $entityItem['fields']
+                ];
+                if (array_key_exists('params', $entityItem)) {
+                    $cmdArguments['params'] = $entityItem['params'];
+                }
+                $this->registerCommand($apiMethod, $cmdArguments);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $updatedItemResult) {
@@ -244,24 +247,25 @@ class Batch implements BatchOperationsInterface
     /**
      * Register api command to command collection for batch calls
      *
-     * @param string             $apiMethod
+     * @param string $apiMethod
      * @param array<mixed,mixed> $parameters
-     * @param string|null        $commandName
-     * @param callable|null      $callback not implemented
+     * @param string|null $commandName
+     * @param callable|null $callback not implemented
      *
      * @throws \Exception
      */
     protected function registerCommand(
-        string $apiMethod,
-        array $parameters = [],
-        ?string $commandName = null,
+        string   $apiMethod,
+        array    $parameters = [],
+        ?string  $commandName = null,
         callable $callback = null
-    ): void {
+    ): void
+    {
         $this->logger->debug(
             'registerCommand.start',
             [
-                'apiMethod'   => $apiMethod,
-                'parameters'  => $parameters,
+                'apiMethod' => $apiMethod,
+                'parameters' => $parameters,
                 'commandName' => $commandName,
             ]
         );
@@ -317,11 +321,11 @@ class Batch implements BatchOperationsInterface
     /**
      * Get traversable list without count elements
      *
-     * @param string               $apiMethod
+     * @param string $apiMethod
      * @param array<string,string> $order
-     * @param array<string,mixed>  $filter
-     * @param array<string,mixed>  $select
-     * @param int|null             $limit
+     * @param array<string,mixed> $filter
+     * @param array<string,mixed> $select
+     * @param int|null $limit
      *
      * @return \Generator<mixed>
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
@@ -333,19 +337,20 @@ class Batch implements BatchOperationsInterface
      */
     public function getTraversableList(
         string $apiMethod,
-        array $order,
-        array $filter,
-        array $select,
-        ?int $limit = null
-    ): Generator {
+        array  $order,
+        array  $filter,
+        array  $select,
+        ?int   $limit = null
+    ): Generator
+    {
         $this->logger->debug(
             'getTraversableList.start',
             [
                 'apiMethod' => $apiMethod,
-                'order'     => $order,
-                'filter'    => $filter,
-                'select'    => $select,
-                'limit'     => $limit,
+                'order' => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'limit' => $limit,
             ]
         );
 
@@ -379,10 +384,10 @@ class Batch implements BatchOperationsInterface
         $firstResultPage = $this->core->call(
             $apiMethod,
             [
-                'order'  => $order,
+                'order' => $order,
                 'filter' => $filter,
                 'select' => $select,
-                'start'  => 0,
+                'start' => 0,
             ]
         );
         $totalElementsCount = $firstResultPage->getResponseData()->getPagination()->getTotal();
@@ -425,10 +430,10 @@ class Batch implements BatchOperationsInterface
         $lastResultPage = $this->core->call(
             $apiMethod,
             [
-                'order'  => $this->getReverseOrder($order),
+                'order' => $this->getReverseOrder($order),
                 'filter' => $filter,
                 'select' => $select,
-                'start'  => 0,
+                'start' => 0,
             ]
         );
         $lastElementId = (int)$lastResultPage->getResponseData()->getResult()[0]['ID'];
@@ -440,7 +445,7 @@ class Batch implements BatchOperationsInterface
         }
         $this->logger->debug('getTraversableList.lastElementsId', [
             'lastElementIdInFirstPage' => $lastElementIdInFirstPage,
-            'lastElementId'            => $lastElementId,
+            'lastElementId' => $lastElementId,
         ]);
 
         // register commands with updated filter
@@ -448,9 +453,9 @@ class Batch implements BatchOperationsInterface
         $lastElementIdInFirstPage++;
         for ($startId = $lastElementIdInFirstPage; $startId <= $lastElementId; $startId += self::MAX_ELEMENTS_IN_PAGE) {
             $this->logger->debug('registerCommand.item', [
-                'startId'       => $startId,
+                'startId' => $startId,
                 'lastElementId' => $lastElementId,
-                'delta'         => $lastElementId - $startId,
+                'delta' => $lastElementId - $startId,
             ]);
 
             $delta = $lastElementId - $startId;
@@ -468,10 +473,10 @@ class Batch implements BatchOperationsInterface
             $this->registerCommand(
                 $apiMethod,
                 [
-                    'order'  => [],
+                    'order' => [],
                     'filter' => $this->updateFilterForBatch($startId, $lastElementIdInPage, $isLastPage, $filter),
                     'select' => $select,
-                    'start'  => -1,
+                    'start' => -1,
                 ]
             );
         }
@@ -492,8 +497,8 @@ class Batch implements BatchOperationsInterface
                 'getTraversableList.batchResultItem',
                 [
                     'batchCommandItemNumber' => $queryCnt,
-                    'nextItem'               => $queryResultData->getPagination()->getNextItem(),
-                    'durationTime'           => $queryResultData->getTime()->getDuration(),
+                    'nextItem' => $queryResultData->getPagination()->getNextItem(),
+                    'durationTime' => $queryResultData->getTime()->getDuration(),
                 ]
             );
             // iterate items in batch query result
@@ -509,9 +514,9 @@ class Batch implements BatchOperationsInterface
     }
 
     /**
-     * @param int                 $startElementId
-     * @param int                 $lastElementId
-     * @param bool                $isLastPage
+     * @param int $startElementId
+     * @param int $lastElementId
+     * @param bool $isLastPage
      * @param array<string,mixed> $oldFilter
      *
      * @return array<string,mixed>
@@ -520,15 +525,15 @@ class Batch implements BatchOperationsInterface
     {
         $this->logger->debug('updateFilterForBatch.start', [
             'startElementId' => $startElementId,
-            'lastElementId'  => $lastElementId,
-            'isLastPage'     => $isLastPage,
-            'oldFilter'      => $oldFilter,
+            'lastElementId' => $lastElementId,
+            'isLastPage' => $isLastPage,
+            'oldFilter' => $oldFilter,
         ]);
 
         $filter = array_merge(
             $oldFilter,
             [
-                '>=ID'                       => $startElementId,
+                '>=ID' => $startElementId,
                 $isLastPage ? '<=ID' : '<ID' => $lastElementId,
             ]
         );
@@ -544,11 +549,11 @@ class Batch implements BatchOperationsInterface
      *
      * work with start item position and elements count
      *
-     * @param string               $apiMethod
+     * @param string $apiMethod
      * @param array<string,string> $order
-     * @param array<string,mixed>  $filter
-     * @param array<string,mixed>  $select
-     * @param int|null             $limit
+     * @param array<string,mixed> $filter
+     * @param array<string,mixed> $select
+     * @param int|null $limit
      *
      * @return Generator<mixed>
      * @throws BaseException
@@ -561,19 +566,20 @@ class Batch implements BatchOperationsInterface
      */
     public function getTraversableListWithCount(
         string $apiMethod,
-        array $order,
-        array $filter,
-        array $select,
-        ?int $limit = null
-    ): Generator {
+        array  $order,
+        array  $filter,
+        array  $select,
+        ?int   $limit = null
+    ): Generator
+    {
         $this->logger->debug(
             'getTraversableListWithCount.start',
             [
                 'apiMethod' => $apiMethod,
-                'order'     => $order,
-                'filter'    => $filter,
-                'select'    => $select,
-                'limit'     => $limit,
+                'order' => $order,
+                'filter' => $filter,
+                'select' => $select,
+                'limit' => $limit,
             ]
         );
         $this->clearCommands();
@@ -582,10 +588,10 @@ class Batch implements BatchOperationsInterface
         $firstResult = $this->core->call(
             $apiMethod,
             [
-                'order'  => $order,
+                'order' => $order,
                 'filter' => $filter,
                 'select' => $select,
-                'start'  => 0,
+                'start' => 0,
             ]
         );
 
@@ -595,7 +601,7 @@ class Batch implements BatchOperationsInterface
         $this->logger->debug(
             'getTraversableListWithCount.calculateCommandsRange',
             [
-                'nextItem'   => $nextItem,
+                'nextItem' => $nextItem,
                 'totalItems' => $total,
             ]
         );
@@ -606,10 +612,10 @@ class Batch implements BatchOperationsInterface
                 $this->registerCommand(
                     $apiMethod,
                     [
-                        'order'  => $order,
+                        'order' => $order,
                         'filter' => $filter,
                         'select' => $select,
-                        'start'  => $startItem,
+                        'start' => $startItem,
                     ]
                 );
                 if ($limit !== null && $limit < $startItem) {
@@ -621,10 +627,10 @@ class Batch implements BatchOperationsInterface
             $this->registerCommand(
                 $apiMethod,
                 [
-                    'order'  => $order,
+                    'order' => $order,
                     'filter' => $filter,
                     'select' => $select,
-                    'start'  => 0,
+                    'start' => 0,
                 ]
             );
         }
@@ -632,7 +638,7 @@ class Batch implements BatchOperationsInterface
         $this->logger->debug(
             'getTraversableListWithCount.commandsRegistered',
             [
-                'commandsCount'      => $this->commands->count(),
+                'commandsCount' => $this->commands->count(),
                 'totalItemsToSelect' => $total,
             ]
         );
@@ -647,8 +653,8 @@ class Batch implements BatchOperationsInterface
                 'getTraversableListWithCount.batchResultItem',
                 [
                     'batchCommandItemNumber' => $queryCnt,
-                    'nextItem'               => $queryResultData->getPagination()->getNextItem(),
-                    'durationTime'           => $queryResultData->getTime()->getDuration(),
+                    'nextItem' => $queryResultData->getPagination()->getNextItem(),
+                    'durationTime' => $queryResultData->getTime()->getDuration(),
                 ]
             );
             // iterate items in batch query result
@@ -692,8 +698,8 @@ class Batch implements BatchOperationsInterface
             $this->logger->debug(
                 'getTraversable.batchResultItem.processStart',
                 [
-                    'batchItemNumber'     => $batchItem,
-                    'batchApiCommand'     => $batchResult->getApiCommand()->getApiMethod(),
+                    'batchItemNumber' => $batchItem,
+                    'batchApiCommand' => $batchResult->getApiCommand()->getApiMethod(),
                     'batchApiCommandUuid' => $batchResult->getApiCommand()->getUuid()->toString(),
                 ]
             );
@@ -765,7 +771,7 @@ class Batch implements BatchOperationsInterface
                 'getTraversableBatchResults.batchQuery',
                 [
                     'batchQueryNumber' => $batchQueryCounter,
-                    'queriesCount'     => count($batchQuery),
+                    'queriesCount' => count($batchQuery),
                 ]
             );
             // batch call

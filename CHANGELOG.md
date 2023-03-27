@@ -1,23 +1,26 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.1 — 25.02.2023
+## 2.0-beta.1 — 25.03.2023
 
 ### Added
 
 * add `Symfony\Component\Uid\Uuid` requirements
-* add contracts for bitrix24 applications based on bitrix24-php-sdk - `Bitrix24\SDK\Application\Contracts`, now added `Bitrix24Account`
+* add contracts for bitrix24 applications based on bitrix24-php-sdk - `Bitrix24\SDK\Application\Contracts`, now
+  added `Bitrix24Account`
 * add [service builder factory](https://github.com/mesilov/bitrix24-php-sdk/issues/328)
 * add method `Bitrix24\SDK\Core\Credentials\Scope::initFromString`
 * add method `Bitrix24\SDK\Application\ApplicationStatus::initFromString`
 * ❗️add php 8.2 support
 * add system CRM multi-field type `Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone`
-* add scope `user`,`user_basic`,`user_brief`,`user.userfield` and services [add scope user support](https://github.com/mesilov/bitrix24-php-sdk/issues/339)
-  * `Bitrix24\SDK\Services\User\Service\User::fields` - get user fields
-  * `Bitrix24\SDK\Services\User\Service\User::current` - get current user
-  * `Bitrix24\SDK\Services\User\Service\User::add` - add user
-  * `Bitrix24\SDK\Services\User\Service\User::get` - get user
-  * `Bitrix24\SDK\Services\User\Service\User::update` - update user
-  * `Bitrix24\SDK\Services\User\Service\User::search` - search users
+* add scope `user`,`user_basic`,`user_brief`,`user.userfield` and
+  services [add scope user support](https://github.com/mesilov/bitrix24-php-sdk/issues/339)
+    * `Bitrix24\SDK\Services\User\Service\User::fields` - get user fields
+    * `Bitrix24\SDK\Services\User\Service\User::current` - get current user
+    * `Bitrix24\SDK\Services\User\Service\User::add` - add user
+    * `Bitrix24\SDK\Services\User\Service\User::get` - get user
+    * `Bitrix24\SDK\Services\User\Service\User::update` - update user
+    * `Bitrix24\SDK\Services\User\Service\User::search` - search users
+* add method `\Bitrix24\SDK\Services\CRM\Contact\Service\Batch::update()` for batch update contacts
 
 ### Changed
 
@@ -43,6 +46,7 @@
 * fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
 
 ### etc
+
 * move CLI entry point to `bin/console`
 
 ## 2.0-alpha.7 — 8.08.2022
@@ -50,34 +54,46 @@
 ### Added
 
 * add new scope `Telephony` and services [add Telephony support](https://github.com/mesilov/bitrix24-php-sdk/issues/291)
-* add new scope `UserConsent` and services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
-* add new scope `Placements` and services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
-* add new scope `IMOpenLines` and services [add IM Open Lines support](https://github.com/mesilov/bitrix24-php-sdk/issues/302)
-* add in scope `CRM` new service `Leads` in scope «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
-* add in scope `CRM` new service `Activity` in scope «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
+* add new scope `UserConsent` and
+  services [add UserConsent support](https://github.com/mesilov/bitrix24-php-sdk/issues/285)
+* add new scope `Placements` and
+  services [add Placements support](https://github.com/mesilov/bitrix24-php-sdk/issues/274)
+* add new scope `IMOpenLines` and
+  services [add IM Open Lines support](https://github.com/mesilov/bitrix24-php-sdk/issues/302)
+* add in scope `CRM` new service `Leads` in scope
+  «CRM» [add Leads support](https://github.com/mesilov/bitrix24-php-sdk/issues/282)
+* add in scope `CRM` new service `Activity` in scope
+  «CRM»  [add Activity support](https://github.com/mesilov/bitrix24-php-sdk/issues/283)
 * add in scope `CRM` for entity Deal method `Services\CRM\Deal\Service\Batch::update` batch update deals
 * add in scope `CRM` for entity Contact method `Services\CRM\Contact\Service\Batch::delete` batch delete contacts
-* add in scope `CRM` [read models](https://github.com/mesilov/bitrix24-php-sdk/issues/300) for activity `Services\CRM\Activity\ReadModel`
+* add in scope `CRM` [read models](https://github.com/mesilov/bitrix24-php-sdk/issues/300) for
+  activity `Services\CRM\Activity\ReadModel`
   for activity types: `EmailFetcher`, `OpenLineFetcher`, `VoximplantFetcher`, `WebFormFetcher`
-* add in scope «Main» new service `Events`  [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
+* add in scope «Main» new
+  service `Events`  [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
 * add support Application level events: `ONAPPINSTALL`
   and `ONAPPUNINSTALL` [add incoming events support](https://github.com/mesilov/bitrix24-php-sdk/issues/296)
 * add support Application level event: `PortalDomainUrlChangedEvent`
-* add method `Core\Batch::updateEntityItems` for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
+* add method `Core\Batch::updateEntityItems`
+  for [update items in batch mode](https://github.com/mesilov/bitrix24-php-sdk/issues/268) and
   integration test
 * add method to interface `Core\Contracts\BatchInterface::updateEntityItems` for update items in batch mode
 * add in scope `Placements` service `Placement\Service\UserFieldType` for work with user fields embedding
-* add in scope `Telephony` add events: `OnExternalCallBackStart`, `OnExternalCallStart`, `OnVoximplantCallEnd`, `OnVoximplantCallEnd`
-  , `OnVoximplantCallInit`, `OnVoximplantCallStart` see [add telephony events](https://github.com/mesilov/bitrix24-php-sdk/issues/304)
+* add in scope `Telephony` add
+  events: `OnExternalCallBackStart`, `OnExternalCallStart`, `OnVoximplantCallEnd`, `OnVoximplantCallEnd`
+  , `OnVoximplantCallInit`, `OnVoximplantCallStart`
+  see [add telephony events](https://github.com/mesilov/bitrix24-php-sdk/issues/304)
 * add `ApplicationStatus` with application status codes description
 * add fabric method `AccessToken::initFromPlacementRequest` when application init form placement request
 * add fabric method `ApplicationProfile::initFromArray` when application profile stored in ENV-variables
 * add `Bitrix24\SDK\Application\Requests\Placement\PlacementRequest` for application data from placements
 * add fabric method `Credentials::initFromPlacementRequest` when application init form placement request
 * add method `Services\Main\Service::getServerTime` returns current server time in the format YYYY-MM-DDThh:mm:ss±hh:mm.
-* add method `Services\Main\Service::getCurrentUserProfile` return basic Information about the current user without any scopes
+* add method `Services\Main\Service::getCurrentUserProfile` return basic Information about the current user without any
+  scopes
 * add method `Services\Main\Service::getAccessName` returns access permission names.
-* add method `Services\Main\Service::checkUserAccess` Checks if the current user has at least one permission of those specified by the
+* add method `Services\Main\Service::checkUserAccess` Checks if the current user has at least one permission of those
+  specified by the
   ACCESS parameter.
 * add method `Services\Main\Service::getMethodAffordability` Method returns 2 parameters - isExisting and isAvailable
 * add money type support by [phpmoney](https://github.com/moneyphp/money)
@@ -85,16 +101,20 @@
 
 ### Changed
 
-* update scope list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
+* update scope
+  list [расширить и актуализировать доступные скоупы](https://github.com/mesilov/bitrix24-php-sdk/issues/280)
 * bump `symfony/*` to `6.*` version requirement.
 * method `Services\Main\Service::getAvailableMethods` marks as deprecated
 * method `Services\Main\Service::getAllMethods` marks as deprecated
 * method `Services\Main\Service::getMethodsByScope` marks as deprecated
 * ❗️fabric methods `Bitrix24\SDK\Core\Credentials`
-  renamed and now are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
+  renamed and now
+  are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
   , `createFromPlacementRequest`
-* ❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
-* ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result`
+*
+❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
+*
+❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result`
 * ❗️deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
   method `CoreBuilder::withCredentials`
 
@@ -102,7 +122,8 @@
 
 * add bugfix for batch method for reverse order queries
 * fix type compatible errors for `Core\Result\AbstractItem`
-* fix error in `NetworkTimingParser`, [error in NetworkTimingsErrorInfo](https://github.com/mesilov/bitrix24-php-sdk/issues/277)
+* fix error
+  in `NetworkTimingParser`, [error in NetworkTimingsErrorInfo](https://github.com/mesilov/bitrix24-php-sdk/issues/277)
 * fix error in `RenewedAccessToken` DTO, remove `Scope`
   enum [UnknownScopeCodeException - in refresh token response](https://github.com/mesilov/bitrix24-php-sdk/issues/295)
 
@@ -116,18 +137,22 @@
 
 * add «fast» batch-query without counting elements in result
   recordset [Добавить поддержку выгрузки большого количества данных без подсчёта элементов -1](https://github.com/mesilov/bitrix24-php-sdk/issues/248)
-* add `Credentials` in CoreBuilder [set credentials from core builder](https://github.com/mesilov/bitrix24-php-sdk/pull/246)
+* add `Credentials` in
+  CoreBuilder [set credentials from core builder](https://github.com/mesilov/bitrix24-php-sdk/pull/246)
 * add method `Core\Batch::deleteEntityItems` for delete items in batch mode and integration test
 * add integration test for read strategy `FilterWithBatchWithoutCountOrderTest`
 * add type check in method `Core\Batch::deleteEntityItems` - only integer id allowed
 * add interface `Core\Contracts\DeletedItemResultInterface`
 * add in scope «CRM» `Services\CRM\Deal\Service\Batch::delete` batch delete deals
 * add `symfony/stopwatch` component for integration tests
-* add `/Infrastructure/HttpClient/TransportLayer/NetworkTimingsParser` for parse `curl_info` network data structures for debug logs
+* add `/Infrastructure/HttpClient/TransportLayer/NetworkTimingsParser` for parse `curl_info` network data structures for
+  debug logs
   in `Bitrix24\SDK\Core\Response::__destruct()`
-* add `/Infrastructure/HttpClient/TransportLayer/ResponseInfoParser` for parse `bitrix24_rest_api` timing info for debug logs
+* add `/Infrastructure/HttpClient/TransportLayer/ResponseInfoParser` for parse `bitrix24_rest_api` timing info for debug
+  logs
   in `Bitrix24\SDK\Core\Response::__destruct()`
-* add `Bitrix24\SDK\Core\BulkItemsReader` for data-intensive applications for bulk export data from Bitrix24, read strategies located in
+* add `Bitrix24\SDK\Core\BulkItemsReader` for data-intensive applications for bulk export data from Bitrix24, read
+  strategies located in
   folder `ReadStrategies`, in services read model **must** use most effective read strategy.
 * add integration tests in GitHub Actions pipeline 🎉, now integration tests run on push on `dev-branch`
 * add incoming webhook for run integration tests `vendor-check.yml` from vendor CI\CD pipeline
@@ -138,7 +163,8 @@
 * switch `symfony/http-client-contracts` to `^2.5` version requirement.
 * switch `symfony/event-dispatcher` to `5.4.*` version requirement.
 * switch `ramsey/uuid` to `^4.2.3` version requirement.
-* switch `psr/log` to `^1.1.4 || ^2.0 || ^3.0` [version requirement](https://github.com/mesilov/bitrix24-php-sdk/issues/245).
+* switch `psr/log`
+  to `^1.1.4 || ^2.0 || ^3.0` [version requirement](https://github.com/mesilov/bitrix24-php-sdk/issues/245).
 
 ## 2.0-alpha.5 – 28.11.2021
 
@@ -161,7 +187,8 @@
 
 ### Changed
 
-* update type definition for `ContactItemResult`, now return types will be cast to real types: DateTimeInterface, int, boolean etc
+* update type definition for `ContactItemResult`, now return types will be cast to real types: DateTimeInterface, int,
+  boolean etc
 
 ## 2.0-alpha.4 – 25.11.2021
 
@@ -283,10 +310,12 @@ branch version 1.x – bugfix and security releases only
 
 ## 0.5.0 (4.09.2016)
 
-* add class `Bitrix24\CRM\Quote` see pr [Added support for Quote API calls](https://github.com/mesilov/bitrix24-php-sdk/pull/53/)
+* add class `Bitrix24\CRM\Quote` see
+  pr [Added support for Quote API calls](https://github.com/mesilov/bitrix24-php-sdk/pull/53/)
 * add support http status 301 moved permanently in class `Bitrix24` see
   issue [301 Moved Permanently #49](https://github.com/mesilov/bitrix24-php-sdk/issues/49)
-* fixed bug in class `Bitrix24` see pr [Issue in the isAccessTokenExpire method](https://github.com/mesilov/bitrix24-php-sdk/pull/54)
+* fixed bug in class `Bitrix24` see
+  pr [Issue in the isAccessTokenExpire method](https://github.com/mesilov/bitrix24-php-sdk/pull/54)
 
 ## 0.4.1 (4.08.2016)
 

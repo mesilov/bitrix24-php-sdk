@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Services\CRM\Contact\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
 use Bitrix24\SDK\Services\AbstractBatchService;
 use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Generator;
@@ -207,6 +208,28 @@ class Batch extends AbstractBatchService
         }
         foreach ($this->batch->addEntityItems('crm.contact.add', $items) as $key => $item) {
             yield $key => new AddedItemBatchResult($item);
+        }
+    }
+
+    /**
+     * Batch update contacts
+     *
+     * Update elements in array with structure
+     * element_id => [  // contact id
+     *  'fields' => [], // contact fields to update
+     *  'params' => []
+     * ]
+     *
+     * @param array <int, array> $entityItems
+     *
+     * @param array $entityItems
+     * @return Generator
+     * @throws BaseException
+     */
+    public function update(array $entityItems): Generator
+    {
+        foreach ($this->batch->updateEntityItems('crm.contact.update', $entityItems) as $key => $item) {
+            yield $key => new UpdatedItemBatchResult($item);
         }
     }
 

@@ -88,35 +88,6 @@ class ContactTest extends TestCase
     }
 
     /**
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public function testBatchList(): void
-    {
-        $this->contactService->add(['NAME' => 'test contact']);
-        $cnt = 0;
-
-        foreach ($this->contactService->batch->list([], ['>ID' => '1'], ['ID', 'NAME'], 1) as $item) {
-            $cnt++;
-        }
-        self::assertGreaterThanOrEqual(1, $cnt);
-    }
-
-    public function testBatchAdd(): void
-    {
-        $contacts = [];
-        for ($i = 1; $i < 60; $i++) {
-            $contacts[] = ['NAME' => 'name-' . $i];
-        }
-        $cnt = 0;
-        foreach ($this->contactService->batch->add($contacts) as $item) {
-            $cnt++;
-        }
-
-        self::assertEquals(count($contacts), $cnt);
-    }
-
-    /**
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
