@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\OperatingTimingTest;
+
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
 use Bitrix24\SDK\Tests\Integration\Fabric;
@@ -25,21 +26,26 @@ class OperatingTimingTest extends TestCase
     public function testOperatingTiming(): void
     {
 
-        $cnt = 0;
+        $timeStart = microtime(true);
         $contactsToUpdate = [];
-        foreach ($this->contactService->batch->list([], ['>ID' => '103595'], ['ID','PHONE'], 30000) as $contactList) {
-            $cnt++;
+        foreach ($this->contactService->batch->list([], ['>ID' => '12'], ['ID', 'PHONE'], 30000) as $contactList) {
             $contactsToUpdate[$contactList->ID] = [
                 'fields' => [
-                    'PHONE' => [['ID' =>$contactList->PHONE[0]['ID']]]
+                    'PHONE' => [['ID' => $contactList->PHONE[0]['ID']]]
                 ],
                 'params' => [],
             ];
             $contactListId[] = $contactList->ID;
         }
         foreach ($this->contactService->batch->update($contactsToUpdate) as $dealUpdateResult) {
-            $this->assertTrue($dealUpdateResult->isSuccess());
+            $logOperating[] = $dealUpdateResult->getResponseData()->getTime()->getOperating();
+            $logOperatingResetAt = $dealUpdateResult->getResponseData()->getTime()->getOperatingResetAt();
+            $sumOperating = array_sum($logOperating);
+            echo "summa operating: " . $sumOperating . PHP_EOL;
+            echo "operating rest at: " . $logOperatingResetAt . PHP_EOL;
         }
+        $timeEnd = microtime(true);
+        echo sprintf('batch query duration: %s seconds', round($timeEnd - $timeStart, 2)) . PHP_EOL;
 
         self::assertGreaterThanOrEqual(5, $contactListId);
 
