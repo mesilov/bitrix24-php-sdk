@@ -1,4 +1,7 @@
 # bitrix24-php-sdk change log
+## 1.3.0 (07.04.2023)
+* change `psr/log` version requirements
+
 ## 1.2.2 (15.01.2022)
 
 * fix php version requirements again =(
