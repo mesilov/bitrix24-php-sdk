@@ -139,7 +139,7 @@ class Time
             (float)$response['finish'],
             (float)$response['duration'],
             (float)$response['processing'],
-            (float)$response['operating'],
+            isset($response['operating']) ? (float)$response['operating'] : 0.0,
             new DateTimeImmutable($response['date_start']),
             new DateTimeImmutable($response['date_finish']),
             $response['operating_reset_at'] ?? null
