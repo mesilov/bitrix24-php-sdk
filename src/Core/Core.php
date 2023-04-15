@@ -32,17 +32,18 @@ class Core implements CoreInterface
     /**
      * Main constructor.
      *
-     * @param ApiClientInterface       $apiClient
-     * @param ApiLevelErrorHandler     $apiLevelErrorHandler
+     * @param ApiClientInterface $apiClient
+     * @param ApiLevelErrorHandler $apiLevelErrorHandler
      * @param EventDispatcherInterface $eventDispatcher
-     * @param LoggerInterface          $logger
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        ApiClientInterface $apiClient,
-        ApiLevelErrorHandler $apiLevelErrorHandler,
+        ApiClientInterface       $apiClient,
+        ApiLevelErrorHandler     $apiLevelErrorHandler,
         EventDispatcherInterface $eventDispatcher,
-        LoggerInterface $logger
-    ) {
+        LoggerInterface          $logger
+    )
+    {
         $this->apiClient = $apiClient;
         $this->apiLevelErrorHandler = $apiLevelErrorHandler;
         $this->eventDispatcher = $eventDispatcher;
@@ -51,7 +52,7 @@ class Core implements CoreInterface
 
     /**
      * @param string $apiMethod
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return Response
      * @throws BaseException
@@ -62,7 +63,7 @@ class Core implements CoreInterface
         $this->logger->debug(
             'call.start',
             [
-                'method'     => $apiMethod,
+                'method' => $apiMethod,
                 'parameters' => $parameters,
             ]
         );
@@ -80,7 +81,7 @@ class Core implements CoreInterface
             switch ($apiCallResponse->getStatusCode()) {
                 case StatusCodeInterface::STATUS_OK:
                     //todo check with empty response size from server
-                    $response = new Response($apiCallResponse, new Command($apiMethod, $parameters), $this->logger);
+                    $response = new Response($apiCallResponse, new Command($apiMethod, $parameters), $this->apiLevelErrorHandler, $this->logger);
                     break;
                 case StatusCodeInterface::STATUS_FOUND:
                     // change domain url
@@ -98,9 +99,9 @@ class Core implements CoreInterface
                     $this->logger->debug(
                         'api call repeated to new domain url',
                         [
-                            'domainUrl'         => $portalNewDomainUrlHost,
+                            'domainUrl' => $portalNewDomainUrlHost,
                             'repeatedApiMethod' => $apiMethod,
-                            'httpStatusCode'    => $response->getHttpResponse()->getStatusCode(),
+                            'httpStatusCode' => $response->getHttpResponse()->getStatusCode(),
                         ]
                     );
                     // dispatch event, application listeners update domain url host in accounts repository
@@ -121,10 +122,10 @@ class Core implements CoreInterface
                         $this->logger->debug(
                             'access token renewed',
                             [
-                                'newAccessToken'  => $renewedToken->getAccessToken()->getAccessToken(),
+                                'newAccessToken' => $renewedToken->getAccessToken()->getAccessToken(),
                                 'newRefreshToken' => $renewedToken->getAccessToken()->getRefreshToken(),
-                                'newExpires'      => $renewedToken->getAccessToken()->getExpires(),
-                                'appStatus'       => $renewedToken->getApplicationStatus(),
+                                'newExpires' => $renewedToken->getAccessToken()->getExpires(),
+                                'appStatus' => $renewedToken->getApplicationStatus(),
                             ]
                         );
                         $this->apiClient->getCredentials()->setAccessToken($renewedToken->getAccessToken());
@@ -135,7 +136,7 @@ class Core implements CoreInterface
                             'api call repeated',
                             [
                                 'repeatedApiMethod' => $apiMethod,
-                                'httpStatusCode'    => $response->getHttpResponse()->getStatusCode(),
+                                'httpStatusCode' => $response->getHttpResponse()->getStatusCode(),
                             ]
                         );
 
@@ -161,7 +162,7 @@ class Core implements CoreInterface
                         'unhandled server status',
                         [
                             'httpStatus' => $apiCallResponse->getStatusCode(),
-                            'body'       => $body,
+                            'body' => $body,
                         ]
                     );
                     $this->apiLevelErrorHandler->handle($body);
@@ -172,7 +173,7 @@ class Core implements CoreInterface
             $this->logger->error(
                 'call.transportException',
                 [
-                    'trace'   => $exception->getTrace(),
+                    'trace' => $exception->getTrace(),
                     'message' => $exception->getMessage(),
                 ]
             );
@@ -185,7 +186,7 @@ class Core implements CoreInterface
                 'call.unknownException',
                 [
                     'message' => $exception->getMessage(),
-                    'trace'   => $exception->getTrace(),
+                    'trace' => $exception->getTrace(),
                 ]
             );
             throw new BaseException(sprintf('unknown error - %s', $exception->getMessage()), $exception->getCode(), $exception);

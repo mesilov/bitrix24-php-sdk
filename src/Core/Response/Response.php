@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Response;
 
+use Bitrix24\SDK\Core\ApiLevelErrorHandler;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO;
@@ -23,19 +24,24 @@ class Response
     protected ResponseInterface $httpResponse;
     protected ?DTO\ResponseData $responseData;
     protected Command $apiCommand;
+    protected ApiLevelErrorHandler $apiLevelErrorHandler;
     protected LoggerInterface $logger;
 
     /**
      * Response constructor.
      *
      * @param ResponseInterface $httpResponse
-     * @param Command           $apiCommand
-     * @param LoggerInterface   $logger
+     * @param Command $apiCommand
+     * @param ApiLevelErrorHandler $apiLevelErrorHandler
+     * @param LoggerInterface $logger
      */
-    public function __construct(ResponseInterface $httpResponse, Command $apiCommand, LoggerInterface $logger)
+    public function __construct(ResponseInterface    $httpResponse, Command $apiCommand,
+                                ApiLevelErrorHandler $apiLevelErrorHandler,
+                                LoggerInterface      $logger)
     {
         $this->httpResponse = $httpResponse;
         $this->apiCommand = $apiCommand;
+        $this->apiLevelErrorHandler = $apiLevelErrorHandler;
         $this->logger = $logger;
         $this->responseData = null;
     }
@@ -64,16 +70,16 @@ class Response
         $restTimings = null;
         if ($this->responseData !== null) {
             $restTimings = [
-                'rest_query_duration'   => $this->responseData->getTime()->getDuration(),
+                'rest_query_duration' => $this->responseData->getTime()->getDuration(),
                 'rest_query_processing' => $this->responseData->getTime()->getProcessing(),
-                'rest_query_start'      => $this->responseData->getTime()->getStart(),
-                'rest_query_finish'     => $this->responseData->getTime()->getFinish(),
+                'rest_query_start' => $this->responseData->getTime()->getStart(),
+                'rest_query_finish' => $this->responseData->getTime()->getFinish(),
             ];
         }
         $this->logger->info('Response.TransportInfo', [
-            'restTimings'    => $restTimings,
+            'restTimings' => $restTimings,
             'networkTimings' => (new NetworkTimingsParser($this->httpResponse->getInfo()))->toArrayWithMicroseconds(),
-            'responseInfo'   => (new ResponseInfoParser($this->httpResponse->getInfo()))->toArray(),
+            'responseInfo' => (new ResponseInfoParser($this->httpResponse->getInfo()))->toArray(),
         ]);
     }
 
@@ -92,8 +98,9 @@ class Response
                 $this->logger->info('getResponseData.responseBody', [
                     'responseBody' => $responseResult,
                 ]);
+
                 // try to handle api-level errors
-                $this->handleApiLevelErrors($responseResult);
+                $this->apiLevelErrorHandler->handle($responseResult);
 
                 if (!is_array($responseResult['result'])) {
                     $responseResult['result'] = [$responseResult['result']];
@@ -142,51 +149,5 @@ class Response
         }
 
         return $content;
-    }
-
-    /**
-     * @param array $apiResponse
-     */
-    private function handleApiLevelErrors(array $apiResponse): void
-    {
-        $this->logger->debug('handleApiLevelErrors.start');
-
-        if (array_key_exists('error', $apiResponse)) {
-            $errorMsg = sprintf(
-                '%s - %s ',
-                $apiResponse['error'],
-                (array_key_exists('error_description', $apiResponse) ? $apiResponse['error_description'] : ''),
-            );
-// todo check api-level error codes
-//
-//            switch (strtoupper(trim($apiResponse['error']))) {
-//                case 'EXPIRED_TOKEN':
-//                    throw new Bitrix24TokenIsExpiredException($errorMsg);
-//                case 'WRONG_CLIENT':
-//                case 'ERROR_OAUTH':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24WrongClientException($errorMsg);
-//                case 'ERROR_METHOD_NOT_FOUND':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24MethodNotFoundException($errorMsg);
-//                case 'INVALID_TOKEN':
-//                case 'INVALID_GRANT':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24TokenIsInvalidException($errorMsg);
-
-//                case 'PAYMENT_REQUIRED':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24PaymentRequiredException($errorMsg);
-//                case 'NO_AUTH_FOUND':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24PortalRenamedException($errorMsg);
-//                case 'INSUFFICIENT_SCOPE':
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24InsufficientScope($errorMsg);
-//                default:
-//                    $this->log->error($errorMsg, $this->getErrorContext());
-//                    throw new Bitrix24ApiException($errorMsg);
-        }
-        $this->logger->debug('handleApiLevelErrors.finish');
     }
 }
