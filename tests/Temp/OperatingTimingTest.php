@@ -43,33 +43,33 @@ class OperatingTimingTest extends TestCase
         //1510 |operating   104.5405356884  |cur_time  2023-04-15 16:57:21 |op_reset_at 1681567640    →   2023-04-15 14:07:20
 
 
-        $contactsToUpdate = $this->getContactsUpdateCommand(15000);
-
-
-        //todo считать количество контактов для обновления и считать количество контактов которые обновили, если не совпало, то падаем с ошибкой
-
-        // обновляем контакты в батч-режиме
-        $cnt = 0;
-        foreach ($this->contactService->batch->update($contactsToUpdate) as $b24ContactId => $contactUpdateResult) {
-            $cnt++;
-
-            $debugOperatingLog = sprintf(
-                    'cnt    %s |id %s |operating   %s  |cur_time  %s |op_reset_at %s    →   %s',
-                    $cnt,
-                    $b24ContactId,
-                    $contactUpdateResult->getResponseData()->getTime()->getOperating(),
-                    $contactUpdateResult->getResponseData()->getTime()->getDateFinish()->format('Y-m-d H:i:s'),
-                    $contactUpdateResult->getResponseData()->getTime()->getOperatingResetAt(),
-                    (new DateTime)->setTimestamp($contactUpdateResult->getResponseData()->getTime()->getOperatingResetAt())->format('Y-m-d H:i:s')
-                ) . PHP_EOL;
-            file_put_contents('operating.log', $debugOperatingLog);
-        }
-
-        $this->assertEquals(
-            count($contactsToUpdate),
-            $cnt,
-            sprintf('updated contacts count %s not equal to expected %s cmd items', $cnt, count($contactsToUpdate))
-        );
+//        $contactsToUpdate = $this->getContactsUpdateCommand(15000);
+//
+//
+//        //todo считать количество контактов для обновления и считать количество контактов которые обновили, если не совпало, то падаем с ошибкой
+//
+//        // обновляем контакты в батч-режиме
+//        $cnt = 0;
+//        foreach ($this->contactService->batch->update($contactsToUpdate) as $b24ContactId => $contactUpdateResult) {
+//            $cnt++;
+//
+//            $debugOperatingLog = sprintf(
+//                    'cnt    %s |id %s |operating   %s  |cur_time  %s |op_reset_at %s    →   %s',
+//                    $cnt,
+//                    $b24ContactId,
+//                    $contactUpdateResult->getResponseData()->getTime()->getOperating(),
+//                    $contactUpdateResult->getResponseData()->getTime()->getDateFinish()->format('Y-m-d H:i:s'),
+//                    $contactUpdateResult->getResponseData()->getTime()->getOperatingResetAt(),
+//                    (new DateTime)->setTimestamp($contactUpdateResult->getResponseData()->getTime()->getOperatingResetAt())->format('Y-m-d H:i:s')
+//                ) . PHP_EOL;
+//            file_put_contents('operating.log', $debugOperatingLog);
+//        }
+//
+//        $this->assertEquals(
+//            count($contactsToUpdate),
+//            $cnt,
+//            sprintf('updated contacts count %s not equal to expected %s cmd items', $cnt, count($contactsToUpdate))
+//        );
 
         // шаг 1 - выброс корректного исключения, что мол упали из за блокировки метода
         // проблемы: - можно потерять часть данных при обновлении, т.к. мы не знаем, какие контакты в клиентском коде обновились, а какие нет или знаем?

@@ -21,6 +21,8 @@ class ApiLevelErrorHandler
 {
     protected LoggerInterface $logger;
     protected const ERROR_KEY = 'error';
+    protected const RESULT_KEY = 'result';
+    protected const RESULT_ERROR_KEY = 'result_error';
     protected const ERROR_DESCRIPTION_KEY = 'error_description';
 
     /**
@@ -41,17 +43,18 @@ class ApiLevelErrorHandler
      */
     public function handle(array $responseBody): void
     {
-        //ошибка единичного запроса
+        // single query error response
         if (array_key_exists(self::ERROR_KEY, $responseBody) && array_key_exists(self::ERROR_DESCRIPTION_KEY, $responseBody)) {
             $this->handleError($responseBody);
         }
 
-        // ошибка в батче
-        if (!array_key_exists('result', $responseBody)) {
+        // error in batch response
+        if (!array_key_exists(self::RESULT_KEY, $responseBody) || (!is_array($responseBody[self::RESULT_KEY]))) {
             return;
         }
-        if (array_key_exists('result_error', $responseBody['result'])) {
-            foreach ($responseBody['result']['result_error'] as $cmdId => $errorData) {
+
+        if (array_key_exists(self::RESULT_ERROR_KEY, $responseBody[self::RESULT_KEY])) {
+            foreach ($responseBody[self::RESULT_KEY][self::RESULT_ERROR_KEY] as $cmdId => $errorData) {
                 $this->handleError($errorData, $cmdId);
             }
         }
