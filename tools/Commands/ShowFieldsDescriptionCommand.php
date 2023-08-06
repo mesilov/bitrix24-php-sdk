@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tools;
+namespace Bitrix24\SDK\Tools\Commands;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
@@ -18,20 +18,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
 
-/**
- * Class ShowFieldsDescriptionCommand
- *
- * @package Bitrix24\SDK\Tools\PerformanceBenchmarks
- */
+
+#[AsCommand(
+    name: 'b24:util:show-fields-description',
+    description: 'show entity fields description with table or phpDoc output format',
+    hidden: false
+)]
 class ShowFieldsDescriptionCommand extends Command
 {
     protected LoggerInterface $logger;
     protected CoreInterface $core;
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'util:show-fields-description';
     protected const WEBHOOK_URL = 'webhook';
     protected const OUTPUT_FORMAT = 'output-format';
 
@@ -71,7 +69,7 @@ class ShowFieldsDescriptionCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int
@@ -160,7 +158,7 @@ class ShowFieldsDescriptionCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @param Response        $fields
+     * @param Response $fields
      *
      * @throws BaseException
      */
@@ -175,7 +173,7 @@ class ShowFieldsDescriptionCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @param Response        $fields
+     * @param Response $fields
      *
      * @throws BaseException
      */
@@ -183,16 +181,15 @@ class ShowFieldsDescriptionCommand extends Command
     {
         $fieldsList = ['*', '* @param array{'];
         foreach ($fields->getResponseData()->getResult() as $fieldCode => $fieldDescription) {
-            switch (strtolower($fieldDescription['type'])) {
-                case 'integer':
-                    $phpDocType = 'int';
-                    break;
-                case 'datetime':
-                    $phpDocType = 'string';
-                    break;
-                default:
-                    $phpDocType = 'string';
+            if (is_array($fieldDescription)) {
+                $phpDocType = match (strtolower($fieldDescription['type'])) {
+                    'integer' => 'int',
+                    default => 'string',
+                };
+            } else {
+                $phpDocType = 'mixed';
             }
+
             $fieldsList[] = sprintf('*   %s?: %s,', $fieldCode, $phpDocType);
         }
         $fieldsList[] = '*   } $fields';
@@ -202,7 +199,7 @@ class ShowFieldsDescriptionCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @param Response        $fields
+     * @param Response $fields
      *
      * @throws BaseException
      */
@@ -210,15 +207,14 @@ class ShowFieldsDescriptionCommand extends Command
     {
         $fieldsList = ['/**', '*'];
         foreach ($fields->getResponseData()->getResult() as $fieldCode => $fieldDescription) {
-            switch (strtolower($fieldDescription['type'])) {
-                case 'integer':
-                    $phpDocType = 'int';
-                    break;
-                case 'datetime':
-                    $phpDocType = 'string';
-                    break;
-                default:
-                    $phpDocType = 'string';
+
+            if (is_array($fieldDescription)) {
+                $phpDocType = match (strtolower($fieldDescription['type'])) {
+                    'integer' => 'int',
+                    default => 'string',
+                };
+            } else {
+                $phpDocType = 'mixed';
             }
             $fieldsList[] = sprintf('* @property-read %s      $%s', $phpDocType, $fieldCode);
         }
@@ -228,7 +224,7 @@ class ShowFieldsDescriptionCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @param Response        $fields
+     * @param Response $fields
      *
      * @throws BaseException
      */

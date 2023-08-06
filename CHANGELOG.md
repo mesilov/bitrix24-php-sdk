@@ -1,5 +1,50 @@
 # bitrix24-php-sdk change log
 
+## 2.0-beta.1 — 25.02.2023
+
+### Added
+
+* add `Symfony\Component\Uid\Uuid` requirements
+* add contracts for bitrix24 applications based on bitrix24-php-sdk - `Bitrix24\SDK\Application\Contracts`, now added `Bitrix24Account`
+* add [service builder factory](https://github.com/mesilov/bitrix24-php-sdk/issues/328)
+* add method `Bitrix24\SDK\Core\Credentials\Scope::initFromString`
+* add method `Bitrix24\SDK\Application\ApplicationStatus::initFromString`
+* ❗️add php 8.2 support
+* add system CRM multi-field type `Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone`
+* add scope `user`,`user_basic`,`user_brief`,`user.userfield` and services [add scope user support](https://github.com/mesilov/bitrix24-php-sdk/issues/339)
+  * `Bitrix24\SDK\Services\User\Service\User::fields` - get user fields
+  * `Bitrix24\SDK\Services\User\Service\User::current` - get current user
+  * `Bitrix24\SDK\Services\User\Service\User::add` - add user
+  * `Bitrix24\SDK\Services\User\Service\User::get` - get user
+  * `Bitrix24\SDK\Services\User\Service\User::update` - update user
+  * `Bitrix24\SDK\Services\User\Service\User::search` - search users
+
+### Changed
+
+* ❗️Batch interface `BatchInterface` [renamed](https://github.com/mesilov/bitrix24-php-sdk/issues/324)
+  to `Bitrix24\SDK\Core\Contracts\BatchOperationsInterface`
+* ❗`Bitrix24\SDK\Services\Telephony\Requests\Events` moved to separated namespaces:
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallInit`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallInit\OnVoximplantCallInit`
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallStart`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallStart\OnVoximplantCallStart`
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
+    * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
+      to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
+
+### Bugfix
+
+* fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
+* fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
+* fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
+* fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
+* fix [add return type for crm multifields phone, email, im](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
+* fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
+
+### etc
+* move CLI entry point to `bin/console`
+
 ## 2.0-alpha.7 — 8.08.2022
 
 ### Added
@@ -46,10 +91,10 @@
 * method `Services\Main\Service::getAllMethods` marks as deprecated
 * method `Services\Main\Service::getMethodsByScope` marks as deprecated
 * ❗️fabric methods `Bitrix24\SDK\Core\Credentials`
-   renamed and now are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
+  renamed and now are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
   , `createFromPlacementRequest`
 * ❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
-* ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result` 
+* ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result`
 * ❗️deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
   method `CoreBuilder::withCredentials`
 

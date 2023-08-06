@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Stubs;
 
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
@@ -14,7 +14,7 @@ use Generator;
  *
  * @package Bitrix24\SDK\Tests\Unit\Stubs
  */
-class NullBatch implements BatchInterface
+class NullBatch implements BatchOperationsInterface
 {
 
     /**

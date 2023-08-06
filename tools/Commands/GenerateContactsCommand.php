@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tools\DemoDataGenerators\CRM\Contacts;
+namespace Bitrix24\SDK\Tools\Commands;
 
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\BulkItemsReader\BulkItemsReaderBuilder;
 use Bitrix24\SDK\Core\CoreBuilder;
@@ -13,27 +15,23 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Services\ServiceBuilder;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Command\Command;
+
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class GenerateContactsCommand
- *
- * @package Bitrix24\SDK\Tools\DemoDataGenerators\CRM\Contacts
- */
+#[AsCommand(
+    name: 'b24:generate:contacts',
+    description: 'generate demo-data contacts in CRM',
+    hidden: false
+)]
 class GenerateContactsCommand extends Command
 {
     /**
      * @var LoggerInterface
      */
     protected LoggerInterface $logger;
-    /**
-     * @var string
-     */
-    protected static $defaultName = 'generate:contacts';
     protected const CONTACTS_COUNT = 'count';
     protected const WEBHOOK_URL = 'webhook';
 
@@ -76,7 +74,7 @@ class GenerateContactsCommand extends Command
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return void
@@ -90,7 +88,7 @@ class GenerateContactsCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int
@@ -159,7 +157,7 @@ class GenerateContactsCommand extends Command
                 );
             }
             $timeEnd = microtime(true);
-            $io->writeln(sprintf('batch query duration: %s seconds', round($timeEnd - $timeStart, 2)) . PHP_EOL . PHP_EOL);
+            $io->writeln(GenerateContactsCommand . phpsprintf('batch query duration: %s seconds', round($timeEnd - $timeStart, 2)) . PHP_EOL . PHP_EOL);
             $io->success('contacts added');
         } catch (BaseException $exception) {
             $io = new SymfonyStyle($input, $output);
@@ -194,16 +192,15 @@ class GenerateContactsCommand extends Command
         $contacts = [];
         for ($i = 0; $i < $contactsCount; $i++) {
             $contacts[] = [
-                'NAME'        => sprintf('name_%s', $i),
-                'LAST_NAME'   => sprintf('last_%s', $i),
+                'NAME' => sprintf('name_%s', $i),
+                'LAST_NAME' => sprintf('last_%s', $i),
                 'SECOND_NAME' => sprintf('second_%s', $i),
-                'PHONE'       => [
+                'PHONE' => [
                     ['VALUE' => sprintf('+7978%s', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'MOBILE'],
-                    ['VALUE' => implode("-", str_split(substr( sprintf('%s', microtime()), 2, -13), 2))],
                 ],
-             /*   'EMAIL'       => [
+                'EMAIL' => [
                     ['VALUE' => sprintf('test-%s@gmail.com', random_int(1000000, 9999999)), 'VALUE_TYPE' => 'WORK'],
-                ],*/
+                ],
             ];
         }
 

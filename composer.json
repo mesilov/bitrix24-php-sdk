@@ -14,10 +14,14 @@
     {
       "name": "Maxim Mesilov",
       "homepage": "https://github.com/mesilov/"
+    },
+    {
+      "name": "Kirill Hramov",
+      "homepage": "https://github.com/KarlsonComplete"
     }
   ],
   "require": {
-    "php": "7.4.*|8.*",
+    "php": "8.1.* || 8.2.*",
     "ext-json": "*",
     "ext-bcmath": "*",
     "ext-curl": "*",
@@ -28,7 +32,9 @@
     "symfony/http-foundation": "5.4.* || 6.*",
     "symfony/event-dispatcher": "5.4.* || 6.*",
     "ramsey/uuid": "^4.2.3",
-    "moneyphp/money": "3.* || 4.*"
+    "moneyphp/money": "3.* || 4.*",
+    "symfony/uid": "6.*",
+    "ext-intl": "*"
   },
   "require-dev": {
     "monolog/monolog": "2.1.*",
@@ -38,8 +44,7 @@
     "phpstan/phpstan": "1.*",
     "phpunit/phpunit": "9.5.*",
     "symfony/stopwatch": "5.4.* || 6.*",
-    "roave/security-advisories": "dev-master",
-    "ext-intl": "*"
+    "roave/security-advisories": "dev-master"
   },
   "autoload": {
     "psr-4": {

@@ -7,19 +7,42 @@ namespace Bitrix24\SDK\Services\CRM\Common\Result;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeImmutable;
+use Money\Currency;
+use Money\Money;
 
 class AbstractCrmItem extends AbstractItem
 {
     private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
+     * @var \Money\Currency
+     */
+    private Currency $currency;
+
+    public function __construct(array $data, Currency $currency = null)
+    {
+        parent::__construct($data);
+        if ($currency !== null) {
+            $this->currency = $currency;
+        }
+
+    }
+
+    /**
      * @param int|string $offset
      *
      * @return bool|\DateTimeImmutable|int|mixed|null
      */
+
     public function __get($offset)
     {
         // todo унести в отдельный класс и покрыть тестами
+        // учитывать требования
+        //  - поддержка пользовательских полей с пользовательскими типами
+        //  - поддержка пользовательских полей со встроенными типами
+        //  - расширяемость для пользовательских полей в клиентском коде
+        //  - хранение связи поле-тип в аннотациях?
+
         // приведение полей к реальным типам данных для основных сущностей CRM
         switch ($offset) {
             case 'ID':
@@ -30,6 +53,10 @@ class AbstractCrmItem extends AbstractItem
             case 'LEAD_ID':
             case 'CONTACT_ID':
             case 'QUOTE_ID':
+                // productRow
+            case 'OWNER_ID':
+                // DealCategoryItem
+            case 'SORT':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
@@ -39,9 +66,7 @@ class AbstractCrmItem extends AbstractItem
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null && $this->data[$offset] !== '0') {
                     return (int)$this->data[$offset];
                 }
-
                 return null;
-
             // contact
             case 'EXPORT':
             case 'HAS_PHONE':
@@ -49,14 +74,25 @@ class AbstractCrmItem extends AbstractItem
             case 'HAS_IMOL':
             case 'OPENED':
                 // deal
+            case 'PRICE_EXCLUSIVE':
+            case 'PRICE_NETTO':
+            case 'PRICE_BRUTTO':
+            case 'PRICE':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    $var = $this->data[$offset] * 100;
+                    return new Money((string)$var, new Currency($this->currency->getCode()));
+                }
+                return null;
             case 'IS_MANUAL_OPPORTUNITY':
             case 'CLOSED':
             case 'IS_NEW':
+            case 'IS_LOCKED':
             case 'IS_RECURRING':
             case 'IS_RETURN_CUSTOMER':
             case 'IS_REPEATED_APPROACH':
                 return $this->data[$offset] === 'Y';
             case 'DATE_CREATE':
+            case 'CREATED_DATE':
             case 'DATE_MODIFY':
             case 'BIRTHDATE':
             case 'BEGINDATE':
