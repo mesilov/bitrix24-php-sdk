@@ -18,7 +18,8 @@
   * `Bitrix24\SDK\Services\User\Service\User::get` - get user
   * `Bitrix24\SDK\Services\User\Service\User::update` - update user
   * `Bitrix24\SDK\Services\User\Service\User::search` - search users
-* add [crm item support](https://github.com/mesilov/bitrix24-php-sdk/issues/330) 
+* add [crm item support](https://github.com/mesilov/bitrix24-php-sdk/issues/330)
+* add Duplicate search support for `Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate`
 
 ### Changed
 
