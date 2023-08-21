@@ -142,7 +142,9 @@ class AbstractCrmItem extends AbstractItem
      */
     protected function getKeyWithUserfieldByFieldName(string $fieldName)
     {
-        $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
+        if(!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
+            $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
+        }
         if (!$this->isKeyExists($fieldName)) {
             throw new UserfieldNotFoundException(sprintf('crm userfield not found by field name %s', $fieldName));
         }

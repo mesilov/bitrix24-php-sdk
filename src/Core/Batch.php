@@ -210,7 +210,7 @@ class Batch implements BatchOperationsInterface
                 $this->registerCommand($apiMethod, [
                     'id' => $entityItemId,
                     'fields' => $entityItem['fields'],
-                    'params' => $entityItem['params'],
+                    'params' => $entityItem['params'] ?? null,
                 ]);
             }
 
