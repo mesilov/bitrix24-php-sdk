@@ -18,12 +18,12 @@ interface BatchOperationsInterface
     /**
      * Batch wrapper for *.list methods without counting elements on every api-call
      *
-     * @param string              $apiMethod
+     * @param string $apiMethod
      * @param array<string,mixed> $order
      * @param array<string,mixed> $filter
      * @param array<string,mixed> $select
-     * @param int|null            $limit
-     *
+     * @param int|null $limit
+     * @param array|null $additionalParameters
      * @return Generator<mixed>
      * @throws BaseException
      */
@@ -32,7 +32,8 @@ interface BatchOperationsInterface
         array $order,
         array $filter,
         array $select,
-        ?int $limit = null
+        ?int $limit = null,
+        ?array $additionalParameters = null
     ): Generator;
 
     /**

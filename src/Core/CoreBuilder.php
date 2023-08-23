@@ -60,11 +60,6 @@ class CoreBuilder
         return $this;
     }
 
-    /**
-     * @param ApiClientInterface $apiClient
-     *
-     * @return $this
-     */
     public function withApiClient(ApiClientInterface $apiClient): self
     {
         $this->apiClient = $apiClient;
@@ -72,11 +67,13 @@ class CoreBuilder
         return $this;
     }
 
-    /**
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     */
+    public function withHttpClient(HttpClientInterface $httpClient):self
+    {
+        $this->httpClient = $httpClient;
+
+        return $this;
+    }
+
     public function withLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
@@ -84,11 +81,6 @@ class CoreBuilder
         return $this;
     }
 
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return $this
-     */
     public function withEventDispatcher(EventDispatcherInterface $eventDispatcher): self
     {
         $this->eventDispatcher = $eventDispatcher;
@@ -97,7 +89,6 @@ class CoreBuilder
     }
 
     /**
-     * @return CoreInterface
      * @throws InvalidArgumentException
      */
     public function build(): CoreInterface

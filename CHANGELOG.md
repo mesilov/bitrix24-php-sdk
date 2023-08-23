@@ -18,6 +18,8 @@
   * `Bitrix24\SDK\Services\User\Service\User::get` - get user
   * `Bitrix24\SDK\Services\User\Service\User::update` - update user
   * `Bitrix24\SDK\Services\User\Service\User::search` - search users
+* add [crm item support](https://github.com/mesilov/bitrix24-php-sdk/issues/330)
+* add Duplicate search support for `Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate`
 
 ### Changed
 
@@ -32,6 +34,16 @@
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
     * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
+*  ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface`:
+    * method `getContactPerson` renamed to `getContactPersonId`
+    * added method `getApplicationVersion`
+    * added method `updateApplicationVersion`
+    * added method `getApplicationScope`
+    * added method `applicationInstalled`
+    * added method `applicationUninstalled`
+    * added method `markAccountAsDeactivated`
+    * removed method `markAccountAsDeleted`
+    * changed method `markAccountAsActive` signature
 
 ### Bugfix
 

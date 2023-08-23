@@ -15,7 +15,7 @@ class AbstractCrmItem extends AbstractItem
     private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
-     * @var \Money\Currency
+     * @var Currency
      */
     private Currency $currency;
 
@@ -25,7 +25,6 @@ class AbstractCrmItem extends AbstractItem
         if ($currency !== null) {
             $this->currency = $currency;
         }
-
     }
 
     /**
@@ -49,6 +48,15 @@ class AbstractCrmItem extends AbstractItem
             case 'ASSIGNED_BY_ID':
             case 'CREATED_BY_ID':
             case 'MODIFY_BY_ID':
+            case 'createdBy':
+            case 'updatedBy':
+            case 'movedBy':
+            case 'begindate':
+            case 'closedate':
+            case 'opportunity':
+            case 'opportunityAccount':
+            case 'taxValueAccount':
+            case 'taxValue':
                 // deal
             case 'LEAD_ID':
             case 'CONTACT_ID':
@@ -57,12 +65,20 @@ class AbstractCrmItem extends AbstractItem
             case 'OWNER_ID':
                 // DealCategoryItem
             case 'SORT':
+            case 'id':
+            case 'categoryId':
+            case 'webformId':
+            case 'assignedById':
+            case 'contactId':
+            case 'lastActivityBy':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
 
                 return null;
             case 'COMPANY_ID':
+            case 'companyId':
+            case 'mycompanyId':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null && $this->data[$offset] !== '0') {
                     return (int)$this->data[$offset];
                 }
@@ -73,17 +89,9 @@ class AbstractCrmItem extends AbstractItem
             case 'HAS_EMAIL':
             case 'HAS_IMOL':
             case 'OPENED':
-                // deal
-            case 'PRICE_EXCLUSIVE':
-            case 'PRICE_NETTO':
-            case 'PRICE_BRUTTO':
-            case 'PRICE':
-                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
-                    $var = $this->data[$offset] * 100;
-                    return new Money((string)$var, new Currency($this->currency->getCode()));
-                }
-                return null;
+            case 'opened':
             case 'IS_MANUAL_OPPORTUNITY':
+            case 'isManualOpportunity':
             case 'CLOSED':
             case 'IS_NEW':
             case 'IS_LOCKED':
@@ -97,11 +105,28 @@ class AbstractCrmItem extends AbstractItem
             case 'BIRTHDATE':
             case 'BEGINDATE':
             case 'CLOSEDATE':
+            case 'createdTime':
+            case 'updatedTime':
+            case 'movedTime':
+            case 'lastActivityTime':
                 if ($this->data[$offset] !== '') {
                     return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
 
                 return null;
+            // deal
+            case 'PRICE_EXCLUSIVE':
+            case 'PRICE_NETTO':
+            case 'PRICE_BRUTTO':
+            case 'PRICE':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    $var = $this->data[$offset] * 100;
+                    return new Money((string)$var, new Currency($this->currency->getCode()));
+                }
+                return null;
+            case 'currencyId':
+            case 'accountCurrencyId':
+                return new Currency($this->data[$offset]);
             default:
                 return $this->data[$offset] ?? null;
         }
@@ -113,11 +138,13 @@ class AbstractCrmItem extends AbstractItem
      * @param string $fieldName
      *
      * @return mixed|null
-     * @throws \Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException
+     * @throws UserfieldNotFoundException
      */
     protected function getKeyWithUserfieldByFieldName(string $fieldName)
     {
-        $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
+        if(!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
+            $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
+        }
         if (!$this->isKeyExists($fieldName)) {
             throw new UserfieldNotFoundException(sprintf('crm userfield not found by field name %s', $fieldName));
         }
