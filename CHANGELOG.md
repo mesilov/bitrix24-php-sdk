@@ -34,6 +34,16 @@
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
     * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
+*  ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface`:
+    * method `getContactPerson` renamed to `getContactPersonId`
+    * added method `getApplicationVersion`
+    * added method `updateApplicationVersion`
+    * added method `getApplicationScope`
+    * added method `applicationInstalled`
+    * added method `applicationUninstalled`
+    * added method `markAccountAsDeactivated`
+    * removed method `markAccountAsDeleted`
+    * changed method `markAccountAsActive` signature
 
 ### Bugfix
 
