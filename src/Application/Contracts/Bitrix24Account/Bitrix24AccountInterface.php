@@ -106,4 +106,9 @@ interface Bitrix24AccountInterface
      * Change account status to Deactivated
      */
     public function markAccountAsDeactivated(): void;
+
+    /**
+     * Get Bitrix24 user id who installed application and own this account
+     */
+    public function getBitrix24UserId(): int;
 }
