@@ -42,6 +42,7 @@
     * added method `applicationInstalled`
     * added method `applicationUninstalled`
     * added method `markAccountAsDeactivated`
+    * added method `getBitrix24UserId`
     * removed method `markAccountAsDeleted`
     * changed method `markAccountAsActive` signature
 
