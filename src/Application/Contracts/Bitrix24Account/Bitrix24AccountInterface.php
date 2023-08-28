@@ -100,12 +100,12 @@ interface Bitrix24AccountInterface
     /**
      * Switch account to Active status
      */
-    public function markAccountAsActive(): void;
+    public function markAsActive(): void;
 
     /**
      * Change account status to Deactivated
      */
-    public function markAccountAsDeactivated(): void;
+    public function markAsDeactivated(): void;
 
     /**
      * Get Bitrix24 user id who installed application and own this account

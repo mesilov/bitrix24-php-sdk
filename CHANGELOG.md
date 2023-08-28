@@ -41,10 +41,19 @@
     * added method `getApplicationScope`
     * added method `applicationInstalled`
     * added method `applicationUninstalled`
-    * added method `markAccountAsDeactivated`
+    * added method `markAsDeactivated`
     * added method `getBitrix24UserId`
     * removed method `markAccountAsDeleted`
-    * changed method `markAccountAsActive` signature
+    * changed method `markAsActive` 
+* ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountRepositoryInterface`:
+    * method `saveAccount` renamed to `save`
+    * method `deleteAccount` renamed to `delete`
+    * method `findAccountByMemberId` renamed to `findByMemberId`
+    * method `getAccountByMemberId` renamed to `getByMemberId`
+    * method `findAccountByContactPersonId` renamed to `findByContactPersonId`
+    * method `findAccountByDomainUrl` renamed to `findByDomainUrl`
+    * add method `findAllActive`
+    * add method `findAllDeactivated`
 
 ### Bugfix
 
