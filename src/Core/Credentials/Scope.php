@@ -6,11 +6,6 @@ namespace Bitrix24\SDK\Core\Credentials;
 
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 
-/**
- * Class Scope
- *
- * @package Bitrix24\SDK\Core\Credentials
- */
 class Scope
 {
     /**
@@ -84,9 +79,14 @@ class Scope
     public function __construct(array $scope = [])
     {
         $scope = array_unique(array_map('strtolower', $scope));
-        foreach ($scope as $item) {
-            if (!in_array($item, $this->availableScope, true)) {
-                throw new UnknownScopeCodeException(sprintf('unknown application scope code - %s', $item));
+
+        if (count($scope) === 1 && $scope[0] === '') {
+            $scope = [];
+        } else {
+            foreach ($scope as $item) {
+                if (!in_array($item, $this->availableScope, true)) {
+                    throw new UnknownScopeCodeException(sprintf('unknown application scope code - %s', $item));
+                }
             }
         }
 

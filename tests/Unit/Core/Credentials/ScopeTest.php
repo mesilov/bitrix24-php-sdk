@@ -76,6 +76,15 @@ class ScopeTest extends TestCase
     /**
      * @throws UnknownScopeCodeException
      */
+    public function testEmptyScope(): void
+    {
+        $scope = new Scope(['']);
+        $this->assertEquals([], $scope->getScopeCodes());
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     */
     public function testWrongScopeCode(): void
     {
         $scope = new Scope(['CRM', 'Call', 'im']);
