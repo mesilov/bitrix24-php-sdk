@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Core;
 use Bitrix24\SDK\Core\Commands\Command;
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
@@ -146,6 +147,15 @@ class Core implements CoreInterface
                         throw new BaseException('UNAUTHORIZED request error');
                     }
                     break;
+                case StatusCodeInterface::STATUS_FORBIDDEN:
+                    $this->logger->warning(
+                        'bitrix24 portal authorisation forbidden',
+                        [
+                            'apiMethod' => $apiMethod,
+                            'b24DomainUrl' => $this->apiClient->getCredentials()->getDomainUrl(),
+                        ]
+                    );
+                    throw new AuthForbiddenException(sprintf('authorisation forbidden for portal %s ', $this->apiClient->getCredentials()->getDomainUrl()));
                 case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
                     $body = $apiCallResponse->toArray(false);
                     $this->logger->notice(
