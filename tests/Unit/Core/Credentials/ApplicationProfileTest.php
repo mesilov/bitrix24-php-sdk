@@ -13,11 +13,11 @@ class ApplicationProfileTest extends TestCase
 {
     /**
      *
-     * @param array       $arr
+     * @param array $arr
      * @param string|null $expectedException
      *
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @dataProvider arrayDataProvider
      */
     public function testFromArray(array $arr, ?string $expectedException): void
@@ -35,35 +35,43 @@ class ApplicationProfileTest extends TestCase
     {
         yield 'valid' => [
             [
-                'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID'     => '1',
+                'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => '1',
                 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => '2',
-                'BITRIX24_PHP_SDK_APPLICATION_SCOPE'         => 'user',
+                'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => 'user',
             ],
             null,
         ];
         yield 'without client id' => [
             [
-                ''                                           => '1',
+                '' => '1',
                 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => '2',
-                'BITRIX24_PHP_SDK_APPLICATION_SCOPE'         => 'user',
+                'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => 'user',
             ],
             InvalidArgumentException::class,
         ];
         yield 'without client secret' => [
             [
                 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => '1',
-                ''                                       => '2',
-                'BITRIX24_PHP_SDK_APPLICATION_SCOPE'     => 'user',
+                '' => '2',
+                'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => 'user',
             ],
             InvalidArgumentException::class,
         ];
         yield 'without client application scope' => [
             [
-                'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID'     => '1',
+                'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => '1',
                 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => '2',
-                ''                                           => 'user',
+                '' => 'user',
             ],
             InvalidArgumentException::class,
+        ];
+        yield 'with empty scope' => [
+            [
+                'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => '1',
+                'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => '2',
+                'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => '',
+            ],
+            null
         ];
     }
 }
