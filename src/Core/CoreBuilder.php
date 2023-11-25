@@ -9,6 +9,8 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\DefaultRequestIdGenerator;
+use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -23,12 +25,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class CoreBuilder
 {
-    protected ?ApiClientInterface $apiClient;
-    protected HttpClientInterface $httpClient;
-    protected EventDispatcherInterface $eventDispatcher;
-    protected LoggerInterface $logger;
-    protected ?Credentials $credentials;
-    protected ApiLevelErrorHandler $apiLevelErrorHandler;
+    private ?ApiClientInterface $apiClient;
+    private HttpClientInterface $httpClient;
+    private EventDispatcherInterface $eventDispatcher;
+    private LoggerInterface $logger;
+    private ?Credentials $credentials;
+    private ApiLevelErrorHandler $apiLevelErrorHandler;
+    private RequestIdGeneratorInterface $requestIdGenerator;
 
     /**
      * CoreBuilder constructor.
@@ -46,6 +49,12 @@ class CoreBuilder
         $this->credentials = null;
         $this->apiClient = null;
         $this->apiLevelErrorHandler = new ApiLevelErrorHandler($this->logger);
+        $this->requestIdGenerator = new DefaultRequestIdGenerator();
+    }
+
+    public function withRequestIdGenerator(RequestIdGeneratorInterface $requestIdGenerator): void
+    {
+        $this->requestIdGenerator = $requestIdGenerator;
     }
 
     /**
@@ -101,6 +110,7 @@ class CoreBuilder
             $this->apiClient = new ApiClient(
                 $this->credentials,
                 $this->httpClient,
+                $this->requestIdGenerator,
                 $this->logger
             );
         }
