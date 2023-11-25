@@ -21,6 +21,7 @@
 * add [crm item support](https://github.com/mesilov/bitrix24-php-sdk/issues/330)
 * add enum `DealStageSemanticId`
 * add Duplicate search support for `Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate`
+* add `x-request-id` [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/354)  
 
 ### Changed
 

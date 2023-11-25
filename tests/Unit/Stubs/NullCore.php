@@ -12,15 +12,11 @@ use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Response\Response;
+use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\DefaultRequestIdGenerator;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-/**
- * Class NullCore
- *
- * @package Bitrix24\SDK\Tests\Unit\Stubs
- */
 class NullCore implements CoreInterface
 {
     /**
@@ -37,6 +33,10 @@ class NullCore implements CoreInterface
 
     public function getApiClient(): ApiClientInterface
     {
-        return new ApiClient(Credentials::createFromWebhook(new WebhookUrl('')), new MockHttpClient(), new NullLogger());
+        return new ApiClient(
+            Credentials::createFromWebhook(new WebhookUrl('')),
+            new MockHttpClient(),
+            new DefaultRequestIdGenerator(),
+            new NullLogger());
     }
 }
