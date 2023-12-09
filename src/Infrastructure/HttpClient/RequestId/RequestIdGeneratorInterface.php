@@ -9,4 +9,6 @@ interface RequestIdGeneratorInterface
     public function getRequestId(): string;
 
     public function getHeaderFieldName(): string;
+
+    public function getQueryStringParameterName():string;
 }
