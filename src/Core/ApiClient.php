@@ -84,7 +84,6 @@ class ApiClient implements ApiClientInterface
      * @return RenewedAccessToken
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
-     * @throws \JsonException
      * @throws TransportException
      */
     public function getNewAccessToken(): RenewedAccessToken
@@ -110,6 +109,7 @@ class ApiClient implements ApiClientInterface
                     'client_id' => $this->getCredentials()->getApplicationProfile()->getClientId(),
                     'client_secret' => $this->getCredentials()->getApplicationProfile()->getClientSecret(),
                     'refresh_token' => $this->getCredentials()->getAccessToken()->getRefreshToken(),
+                    $this->requestIdGenerator->getQueryStringParameterName() => $requestId
                 ]
             )
         );
@@ -170,8 +170,9 @@ class ApiClient implements ApiClientInterface
             }
             $parameters['auth'] = $this->getCredentials()->getAccessToken()->getAccessToken();
         }
-
-
+        // duplicate request id in query string for current version of bitrix24 api
+        // vendor don't use request id from headers =(
+        $url .= '?' . $this->requestIdGenerator->getQueryStringParameterName() . '=' . $requestId;
         $requestOptions = [
             'json' => $parameters,
             'headers' => array_merge(

@@ -8,12 +8,19 @@ use Symfony\Component\Uid\Uuid;
 
 class DefaultRequestIdGenerator implements RequestIdGeneratorInterface
 {
-    private const DEFAULT_REQUEST_ID_FIELD_NAME = 'X-Request-ID';
+    private const DEFAULT_REQUEST_ID_HEADER_FIELD_NAME = 'X-Request-ID';
+    private const DEFAULT_QUERY_STRING_PARAMETER_NAME = 'request_id';
     private const KEY_NAME_VARIANTS = [
         'REQUEST_ID',
         'HTTP_X_REQUEST_ID',
         'UNIQUE_ID'
     ];
+
+    public function getQueryStringParameterName(): string
+    {
+        return self::DEFAULT_QUERY_STRING_PARAMETER_NAME;
+    }
+
 
     private function generate(): string
     {
@@ -23,13 +30,11 @@ class DefaultRequestIdGenerator implements RequestIdGeneratorInterface
     private function findExists(): ?string
     {
         $candidate = null;
-        foreach(self::KEY_NAME_VARIANTS as $key)
-        {
-           if(!empty($_SERVER[$key]))
-           {
-               $candidate = $_SERVER[$key];
-               break;
-           }
+        foreach (self::KEY_NAME_VARIANTS as $key) {
+            if (!empty($_SERVER[$key])) {
+                $candidate = $_SERVER[$key];
+                break;
+            }
         }
         return $candidate;
     }
@@ -45,6 +50,6 @@ class DefaultRequestIdGenerator implements RequestIdGeneratorInterface
 
     public function getHeaderFieldName(): string
     {
-        return self::DEFAULT_REQUEST_ID_FIELD_NAME;
+        return self::DEFAULT_REQUEST_ID_HEADER_FIELD_NAME;
     }
 }
