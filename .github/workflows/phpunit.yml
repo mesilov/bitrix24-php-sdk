@@ -11,14 +11,15 @@ jobs:
   tests:
     name: "PHPUnit tests"
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+
 
     strategy:
       matrix:
         php-version:
-          - "8.1"
-          - "8.2"
+          - "8.3"
         dependencies: [ highest ]
+        operating-system: [ ubuntu-latest, windows-latest ]
 
     steps:
       - name: "Checkout"
