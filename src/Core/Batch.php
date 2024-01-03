@@ -340,7 +340,8 @@ class Batch implements BatchOperationsInterface
         array  $order,
         array  $filter,
         array  $select,
-        ?int   $limit = null
+        ?int   $limit = null,
+        ?array $additionalParameters = null
     ): Generator
     {
         $this->logger->debug(
@@ -351,6 +352,7 @@ class Batch implements BatchOperationsInterface
                 'filter' => $filter,
                 'select' => $select,
                 'limit' => $limit,
+                'additionalParameters' => $additionalParameters,
             ]
         );
 
@@ -381,15 +383,28 @@ class Batch implements BatchOperationsInterface
         // todo проверили, что если есть limit, то он >1
         // todo проверили, что в фильтре нет поля ID, т.к. мы с ним будем работать
 
-        $firstResultPage = $this->core->call(
-            $apiMethod,
-            [
-                'order' => $order,
-                'filter' => $filter,
-                'select' => $select,
-                'start' => 0,
-            ]
-        );
+        $params = [
+            'order' => $order,
+            'filter' => $filter,
+            'select' => $select,
+            'start' => 0,
+        ];
+
+        // data structures for crm.items.* is little different =\
+        $isCrmItemsInBatch = false;
+        if ($additionalParameters !== null) {
+            if (array_key_exists('entityTypeId', $additionalParameters)) {
+                $isCrmItemsInBatch = true;
+            }
+            $params = array_merge($params, $additionalParameters);
+        }
+
+        if ($isCrmItemsInBatch) {
+            $keyId = 'id';
+        } else {
+            $keyId = 'ID';
+        }
+        $firstResultPage = $this->core->call($apiMethod, $params);
         $totalElementsCount = $firstResultPage->getResponseData()->getPagination()->getTotal();
         $this->logger->debug('getTraversableList.totalElementsCount', [
             'totalElementsCount' => $totalElementsCount,
@@ -412,31 +427,46 @@ class Batch implements BatchOperationsInterface
         // filtered elements count more than one result page(50 elements)
         // return first page
         $lastElementIdInFirstPage = null;
-        foreach ($firstResultPage->getResponseData()->getResult() as $cnt => $listElement) {
-            $elementsCounter++;
-            $lastElementIdInFirstPage = (int)$listElement['ID'];
-            if ($limit !== null && $elementsCounter > $limit) {
-                return;
+        if ($isCrmItemsInBatch) {
+            foreach ($firstResultPage->getResponseData()->getResult()['items'] as $cnt => $listElement) {
+                $elementsCounter++;
+                $lastElementIdInFirstPage = (int)$listElement[$keyId];
+                if ($limit !== null && $elementsCounter > $limit) {
+                    return;
+                }
+                yield $listElement;
             }
-            yield $listElement;
+        } else {
+            foreach ($firstResultPage->getResponseData()->getResult() as $cnt => $listElement) {
+                $elementsCounter++;
+                $lastElementIdInFirstPage = (int)$listElement[$keyId];
+                if ($limit !== null && $elementsCounter > $limit) {
+                    return;
+                }
+                yield $listElement;
+            }
         }
 
         $this->clearCommands();
-        if (!in_array('ID', $select, true)) {
-            $select[] = 'ID';
+        if (!in_array($keyId, $select, true)) {
+            $select[] = $keyId;
         }
-
         // getLastElementId in filtered result
-        $lastResultPage = $this->core->call(
-            $apiMethod,
-            [
-                'order' => $this->getReverseOrder($order),
-                'filter' => $filter,
-                'select' => $select,
-                'start' => 0,
-            ]
-        );
-        $lastElementId = (int)$lastResultPage->getResponseData()->getResult()[0]['ID'];
+        $params = [
+            'order' => $this->getReverseOrder($order),
+            'filter' => $filter,
+            'select' => $select,
+            'start' => 0,
+        ];
+        if ($additionalParameters !== null) {
+            $params = array_merge($params, $additionalParameters);
+        }
+        $lastResultPage = $this->core->call($apiMethod, $params);
+        if ($isCrmItemsInBatch) {
+            $lastElementId = (int)$lastResultPage->getResponseData()->getResult()['items'][0][$keyId];
+        } else {
+            $lastElementId = (int)$lastResultPage->getResponseData()->getResult()[0][$keyId];
+        }
         // reverse order if you need
         if ($lastElementIdInFirstPage > $lastElementId) {
             $tmp = $lastElementIdInFirstPage;
@@ -470,15 +500,17 @@ class Batch implements BatchOperationsInterface
                 $isLastPage = true;
             }
 
-            $this->registerCommand(
-                $apiMethod,
-                [
-                    'order' => [],
-                    'filter' => $this->updateFilterForBatch($startId, $lastElementIdInPage, $isLastPage, $filter),
-                    'select' => $select,
-                    'start' => -1,
-                ]
-            );
+            $params = [
+                'order' => [],
+                'filter' => $this->updateFilterForBatch($keyId, $startId, $lastElementIdInPage, $isLastPage, $filter),
+                'select' => $select,
+                'start' => -1,
+            ];
+            if ($additionalParameters !== null) {
+                $params = array_merge($params, $additionalParameters);
+            }
+
+            $this->registerCommand($apiMethod, $params);
         }
         $this->logger->debug(
             'getTraversableList.commandsRegistered',
@@ -501,19 +533,32 @@ class Batch implements BatchOperationsInterface
                     'durationTime' => $queryResultData->getTime()->getDuration(),
                 ]
             );
+
             // iterate items in batch query result
-            foreach ($queryResultData->getResult() as $cnt => $listElement) {
-                $elementsCounter++;
-                if ($limit !== null && $elementsCounter > $limit) {
-                    return;
+            if ($isCrmItemsInBatch) {
+                foreach ($queryResultData->getResult()['items'] as $cnt => $listElement) {
+                    $elementsCounter++;
+                    if ($limit !== null && $elementsCounter > $limit) {
+                        return;
+                    }
+                    yield $listElement;
                 }
-                yield $listElement;
+            } else {
+                foreach ($queryResultData->getResult() as $cnt => $listElement) {
+                    $elementsCounter++;
+                    if ($limit !== null && $elementsCounter > $limit) {
+                        return;
+                    }
+                    yield $listElement;
+                }
             }
+
         }
         $this->logger->debug('getTraversableList.finish');
     }
 
     /**
+     * @param string $keyId
      * @param int $startElementId
      * @param int $lastElementId
      * @param bool $isLastPage
@@ -521,20 +566,21 @@ class Batch implements BatchOperationsInterface
      *
      * @return array<string,mixed>
      */
-    protected function updateFilterForBatch(int $startElementId, int $lastElementId, bool $isLastPage, array $oldFilter): array
+    protected function updateFilterForBatch(string $keyId, int $startElementId, int $lastElementId, bool $isLastPage, array $oldFilter): array
     {
         $this->logger->debug('updateFilterForBatch.start', [
             'startElementId' => $startElementId,
             'lastElementId' => $lastElementId,
             'isLastPage' => $isLastPage,
             'oldFilter' => $oldFilter,
+            'key' => $keyId,
         ]);
 
         $filter = array_merge(
             $oldFilter,
             [
-                '>=ID' => $startElementId,
-                $isLastPage ? '<=ID' : '<ID' => $lastElementId,
+                sprintf('>=%s', $keyId) => $startElementId,
+                $isLastPage ? sprintf('<=%s', $keyId) : sprintf('<%s', $keyId) => $lastElementId,
             ]
         );
         $this->logger->debug('updateFilterForBatch.finish', [

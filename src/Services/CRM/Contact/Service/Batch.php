@@ -247,4 +247,25 @@ class Batch extends AbstractBatchService
             yield $key => new DeletedItemBatchResult($item);
         }
     }
+
+    /**
+     * Update contact
+     *
+     * Update elements in array with structure
+     * element_id => [  // contact id
+     *  'fields' => [], // contact fields to update
+     *  'params' => []
+     * ]
+     *
+     * @param array <int, array> $entityItems
+     *
+     * @return \Generator
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     */
+    public function update(array $entityItems): Generator
+    {
+        foreach ($this->batch->updateEntityItems('crm.contact.update', $entityItems) as $key => $item) {
+            yield $key => new UpdatedItemBatchResult($item);
+        }
+    }
 }

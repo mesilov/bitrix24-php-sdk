@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
 use Bitrix24\SDK\Tools\Commands\GenerateContactsCommand;
 use Bitrix24\SDK\Tools\Commands\PerformanceBenchmarks\ListCommand;
 use Bitrix24\SDK\Tools\Commands\ShowFieldsDescriptionCommand;
@@ -53,4 +54,5 @@ $application = new Application();
 $application->add(new GenerateContactsCommand($log));
 $application->add(new ListCommand($log));
 $application->add(new ShowFieldsDescriptionCommand($log));
+$application->add(new CopyPropertyValues($log));
 $application->run($input);

@@ -18,9 +18,15 @@ class NullBatch implements BatchOperationsInterface
 {
 
     /**
+     * @param string $apiMethod
+     * @param array $order
+     * @param array $filter
+     * @param array $select
+     * @param int|null $limit
+     * @param array|null $additionalParameters
      * @inheritDoc
      */
-    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
+    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null, ?array $additionalParameters = null): Generator
     {
         yield [];
     }

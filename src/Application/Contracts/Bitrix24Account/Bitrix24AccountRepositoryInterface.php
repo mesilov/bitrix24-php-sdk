@@ -10,64 +10,46 @@ interface Bitrix24AccountRepositoryInterface
 {
     /**
      * Save account
-     *
-     * @param Bitrix24AccountInterface $entity
-     * @param bool                     $flush
-     *
-     * @return void
      */
-    public function saveAccount(Bitrix24AccountInterface $entity, bool $flush = false): void;
+    public function save(Bitrix24AccountInterface $entity, bool $flush = false): void;
 
     /**
      * Get by account id
-     *
-     * @param \Symfony\Component\Uid\Uuid $id
-     *
-     * @return Bitrix24AccountInterface
      */
     public function getById(Uuid $id): Bitrix24AccountInterface;
 
     /**
      * Delete account
-     *
-     * @param Bitrix24AccountInterface $entity
-     * @param bool                     $flush
-     *
-     * @return void
      */
-    public function deleteAccount(Bitrix24AccountInterface $entity, bool $flush = false): void;
+    public function delete(Bitrix24AccountInterface $entity, bool $flush = false): void;
 
     /**
      * Find account by member_id
-     *
-     * @return ?Bitrix24AccountInterface Returns an array of Bitrix24Account objects
      */
-    public function findAccountByMemberId(string $memberId): ?Bitrix24AccountInterface;
+    public function findByMemberId(string $memberId): ?Bitrix24AccountInterface;
 
     /**
      * Get account by member_id
-     *
-     * @param string $memberId
-     *
-     * @return Bitrix24AccountInterface
      */
-    public function getAccountByMemberId(string $memberId): Bitrix24AccountInterface;
+    public function getByMemberId(string $memberId): Bitrix24AccountInterface;
 
     /**
      * Find account by contact person id - person, who installed application
-     *
-     * @param \Symfony\Component\Uid\Uuid $contactPersonId
-     *
-     * @return Bitrix24AccountInterface|null
      */
-    public function findAccountByContactPersonId(Uuid $contactPersonId): ?Bitrix24AccountInterface;
+    public function findByContactPersonId(Uuid $contactPersonId): ?Bitrix24AccountInterface;
 
     /**
      * Find account by domain url
-     *
-     * @param string $domainUrl
-     *
-     * @return Bitrix24AccountInterface|null
      */
-    public function findAccountByDomainUrl(string $domainUrl): ?Bitrix24AccountInterface;
+    public function findByDomainUrl(string $domainUrl): ?Bitrix24AccountInterface;
+
+    /**
+     * @return array<Bitrix24AccountInterface>
+     */
+    public function findAllActive(): array;
+
+    /**
+     * @return array<Bitrix24AccountInterface>
+     */
+    public function findAllDeactivated(): array;
 }

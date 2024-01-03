@@ -21,6 +21,10 @@
     * `Bitrix24\SDK\Services\User\Service\User::update` - update user
     * `Bitrix24\SDK\Services\User\Service\User::search` - search users
 * add method `\Bitrix24\SDK\Services\CRM\Contact\Service\Batch::update()` for batch update contacts
+* add [crm item support](https://github.com/mesilov/bitrix24-php-sdk/issues/330)
+* add enum `DealStageSemanticId`
+* add Duplicate search support for `Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate`
+* add `x-request-id` [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/354) 
 
 ### Changed
 
@@ -35,6 +39,26 @@
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
     * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
+*  ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface`:
+    * method `getContactPerson` renamed to `getContactPersonId`
+    * added method `getApplicationVersion`
+    * added method `updateApplicationVersion`
+    * added method `getApplicationScope`
+    * added method `applicationInstalled`
+    * added method `applicationUninstalled`
+    * added method `markAsDeactivated`
+    * added method `getBitrix24UserId`
+    * removed method `markAccountAsDeleted`
+    * changed method `markAsActive` 
+* ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountRepositoryInterface`:
+    * method `saveAccount` renamed to `save`
+    * method `deleteAccount` renamed to `delete`
+    * method `findAccountByMemberId` renamed to `findByMemberId`
+    * method `getAccountByMemberId` renamed to `getByMemberId`
+    * method `findAccountByContactPersonId` renamed to `findByContactPersonId`
+    * method `findAccountByDomainUrl` renamed to `findByDomainUrl`
+    * add method `findAllActive`
+    * add method `findAllDeactivated`
 
 ### Bugfix
 
@@ -44,6 +68,8 @@
 * fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
 * fix [add return type for crm multifields phone, email, im](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
 * fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
+* fix errors for `ApplicationProfile` with empty scope
+* fix errors in `Core` with auth attempt to non-exists portal
 
 ### etc
 
