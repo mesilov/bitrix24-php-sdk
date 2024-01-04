@@ -121,8 +121,8 @@ class Batch extends AbstractBatchService
      *                         WEB?: string,
      *                         IM?: string,
      *                         } $filter
-     * @param array              $select = ['ID','HONORIFIC','NAME','SECOND_NAME','LAST_NAME','PHOTO','BIRTHDATE','TYPE_ID','SOURCE_ID','SOURCE_DESCRIPTION','POST','ADDRESS','ADDRESS_2','ADDRESS_CITY','ADDRESS_POSTAL_CODE','ADDRESS_REGION','ADDRESS_PROVINCE','ADDRESS_COUNTRY','ADDRESS_COUNTRY_CODE','ADDRESS_LOC_ADDR_ID','COMMENTS','OPENED','EXPORT','HAS_PHONE','HAS_EMAIL','HAS_IMOL','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','DATE_CREATE','DATE_MODIFY','COMPANY_ID','COMPANY_IDS','LEAD_ID','ORIGINATOR_ID','ORIGIN_ID','ORIGIN_VERSION','FACE_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM','PHONE','EMAIL','WEB','IM']
-     * @param int|null           $limit
+     * @param array $select = ['ID','HONORIFIC','NAME','SECOND_NAME','LAST_NAME','PHOTO','BIRTHDATE','TYPE_ID','SOURCE_ID','SOURCE_DESCRIPTION','POST','ADDRESS','ADDRESS_2','ADDRESS_CITY','ADDRESS_POSTAL_CODE','ADDRESS_REGION','ADDRESS_PROVINCE','ADDRESS_COUNTRY','ADDRESS_COUNTRY_CODE','ADDRESS_LOC_ADDR_ID','COMMENTS','OPENED','EXPORT','HAS_PHONE','HAS_EMAIL','HAS_IMOL','ASSIGNED_BY_ID','CREATED_BY_ID','MODIFY_BY_ID','DATE_CREATE','DATE_MODIFY','COMPANY_ID','COMPANY_IDS','LEAD_ID','ORIGINATOR_ID','ORIGIN_ID','ORIGIN_VERSION','FACE_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM','PHONE','EMAIL','WEB','IM']
+     * @param int|null $limit
      *
      * @return Generator<int, ContactItemResult>
      * @throws BaseException
@@ -220,9 +220,7 @@ class Batch extends AbstractBatchService
      *  'params' => []
      * ]
      *
-     * @param array <int, array> $entityItems
-     *
-     * @param array $entityItems
+     * @param array<int, array> $entityItems
      * @return Generator
      * @throws BaseException
      */
@@ -245,27 +243,6 @@ class Batch extends AbstractBatchService
     {
         foreach ($this->batch->deleteEntityItems('crm.contact.delete', $contactId) as $key => $item) {
             yield $key => new DeletedItemBatchResult($item);
-        }
-    }
-
-    /**
-     * Update contact
-     *
-     * Update elements in array with structure
-     * element_id => [  // contact id
-     *  'fields' => [], // contact fields to update
-     *  'params' => []
-     * ]
-     *
-     * @param array <int, array> $entityItems
-     *
-     * @return \Generator
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     */
-    public function update(array $entityItems): Generator
-    {
-        foreach ($this->batch->updateEntityItems('crm.contact.update', $entityItems) as $key => $item) {
-            yield $key => new UpdatedItemBatchResult($item);
         }
     }
 }
