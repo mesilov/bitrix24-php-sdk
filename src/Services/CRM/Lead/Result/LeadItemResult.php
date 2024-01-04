@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Lead\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
 use DateTimeInterface;
 
 /**
@@ -60,10 +64,10 @@ use DateTimeInterface;
  * @property-read string                 $UTM_CAMPAIGN
  * @property-read string                 $UTM_CONTENT
  * @property-read string                 $UTM_TERM
- * @property-read string                 $PHONE
- * @property-read string                 $EMAIL
- * @property-read string                 $WEB
- * @property-read string                 $IM
+ * @property-read Phone[]                $PHONE
+ * @property-read Email[]                $EMAIL
+ * @property-read Website[]              $WEB
+ * @property-read InstantMessenger[]     $IM
  * @property-read string                 $LINK
  */
 class LeadItemResult extends AbstractCrmItem

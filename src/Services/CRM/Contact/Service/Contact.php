@@ -104,7 +104,7 @@ class Contact extends AbstractService
     public function add(array $fields, array $params = ['REGISTER_SONET_EVENT' => 'N']): AddedItemResult
     {
         return new AddedItemResult(
-            $result = $this->core->call(
+            $this->core->call(
                 'crm.contact.add',
                 [
                     'fields' => $fields,

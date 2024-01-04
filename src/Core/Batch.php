@@ -207,11 +207,14 @@ class Batch implements BatchOperationsInterface
                     );
                 }
 
-                $this->registerCommand($apiMethod, [
+                $cmdArguments = [
                     'id' => $entityItemId,
-                    'fields' => $entityItem['fields'],
-                    'params' => $entityItem['params'] ?? null,
-                ]);
+                    'fields' => $entityItem['fields']
+                ];
+                if (array_key_exists('params', $entityItem)) {
+                    $cmdArguments['params'] = $entityItem['params'];
+                }
+                $this->registerCommand($apiMethod, $cmdArguments);
             }
 
             foreach ($this->getTraversable(true) as $cnt => $updatedItemResult) {
