@@ -4,13 +4,13 @@
 
 ### Added
 
+* ❗️add php 8.3 support
 * add `Symfony\Component\Uid\Uuid` requirements
 * add contracts for bitrix24 applications based on bitrix24-php-sdk - `Bitrix24\SDK\Application\Contracts`, now
   added `Bitrix24Account`
 * add [service builder factory](https://github.com/mesilov/bitrix24-php-sdk/issues/328)
 * add method `Bitrix24\SDK\Core\Credentials\Scope::initFromString`
 * add method `Bitrix24\SDK\Application\ApplicationStatus::initFromString`
-* ❗️add php 8.2 support
 * add system CRM multi-field type `Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone`
 * add scope `user`,`user_basic`,`user_brief`,`user.userfield` and
   services [add scope user support](https://github.com/mesilov/bitrix24-php-sdk/issues/339)
@@ -25,6 +25,11 @@
 * add enum `DealStageSemanticId`
 * add Duplicate search support for `Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate`
 * add `x-request-id` [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/354) 
+* add CRM multifields support [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
+    * `Email`
+    * `Phone`
+    * `Website`
+    * `IM`
 
 ### Changed
 

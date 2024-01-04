@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Common\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
+use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeImmutable;
 use Money\Currency;
@@ -14,7 +17,7 @@ use Money\Money;
 
 class AbstractCrmItem extends AbstractItem
 {
-    private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
+    private const string CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
      * @var Currency
@@ -32,7 +35,7 @@ class AbstractCrmItem extends AbstractItem
     /**
      * @param int|string $offset
      *
-     * @return bool|\DateTimeImmutable|int|mixed|null
+     * @return bool|DateTimeImmutable|int|mixed|null
      */
 
     public function __get($offset)
@@ -132,8 +135,38 @@ class AbstractCrmItem extends AbstractItem
                 }
 
                 $items = [];
-                foreach ($this->data[$offset] as $phone) {
-                    $items[] = new Phone($phone);
+                foreach ($this->data[$offset] as $item) {
+                    $items[] = new Phone($item);
+                }
+                return $items;
+            case 'EMAIL':
+                if (!$this->isKeyExists($offset)) {
+                    return [];
+                }
+
+                $items = [];
+                foreach ($this->data[$offset] as $item) {
+                    $items[] = new Email($item);
+                }
+                return $items;
+            case 'WEB':
+                if (!$this->isKeyExists($offset)) {
+                    return [];
+                }
+
+                $items = [];
+                foreach ($this->data[$offset] as $item) {
+                    $items[] = new Website($item);
+                }
+                return $items;
+            case 'IM':
+                if (!$this->isKeyExists($offset)) {
+                    return [];
+                }
+
+                $items = [];
+                foreach ($this->data[$offset] as $item) {
+                    $items[] = new InstantMessenger($item);
                 }
                 return $items;
             case 'currencyId':
@@ -154,7 +187,7 @@ class AbstractCrmItem extends AbstractItem
      */
     protected function getKeyWithUserfieldByFieldName(string $fieldName)
     {
-        if(!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
+        if (!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
             $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
         }
         if (!$this->isKeyExists($fieldName)) {
