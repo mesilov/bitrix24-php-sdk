@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
+use Bitrix24\SDK\Services\Catalog\CatalogServiceBuilder;
 use Bitrix24\SDK\Services\CRM\CRMServiceBuilder;
 use Bitrix24\SDK\Services\IM\IMServiceBuilder;
 use Bitrix24\SDK\Services\IMOpenLines\IMOpenLinesServiceBuilder;
@@ -13,11 +14,6 @@ use Bitrix24\SDK\Services\User\UserServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\UserConsentServiceBuilder;
 use Bitrix24\SDK\Services\Placement\PlacementServiceBuilder;
 
-/**
- * Class ServiceBuilder
- *
- * @package Bitrix24\SDK\Services
- */
 class ServiceBuilder extends AbstractServiceBuilder
 {
     /**
@@ -99,6 +95,15 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new PlacementServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getCatalogScope(): CatalogServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new CatalogServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

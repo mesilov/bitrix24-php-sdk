@@ -30,6 +30,7 @@
     * `Phone`
     * `Website`
     * `IM`
+* add [Catalog](https://github.com/mesilov/bitrix24-php-sdk/issues/364) scope services support 
 
 ### Changed
 
