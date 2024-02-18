@@ -36,7 +36,7 @@ class TimeTest extends TestCase
     /**
      * @return \Generator
      */
-    public function timingsDataProvider(): Generator
+    public static function timingsDataProvider(): Generator
     {
         yield 'without operating reset at' => [
             [

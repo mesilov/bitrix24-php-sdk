@@ -49,7 +49,7 @@ class ApplicationStatusTest extends TestCase
     /**
      * @return \Generator
      */
-    public function statusDataProvider(): Generator
+    public static function statusDataProvider(): Generator
     {
         yield 'free' => [
             'F',

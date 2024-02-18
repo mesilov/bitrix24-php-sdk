@@ -31,7 +31,7 @@ class ApplicationProfileTest extends TestCase
         $this->assertEquals($prof->getClientSecret(), $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET']);
     }
 
-    public function arrayDataProvider(): Generator
+    public static function arrayDataProvider(): Generator
     {
         yield 'valid' => [
             [

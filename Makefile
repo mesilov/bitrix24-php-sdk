@@ -4,3 +4,6 @@ default:
 
 phpstan:
 	vendor/bin/phpstan analyse
+
+test-unit:
+	vendor/bin/phpunit --testsuite unit_tests
