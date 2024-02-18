@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Result;
 
-use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
+use DateTimeImmutable;
 
 /**
  * Class DealItemResult
  *
- * @property int    $ID
- * @property string $CREATED_DATE
- * @property string $NAME
- * @property string $IS_LOCKED
- * @property string $SORT
+ * @property int               $ID
+ * @property DateTimeImmutable $CREATED_DATE
+ * @property string            $NAME
+ * @property bool              $IS_LOCKED
+ * @property int               $SORT
  */
-class DealCategoryItemResult extends AbstractItem
+class DealCategoryItemResult extends AbstractCrmItem
 {
 }

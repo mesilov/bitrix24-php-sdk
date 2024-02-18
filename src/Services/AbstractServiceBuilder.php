@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services;
 
 
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Psr\Log\LoggerInterface;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractServiceBuilder
 {
     protected CoreInterface $core;
-    protected BatchInterface $batch;
+    protected BatchOperationsInterface $batch;
     protected BulkItemsReaderInterface $bulkItemsReader;
     protected LoggerInterface $log;
     protected array $serviceCache;
@@ -27,13 +27,13 @@ abstract class AbstractServiceBuilder
      * AbstractServiceBuilder constructor.
      *
      * @param CoreInterface                                         $core
-     * @param BatchInterface                                        $batch
+     * @param BatchOperationsInterface                              $batch
      * @param \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface $bulkItemsReader
      * @param LoggerInterface                                       $log
      */
     public function __construct(
         CoreInterface $core,
-        BatchInterface $batch,
+        BatchOperationsInterface $batch,
         BulkItemsReaderInterface $bulkItemsReader,
         LoggerInterface $log
     ) {

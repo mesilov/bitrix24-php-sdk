@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Stubs;
 
-use Bitrix24\SDK\Core\Contracts\BatchInterface;
+use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Generator;
@@ -14,13 +14,19 @@ use Generator;
  *
  * @package Bitrix24\SDK\Tests\Unit\Stubs
  */
-class NullBatch implements BatchInterface
+class NullBatch implements BatchOperationsInterface
 {
 
     /**
+     * @param string $apiMethod
+     * @param array $order
+     * @param array $filter
+     * @param array $select
+     * @param int|null $limit
+     * @param array|null $additionalParameters
      * @inheritDoc
      */
-    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null): Generator
+    public function getTraversableList(string $apiMethod, array $order, array $filter, array $select, ?int $limit = null, ?array $additionalParameters = null): Generator
     {
         yield [];
     }

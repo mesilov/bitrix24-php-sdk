@@ -19,7 +19,7 @@ class ApplicationStatusTest extends TestCase
      * @dataProvider statusDataProvider
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public function testGetStatusCode(string $shortCode, string $longCode)
+    public function testGetStatusCode(string $shortCode, string $longCode): void
     {
         $this->assertEquals(
             $longCode,
@@ -37,9 +37,19 @@ class ApplicationStatusTest extends TestCase
     }
 
     /**
+     * @return void
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @covers \Bitrix24\SDK\Application\ApplicationStatus::initFromString
+     */
+    public function testInitFromString(): void
+    {
+        $this->assertTrue(ApplicationStatus::initFromString('F')->isFree());
+    }
+
+    /**
      * @return \Generator
      */
-    public function statusDataProvider(): Generator
+    public static function statusDataProvider(): Generator
     {
         yield 'free' => [
             'F',
