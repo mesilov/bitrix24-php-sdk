@@ -70,7 +70,7 @@ class CredentialsTest extends TestCase
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
      */
-    public function credentialsDataProviderWithDomainUrlVariants(): Generator
+    public static function credentialsDataProviderWithDomainUrlVariants(): Generator
     {
         yield 'with webhook walid domain url' => [
             Credentials::createFromWebhook(new WebhookUrl('https://bitrix24-php-sdk-playground.bitrix24.ru/rest/1/valid-webhook/')),

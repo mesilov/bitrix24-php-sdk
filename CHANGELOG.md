@@ -1,10 +1,10 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.1 — 25.03.2023
+## 2.0-beta.1 — 18.02.2024
 
 ### Added
 
-* ❗️add php 8.3 support, drop 8.1 and 8.0 support
+* ❗️add php 8.3, 8.2 support, drop 8.1 and 8.0 support
 * add `Symfony\Component\Uid\Uuid` requirements
 * add contracts for bitrix24 applications based on bitrix24-php-sdk - `Bitrix24\SDK\Application\Contracts`, now
   added `Bitrix24Account`

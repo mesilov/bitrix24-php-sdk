@@ -13,7 +13,7 @@ use Money\Money;
 
 abstract class AbstractCatalogItem extends AbstractItem
 {
-    private const string CRM_USERFIELD_PREFIX = 'UF_CRM_';
+    private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
      * @var Currency

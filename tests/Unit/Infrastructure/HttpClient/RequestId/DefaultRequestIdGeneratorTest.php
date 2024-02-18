@@ -26,7 +26,7 @@ class DefaultRequestIdGeneratorTest extends TestCase
         unset($_SERVER[$requestIdKey]);
     }
 
-    public function requestIdKeyDataProvider(): Generator
+    public static function requestIdKeyDataProvider(): Generator
     {
         yield 'REQUEST_ID' => [
             'REQUEST_ID',
