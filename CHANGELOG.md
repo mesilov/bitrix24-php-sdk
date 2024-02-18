@@ -4,7 +4,7 @@
 
 ### Added
 
-* ❗️add php 8.3 support
+* ❗️add php 8.3 support, drop 8.1 and 8.0 support
 * add `Symfony\Component\Uid\Uuid` requirements
 * add contracts for bitrix24 applications based on bitrix24-php-sdk - `Bitrix24\SDK\Application\Contracts`, now
   added `Bitrix24Account`
@@ -30,6 +30,7 @@
     * `Phone`
     * `Website`
     * `IM`
+* add [Catalog](https://github.com/mesilov/bitrix24-php-sdk/issues/364) scope services support 
 
 ### Changed
 

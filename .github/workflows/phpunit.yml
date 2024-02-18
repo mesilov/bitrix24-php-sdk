@@ -1,8 +1,8 @@
 name: "PHPUnit tests"
 
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
 
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
@@ -14,8 +14,10 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
 
     strategy:
+      fail-fast: false
       matrix:
         php-version:
+          - "8.2"
           - "8.3"
         dependencies: [ highest ]
         operating-system: [ ubuntu-latest, windows-latest ]

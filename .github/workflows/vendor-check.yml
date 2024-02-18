@@ -8,20 +8,20 @@ on:
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
   BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
-  TEST2_ENV: 12345
 
 jobs:
   tests:
     name: "Vendor integration tests"
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
 
     strategy:
       matrix:
         php-version:
-          - "8.1"
           - "8.2"
+          - "8.3"
         dependencies: [ highest ]
+        operating-system: [ ubuntu-latest, windows-latest ]
 
     steps:
 
