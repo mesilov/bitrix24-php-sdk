@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-         backupGlobals="false"
-         colors="true"
-         bootstrap="tests/bootstrap.php"
-         failOnRisky="true"
-         failOnWarning="true">
-    <coverage>
-        <include>
-            <directory>./src</directory>
-        </include>
-    </coverage>
-    <php>
-        <ini name="error_reporting" value="-1"/>
-    </php>
-    <testsuites>
-        <testsuite name="unit_tests">
-            <directory>./tests/Unit</directory>
-        </testsuite>
-        <testsuite name="integration_tests">
-            <directory>./tests/Integration</directory>
-        </testsuite>
-    </testsuites>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="tests/bootstrap.php" failOnRisky="true" failOnWarning="true">
+  <php>
+    <ini name="error_reporting" value="-1"/>
+  </php>
+  <testsuites>
+    <testsuite name="unit_tests">
+      <directory>./tests/Unit</directory>
+    </testsuite>
+    <testsuite name="integration_tests">
+      <directory>./tests/Integration</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory>./src</directory>
+    </include>
+  </source>
 </phpunit>

@@ -9,19 +9,19 @@ on:
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
   BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
-  TEST2_ENV: 12345
 
 jobs:
   tests:
     name: "Integration tests"
-
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.operating-system }}
     strategy:
+      fail-fast: false
       matrix:
         php-version:
-          - "7.4"
+          - "8.2"
+          - "8.3"
         dependencies: [ highest ]
+        operating-system: [ ubuntu-latest, windows-latest ]
 
     steps:
 
@@ -36,7 +36,6 @@ jobs:
           ini-values: variables_order=EGPCS
         env:
           BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
-          TEST2_ENV: 12345
 
       - name: "Install dependencies"
         run: |

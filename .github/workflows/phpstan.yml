@@ -7,17 +7,16 @@ name: PHPStan checks
 jobs:
   static-analysis:
     name: "PHPStan"
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ matrix.operating-system }}
 
     strategy:
       fail-fast: false
       matrix:
         php-version:
-          - "7.4"
-          - "8.0"
-        dependencies:
-          - "lowest"
-          - "highest"
+          - "8.2"
+          - "8.3"
+        dependencies: [ highest ]
+        operating-system: [ ubuntu-latest, windows-latest ]
 
     steps:
       - name: "Checkout"
@@ -28,7 +27,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
-          extensions: mbstring
+          extensions: json, bcmath, curl, intl, mbstring
           tools: composer:v2
 
       - name: "Install lowest dependencies"

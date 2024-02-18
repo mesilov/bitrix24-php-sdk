@@ -76,10 +76,31 @@ class ScopeTest extends TestCase
     /**
      * @throws UnknownScopeCodeException
      */
+    public function testEmptyScope(): void
+    {
+        $scope = new Scope(['']);
+        $this->assertEquals([], $scope->getScopeCodes());
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     */
     public function testWrongScopeCode(): void
     {
         $scope = new Scope(['CRM', 'Call', 'im']);
 
         $this->assertEquals(['crm', 'call', 'im'], $scope->getScopeCodes());
+    }
+
+    /**
+     * @return void
+     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @covers  \Bitrix24\SDK\Core\Credentials\Scope::initFromString
+     * @testdox Test init Scope from string
+     */
+    public function testInitFromString(): void
+    {
+        $scope = Scope::initFromString('crm,telephony,call,user_basic,placement,im,imopenlines');
+        $this->assertEquals(['crm', 'telephony', 'call', 'user_basic', 'placement', 'im', 'imopenlines'], $scope->getScopeCodes());
     }
 }

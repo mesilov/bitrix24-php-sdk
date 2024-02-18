@@ -33,25 +33,26 @@ class Time
     /**
      * Time constructor.
      *
-     * @param float              $start
-     * @param float              $finish
-     * @param float              $duration
-     * @param float              $processing
-     * @param float              $operating
+     * @param float $start
+     * @param float $finish
+     * @param float $duration
+     * @param float $processing
+     * @param float $operating
      * @param \DateTimeImmutable $dateStart
      * @param \DateTimeImmutable $dateFinish
-     * @param int|null           $operatingResetAt
+     * @param int|null $operatingResetAt
      */
     public function __construct(
-        float $start,
-        float $finish,
-        float $duration,
-        float $processing,
-        float $operating,
+        float             $start,
+        float             $finish,
+        float             $duration,
+        float             $processing,
+        float             $operating,
         DateTimeImmutable $dateStart,
         DateTimeImmutable $dateFinish,
-        ?int $operatingResetAt
-    ) {
+        ?int              $operatingResetAt
+    )
+    {
         $this->start = $start;
         $this->finish = $finish;
         $this->duration = $duration;
@@ -139,7 +140,7 @@ class Time
             (float)$response['finish'],
             (float)$response['duration'],
             (float)$response['processing'],
-            (float)$response['operating'],
+            array_key_exists('operating', $response) ? (float)$response['operating'] : 0,
             new DateTimeImmutable($response['date_start']),
             new DateTimeImmutable($response['date_finish']),
             $response['operating_reset_at'] ?? null

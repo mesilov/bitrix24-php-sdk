@@ -19,7 +19,7 @@ class ApplicationStatusTest extends TestCase
      * @dataProvider statusDataProvider
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
-    public function testGetStatusCode(string $shortCode, string $longCode)
+    public function testGetStatusCode(string $shortCode, string $longCode): void
     {
         $this->assertEquals(
             $longCode,
@@ -34,6 +34,16 @@ class ApplicationStatusTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         new ApplicationStatus('foo');
+    }
+
+    /**
+     * @return void
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @covers \Bitrix24\SDK\Application\ApplicationStatus::initFromString
+     */
+    public function testInitFromString(): void
+    {
+        $this->assertTrue(ApplicationStatus::initFromString('F')->isFree());
     }
 
     /**

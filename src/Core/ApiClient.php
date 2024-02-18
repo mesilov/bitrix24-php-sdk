@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAccessToken;
+use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -16,7 +20,8 @@ class ApiClient implements ApiClientInterface
 {
     protected HttpClientInterface $client;
     protected LoggerInterface $logger;
-    protected Credentials\Credentials $credentials;
+    protected Credentials $credentials;
+    protected RequestIdGeneratorInterface $requestIdGenerator;
     /**
      * @const string
      */
@@ -30,14 +35,20 @@ class ApiClient implements ApiClientInterface
     /**
      * ApiClient constructor.
      *
-     * @param Credentials\Credentials $credentials
-     * @param HttpClientInterface     $client
-     * @param LoggerInterface         $logger
+     * @param Credentials $credentials
+     * @param HttpClientInterface $client
+     * @param RequestIdGeneratorInterface $requestIdGenerator
+     * @param LoggerInterface $logger
      */
-    public function __construct(Credentials\Credentials $credentials, HttpClientInterface $client, LoggerInterface $logger)
+    public function __construct(
+        Credentials                 $credentials,
+        HttpClientInterface         $client,
+        RequestIdGeneratorInterface $requestIdGenerator,
+        LoggerInterface             $logger)
     {
         $this->credentials = $credentials;
         $this->client = $client;
+        $this->requestIdGenerator = $requestIdGenerator;
         $this->logger = $logger;
         $this->logger->debug(
             'ApiClient.init',
@@ -53,18 +64,18 @@ class ApiClient implements ApiClientInterface
     protected function getDefaultHeaders(): array
     {
         return [
-            'Accept'                         => 'application/json',
-            'Accept-Charset'                 => 'utf-8',
-            'User-Agent'                     => sprintf('%s-v-%s-php-%s', self::SDK_USER_AGENT, self::SDK_VERSION, PHP_VERSION),
+            'Accept' => 'application/json',
+            'Accept-Charset' => 'utf-8',
+            'User-Agent' => sprintf('%s-v-%s-php-%s', self::SDK_USER_AGENT, self::SDK_VERSION, PHP_VERSION),
             'X-BITRIX24-PHP-SDK-PHP-VERSION' => PHP_VERSION,
-            'X-BITRIX24-PHP-SDK-VERSION'     => self::SDK_VERSION,
+            'X-BITRIX24-PHP-SDK-VERSION' => self::SDK_VERSION,
         ];
     }
 
     /**
-     * @return Credentials\Credentials
+     * @return Credentials
      */
-    public function getCredentials(): Credentials\Credentials
+    public function getCredentials(): Credentials
     {
         return $this->credentials;
     }
@@ -73,11 +84,14 @@ class ApiClient implements ApiClientInterface
      * @return RenewedAccessToken
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
-     * @throws \JsonException
+     * @throws TransportException
      */
     public function getNewAccessToken(): RenewedAccessToken
     {
-        $this->logger->debug('getNewAccessToken.start');
+        $requestId = $this->requestIdGenerator->getRequestId();
+        $this->logger->debug('getNewAccessToken.start', [
+            'requestId' => $requestId
+        ]);
         if ($this->getCredentials()->getApplicationProfile() === null) {
             throw new InvalidArgumentException('application profile not set');
         }
@@ -91,28 +105,41 @@ class ApiClient implements ApiClientInterface
             $this::BITRIX24_OAUTH_SERVER_URL,
             http_build_query(
                 [
-                    'grant_type'    => 'refresh_token',
-                    'client_id'     => $this->getCredentials()->getApplicationProfile()->getClientId(),
+                    'grant_type' => 'refresh_token',
+                    'client_id' => $this->getCredentials()->getApplicationProfile()->getClientId(),
                     'client_secret' => $this->getCredentials()->getApplicationProfile()->getClientSecret(),
                     'refresh_token' => $this->getCredentials()->getAccessToken()->getRefreshToken(),
+                    $this->requestIdGenerator->getQueryStringParameterName() => $requestId
                 ]
             )
         );
 
         $requestOptions = [
-            'headers' => $this->getDefaultHeaders(),
+            'headers' => array_merge(
+                $this->getDefaultHeaders(),
+                [
+                    $this->requestIdGenerator->getHeaderFieldName() => $requestId
+                ]
+            ),
         ];
         $response = $this->client->request($method, $url, $requestOptions);
-        $result = $response->toArray(false);
-        $newAccessToken = RenewedAccessToken::initFromArray($result);
+        $responseData = $response->toArray(false);
+        if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
+            $newAccessToken = RenewedAccessToken::initFromArray($responseData);
 
-        $this->logger->debug('getNewAccessToken.finish');
-
-        return $newAccessToken;
+            $this->logger->debug('getNewAccessToken.finish', [
+                'requestId' => $requestId
+            ]);
+            return $newAccessToken;
+        }
+        if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
+            throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
+        }
+        throw new TransportException('getting new access token failure with unknown http-status code %s', $response->getStatusCode());
     }
 
     /**
-     * @param string       $apiMethod
+     * @param string $apiMethod
      * @param array<mixed> $parameters
      *
      * @return ResponseInterface
@@ -121,12 +148,14 @@ class ApiClient implements ApiClientInterface
      */
     public function getResponse(string $apiMethod, array $parameters = []): ResponseInterface
     {
+        $requestId = $this->requestIdGenerator->getRequestId();
         $this->logger->info(
             'getResponse.start',
             [
-                'apiMethod'  => $apiMethod,
-                'domainUrl'  => $this->credentials->getDomainUrl(),
+                'apiMethod' => $apiMethod,
+                'domainUrl' => $this->credentials->getDomainUrl(),
                 'parameters' => $parameters,
+                'requestId' => $requestId
             ]
         );
 
@@ -141,10 +170,17 @@ class ApiClient implements ApiClientInterface
             }
             $parameters['auth'] = $this->getCredentials()->getAccessToken()->getAccessToken();
         }
-
+        // duplicate request id in query string for current version of bitrix24 api
+        // vendor don't use request id from headers =(
+        $url .= '?' . $this->requestIdGenerator->getQueryStringParameterName() . '=' . $requestId;
         $requestOptions = [
-            'json'          => $parameters,
-            'headers'       => $this->getDefaultHeaders(),
+            'json' => $parameters,
+            'headers' => array_merge(
+                $this->getDefaultHeaders(),
+                [
+                    $this->requestIdGenerator->getHeaderFieldName() => $requestId
+                ]
+            ),
             // disable redirects, try to catch portal change domain name event
             'max_redirects' => 0,
         ];
@@ -153,8 +189,9 @@ class ApiClient implements ApiClientInterface
         $this->logger->info(
             'getResponse.end',
             [
-                'apiMethod'    => $apiMethod,
+                'apiMethod' => $apiMethod,
                 'responseInfo' => $response->getInfo(),
+                'requestId' => $requestId
             ]
         );
 
