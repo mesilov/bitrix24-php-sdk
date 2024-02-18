@@ -6,7 +6,6 @@ namespace Bitrix24\SDK\Services\Catalog\Product\Result;
 
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
 use Bitrix24\SDK\Services\Catalog\Common\Result\AbstractCatalogItem;
-use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeInterface;
 use Money\Currency;
 use Money\Money;
@@ -44,14 +43,4 @@ use Money\Money;
  */
 class ProductItemResult extends AbstractCatalogItem
 {
-    /**
-     * @param string $userfieldName
-     *
-     * @return mixed|null
-     * @throws UserfieldNotFoundException
-     */
-    public function getUserfieldByFieldName(string $userfieldName)
-    {
-        return $this->getKeyWithUserfieldByFieldName($userfieldName);
-    }
 }

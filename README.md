@@ -5,7 +5,7 @@ Bitrix24 REST API PHP SDK
 
 A powerful PHP library for the Bitrix24 REST API
 
-### Build status
+## Build status
 
 | CI\CD [status](https://github.com/mesilov/bitrix24-php-sdk/actions) on `master`                                                                                                                         | 
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
@@ -15,20 +15,16 @@ A powerful PHP library for the Bitrix24 REST API
 
 Integration tests run in GitHub actions with real Bitrix24 portal 
 
-### BITRIX24-PHP-SDK ✨FEATURES✨
+## BITRIX24-PHP-SDK ✨FEATURES✨
 
 Support both auth modes:
 
 - [x] work with auth tokens for Bitrix24 applications in marketplace
 - [x] work with incoming webhooks for simple integration projects for current portal
 
-Low-level tools to devs:
-
-- Domain core events:
-    - [x] Access Token expired
-    - [ ] Bitrix24 portal domain url changed
-- [ ] Rate-limit strategy
-- [ ] Retry strategy for safe methods
+Domain core events:
+  - [x] Access Token expired
+  - [x] Bitrix24 portal domain url changed
 
 API - level features
 
@@ -46,7 +42,12 @@ Performance improvements 🚀
     - [ ] composite batch queries to many entities (work in progress)
 - [ ] read without count flag
 
-### Development principles
+Low-level tools to devs:
+- [ ] Rate-limit strategy
+- [ ] Retry strategy for safe methods
+
+
+## Development principles
 
 - Good developer experience
     - auto-completion of methods at the IDE
@@ -67,26 +68,42 @@ Performance improvements 🚀
     - test coverage: unit, integration, contract
     - typical examples typical for different modes of operation and they are optimized for memory \ performance
 
-### Sponsors
+## Architecture
 
-Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk) its development!
+### Abstraction layers
 
-### Requirements
+```
+- http2 protocol via json data structures
+- symfony http client
+- \Bitrix24\SDK\Core\ApiClient - work with b24 rest-api endpoints
+    input: arrays \ strings
+    output: Symfony\Contracts\HttpClient\ResponseInterface, operate with strings
+    process: network operations 
+- \Bitrix24\SDK\Services\* - work with b24 rest-api entities
+    input: arrays \ strings
+    output: b24 response dto
+    process: b24 entities, operate with immutable objects  
+```
+## Sponsors
+
+Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)
+
+## Requirements
 
 - php: >=8.2
 - ext-json: *
 - ext-curl: *
 
-### Installation
+## Installation
 
 Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
 
-### Tests
+## Tests
 
 Tests locate in folder `tests` and we have two test types.
 In folder tests create file `.env.local` and fill environment variables from `.env`.
 
-#### Unit tests
+### Unit tests
 
 **Fast**, in-memory tests without a network I\O For run unit tests you must call in command line
 
@@ -94,11 +111,11 @@ In folder tests create file `.env.local` and fill environment variables from `.e
 composer phpunit-run-unit-test
 ```
 
-#### Integration tests
+### Integration tests
 
 **Slow** tests with full lifecycle with your **test** Bitrix24 portal via webhook.
 
-❗️Do not run integration tests with production portals ❗️
+❗️Do not run integration tests with production portals
 
 For run integration test you must:
 
@@ -130,50 +147,28 @@ Call in command line
  composer phpstan-analyse
 ```
 
-### Submitting bugs and feature requests
+## Submitting bugs and feature requests
 
 Bugs and feature request are tracked on [GitHub](https://github.com/mesilov/bitrix24-php-sdk/issues)
 
-### License
+## License
 
 bitrix24-php-sdk is licensed under the MIT License - see the `MIT-LICENSE.txt` file for details
 
-### Author
+## Authors
 
-Maxim Mesilov - <mesilov.maxim@gmail.com> - <https://twitter.com/mesilov><br />
+Maksim Mesilov - mesilov.maxim@gmail.com
+
 See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/graphs/contributors) which participated in this project.
 
-### Need custom Bitrix24 application? ##
+## Need custom Bitrix24 application?
 
-email: <mesilov.maxim@gmail.com>
+mesilov.maxim@gmail.com for private consultations or dedicated support
 
-
-### Documentation
+## Documentation
 
 [Bitrix24 API documentation - Russian](http://dev.1c-bitrix.ru/rest_help/)
 
 [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
 
 [Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)
-
-
-### Architecture
-
-#### Abstraction layers
-
-```
-- http protocol
-- json data
-- symfony http client
-- \Bitrix24\SDK\Core\ApiClient - work with b24 rest-api endpoints
-    input: arrays \ strings
-    output: Symfony\Contracts\HttpClient\ResponseInterface, operate with strings
-    process: network operations 
-- \Bitrix24\SDK\Services\* - work with b24 rest-api entities
-    input: arrays \ strings
-    output: b24 response dto
-    process: b24 entities, operate with immutable objects  
-```
-#### Symfony HttpClient
-#### Core
-#### ApiClient

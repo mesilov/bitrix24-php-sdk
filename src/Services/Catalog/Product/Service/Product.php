@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\Product\Service;
 
-
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Response\Response;
+use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
-use Bitrix24\SDK\Services\Catalog\Product\Result\ProductItemResult;
 use Bitrix24\SDK\Services\Catalog\Product\Result\ProductResult;
 use Bitrix24\SDK\Services\Catalog\Product\Result\ProductsResult;
+
 use Psr\Log\LoggerInterface;
 
 class Product extends AbstractService
 {
+    public Batch $batch;
+
     public function __construct(
         Batch           $batch,
         CoreInterface   $core,
@@ -26,6 +27,7 @@ class Product extends AbstractService
     )
     {
         parent::__construct($core, $log);
+        $this->batch = $batch;
     }
 
     /**
@@ -38,6 +40,37 @@ class Product extends AbstractService
     public function get(int $productId): ProductResult
     {
         return new ProductResult($this->core->call('catalog.product.get', ['id' => $productId]));
+    }
+
+    /**
+     * The method adds a commercial catalog product.
+     *
+     * @see https://training.bitrix24.com/rest_help/catalog/product/catalog_product_add.php
+     * @param array $productFields
+     * @return ProductResult
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function add(array $productFields): ProductResult
+    {
+        return new ProductResult($this->core->call('catalog.product.add', [
+                'fields' => $productFields
+            ]
+        ));
+    }
+
+    /**
+     * The method deletes commercial catalog product.
+     *
+     * @see https://training.bitrix24.com/rest_help/catalog/product/catalog_product_delete.php
+     * @param int $productId
+     * @return DeletedItemResult
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function delete(int $productId): DeletedItemResult
+    {
+        return new DeletedItemResult($this->core->call('catalog.product.delete', ['id' => $productId]));
     }
 
     /**
