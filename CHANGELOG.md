@@ -1,5 +1,19 @@
 # bitrix24-php-sdk change log
 
+## 2.0-beta.2 — 1.04.2024
+
+### Added
+### Changed
+* updated [dependencies versions](https://github.com/mesilov/bitrix24-php-sdk/issues/373):
+  * require
+    * `psr/log` `1.4.0` → `3.0.*`
+    * `moneyphp/money` `4.3.*` → `4.5.*`
+  * require-dev
+    * `monolog/monolog` `2.9.*` → `3.5.*`
+    * `phpunit/phpunit` `10.5.*` → `11.0.*`
+### Bugfix
+### etc
+
 ## 2.0-beta.1 — 18.02.2024
 
 ### Added
