@@ -3,6 +3,7 @@
 ## 2.0-beta.2 — 1.04.2024
 
 ### Added
+* add `bizproc` [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376)
 ### Changed
 * updated [dependencies versions](https://github.com/mesilov/bitrix24-php-sdk/issues/373):
   * require

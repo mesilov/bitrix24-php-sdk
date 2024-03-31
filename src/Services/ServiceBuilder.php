@@ -13,6 +13,7 @@ use Bitrix24\SDK\Services\Telephony\TelephonyServiceBuilder;
 use Bitrix24\SDK\Services\User\UserServiceBuilder;
 use Bitrix24\SDK\Services\UserConsent\UserConsentServiceBuilder;
 use Bitrix24\SDK\Services\Placement\PlacementServiceBuilder;
+use Bitrix24\SDK\Services\Workflows\WorkflowsServiceBuilder;
 
 class ServiceBuilder extends AbstractServiceBuilder
 {
@@ -116,6 +117,15 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new TelephonyServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getBizProcScope(): WorkflowsServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new WorkflowsServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
