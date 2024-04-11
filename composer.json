@@ -25,15 +25,15 @@
     "ext-bcmath": "*",
     "ext-curl": "*",
     "ext-intl": "*",
-    "psr/log": "3.0.*",
+    "psr/log": "^2 || ˆ3",
     "fig/http-message-util": "1.1.*",
-    "ramsey/uuid": "4.7.*",
-    "moneyphp/money": "4.5.*",
-    "symfony/http-client": "7.0.*",
-    "symfony/http-client-contracts": "3.4.*",
-    "symfony/http-foundation": "7.0.*",
-    "symfony/event-dispatcher": "7.0.*",
-    "symfony/uid": "7.0.*"
+    "ramsey/uuid": "^3 ||^4",
+    "moneyphp/money": "^3 || ^4",
+    "symfony/http-client": "^6 || ^7",
+    "symfony/http-client-contracts": "^2 || ^3",
+    "symfony/http-foundation": "^6 || ^7",
+    "symfony/event-dispatcher": "^6 || ^7",
+    "symfony/uid": "^6 || ^7"
   },
   "require-dev": {
     "monolog/monolog": "3.5.*",
