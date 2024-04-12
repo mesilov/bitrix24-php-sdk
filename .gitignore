@@ -7,4 +7,5 @@ composer.lock
 tools/.env.local
 tools/logs
 examples/logs
+*.log
 .env.local

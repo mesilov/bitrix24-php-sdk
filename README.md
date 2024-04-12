@@ -29,7 +29,7 @@ Domain core events:
 API - level features
 
 - [x] Auto renew access tokens
-- [ ] List queries with «start=-1» support
+- [x] List queries with «start=-1» support
 - [ ] offline queues
 
 Performance improvements 🚀
@@ -67,7 +67,6 @@ Low-level tools to devs:
 - Reliable:
     - test coverage: unit, integration, contract
     - typical examples typical for different modes of operation and they are optimized for memory \ performance
-
 ## Architecture
 
 ### Abstraction layers
@@ -97,6 +96,30 @@ Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24
 ## Installation
 
 Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
+
+## Examples
+### Work with webhook
+```php
+declare(strict_types=1);
+
+use Bitrix24\SDK\Services\ServiceBuilderFactory;
+use Monolog\Logger;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+require_once  'vendor/autoload.php';
+
+$webhookUrl = 'INSERT_HERE_YOUR_WEBHOOK_URL';
+
+$log = new Logger('bitrix24-php-sdk');
+$b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
+
+// init bitrix24-php-sdk service
+$b24Service = $b24ServiceFactory->initFromWebhook($webhookUrl);
+
+// work with interested scope
+var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());
+var_dump($b24Service->getCRMScope()->lead()->list([],[],['ID','TITLE'])->getLeads()[0]->TITLE);
+```
 
 ## Tests
 
