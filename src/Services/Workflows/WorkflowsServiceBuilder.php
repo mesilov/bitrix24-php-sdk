@@ -9,6 +9,19 @@ use Bitrix24\SDK\Services\Workflows;
 
 class WorkflowsServiceBuilder extends AbstractServiceBuilder
 {
+    public function robot(): Workflows\Robot\Service\Robot
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Workflows\Robot\Service\Robot(
+                new Workflows\Template\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function template(): Workflows\Template\Service\Template
     {
         if (!isset($this->serviceCache[__METHOD__])) {
