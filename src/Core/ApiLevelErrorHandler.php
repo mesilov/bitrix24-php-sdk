@@ -8,14 +8,12 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
+use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
+use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Handle api-level errors and throw related exception
- *
- * Class ApiLevelErrorHandler
- *
- * @package Bitrix24\SDK\Core
  */
 class ApiLevelErrorHandler
 {
@@ -90,6 +88,10 @@ class ApiLevelErrorHandler
                 throw new MethodNotFoundException(sprintf('api method not found %s %s', $errorDescription, $batchErrorPrefix));
             case 'operation_time_limit':
                 throw new OperationTimeLimitExceededException(sprintf('operation time limit exceeded %s %s', $errorDescription, $batchErrorPrefix));
+            case 'error_activity_already_installed':
+                throw new ActivityOrRobotAlreadyInstalledException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'error_activity_validation_failure':
+                throw new ActivityOrRobotValidationFailureException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }

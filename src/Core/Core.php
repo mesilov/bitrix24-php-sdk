@@ -108,6 +108,16 @@ class Core implements CoreInterface
                     // dispatch event, application listeners update domain url host in accounts repository
                     $this->eventDispatcher->dispatch(new PortalDomainUrlChangedEvent($portalOldDomainUrlHost, $portalNewDomainUrlHost));
                     break;
+                case StatusCodeInterface::STATUS_BAD_REQUEST:
+                    $body = $apiCallResponse->toArray(false);
+                    $this->logger->notice(
+                        'bad request',
+                        [
+                            'body' => $body,
+                        ]
+                    );
+                    $this->apiLevelErrorHandler->handle($body);
+                    break;
                 case StatusCodeInterface::STATUS_UNAUTHORIZED:
                     $body = $apiCallResponse->toArray(false);
                     $this->logger->debug(
