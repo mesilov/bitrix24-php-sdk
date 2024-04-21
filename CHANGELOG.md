@@ -1,10 +1,17 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.2 — 1.04.2024
+## 2.0-beta.3 — 1.05.2024
 
 ### Added
+* add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
+    * `Workflow`
+    * `Template`
+    * `Robot`
+    * `Event`
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromRobotRequest`
+* 
 
-* add `bizproc` [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376)
+## 2.0-beta.2 — 1.04.2024
 
 ### Changed
 
@@ -16,10 +23,6 @@
         * `monolog/monolog` `2.9.*` → `3.5.*`
         * `phpunit/phpunit` `10.5.*` → `11.0.*`
 * added enum `DealSemanticStage` for deal field `STAGE_SEMANTIC_ID`
-
-### Bugfix
-
-### etc
 
 ## 2.0-beta.1 — 18.02.2024
 
