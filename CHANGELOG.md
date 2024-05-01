@@ -3,15 +3,32 @@
 ## 2.0-beta.3 — 1.05.2024
 
 ### Added
-* add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
-    * `Workflow`
-    * `Template`
-    * `Robot`
-    * `Event`
-* add `WorkflowActivityDocumentType`
-* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
-* 
 
+* add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
+    * `Activity` – service for work with application activities:
+        * `add` – adds new activity to a workflow
+        * `delete` – delete an activity
+        * `list` – returns list of activities, installed by the application
+        * `log` – records data in the workflow log
+        * `update` – update activity fields
+    * `Robot` – service for work with application automation rules (robots):
+        * `add` – registers new automation rule
+        * `delete` – deletes registered automation rule
+        * `list` – returns list of automation rules, registered by the application
+        * `update` – updates fields of automation rules
+    * `Event` – service for work with return parameters¨
+        * `send` – Returns the output parameters to the activity
+    * `Providers` — deprecated methods, not implemented
+    * `Workflow` — 🛠️ WIP
+    * `Template` — 🛠️ WIP
+    * `Tasks` — 🛠️ WIP
+    * add `WorkflowActivityDocumentType`
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
+* add dependencies
+  * require
+    * `symfony/console` version `^6 || ^7` 
+    * `symfony/dotenv` version `^6 || ^7` 
+    
 ## 2.0-beta.2 — 1.04.2024
 
 ### Changed
@@ -97,7 +114,9 @@
 * fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
 * fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
 *
+
 fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
+
 * fix [add return type for crm multifields phone, email, im](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
 * fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
 * fix errors for `ApplicationProfile` with empty scope
