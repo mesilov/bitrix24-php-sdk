@@ -28,6 +28,22 @@ class Workflow extends AbstractService
     }
 
     /**
+     * Stops an active workflow.
+     *
+     * @param string $workflowId
+     * @param string $message
+     * @return Workflows\Workflow\Result\WorkflowTerminationResult
+     * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_terminate.php
+     */
+    public function terminate(string $workflowId, string $message)
+    {
+        return new Workflows\Workflow\Result\WorkflowTerminationResult($this->core->call('bizproc.workflow.terminate', [
+            'ID' => $workflowId,
+            'STATUE' => $message
+        ]));
+    }
+
+    /**
      * bizproc.workflow.start launches a worfklow
      *
      * @throws TransportException

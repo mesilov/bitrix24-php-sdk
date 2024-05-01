@@ -9,14 +9,14 @@ readonly class WorkflowActivityDocumentType
     public function __construct(
         public string $moduleId,
         public string $entityId,
-        public string $targetDocumentType,
+        public string $targetDocumentId,
     )
     {
     }
 
     public function toArray(): array
     {
-        return [$this->moduleId, $this->entityId, $this->targetDocumentType];
+        return [$this->moduleId, $this->entityId, $this->targetDocumentId];
     }
 
     public static function buildForLead(): self
