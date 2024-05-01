@@ -8,7 +8,8 @@
     * `Template`
     * `Robot`
     * `Event`
-* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromRobotRequest`
+* add `WorkflowActivityDocumentType`
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
 * 
 
 ## 2.0-beta.2 — 1.04.2024

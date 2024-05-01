@@ -44,6 +44,7 @@ class Workflow extends AbstractService
         int                                   $smartProcessId = null
     ): Workflows\Workflow\Result\WorkflowInstanceStartResult
     {
+        $documentId = null;
         switch ($workflowDocumentType) {
             case Workflows\Common\WorkflowDocumentType::crmLead:
                 $documentId = ['crm', $workflowDocumentType->value, sprintf('LEAD_%s', $entityId)];

@@ -79,7 +79,7 @@ class AccessToken
         );
     }
 
-    public static function initFromRobotRequest(Request $request): self
+    public static function initFromWorkflowRequest(Request $request): self
     {
         $requestFields = $request->request->all();
         return self::initFromArray($requestFields['auth']);
