@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Workflows;
 
+use Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
 use Bitrix24\SDK\Services\Workflows;
+use Symfony\Component\Filesystem\Filesystem;
 
 class WorkflowsServiceBuilder extends AbstractServiceBuilder
 {
@@ -54,6 +56,11 @@ class WorkflowsServiceBuilder extends AbstractServiceBuilder
             $this->serviceCache[__METHOD__] = new Workflows\Template\Service\Template(
                 new Workflows\Template\Service\Batch($this->batch, $this->log),
                 $this->core,
+                new Base64Encoder(
+                    new Filesystem(),
+                    new \Symfony\Component\Mime\Encoder\Base64Encoder(),
+                    $this->log,
+                ),
                 $this->log
             );
         }

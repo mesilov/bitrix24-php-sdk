@@ -81,9 +81,14 @@ class ApiLevelErrorHandler
         if ($batchCommandId !== null) {
             $batchErrorPrefix = sprintf(' batch command id: %s', $batchCommandId);
         }
+        // fix error code responses
+        if ($errorCode === '' && strtolower($errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
+            $errorCode = 'bizproc_workflow_template_access_denied';
+        }
 
         switch ($errorCode) {
             case 'access_denied':
+            case 'bizproc_workflow_template_access_denied':
                 throw new AuthForbiddenException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'query_limit_exceeded':
                 throw new QueryLimitExceededException(sprintf('query limit exceeded - too many requests %s', $batchErrorPrefix));

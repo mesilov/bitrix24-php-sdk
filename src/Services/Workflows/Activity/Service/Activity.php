@@ -12,7 +12,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
 use Bitrix24\SDK\Services\Workflows\Activity\Result\AddedActivityResult;
 use Bitrix24\SDK\Services\Workflows\Activity\Result\UpdateActivityResult;
-use Bitrix24\SDK\Services\Workflows\Common\WorkflowActivityDocumentType;
+use Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentType;
 use Psr\Log\LoggerInterface;
 
 class Activity extends AbstractService
@@ -70,7 +70,7 @@ class Activity extends AbstractService
      * @param array $properties Array of activity parameters.
      * @param bool $isUsePlacement Enables option to open additional settings for activity in the app slider.
      * @param array $returnProperties Array of returned activity values.
-     * @param WorkflowActivityDocumentType $documentType Tip of document, which will determine type of data for parameters.
+     * @param WorkflowDocumentType $documentType Tip of document, which will determine type of data for parameters.
      * @param array $limitationFilter Activity limitation rules by document type and revision.
      *
      * @return AddedActivityResult
@@ -79,17 +79,17 @@ class Activity extends AbstractService
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_add.php
      */
     public function add(
-        string                                        $code,
-        string                                        $handlerUrl,
-        int                                           $b24AuthUserId,
-        array                                         $localizedName,
-        array                                         $localizedDescription,
-        bool                                          $isUseSubscription,
-        array                                         $properties,
-        bool                                          $isUsePlacement,
-        array                                         $returnProperties,
-        Workflows\Common\WorkflowActivityDocumentType $documentType,
-        array                                         $limitationFilter,
+        string                                $code,
+        string                                $handlerUrl,
+        int                                   $b24AuthUserId,
+        array                                 $localizedName,
+        array                                 $localizedDescription,
+        bool                                  $isUseSubscription,
+        array                                 $properties,
+        bool                                  $isUsePlacement,
+        array                                 $returnProperties,
+        Workflows\Common\WorkflowDocumentType $documentType,
+        array                                 $limitationFilter,
     ): Workflows\Activity\Result\AddedActivityResult
     {
         return new Workflows\Activity\Result\AddedActivityResult($this->core->call('bizproc.activity.add', [
@@ -137,7 +137,7 @@ class Activity extends AbstractService
      * @param array|null $properties Array of activity parameters.
      * @param bool|null $isUsePlacement Enables option to open additional settings for activity in the app slider.
      * @param array|null $returnProperties Array of returned activity values.
-     * @param WorkflowActivityDocumentType|null $documentType Tip of document, which will determine type of data for parameters.
+     * @param WorkflowDocumentType|null $documentType Tip of document, which will determine type of data for parameters.
      * @param array|null $limitationFilter Activity limitation rules by document type and revision.
      *
      * @return UpdateActivityResult
@@ -146,17 +146,17 @@ class Activity extends AbstractService
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_update.php
      */
     public function update(
-        string                                         $code,
-        ?string                                        $handlerUrl,
-        ?int                                           $b24AuthUserId,
-        ?array                                         $localizedName,
-        ?array                                         $localizedDescription,
-        ?bool                                          $isUseSubscription,
-        ?array                                         $properties,
-        ?bool                                          $isUsePlacement,
-        ?array                                         $returnProperties,
-        ?Workflows\Common\WorkflowActivityDocumentType $documentType,
-        ?array                                         $limitationFilter,
+        string                                 $code,
+        ?string                                $handlerUrl,
+        ?int                                   $b24AuthUserId,
+        ?array                                 $localizedName,
+        ?array                                 $localizedDescription,
+        ?bool                                  $isUseSubscription,
+        ?array                                 $properties,
+        ?bool                                  $isUsePlacement,
+        ?array                                 $returnProperties,
+        ?Workflows\Common\WorkflowDocumentType $documentType,
+        ?array                                 $limitationFilter,
     ): Workflows\Activity\Result\UpdateActivityResult
     {
         $fieldsToUpdate = [];

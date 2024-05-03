@@ -12,7 +12,6 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
 use Psr\Log\LoggerInterface;
 
-
 class Workflow extends AbstractService
 {
     public Batch $batch;
@@ -28,6 +27,22 @@ class Workflow extends AbstractService
     }
 
     /**
+     * Deletes a launched workflow
+     *
+     * @param non-empty-string $workflowId Workflow id
+     * @return Workflows\Workflow\Result\WorkflowKillResult
+     * @throws BaseException
+     * @throws TransportException
+     * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_kill.php
+     */
+    public function kill(string $workflowId): Workflows\Workflow\Result\WorkflowKillResult
+    {
+        return new Workflows\Workflow\Result\WorkflowKillResult($this->core->call('bizproc.workflow.kill', [
+            'ID' => $workflowId,
+        ]));
+    }
+
+    /**
      * Stops an active workflow.
      *
      * @param string $workflowId
@@ -35,7 +50,7 @@ class Workflow extends AbstractService
      * @return Workflows\Workflow\Result\WorkflowTerminationResult
      * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_terminate.php
      */
-    public function terminate(string $workflowId, string $message)
+    public function terminate(string $workflowId, string $message): Workflows\Workflow\Result\WorkflowTerminationResult
     {
         return new Workflows\Workflow\Result\WorkflowTerminationResult($this->core->call('bizproc.workflow.terminate', [
             'ID' => $workflowId,
@@ -53,44 +68,44 @@ class Workflow extends AbstractService
      *
      */
     public function start(
-        Workflows\Common\WorkflowDocumentType $workflowDocumentType,
-        int                                   $bizProcTemplateId,
-        int                                   $entityId,
-        array                                 $callParameters = [],
-        int                                   $smartProcessId = null
+        Workflows\Common\DocumentType $workflowDocumentType,
+        int                           $bizProcTemplateId,
+        int                           $entityId,
+        array                         $callParameters = [],
+        int                           $smartProcessId = null
     ): Workflows\Workflow\Result\WorkflowInstanceStartResult
     {
         $documentId = null;
         switch ($workflowDocumentType) {
-            case Workflows\Common\WorkflowDocumentType::crmLead:
+            case Workflows\Common\DocumentType::crmLead:
                 $documentId = ['crm', $workflowDocumentType->value, sprintf('LEAD_%s', $entityId)];
                 break;
-            case Workflows\Common\WorkflowDocumentType::crmCompany:
+            case Workflows\Common\DocumentType::crmCompany:
                 $documentId = ['crm', $workflowDocumentType->value, sprintf('COMPANY_%s', $entityId)];
                 break;
-            case Workflows\Common\WorkflowDocumentType::crmContact:
+            case Workflows\Common\DocumentType::crmContact:
                 $documentId = ['crm', $workflowDocumentType->value, sprintf('CONTACT_%s', $entityId)];
                 break;
-            case Workflows\Common\WorkflowDocumentType::crmDeal:
+            case Workflows\Common\DocumentType::crmDeal:
                 $documentId = ['crm', $workflowDocumentType->value, sprintf('DEAL_%s', $entityId)];
                 break;
-            case Workflows\Common\WorkflowDocumentType::discBizProcDocument:
+            case Workflows\Common\DocumentType::discBizProcDocument:
                 $documentId = ['disk', $workflowDocumentType->value, $entityId];
                 break;
-            case Workflows\Common\WorkflowDocumentType::listBizProcDocumentLists:
-            case Workflows\Common\WorkflowDocumentType::listBizProcDocument:
+            case Workflows\Common\DocumentType::listBizProcDocumentLists:
+            case Workflows\Common\DocumentType::listBizProcDocument:
                 $documentId = ['lists', $workflowDocumentType->value, $entityId];
                 break;
-            case Workflows\Common\WorkflowDocumentType::smartProcessDynamic:
+            case Workflows\Common\DocumentType::smartProcessDynamic:
                 if ($smartProcessId === null) {
                     throw new InvalidArgumentException('smartProcessId not set');
                 }
                 $documentId = ['crm', $workflowDocumentType->value, sprintf('DYNAMIC_%s_%s', $smartProcessId, $entityId)];
                 break;
-            case Workflows\Common\WorkflowDocumentType::task:
+            case Workflows\Common\DocumentType::task:
                 $documentId = ['tasks', $workflowDocumentType->value, $entityId];
                 break;
-            case Workflows\Common\WorkflowDocumentType::invoice:
+            case Workflows\Common\DocumentType::invoice:
                 $documentId = ['tasks', $workflowDocumentType->value, sprintf('SMART_INVOICE_%s', $entityId)];
                 break;
         }

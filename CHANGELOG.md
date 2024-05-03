@@ -19,16 +19,24 @@
     * `Event` – service for work with return parameters¨
         * `send` – Returns the output parameters to the activity
     * `Providers` — deprecated methods, not implemented
-    * `Workflow` — 🛠️ WIP
+    * `Workflow` — service for work with workflow instances
+        * `instances` – returns list of launched workflows
+        * `kill` – delete a launched workflow
+        * `start` – launches a workflow
+        * `terminate` – stops an active workflow
     * `Template` — 🛠️ WIP
     * `Tasks` — 🛠️ WIP
     * add `WorkflowActivityDocumentType`
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
 * add dependencies
-  * require
-    * `symfony/console` version `^6 || ^7` 
-    * `symfony/dotenv` version `^6 || ^7` 
-    
+    * require
+        * `symfony/console` version `^6 || ^7`
+        * `symfony/dotenv` version `^6 || ^7`
+        * `symfony/filesystem` version `^6 || ^7`,
+        * `symfony/mime` version `^6 || ^7`,
+* add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
+* add `\Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+
 ## 2.0-beta.2 — 1.04.2024
 
 ### Changed
