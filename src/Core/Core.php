@@ -113,7 +113,7 @@ class Core implements CoreInterface
                     $this->logger->notice(
                         'bad request',
                         [
-                            'body' => $body,
+                            'rawResponse' => $body,
                         ]
                     );
                     $this->apiLevelErrorHandler->handle($body);
@@ -123,7 +123,7 @@ class Core implements CoreInterface
                     $this->logger->debug(
                         'UNAUTHORIZED request',
                         [
-                            'body' => $body,
+                            'rawResponse' => $body,
                         ]
                     );
 
@@ -158,20 +158,23 @@ class Core implements CoreInterface
                     }
                     break;
                 case StatusCodeInterface::STATUS_FORBIDDEN:
+                    $body = $apiCallResponse->toArray(false);
                     $this->logger->warning(
                         'bitrix24 portal authorisation forbidden',
                         [
                             'apiMethod' => $apiMethod,
                             'b24DomainUrl' => $this->apiClient->getCredentials()->getDomainUrl(),
+                            'rawResponse' => $body,
                         ]
                     );
-                    throw new AuthForbiddenException(sprintf('authorisation forbidden for portal %s ', $this->apiClient->getCredentials()->getDomainUrl()));
+                    $this->apiLevelErrorHandler->handle($body);
+                    break;
                 case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
                     $body = $apiCallResponse->toArray(false);
                     $this->logger->notice(
                         'bitrix24 portal unavailable',
                         [
-                            'body' => $body,
+                            'rawResponse' => $body,
                         ]
                     );
                     $this->apiLevelErrorHandler->handle($body);
@@ -182,7 +185,7 @@ class Core implements CoreInterface
                         'unhandled server status',
                         [
                             'httpStatus' => $apiCallResponse->getStatusCode(),
-                            'body' => $body,
+                            'rawResponse' => $body,
                         ]
                     );
                     $this->apiLevelErrorHandler->handle($body);

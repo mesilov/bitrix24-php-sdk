@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
+use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
@@ -82,6 +83,8 @@ class ApiLevelErrorHandler
         }
 
         switch ($errorCode) {
+            case 'access_denied':
+                throw new AuthForbiddenException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'query_limit_exceeded':
                 throw new QueryLimitExceededException(sprintf('query limit exceeded - too many requests %s', $batchErrorPrefix));
             case 'error_method_not_found':
