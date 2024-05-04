@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Workflows\Template\Service;
 
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
-use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemBatchResult;
-use Generator;
 use Psr\Log\LoggerInterface;
 
 readonly class Batch

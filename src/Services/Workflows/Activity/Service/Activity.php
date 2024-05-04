@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Services\Workflows\Activity\Service;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
@@ -189,6 +190,9 @@ class Activity extends AbstractService
         }
         if ($limitationFilter !== null) {
             $fieldsToUpdate['FILTER'] = $limitationFilter;
+        }
+        if (count($fieldsToUpdate) === 0) {
+            throw new InvalidArgumentException('no fields to update – you must set minimum one field to update');
         }
         return new Workflows\Activity\Result\UpdateActivityResult($this->core->call(
             'bizproc.activity.update',

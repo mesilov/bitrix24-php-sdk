@@ -6,9 +6,11 @@ namespace Bitrix24\SDK\Services\Workflows\Template\Service;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
@@ -60,6 +62,62 @@ class Template extends AbstractService
             'AUTO_EXECUTE' => (string)$workflowAutoExecutionType->value,
             'TEMPLATE_DATA' => $this->base64Encoder->encodeFile($filename)
         ]));
+    }
+
+    /**
+     * Update workflow template
+     *
+     * Requires administrator access permissions. This method only updates the templates created via the method bizproc.workflow.template.add,
+     * because such templates are bound to a specific app.
+     *
+     * @param int $templateId
+     * @param Workflows\Common\WorkflowDocumentType|null $workflowDocumentType
+     * @param string|null $name
+     * @param string|null $description
+     * @param Workflows\Common\WorkflowAutoExecutionType|null $workflowAutoExecutionType
+     * @param string|null $filename
+     * @return UpdatedItemResult
+     * @throws BaseException
+     * @throws TransportException
+     * @throws \Bitrix24\SDK\Core\Exceptions\FileNotFoundException
+     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @see https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_update.php
+     */
+    public function update(
+        int                                         $templateId,
+        ?Workflows\Common\WorkflowDocumentType      $workflowDocumentType,
+        ?string                                     $name,
+        ?string                                     $description,
+        ?Workflows\Common\WorkflowAutoExecutionType $workflowAutoExecutionType,
+        ?string                                     $filename
+    )
+    {
+        $fieldsToUpdate = [];
+        if ($workflowDocumentType !== null) {
+            $fieldsToUpdate['DOCUMENT_TYPE'] = $workflowDocumentType->toArray();
+        }
+        if ($name !== null) {
+            $fieldsToUpdate['NAME'] = $name;
+        }
+        if ($description !== null) {
+            $fieldsToUpdate['DESCRIPTION'] = $description;
+        }
+        if ($workflowAutoExecutionType !== null) {
+            $fieldsToUpdate['AUTO_EXECUTE'] = (string)$workflowAutoExecutionType->value;
+        }
+        if ($filename !== null) {
+            $fieldsToUpdate['TEMPLATE_DATA'] = $this->base64Encoder->encodeFile($filename);
+        }
+        if (count($fieldsToUpdate) === 0) {
+            throw new InvalidArgumentException('no fields to update – you must set minimum one field to update');
+        }
+
+        return new UpdatedItemResult($this->core->call(
+            'bizproc.workflow.template.update', [
+                'ID' => $templateId,
+                'FIELDS' => $fieldsToUpdate
+            ]
+        ));
     }
 
     /**

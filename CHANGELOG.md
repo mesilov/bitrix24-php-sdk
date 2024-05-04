@@ -3,7 +3,11 @@
 ## 2.0-beta.3 — 1.05.2024
 
 ### Added
-
+* add dependencies
+    * `symfony/console` version `^6 || ^7`
+    * `symfony/dotenv` version `^6 || ^7`
+    * `symfony/filesystem` version `^6 || ^7`,
+    * `symfony/mime` version `^6 || ^7`,
 * add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
     * `Activity` – service for work with application activities:
         * `add` – adds new activity to a workflow
@@ -24,16 +28,14 @@
         * `kill` – delete a launched workflow
         * `start` – launches a workflow
         * `terminate` – stops an active workflow
-    * `Template` — 🛠️ WIP
+    * `Template` — service for work with workflow templates
+        * `add` – add a workflow template
+        * `delete` – delete workflow template
+        * `list` – returns list of workflow templates
+        * `update` – update workflow template
     * `Tasks` — 🛠️ WIP
     * add `WorkflowActivityDocumentType`
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
-* add dependencies
-    * require
-        * `symfony/console` version `^6 || ^7`
-        * `symfony/dotenv` version `^6 || ^7`
-        * `symfony/filesystem` version `^6 || ^7`,
-        * `symfony/mime` version `^6 || ^7`,
 * add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
 * add `\Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
 

@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
@@ -85,8 +86,13 @@ class ApiLevelErrorHandler
         if ($errorCode === '' && strtolower($errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
             $errorCode = 'bizproc_workflow_template_access_denied';
         }
+        if ($errorCode === '' && strtolower($errorDescription) === strtolower('No fields to update.')) {
+            $errorCode = 'bad_request_no_fields_to_update';
+        }
 
         switch ($errorCode) {
+            case 'bad_request_no_fields_to_update':
+                throw new InvalidArgumentException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'access_denied':
             case 'bizproc_workflow_template_access_denied':
                 throw new AuthForbiddenException(sprintf('%s - %s', $errorCode, $errorDescription));

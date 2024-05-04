@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Services\Workflows\Robot\Service;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
@@ -148,7 +149,9 @@ class Robot extends AbstractService
         if ($returnProperties !== null) {
             $fieldsToUpdate['RETURN_PROPERTIES'] = $returnProperties;
         }
-
+        if (count($fieldsToUpdate) === 0) {
+            throw new InvalidArgumentException('no fields to update – you must set minimum one field to update');
+        }
         return new Workflows\Robot\Result\UpdateRobotResult($this->core->call(
             'bizproc.robot.update',
             [
