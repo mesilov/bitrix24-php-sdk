@@ -6,8 +6,9 @@
 * add dependencies
     * `symfony/console` version `^6 || ^7`
     * `symfony/dotenv` version `^6 || ^7`
-    * `symfony/filesystem` version `^6 || ^7`,
-    * `symfony/mime` version `^6 || ^7`,
+    * `symfony/filesystem` version `^6 || ^7`
+    * `symfony/mime` version `^6 || ^7`
+    * `nesbot/carbon` version `3.3.*`
 * add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
     * `Activity` – service for work with application activities:
         * `add` – adds new activity to a workflow
