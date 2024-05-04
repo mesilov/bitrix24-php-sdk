@@ -50,6 +50,19 @@ class WorkflowsServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
+    public function task(): Workflows\Task\Service\Task
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Workflows\Task\Service\Task(
+                new Workflows\Task\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
     public function template(): Workflows\Template\Service\Template
     {
         if (!isset($this->serviceCache[__METHOD__])) {
