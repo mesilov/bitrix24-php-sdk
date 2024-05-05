@@ -39,8 +39,50 @@ class Task extends AbstractService
      * To request personal tasks, non-administrator should not specify filter for USER_ID
      *
      * @param array $order
-     * @param array $filter
-     * @param array{'ID':int, 'WORKFLOW_ID'?:string, 'DOCUMENT_NAME'?:string, 'DESCRIPTION'?:string, 'NAME'?:string, 'MODIFIED'?: CarbonImmutable, 'WORKFLOW_STARTED'?: CarbonImmutable, 'WORKFLOW_STARTED_BY'?: int, 'OVERDUE_DATE'?: CarbonImmutable, 'WORKFLOW_TEMPLATE_ID'?:int, 'WORKFLOW_TEMPLATE_NAME'?:string, 'WORKFLOW_STATE'?: string, 'STATUS'?:WorkflowTaskStatusType, 'USER_ID'?:int, 'USER_STATUS'?:WorkflowTaskUserStatusType, 'MODULE_ID'?:string, 'ENTITY'?:DocumentType, 'DOCUMENT_ID'?:int, 'ACTIVITY': WorkflowTaskActivityType, 'PARAMETERS'?:array, 'DOCUMENT_URL'?:string} $select
+     * @param array|array{
+     *     ID?:int,
+     *     WORKFLOW_ID?:string,
+     *     DOCUMENT_NAME?:string,
+     *     DESCRIPTION?:string,
+     *     NAME?:string,
+     *     MODIFIED?: CarbonImmutable,
+     *     WORKFLOW_STARTED?: CarbonImmutable,
+     *     WORKFLOW_STARTED_BY?: int,
+     *     OVERDUE_DATE?: CarbonImmutable,
+     *     WORKFLOW_TEMPLATE_ID?:int,
+     *     WORKFLOW_TEMPLATE_NAME?:string,
+     *     WORKFLOW_STATE?: string,
+     *     STATUS?:WorkflowTaskStatusType,
+     *     USER_ID?:int,
+     *     USER_STATUS?:WorkflowTaskUserStatusType,
+     *     MODULE_ID?:string,
+     *     ENTITY?:DocumentType,
+     *     DOCUMENT_ID?:int,
+     *     ACTIVITY: WorkflowTaskActivityType,
+     *     PARAMETERS?:array,
+     *     DOCUMENT_URL?:string } $filter
+     * @param array|array{
+     *     'ID',
+     *     'WORKFLOW_ID',
+     *     'DOCUMENT_NAME',
+     *     'NAME',
+     *     'DESCRIPTION',
+     *     'MODIFIED',
+     *     'WORKFLOW_STARTED',
+     *     'WORKFLOW_STARTED_BY',
+     *     'OVERDUE_DATE',
+     *     'WORKFLOW_TEMPLATE_ID',
+     *     'WORKFLOW_TEMPLATE_NAME',
+     *     'WORKFLOW_STATE',
+     *     'STATUS',
+     *     'USER_ID',
+     *     'USER_STATUS',
+     *     'MODULE_ID',
+     *     'ENTITY',
+     *     'DOCUMENT_ID',
+     *     'ACTIVITY',
+     *     'PARAMETERS',
+     *     'DOCUMENT_URL' } $select
      * @return WorkflowTasksResult
      * @throws BaseException
      * @throws TransportException
@@ -49,7 +91,7 @@ class Task extends AbstractService
     public function list(
         array $order = ['ID' => 'DESC'],
         array $filter = [],
-        array $select = ['ID', 'WORKFLOW_ID', 'DOCUMENT_NAME', 'NAME'])
+        array $select = ['ID', 'WORKFLOW_ID', 'DOCUMENT_NAME', 'NAME']): WorkflowTasksResult
     {
         return new WorkflowTasksResult($this->core->call('bizproc.task.list', [
             'SELECT' => $select,
