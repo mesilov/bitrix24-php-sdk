@@ -12,6 +12,7 @@ use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
+use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -91,6 +92,8 @@ class ApiLevelErrorHandler
         }
 
         switch ($errorCode) {
+            case 'error_task_completed':
+                throw new WorkflowTaskAlreadyCompletedException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'bad_request_no_fields_to_update':
                 throw new InvalidArgumentException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'access_denied':

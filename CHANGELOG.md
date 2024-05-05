@@ -3,6 +3,7 @@
 ## 2.0-beta.3 — 1.05.2024
 
 ### Added
+
 * add dependencies
     * `symfony/console` version `^6 || ^7`
     * `symfony/dotenv` version `^6 || ^7`
@@ -34,7 +35,9 @@
         * `delete` – delete workflow template
         * `list` – returns list of workflow templates
         * `update` – update workflow template
-    * `Tasks` — 🛠️ WIP
+    * `Tasks` — service for work with workflow tasks
+        * `complete` – Complete workflow task
+        * `list` – List of workflow tasks
     * add `WorkflowActivityDocumentType`
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
 * add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding

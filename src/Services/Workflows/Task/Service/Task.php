@@ -6,15 +6,15 @@ namespace Bitrix24\SDK\Services\Workflows\Task\Service;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows\Common\DocumentType;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowTaskActivityType;
+use Bitrix24\SDK\Services\Workflows\Common\WorkflowTaskCompleteStatusType;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowTaskStatusType;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowTaskUserStatusType;
+use Bitrix24\SDK\Services\Workflows\Task\Result\WorkflowTaskCompleteResult;
 use Carbon\CarbonImmutable;
-use DateTimeInterface;
 use Psr\Log\LoggerInterface;
 use Bitrix24\SDK\Services\Workflows\Task\Result\WorkflowTasksResult;
 
@@ -30,6 +30,34 @@ class Task extends AbstractService
     {
         parent::__construct($core, $log);
         $this->batch = $batch;
+    }
+
+    /**
+     * Complete workflow task
+     *
+     * Presently, the tasks Document approval and Document review can be executed.
+     * Only your own task can be completed, as well as the task, not completed yet.
+     *
+     * Starting from the Business Process module version 20.0.800 you have an option to execute Request for extra information.
+     * You can execute only your task and only when it wasn't executed yet.
+     *
+     * @param int $taskId
+     * @param WorkflowTaskCompleteStatusType $status
+     * @param string $comment
+     * @param array|null $taskFields
+     * @return WorkflowTaskCompleteResult
+     * @throws BaseException
+     * @throws TransportException
+     * @see https://training.bitrix24.com/rest_help/workflows/workflows_tasks/bizproc_task_complete.php
+     */
+    public function complete(int $taskId, WorkflowTaskCompleteStatusType $status, string $comment, ?array $taskFields = null): WorkflowTaskCompleteResult
+    {
+        return new WorkflowTaskCompleteResult($this->core->call('bizproc.task.complete', [
+            'TASK_ID' => $taskId,
+            'STATUS' => $status->value,
+            'COMMENT' => $comment,
+            'FIELDS' => $taskFields
+        ]));
     }
 
     /**
