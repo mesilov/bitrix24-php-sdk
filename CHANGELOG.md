@@ -42,6 +42,7 @@
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
 * add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
 * add `\Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+* add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
 
 ## 2.0-beta.2 — 1.04.2024
 
