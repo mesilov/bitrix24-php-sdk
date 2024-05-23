@@ -13,24 +13,17 @@ use Psr\Log\LoggerInterface;
 
 class Event extends AbstractService
 {
-    public Batch $batch;
-
     public function __construct(
-        Batch           $batch,
+        public Batch           $batch,
         CoreInterface   $core,
         LoggerInterface $log
     )
     {
         parent::__construct($core, $log);
-        $this->batch = $batch;
     }
 
     /**
      * returns output parameters to an activity. Parameters are specified in the activity description.
-     *
-     * @param string $eventToken
-     * @param array $returnValues
-     * @param string|null $logMessage
      *
      * @return Workflows\Event\Result\EventSendResult
      * @throws BaseException

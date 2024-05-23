@@ -12,29 +12,25 @@ use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
 use Bitrix24\SDK\Services\Workflows\Activity\Result\AddedActivityResult;
+use Bitrix24\SDK\Services\Workflows\Activity\Result\AddedMessageToLogResult;
 use Bitrix24\SDK\Services\Workflows\Activity\Result\UpdateActivityResult;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentType;
 use Psr\Log\LoggerInterface;
 
 class Activity extends AbstractService
 {
-    public Batch $batch;
-
     public function __construct(
-        Batch           $batch,
+        public Batch    $batch,
         CoreInterface   $core,
         LoggerInterface $log
     )
     {
         parent::__construct($core, $log);
-        $this->batch = $batch;
     }
 
     /**
      * This method records data in the workflow log.
-     * @param string $eventToken
-     * @param string $message
-     * @return Workflows\Activity\Result\AddedMessageToLogResult
+     * @return AddedMessageToLogResult
      * @throws BaseException
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_list.php
@@ -111,14 +107,12 @@ class Activity extends AbstractService
     /**
      * This method deletes an activity.
      *
-     * @param string $activityCode
      * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_delete.php
      */
-    public
-    function delete(string $activityCode): DeletedItemResult
+    public function delete(string $activityCode): DeletedItemResult
     {
         return new DeletedItemResult(
             $this->core->call('bizproc.activity.delete', [

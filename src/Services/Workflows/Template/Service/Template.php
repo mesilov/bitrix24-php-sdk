@@ -19,29 +19,19 @@ use Psr\Log\LoggerInterface;
 
 class Template extends AbstractService
 {
-    public Batch $batch;
-    private Base64Encoder $base64Encoder;
-
     public function __construct(
-        Batch           $batch,
+        public Batch           $batch,
         CoreInterface   $core,
-        Base64Encoder   $base64Encoder,
+        private readonly Base64Encoder   $base64Encoder,
         LoggerInterface $log
     )
     {
         parent::__construct($core, $log);
-        $this->batch = $batch;
-        $this->base64Encoder = $base64Encoder;
     }
 
     /**
      * Add a workflow template, requires administrator access permissions
      *
-     * @param Workflows\Common\WorkflowDocumentType $workflowDocumentType
-     * @param string $name
-     * @param string $description
-     * @param Workflows\Common\WorkflowAutoExecutionType $workflowAutoExecutionType
-     * @param string $filename
      * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
@@ -70,12 +60,6 @@ class Template extends AbstractService
      * Requires administrator access permissions. This method only updates the templates created via the method bizproc.workflow.template.add,
      * because such templates are bound to a specific app.
      *
-     * @param int $templateId
-     * @param Workflows\Common\WorkflowDocumentType|null $workflowDocumentType
-     * @param string|null $name
-     * @param string|null $description
-     * @param Workflows\Common\WorkflowAutoExecutionType|null $workflowAutoExecutionType
-     * @param string|null $filename
      * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
@@ -126,7 +110,6 @@ class Template extends AbstractService
      * This method deletes only the templates created via the method bizproc.workflow.template.add,
      * because such templates are bound to an app and only they can be deleted.
      *
-     * @param int $templateId
      * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
@@ -141,8 +124,6 @@ class Template extends AbstractService
 
     /**
      * The method bizproc.workflow.template.list returns list of workflow templates, specified for a site. This method requires administrator access permissions.
-     * @param array $select
-     * @param array $filter
      * @return Workflows\Template\Result\WorkflowTemplatesResult
      * @throws BaseException
      * @throws TransportException

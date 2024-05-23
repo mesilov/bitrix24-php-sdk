@@ -14,16 +14,13 @@ use Psr\Log\LoggerInterface;
 
 class Workflow extends AbstractService
 {
-    public Batch $batch;
-
     public function __construct(
-        Batch           $batch,
+        public Batch           $batch,
         CoreInterface   $core,
         LoggerInterface $log
     )
     {
         parent::__construct($core, $log);
-        $this->batch = $batch;
     }
 
     /**
@@ -45,8 +42,6 @@ class Workflow extends AbstractService
     /**
      * Stops an active workflow.
      *
-     * @param string $workflowId
-     * @param string $message
      * @return Workflows\Workflow\Result\WorkflowTerminationResult
      * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_terminate.php
      */
@@ -124,9 +119,6 @@ class Workflow extends AbstractService
     /**
      * returns list of launched workflows
      *
-     * @param array $select
-     * @param array $order
-     * @param array $filter
      * @return Workflows\Workflow\Result\WorkflowInstancesResult
      * @throws BaseException
      * @throws TransportException

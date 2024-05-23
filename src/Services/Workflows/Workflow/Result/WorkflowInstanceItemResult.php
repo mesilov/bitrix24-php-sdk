@@ -31,7 +31,7 @@ class WorkflowInstanceItemResult extends AbstractItem
             case 'DOCUMENT_ID':
                 if ($this->data[$offset] !== '') {
                     // "DEAL_158310"
-                    return (int)substr($this->data[$offset], strpos($this->data[$offset], '_')+1);
+                    return (int)substr((string) $this->data[$offset], strpos((string) $this->data[$offset], '_')+1);
                 }
                 return null;
             case 'MODIFIED':

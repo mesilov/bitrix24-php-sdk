@@ -47,7 +47,7 @@ class WorkflowTaskItemResult extends AbstractItem
                 return (int)$this->data[$offset];
             case 'DOCUMENT_ID':
                 if ($this->data[$offset] !== '') {
-                    return (int)substr($this->data[$offset], strrpos($this->data[$offset], '_') + 1);
+                    return (int)substr((string) $this->data[$offset], strrpos((string) $this->data[$offset], '_') + 1);
                 }
                 return null;
             case 'MODIFIED':

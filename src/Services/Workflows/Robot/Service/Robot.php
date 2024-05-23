@@ -19,29 +19,18 @@ use Psr\Log\LoggerInterface;
 
 class Robot extends AbstractService
 {
-    public Batch $batch;
-
     public function __construct(
-        Batch           $batch,
+        public Batch           $batch,
         CoreInterface   $core,
         LoggerInterface $log
     )
     {
         parent::__construct($core, $log);
-        $this->batch = $batch;
     }
 
     /**
      * Registers new automation rule.
      *
-     * @param string $code
-     * @param string $handlerUrl
-     * @param int $b24AuthUserId
-     * @param array $localizedRobotName
-     * @param bool $isUseSubscription
-     * @param array $properties
-     * @param bool $isUsePlacement
-     * @param array $returnProperties
      *
      * @return AddedRobotResult
      * @throws BaseException
@@ -86,7 +75,6 @@ class Robot extends AbstractService
     /**
      * This method deletes registered automation rule.
      *
-     * @param string $robotCode
      * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
@@ -103,14 +91,8 @@ class Robot extends AbstractService
     /**
      * updates fields of automation rules
      *
-     * @param string $code
-     * @param string|null $handlerUrl
-     * @param int|null $b24AuthUserId
-     * @param array|null $localizedRobotName
      * @param bool $isUseSubscription
-     * @param array|null $properties
      * @param bool $isUsePlacement
-     * @param array|null $returnProperties
      * @return UpdateRobotResult
      * @throws BaseException
      * @throws TransportException

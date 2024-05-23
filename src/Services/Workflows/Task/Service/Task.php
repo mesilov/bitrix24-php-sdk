@@ -20,16 +20,13 @@ use Bitrix24\SDK\Services\Workflows\Task\Result\WorkflowTasksResult;
 
 class Task extends AbstractService
 {
-    public Batch $batch;
-
     public function __construct(
-        Batch           $batch,
+        public Batch           $batch,
         CoreInterface   $core,
         LoggerInterface $log
     )
     {
         parent::__construct($core, $log);
-        $this->batch = $batch;
     }
 
     /**
@@ -41,10 +38,6 @@ class Task extends AbstractService
      * Starting from the Business Process module version 20.0.800 you have an option to execute Request for extra information.
      * You can execute only your task and only when it wasn't executed yet.
      *
-     * @param int $taskId
-     * @param WorkflowTaskCompleteStatusType $status
-     * @param string $comment
-     * @param array|null $taskFields
      * @return WorkflowTaskCompleteResult
      * @throws BaseException
      * @throws TransportException
@@ -66,7 +59,6 @@ class Task extends AbstractService
      * Not only administrators can access this method. Usual user can request his/her own tasks or tasks of his/her subordinate.
      * To request personal tasks, non-administrator should not specify filter for USER_ID
      *
-     * @param array $order
      * @param array|array{
      *     ID?:int,
      *     WORKFLOW_ID?:string,
