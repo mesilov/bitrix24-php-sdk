@@ -14,6 +14,11 @@ readonly class WorkflowDocumentType
     {
     }
 
+    public static function initFromArray(array $data): self
+    {
+        return new self($data[0], $data[1], $data[2]);
+    }
+
     public function toArray(): array
     {
         return [$this->moduleId, $this->entityId, $this->targetDocumentId];
