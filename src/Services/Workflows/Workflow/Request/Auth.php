@@ -39,10 +39,10 @@ readonly class Auth
             Scope::initFromString($auth['scope']),
             ApplicationStatus::initFromString($auth['status']),
             $auth['application_token'],
-            $auth['expires_in'],
+            (int)$auth['expires_in'],
             $auth['domain'],
             $auth['member_id'],
-            $auth['user_id']
+            (int)$auth['user_id']
         );
     }
 }

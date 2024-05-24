@@ -39,9 +39,9 @@ class IncomingWorkflowRequest extends AbstractRequest
             WorkflowDocumentType::initFromArray($data['document_type']),
             $data['event_token'],
             $data['properties'],
-            $data['is_use_subscription'] === 'Y' ? true : false,
-            $data['timeout_duration'],
-            $data['ts'],
+            $data['use_subscription'] === 'Y' ? true : false,
+            (int)$data['timeout_duration'],
+            (int)$data['ts'],
             Auth::initFromArray($data['auth'])
         );
     }
