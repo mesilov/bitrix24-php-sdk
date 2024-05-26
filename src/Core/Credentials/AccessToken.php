@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Core\Credentials;
 
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation;
 
 /**
  * Class AccessToken
@@ -78,10 +79,16 @@ class AccessToken
         );
     }
 
+    public static function initFromWorkflowRequest(Request $request): self
+    {
+        $requestFields = $request->request->all();
+        return self::initFromArray($requestFields['auth']);
+    }
+
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public static function initFromPlacementRequest(Request $request): self
+    public static function initFromPlacementRequest(HttpFoundation\Request $request): self
     {
         $requestFields = $request->request->all();
         if (!array_key_exists('AUTH_ID', $requestFields)) {

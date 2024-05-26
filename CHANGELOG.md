@@ -1,18 +1,63 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.2 — 1.04.2024
+## 2.0-beta.3 — 1.05.2024
 
 ### Added
+
+* add dependencies
+    * `symfony/console` version `^6 || ^7`
+    * `symfony/dotenv` version `^6 || ^7`
+    * `symfony/filesystem` version `^6 || ^7`
+    * `symfony/mime` version `^6 || ^7`
+    * `nesbot/carbon` version `3.3.*`
+* add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
+    * `Activity` – service for work with application activities:
+        * `add` – adds new activity to a workflow
+        * `delete` – delete an activity
+        * `list` – returns list of activities, installed by the application
+        * `log` – records data in the workflow log
+        * `update` – update activity fields
+    * `Robot` – service for work with application automation rules (robots):
+        * `add` – registers new automation rule
+        * `delete` – deletes registered automation rule
+        * `list` – returns list of automation rules, registered by the application
+        * `update` – updates fields of automation rules
+    * `Event` – service for work with return parameters¨
+        * `send` – Returns the output parameters to the activity
+    * `Providers` — deprecated methods, not implemented
+    * `Workflow` — service for work with workflow instances
+        * `instances` – returns list of launched workflows
+        * `kill` – delete a launched workflow
+        * `start` – launches a workflow
+        * `terminate` – stops an active workflow
+    * `Template` — service for work with workflow templates
+        * `add` – add a workflow template
+        * `delete` – delete workflow template
+        * `list` – returns list of workflow templates
+        * `update` – update workflow template
+    * `Tasks` — service for work with workflow tasks
+        * `complete` – Complete workflow task
+        * `list` – List of workflow tasks
+    * add `WorkflowActivityDocumentType`
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
+* add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
+* add `\Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+* add `IncomingRobotRequest` wrapper for data from crm-robot request
+* add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
+* add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
+
+## 2.0-beta.2 — 1.04.2024
+
 ### Changed
+
 * updated [dependencies versions](https://github.com/mesilov/bitrix24-php-sdk/issues/373):
-  * require
-    * `psr/log` `1.4.0` → `3.0.*`
-    * `moneyphp/money` `4.3.*` → `4.5.*`
-  * require-dev
-    * `monolog/monolog` `2.9.*` → `3.5.*`
-    * `phpunit/phpunit` `10.5.*` → `11.0.*`
-### Bugfix
-### etc
+    * require
+        * `psr/log` `1.4.0` → `3.0.*`
+        * `moneyphp/money` `4.3.*` → `4.5.*`
+    * require-dev
+        * `monolog/monolog` `2.9.*` → `3.5.*`
+        * `phpunit/phpunit` `10.5.*` → `11.0.*`
+* added enum `DealSemanticStage` for deal field `STAGE_SEMANTIC_ID`
 
 ## 2.0-beta.1 — 18.02.2024
 
@@ -38,13 +83,13 @@
 * add [crm item support](https://github.com/mesilov/bitrix24-php-sdk/issues/330)
 * add enum `DealStageSemanticId`
 * add Duplicate search support for `Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate`
-* add `x-request-id` [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/354) 
+* add `x-request-id` [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/354)
 * add CRM multifields support [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
     * `Email`
     * `Phone`
     * `Website`
     * `IM`
-* add [Catalog](https://github.com/mesilov/bitrix24-php-sdk/issues/364) scope services support 
+* add [Catalog](https://github.com/mesilov/bitrix24-php-sdk/issues/364) scope services support
 
 ### Changed
 
@@ -59,7 +104,7 @@
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
     * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
-*  ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface`:
+* ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface`:
     * method `getContactPerson` renamed to `getContactPersonId`
     * added method `getApplicationVersion`
     * added method `updateApplicationVersion`
@@ -69,7 +114,7 @@
     * added method `markAsDeactivated`
     * added method `getBitrix24UserId`
     * removed method `markAccountAsDeleted`
-    * changed method `markAsActive` 
+    * changed method `markAsActive`
 * ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountRepositoryInterface`:
     * method `saveAccount` renamed to `save`
     * method `deleteAccount` renamed to `delete`
@@ -85,7 +130,10 @@
 * fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
 * fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
 * fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
-* fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
+*
+
+fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
+
 * fix [add return type for crm multifields phone, email, im](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
 * fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
 * fix errors for `ApplicationProfile` with empty scope
@@ -158,9 +206,13 @@
   are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
   , `createFromPlacementRequest`
 *
+
 ❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
+
 *
+
 ❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result`
+
 * ❗️deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
   method `CoreBuilder::withCredentials`
 

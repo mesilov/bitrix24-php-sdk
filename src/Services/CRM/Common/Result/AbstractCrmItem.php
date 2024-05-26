@@ -10,6 +10,7 @@ use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
+use Bitrix24\SDK\Services\CRM\Deal\Result\DealSemanticStage;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use DateTimeImmutable;
 use Money\Currency;
@@ -172,6 +173,11 @@ class AbstractCrmItem extends AbstractItem
             case 'currencyId':
             case 'accountCurrencyId':
                 return new Currency($this->data[$offset]);
+            case 'STAGE_SEMANTIC_ID':
+                if ($this->data[$offset] !== null) {
+                    return DealSemanticStage::from($this->data[$offset]);
+                }
+                return null;
             default:
                 return $this->data[$offset] ?? null;
         }

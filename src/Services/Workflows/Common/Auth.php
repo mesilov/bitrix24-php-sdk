@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Bitrix24\SDK\Services\Workflows\Common;
+
+use Bitrix24\SDK\Application\ApplicationStatus;
+use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\Endpoints;
+use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
+
+readonly class Auth
+{
+    public function __construct(
+        public AccessToken       $accessToken,
+        public Endpoints         $endpoints,
+        public Scope             $scope,
+        public ApplicationStatus $applicationStatus,
+        public string            $applicationToken,
+        public int               $expiresIn,
+        public string            $domain,
+        public string            $memberId,
+        public int               $userId
+    )
+    {
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     * @throws InvalidArgumentException
+     */
+    public static function initFromArray(array $auth): self
+    {
+        return new self(
+            AccessToken::initFromArray($auth),
+            Endpoints::initFromArray($auth),
+            Scope::initFromString($auth['scope']),
+            ApplicationStatus::initFromString($auth['status']),
+            $auth['application_token'],
+            (int)$auth['expires_in'],
+            $auth['domain'],
+            $auth['member_id'],
+            (int)$auth['user_id']
+        );
+    }
+}
