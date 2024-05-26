@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Workflows\Workflow\Request;
+namespace Bitrix24\SDK\Services\Workflows\Robot\Request;
 
 use Bitrix24\SDK\Application\Requests\AbstractRequest;
 use Bitrix24\SDK\Services\Workflows\Common\Auth;
@@ -10,7 +10,7 @@ use Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentId;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentType;
 use Symfony\Component\HttpFoundation\Request;
 
-class IncomingWorkflowRequest extends AbstractRequest
+class IncomingRobotRequest extends AbstractRequest
 {
     public function __construct(
         Request                              $request,

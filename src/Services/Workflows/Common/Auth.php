@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Services\Workflows\Workflow\Request;
+namespace Bitrix24\SDK\Services\Workflows\Common;
 
 use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Core\Credentials\AccessToken;
