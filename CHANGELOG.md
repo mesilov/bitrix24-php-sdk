@@ -46,6 +46,10 @@
 * add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
 * add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
 
+### Changed
+* update scope `telephony`, scope fully rewritten 
+
+
 ## 2.0-beta.2 — 1.04.2024
 
 ### Changed
