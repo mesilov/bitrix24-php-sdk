@@ -110,18 +110,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return TelephonyServiceBuilder
-     */
-    public function getTelephonyScope(): TelephonyServiceBuilder
-    {
-        if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new TelephonyServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
-        }
-
-        return $this->serviceCache[__METHOD__];
-    }
-
     public function getBizProcScope(): WorkflowsServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
