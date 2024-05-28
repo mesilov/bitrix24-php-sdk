@@ -47,8 +47,11 @@
 * add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
 
 ### Changed
-* update scope `telephony`, scope fully rewritten 
 
+* update scope `telephony`, scope fully rewritten
+    * `ExternalCall` – work with external call
+    * add `CallType` – call types enum
+    * add `CrmEntityType` – crm entity type enum
 
 ## 2.0-beta.2 — 1.04.2024
 
