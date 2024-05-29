@@ -45,6 +45,7 @@
 * add `IncomingRobotRequest` wrapper for data from crm-robot request
 * add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
 * add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
+* add `Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException` exception if user not found, or it is not active
 
 ### Changed
 

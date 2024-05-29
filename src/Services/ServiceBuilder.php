@@ -17,9 +17,6 @@ use Bitrix24\SDK\Services\Workflows\WorkflowsServiceBuilder;
 
 class ServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return CRMServiceBuilder
-     */
     public function getCRMScope(): CRMServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -29,9 +26,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return IMServiceBuilder
-     */
     public function getIMScope(): IMServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -41,9 +35,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return IMOpenLinesServiceBuilder
-     */
     public function getIMOpenLinesScope(): IMOpenLinesServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -65,9 +56,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return UserConsentServiceBuilder
-     */
     public function getUserConsentScope(): UserConsentServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -77,9 +65,6 @@ class ServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return UserServiceBuilder
-     */
     public function getUserScope(): UserServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -114,6 +99,15 @@ class ServiceBuilder extends AbstractServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new WorkflowsServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function getTelephonyScope(): TelephonyServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new TelephonyServiceBuilder($this->core, $this->batch, $this->bulkItemsReader, $this->log);
         }
 
         return $this->serviceCache[__METHOD__];
