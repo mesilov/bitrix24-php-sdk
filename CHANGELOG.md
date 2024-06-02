@@ -42,6 +42,7 @@
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
 * add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
 * add `\Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+* add `\Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult` result of call UI
 * add `IncomingRobotRequest` wrapper for data from crm-robot request
 * add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
 * add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
@@ -50,7 +51,15 @@
 ### Changed
 
 * update scope `telephony`, scope fully rewritten
-    * `ExternalCall` – work with external call
+    * `ExternalCall` – work with external call:
+        * `getCallRecordUploadUrl` – get url for upload call record file
+        * `attachCallRecordInBase64` – attach call record encoded in base64
+        * `register` – registers a call in Bitrix24
+        * `searchCrmEntities` – retrieve information about a client from CRM by a telephone number via single request
+        * `finishForUserPhoneInner` – completes the call, registers it in the statistics and hides the call ID screen from the user
+        * `finishForUserId` – completes the call, registers it in the statistics and hides the call ID screen from the user
+        * `show` – displays a call ID screen to the user
+        * `hide` – hides call information window
     * add `CallType` – call types enum
     * add `CrmEntityType` – crm entity type enum
 
