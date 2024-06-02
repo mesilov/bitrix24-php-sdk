@@ -12,8 +12,7 @@ use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 
 /**
- * @property-read  non-empty-string $uploadUrl
- * @property-read  non-empty-string $fieldName
+ * @property-read  int $FILE_ID
  */
 class CallRecordFileUploadedItemResult extends AbstractItem
 {

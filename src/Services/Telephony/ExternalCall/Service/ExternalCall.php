@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Services\Telephony\ExternalCall\Service;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult;
@@ -15,6 +16,7 @@ use Bitrix24\SDK\Services\Telephony\Common\CallType;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
 use Bitrix24\SDK\Services\Telephony\Common\TelephonyCallStatusCode;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\CallRecordFileUploadedResult;
+use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\CallRecordUploadUrlResult;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\ExternalCallFinishedResult;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\ExternalCallRegisteredResult;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\SearchCrmEntitiesResult;
@@ -39,19 +41,19 @@ class ExternalCall extends AbstractService
      *
      * @param non-empty-string $callId
      * @param non-empty-string $callRecordFileName
-     * @return CallRecordFileUploadedResult
+     * @return CallRecordUploadUrlResult
      * @throws BaseException
      * @throws InvalidArgumentException
      * @throws TransportException
-     * @throws \Bitrix24\SDK\Core\Exceptions\FileNotFoundException
+     * @throws FileNotFoundException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php
      */
     public function getCallRecordUploadUrl(
         string $callId,
         string $callRecordFileName,
-    ): CallRecordFileUploadedResult
+    ): CallRecordUploadUrlResult
     {
-        return new CallRecordFileUploadedResult($this->core->call('telephony.externalCall.attachRecord', [
+        return new CallRecordUploadUrlResult($this->core->call('telephony.externalCall.attachRecord', [
             'CALL_ID' => $callId,
             'FILENAME' => pathinfo($callRecordFileName, PATHINFO_BASENAME),
             'FILE_CONTENT' => null
@@ -67,7 +69,7 @@ class ExternalCall extends AbstractService
      * @throws BaseException
      * @throws InvalidArgumentException
      * @throws TransportException
-     * @throws \Bitrix24\SDK\Core\Exceptions\FileNotFoundException
+     * @throws FileNotFoundException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php
      */
     public function attachCallRecordInBase64(
