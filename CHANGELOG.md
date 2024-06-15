@@ -62,14 +62,20 @@
         * `hide` – hides call information window
     * `Call` – work with call: 
         * `attachTranscription` – method adds a call transcript
-  * `Call` – work with external line:
-      * `add` – method adds an external line 
-      * `delete` – method delete external line 
-      * `get` – method gets external lines list 
+    * `ExternalLine` – work with external line:
+        * `add` – method adds an external line 
+        * `delete` – method delete external line 
+        * `get` – method gets external lines list 
+    * `Voximplant` – work with voximplant namespace:
+        * `Sip` – work with sip lines:
+          * `get` - get sip lines list
+          * `add` - add new sip line
+          * `delete` - delete sip line
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum
     * add `CrmEntityType` – crm entity type enum
+    * add `PbxType` – pbx type enum
 
 ## 2.0-beta.2 — 1.04.2024
 
