@@ -2,7 +2,7 @@ default:
 	@echo "make needs target:"
 	@egrep -e '^\S+' ./Makefile | grep -v default | sed -r 's/://' | sed -r 's/^/ - /'
 
-phpstan:
+lint-phpstan:
 	vendor/bin/phpstan --memory-limit=1G analyse
 lint-rector:
 	vendor/bin/rector process --dry-run

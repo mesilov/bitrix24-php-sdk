@@ -29,7 +29,7 @@ class ExternalLineTest extends TestCase
     #[TestDox('Method tests add external line method')]
     public function testExternalLineAdd(): void
     {
-        $lineNumber = (string)time() . abs(random_int(PHP_INT_MIN, PHP_INT_MAX));
+        $lineNumber = time() . abs(random_int(PHP_INT_MIN, PHP_INT_MAX));
         $res = $this->externalLine->add($lineNumber, true, sprintf('line-name-%s', $lineNumber));
         $this->assertGreaterThan(0, $res->getExternalLineAddResultItem()->ID);
         $this->assertContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
@@ -52,7 +52,7 @@ class ExternalLineTest extends TestCase
     #[TestDox('Method tests delete external line method')]
     public function testDeleteExternalLine(): void
     {
-        $lineNumber = (string)time() . abs(random_int(PHP_INT_MIN, PHP_INT_MAX));
+        $lineNumber = time() . abs(random_int(PHP_INT_MIN, PHP_INT_MAX));
         $this->externalLine->add($lineNumber, true, sprintf('line-name-%s', $lineNumber));
 
         $this->assertContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));

@@ -7,6 +7,10 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Call\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\Telephony\Call\Service\Call;
+use Bitrix24\SDK\Services\Telephony\Common\CallType;
+use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
+use Bitrix24\SDK\Services\Telephony\Common\TelephonyCallStatusCode;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessage;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessageSide;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Service\ExternalCall;
@@ -21,12 +25,11 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Random\RandomException;
-use Bitrix24\SDK\Services\Telephony;
 
-#[CoversClass(Telephony\Call\Service\Call::class)]
+#[CoversClass(Call::class)]
 class CallTest extends TestCase
 {
-    private Telephony\Call\Service\Call $call;
+    private Call $call;
 
     private ExternalCall $externalCall;
 
@@ -57,12 +60,12 @@ class CallTest extends TestCase
             $currentB24UserId,
             $phoneNumber,
             CarbonImmutable::now(),
-            Telephony\Common\CallType::outbound,
+            CallType::outbound,
             true,
             true,
             '3333',
             null,
-            Telephony\Common\CrmEntityType::contact
+            CrmEntityType::contact
 
         );
 
@@ -89,7 +92,7 @@ class CallTest extends TestCase
             $currentB24UserId,
             $duration,
             $money,
-            Telephony\Common\TelephonyCallStatusCode::successful,
+            TelephonyCallStatusCode::successful,
             true
         );
 

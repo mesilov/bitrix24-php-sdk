@@ -8,8 +8,10 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\ServiceBuilder;
+use Bitrix24\SDK\Services\Telephony\Common\CallType;
+use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
+use Bitrix24\SDK\Services\Telephony\Common\TelephonyCallStatusCode;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Service\ExternalCall;
-use Bitrix24\SDK\Services\Telephony;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Carbon\CarbonImmutable;
 use Generator;
@@ -56,12 +58,12 @@ class ExternalCallTest extends TestCase
             $currentB24UserId,
             $phoneNumber,
             CarbonImmutable::now(),
-            Telephony\Common\CallType::outbound,
+            CallType::outbound,
             true,
             true,
             '3333',
             null,
-            Telephony\Common\CrmEntityType::contact
+            CrmEntityType::contact
 
         );
 
@@ -97,12 +99,12 @@ class ExternalCallTest extends TestCase
             $currentB24UserId,
             $phoneNumber,
             CarbonImmutable::now(),
-            Telephony\Common\CallType::outbound,
+            CallType::outbound,
             true,
             true,
             '3333',
             null,
-            Telephony\Common\CrmEntityType::contact
+            CrmEntityType::contact
 
         );
 
@@ -146,7 +148,7 @@ class ExternalCallTest extends TestCase
             $currentB24UserId,
             $duration,
             $money,
-            Telephony\Common\TelephonyCallStatusCode::successful,
+            TelephonyCallStatusCode::successful,
             true
         );
 
@@ -167,7 +169,7 @@ class ExternalCallTest extends TestCase
             $currentB24UserId,
             $duration,
             $money,
-            Telephony\Common\TelephonyCallStatusCode::successful,
+            TelephonyCallStatusCode::successful,
             true
         );
         $filename = dirname(__DIR__,2) . '/call-record-test.mp3';
@@ -187,7 +189,7 @@ class ExternalCallTest extends TestCase
             $currentB24UserId,
             100,
             new Money(10000, new Currency('USD')),
-            Telephony\Common\TelephonyCallStatusCode::successful,
+            TelephonyCallStatusCode::successful,
             true
         );
 
