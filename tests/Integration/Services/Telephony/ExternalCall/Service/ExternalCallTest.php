@@ -173,7 +173,7 @@ class ExternalCallTest extends TestCase
             Telephony\Common\TelephonyCallStatusCode::successful,
             true
         );
-        $filename = __DIR__ . '/call-record-test.mp3';
+        $filename = dirname(__DIR__,2) . '/call-record-test.mp3';
         $this->assertGreaterThan(0, $this->externalCall->attachCallRecordInBase64(
             $callId,
             $filename
@@ -194,7 +194,7 @@ class ExternalCallTest extends TestCase
             true
         );
 
-        $filename = __DIR__ . '/call-record-test.mp3';
+        $filename = dirname(__DIR__,2) . '/call-record-test.mp3';
         $this->assertStringContainsString('https://', $this->externalCall->getCallRecordUploadUrl(
             $callId,
             $filename

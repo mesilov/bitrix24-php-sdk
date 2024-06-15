@@ -60,6 +60,10 @@
         * `finishForUserId` – completes the call, registers it in the statistics and hides the call ID screen from the user
         * `show` – displays a call ID screen to the user
         * `hide` – hides call information window
+    * `Call` – work with call: 
+        * `attachTranscription` – method adds a call transcript
+    * add `TranscriptMessage` – data structure for transcript message item
+    * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum
     * add `CrmEntityType` – crm entity type enum
 
