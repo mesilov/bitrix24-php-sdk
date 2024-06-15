@@ -12,5 +12,8 @@ lint-rector-fix:
 test-unit:
 	vendor/bin/phpunit --testsuite unit_tests
 
+# integration tests with granularity by api-scope
 test-integration-scope-telephony:
 	vendor/bin/phpunit --testsuite integration_tests_scope_telephony
+test-integration-scope-workflows:
+	vendor/bin/phpunit --testsuite integration_tests_scope_workflows
