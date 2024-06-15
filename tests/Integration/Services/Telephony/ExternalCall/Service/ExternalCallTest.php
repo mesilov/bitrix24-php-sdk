@@ -26,7 +26,8 @@ use Random\RandomException;
 class ExternalCallTest extends TestCase
 {
     private ExternalCall $externalCall;
-    private ServiceBuilder $sb;
+
+    private ServiceBuilder $serviceBuilder;
 
     /**
      * @throws RandomException
@@ -37,14 +38,14 @@ class ExternalCallTest extends TestCase
     public static function callIdDataProvider(): Generator
     {
         $externalCall = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
-        $sb = Fabric::getServiceBuilder();
+        $serviceBuilder = Fabric::getServiceBuilder();
 
         $innerPhoneNumber = '123';
         // phone number to call
-        $phoneNumber = sprintf('7978' . random_int(1000000, 9999999));
-        $currentB24UserId = $sb->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+        $phoneNumber = '7978' . random_int(1000000, 9999999);
+        $currentB24UserId = $serviceBuilder->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
         // set inner phone number
-        $sb->getUserScope()->user()->update(
+        $serviceBuilder->getUserScope()->user()->update(
             $currentB24UserId,
             [
                 'UF_PHONE_INNER' => $innerPhoneNumber
@@ -71,7 +72,6 @@ class ExternalCallTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws BaseException
      * @throws TransportException
      */
@@ -83,9 +83,9 @@ class ExternalCallTest extends TestCase
         // phone number to call
         $phoneNumber = '79780000000';
 
-        $currentB24UserId = $this->sb->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+        $currentB24UserId = $this->serviceBuilder->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
         // set inner phone number
-        $this->sb->getUserScope()->user()->update(
+        $this->serviceBuilder->getUserScope()->user()->update(
             $currentB24UserId,
             [
                 'UF_PHONE_INNER' => $innerPhoneNumber
@@ -110,9 +110,6 @@ class ExternalCallTest extends TestCase
     }
 
     /**
-     * @param string $callId
-     * @param int $currentB24UserId
-     * @return void
      * @throws BaseException
      * @throws TransportException
      */
@@ -141,19 +138,19 @@ class ExternalCallTest extends TestCase
     #[TestDox('Method tests finishForUserId method')]
     public function testFinishWithUserId(string $callId, int $currentB24UserId): void
     {
-        $cost = new Money(10000, new Currency('USD'));
+        $money = new Money(10000, new Currency('USD'));
         $duration = 100;
 
         $fr = $this->externalCall->finishForUserId(
             $callId,
             $currentB24UserId,
             $duration,
-            $cost,
+            $money,
             Telephony\Common\TelephonyCallStatusCode::successful,
             true
         );
 
-        $this->assertTrue($fr->getExternalCallFinished()->COST->equals($cost));
+        $this->assertTrue($fr->getExternalCallFinished()->COST->equals($money));
         $this->assertEquals($fr->getExternalCallFinished()->CALL_DURATION, $duration);
 
     }
@@ -163,13 +160,13 @@ class ExternalCallTest extends TestCase
     #[TestDox('Method tests attachCallRecordInBase64 method')]
     public function testAttachRecordInBase64(string $callId, int $currentB24UserId): void
     {
-        $cost = new Money(10000, new Currency('USD'));
+        $money = new Money(10000, new Currency('USD'));
         $duration = 100;
-        $fr = $this->externalCall->finishForUserId(
+        $this->externalCall->finishForUserId(
             $callId,
             $currentB24UserId,
             $duration,
-            $cost,
+            $money,
             Telephony\Common\TelephonyCallStatusCode::successful,
             true
         );
@@ -185,7 +182,7 @@ class ExternalCallTest extends TestCase
     #[TestDox('Method tests getCallRecordUploadUrl method')]
     public function testGetCallRecordUploadUrl(string $callId, int $currentB24UserId): void
     {
-        $fr = $this->externalCall->finishForUserId(
+        $this->externalCall->finishForUserId(
             $callId,
             $currentB24UserId,
             100,
@@ -204,13 +201,13 @@ class ExternalCallTest extends TestCase
 
     public function testSearchCrmEntities(): void
     {
-        $res = $this->externalCall->searchCrmEntities('79780000000');
-        $this->assertGreaterThanOrEqual(0, count($res->getCrmEntities()));
+        $searchCrmEntitiesResult = $this->externalCall->searchCrmEntities('79780000000');
+        $this->assertGreaterThanOrEqual(0, count($searchCrmEntitiesResult->getCrmEntities()));
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->externalCall = Fabric::getServiceBuilder(true)->getTelephonyScope()->externalCall();
-        $this->sb = Fabric::getServiceBuilder(true);
+        $this->serviceBuilder = Fabric::getServiceBuilder(true);
     }
 }

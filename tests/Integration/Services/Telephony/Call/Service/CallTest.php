@@ -28,8 +28,8 @@ use Random\RandomException;
 class CallTest extends TestCase
 {
     private Telephony\Call\Service\Call $call;
+
     private ExternalCall $externalCall;
-    private ServiceBuilder $sb;
 
     /**
      * @throws RandomException
@@ -40,14 +40,14 @@ class CallTest extends TestCase
     public static function callIdDataProvider(): Generator
     {
         $externalCall = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
-        $sb = Fabric::getServiceBuilder();
+        $serviceBuilder = Fabric::getServiceBuilder();
 
         $innerPhoneNumber = '123';
         // phone number to call
-        $phoneNumber = sprintf('7978' . random_int(1000000, 9999999));
-        $currentB24UserId = $sb->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
+        $phoneNumber = '7978' . random_int(1000000, 9999999);
+        $currentB24UserId = $serviceBuilder->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
         // set inner phone number
-        $sb->getUserScope()->user()->update(
+        $serviceBuilder->getUserScope()->user()->update(
             $currentB24UserId,
             [
                 'UF_PHONE_INNER' => $innerPhoneNumber
@@ -82,14 +82,14 @@ class CallTest extends TestCase
     #[TestDox('Method tests attachTranscription method')]
     public function testFinishWithUserId(string $callId, int $currentB24UserId): void
     {
-        $cost = new Money(30000, new Currency('USD'));
+        $money = new Money(30000, new Currency('USD'));
         $duration = 100;
 
         $this->externalCall->finishForUserId(
             $callId,
             $currentB24UserId,
             $duration,
-            $cost,
+            $money,
             Telephony\Common\TelephonyCallStatusCode::successful,
             true
         );
@@ -102,7 +102,7 @@ class CallTest extends TestCase
 
         $res = $this->call->attachTranscription(
             $callId,
-            $cost,
+            $money,
             [
                 new TranscriptMessage(TranscriptMessageSide::user, 1, 5, "We're no strangers to love"),
                 new TranscriptMessage(TranscriptMessageSide::client, 5, 10, "You know the rules and so do I (do I)"),
@@ -122,10 +122,9 @@ class CallTest extends TestCase
         $this->assertGreaterThan(0, $res->getTranscriptAttachItem()->TRANSCRIPT_ID);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->call = Fabric::getServiceBuilder(true)->getTelephonyScope()->call();
         $this->externalCall = Fabric::getServiceBuilder(true)->getTelephonyScope()->externalCall();
-        $this->sb = Fabric::getServiceBuilder(true);
     }
 }
