@@ -18,6 +18,10 @@ return RectorConfig::configure()
             PHPUnitSetList::PHPUNIT_100
         ]
     )
+    ->withImportNames(
+        importNames: false,
+        removeUnusedImports: true
+    )
     ->withPhpSets(
         php82: true   // 8.2
     )

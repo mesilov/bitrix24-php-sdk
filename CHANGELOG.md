@@ -62,6 +62,10 @@
         * `hide` – hides call information window
     * `Call` – work with call: 
         * `attachTranscription` – method adds a call transcript
+  * `Call` – work with external line:
+      * `add` – method adds an external line 
+      * `delete` – method delete external line 
+      * `get` – method gets external lines list 
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum

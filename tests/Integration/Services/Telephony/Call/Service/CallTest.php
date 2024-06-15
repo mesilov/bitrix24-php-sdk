@@ -7,8 +7,6 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Call\Service;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Services\Telephony;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessage;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessageSide;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Service\ExternalCall;
@@ -23,6 +21,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Random\RandomException;
+use Bitrix24\SDK\Services\Telephony;
 
 #[CoversClass(Telephony\Call\Service\Call::class)]
 class CallTest extends TestCase
