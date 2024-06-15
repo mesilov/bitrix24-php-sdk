@@ -29,9 +29,24 @@ class SipTest extends TestCase
     #[TestDox('Method tests sip get method')]
     public function testGet(): void
     {
-        $this->assertGreaterThan(0, count($this->sip->get()->getLines()));
+        $sipTitle = 'test sip - ' . Uuid::v4()->toRfc4122();
+        $serverUrl = 'supersip.io';
+        $login = Uuid::v4()->toRfc4122();
+        $password = Uuid::v4()->toRfc4122();
+
+        $addedLine = $this->sip->add(
+            PbxType::cloud,
+            $sipTitle,
+            $serverUrl,
+            $login,
+            $password
+        );
+        $this->assertGreaterThanOrEqual(1, count($this->sip->get()->getLines()));
+        $this->assertTrue($this->sip->delete($addedLine->getLine()->CONFIG_ID)->isSuccess());
     }
 
+    #[Test]
+    #[TestDox('Method tests sip delete line method')]
     public function testDelete(): void
     {
         $sipTitle = 'test sip - ' . Uuid::v4()->toRfc4122();
@@ -79,6 +94,42 @@ class SipTest extends TestCase
         $this->assertEquals($password, $addedLine->getLine()->PASSWORD);
 
         $this->sip->delete($addedLine->getLine()->CONFIG_ID)->isSuccess();
+    }
+
+    #[Test]
+    #[TestDox('Method tests sip get line status method')]
+    public function testStatus(): void
+    {
+        $sipTitle = 'test sip - ' . Uuid::v4()->toRfc4122();
+        $serverUrl = 'supersip.io';
+        $login = Uuid::v4()->toRfc4122();
+        $password = Uuid::v4()->toRfc4122();
+
+        $addedLine = $this->sip->add(
+            PbxType::cloud,
+            $sipTitle,
+            $serverUrl,
+            $login,
+            $password
+        );
+
+        $sipLineStatus = $this->sip->status($addedLine->getLine()->REG_ID)->getStatus();
+        $this->assertEquals($addedLine->getLine()->REG_ID, $sipLineStatus->REG_ID);
+
+        $this->sip->delete($addedLine->getLine()->CONFIG_ID);
+    }
+
+    /**
+     * @throws TransportException
+     * @throws BaseException
+     */
+    protected function tearDown(): void
+    {
+        //delete all cloud pbx
+        $lines = $this->sip->get()->getLines();
+        foreach ($lines as $line) {
+            $this->sip->delete($line->CONFIG_ID);
+        }
     }
 
     protected function setUp(): void
