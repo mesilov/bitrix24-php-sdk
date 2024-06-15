@@ -23,7 +23,7 @@ return RectorConfig::configure()
         importNames: false,
         importDocBlockNames: false,
         importShortClasses: false,
-        removeUnusedImports: true,
+        removeUnusedImports: false,
     )
     ->withPhpSets(
         php82: true   // 8.2
