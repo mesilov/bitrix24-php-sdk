@@ -71,11 +71,13 @@
           * `get` - get sip lines list
           * `add` - add new sip line
           * `delete` - delete sip line
+          * `status` - pbx sip line registration status
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum
     * add `CrmEntityType` – crm entity type enum
     * add `PbxType` – pbx type enum
+    * add `SipRegistrationStatus` – pbx sip line registration status 
 
 ## 2.0-beta.2 — 1.04.2024
 

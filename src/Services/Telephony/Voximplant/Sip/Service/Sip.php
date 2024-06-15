@@ -15,6 +15,8 @@ use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLineAddedResult;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLinesResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineAddedResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLinesResult;
+use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineStatusItemResult;
+use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineStatusResult;
 use Psr\Log\LoggerInterface;
 
 class Sip extends AbstractService
@@ -79,5 +81,22 @@ class Sip extends AbstractService
     public function get(): SipLinesResult
     {
         return new SipLinesResult($this->core->call('voximplant.sip.get'));
+    }
+
+    /**
+     * Returns the current status of the SIP registration (for cloud hosted PBX only).
+     *
+     * This method is available to the user with granted access permissions for Manage numbers - Edit - Any.
+     *
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_status.php
+     * @param int $sipRegistrationId SIP registration identifier.
+     * @throws BaseException
+     * @throws TransportException
+     */
+    public function status(int $sipRegistrationId): SipLineStatusResult
+    {
+        return new SipLineStatusResult($this->core->call('voximplant.sip.status', [
+            'REG_ID' => $sipRegistrationId
+        ]));
     }
 }
