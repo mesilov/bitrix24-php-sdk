@@ -21,6 +21,7 @@ use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\ExternalCallFinishedResu
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\ExternalCallRegisteredResult;
 use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\SearchCrmEntitiesResult;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLineAddedResult;
+use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLinesResult;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\Batch;
 use Carbon\CarbonImmutable;
 use Money\Money;
@@ -55,5 +56,17 @@ class ExternalLine extends AbstractService
             'NAME' => $lineName,
             'CRM_AUTO_CREATE' => $isAutoCreateCrmEntities ? 'Y' : 'N'
         ]));
+    }
+
+    /**
+     * Method allows to retrieve the list of external lines of an application.
+     *
+     * @throws BaseException
+     * @throws TransportException
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_get.php
+     */
+    public function get(): ExternalLinesResult
+    {
+        return new ExternalLinesResult($this->core->call('telephony.externalLine.get'));
     }
 }
