@@ -11,3 +11,6 @@ lint-rector-fix:
 
 test-unit:
 	vendor/bin/phpunit --testsuite unit_tests
+
+test-integration-scope-telephony:
+	vendor/bin/phpunit --testsuite integration_tests_scope_telephony
