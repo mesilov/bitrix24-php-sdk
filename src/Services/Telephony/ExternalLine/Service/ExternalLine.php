@@ -9,6 +9,8 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Result\AbstractResult;
+use Bitrix24\SDK\Core\Result\EmptyResult;
 use Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult;
 use Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder;
 use Bitrix24\SDK\Services\AbstractService;
@@ -55,6 +57,22 @@ class ExternalLine extends AbstractService
             'NUMBER' => $lineNumber,
             'NAME' => $lineName,
             'CRM_AUTO_CREATE' => $isAutoCreateCrmEntities ? 'Y' : 'N'
+        ]));
+    }
+
+    /**
+     * Method for deleting an external line.
+     *
+     * @param string $lineNumber
+     * @return EmptyResult
+     * @throws BaseException
+     * @throws TransportException
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_delete.php
+     */
+    public function delete(string $lineNumber): EmptyResult
+    {
+        return new EmptyResult($this->core->call('telephony.externalLine.delete', [
+            'NUMBER' => $lineNumber
         ]));
     }
 

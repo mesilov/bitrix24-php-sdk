@@ -11,6 +11,7 @@ use Bitrix24\SDK\Services\ServiceBuilder;
 use Bitrix24\SDK\Services\Telephony;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessage;
 use Bitrix24\SDK\Services\Telephony\Common\TranscriptMessageSide;
+use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\ExternalLine;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Carbon\CarbonImmutable;
 use Generator;
@@ -23,52 +24,11 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Random\RandomException;
 
-#[CoversClass(Telephony\ExternalLine\Service\ExternalLine::class)]
+#[CoversClass(ExternalLine::class)]
+#[CoversClass(ExternalLine::class)]
 class ExternalLineTest extends TestCase
 {
-    private Telephony\ExternalLine\Service\ExternalLine $externalLine;
-
-    /**
-     * @throws RandomException
-     * @throws InvalidArgumentException
-     * @throws BaseException
-     * @throws TransportException
-     */
-    public static function callIdDataProvider(): Generator
-    {
-        $externalCall = Fabric::getServiceBuilder()->getTelephonyScope()->externalCall();
-        $serviceBuilder = Fabric::getServiceBuilder();
-
-        $innerPhoneNumber = '123';
-        // phone number to call
-        $phoneNumber = '7978' . random_int(1000000, 9999999);
-        $currentB24UserId = $serviceBuilder->getMainScope()->main()->getCurrentUserProfile()->getUserProfile()->ID;
-        // set inner phone number
-        $serviceBuilder->getUserScope()->user()->update(
-            $currentB24UserId,
-            [
-                'UF_PHONE_INNER' => $innerPhoneNumber
-            ]
-        );
-        $res = $externalCall->register(
-            $innerPhoneNumber,
-            $currentB24UserId,
-            $phoneNumber,
-            CarbonImmutable::now(),
-            Telephony\Common\CallType::outbound,
-            true,
-            true,
-            '3333',
-            null,
-            Telephony\Common\CrmEntityType::contact
-
-        );
-
-        yield 'default callId' => [
-            $res->getExternalCallRegistered()->CALL_ID,
-            $currentB24UserId
-        ];
-    }
+    private ExternalLine $externalLine;
 
     /**
      * @throws TransportException
@@ -81,6 +41,30 @@ class ExternalLineTest extends TestCase
         $lineNumber = (string)time();
         $res = $this->externalLine->add($lineNumber, true, sprintf('line-name-%s', $lineNumber));
         $this->assertGreaterThan(0, $res->getExternalLineAddResultItem()->ID);
+        $this->assertContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
+    }
+
+    #[Test]
+    #[TestDox('Method tests get external lines method')]
+    public function testGetExternalLine(): void
+    {
+        $externalLinesResult = $this->externalLine->get();
+        $this->assertGreaterThan(1, count($externalLinesResult->getExternalLines()));
+    }
+
+    #[Test]
+    #[TestDox('Method tests delete external line method')]
+    public function testDeleteExternalLine(): void
+    {
+        $lineNumber = (string)time();
+        $this->externalLine->add($lineNumber, true, sprintf('line-name-%s', $lineNumber));
+
+        $this->assertContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
+
+        $deleteRes = $this->externalLine->delete($lineNumber);
+        $this->assertEquals([], $deleteRes->getCoreResponse()->getResponseData()->getResult());
+
+        $this->assertNotContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
     }
 
     protected function setUp(): void
