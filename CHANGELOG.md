@@ -72,6 +72,7 @@
           * `add` - add new sip line
           * `delete` - delete sip line
           * `status` - pbx sip line registration status
+          * `update` - update sip line settings
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum

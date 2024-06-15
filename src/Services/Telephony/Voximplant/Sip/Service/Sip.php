@@ -6,9 +6,11 @@ namespace Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Service;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\EmptyResult;
+use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Telephony\Common\PbxType;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLineAddedResult;
@@ -98,5 +100,50 @@ class Sip extends AbstractService
         return new SipLineStatusResult($this->core->call('voximplant.sip.status', [
             'REG_ID' => $sipRegistrationId
         ]));
+    }
+
+    /**
+     * Updates the existing SIP line (created by the application).
+     *
+     * This method is available to the user with granted access permissions for Manage numbers - Edit - Any.
+     *
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_update.php
+     * @throws InvalidArgumentException
+     */
+    public function update(int     $sipConfigId,
+                           PbxType $pbxType,
+                           ?string $title = null,
+                           ?string $serverUrl = null,
+                           ?string $login = null,
+                           ?string $password = null): UpdatedItemResult
+    {
+        $fieldsForUpdate = [];
+        if ($title !== null) {
+            $fieldsForUpdate['TITLE'] = $title;
+        }
+
+        if ($serverUrl !== null) {
+            $fieldsForUpdate['SERVER'] = $serverUrl;
+        }
+
+        if ($login !== null) {
+            $fieldsForUpdate['LOGIN'] = $login;
+        }
+
+        if ($password !== null) {
+            $fieldsForUpdate['PASSWORD'] = $password;
+        }
+
+        if ($fieldsForUpdate === []) {
+            throw new InvalidArgumentException('you must set minimum one field: title, server, login, password');
+        }
+
+        return new UpdatedItemResult($this->core->call('voximplant.sip.update',
+            array_merge([
+                'CONFIG_ID' => $sipConfigId,
+                'TYPE' => $pbxType->name
+            ],
+                $fieldsForUpdate)
+        ));
     }
 }

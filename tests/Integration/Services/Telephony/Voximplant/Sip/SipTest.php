@@ -97,6 +97,34 @@ class SipTest extends TestCase
     }
 
     #[Test]
+    #[TestDox('Method tests sip update line method')]
+    public function testUpdate(): void
+    {
+        $sipTitle = 'test sip - ' . Uuid::v4()->toRfc4122();
+        $serverUrl = 'supersip.io';
+        $login = Uuid::v4()->toRfc4122();
+        $password = Uuid::v4()->toRfc4122();
+
+        $addedLine = $this->sip->add(
+            PbxType::cloud,
+            $sipTitle,
+            $serverUrl,
+            $login,
+            $password
+        );
+
+        $newTitle = 'test sip updated title - ' . Uuid::v4()->toRfc4122();
+        $this->assertTrue($this->sip->update(
+            $addedLine->getLine()->CONFIG_ID,
+            $addedLine->getLine()->TYPE,
+            $newTitle
+        )->isSuccess());
+
+
+        $this->sip->delete($addedLine->getLine()->CONFIG_ID)->isSuccess();
+    }
+
+    #[Test]
     #[TestDox('Method tests sip get line status method')]
     public function testStatus(): void
     {
