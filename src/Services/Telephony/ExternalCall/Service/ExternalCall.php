@@ -30,10 +30,10 @@ class ExternalCall extends AbstractService
         readonly public Batch          $batch,
         private readonly Base64Encoder $base64Encoder,
         CoreInterface                  $core,
-        LoggerInterface                $log
+        LoggerInterface                $logger
     )
     {
-        parent::__construct($core, $log);
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -41,7 +41,6 @@ class ExternalCall extends AbstractService
      *
      * @param non-empty-string $callId
      * @param non-empty-string $callRecordFileName
-     * @return CallRecordUploadUrlResult
      * @throws BaseException
      * @throws InvalidArgumentException
      * @throws TransportException
@@ -65,7 +64,6 @@ class ExternalCall extends AbstractService
      *
      * @param non-empty-string $callId
      * @param non-empty-string $callRecordFileName
-     * @return CallRecordFileUploadedResult
      * @throws BaseException
      * @throws InvalidArgumentException
      * @throws TransportException
@@ -123,7 +121,6 @@ class ExternalCall extends AbstractService
      * @param CrmEntityType|null $crmEntityType Type of CRM object, from the details card of which the call is made - CONTACT | COMPANY | LEAD.
      * @param int|null $crmEntityId CRM object ID, type of which is specified in CRM_ENTITY_TYPE
      * @param int|null $callListId Call dialing list ID, to which the call should be connected.
-     * @return ExternalCallRegisteredResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_register.php
@@ -150,7 +147,7 @@ class ExternalCall extends AbstractService
                     'USER_ID' => $b24UserId,
                     'PHONE_NUMBER' => $phoneNumber,
                     'CALL_START_DATE' => $callStartDate->format(DATE_ATOM),
-                    'CRM_CREATE' => $isCreateCrmEntities ? 1 : 0,
+                    'CRM_CREATE' => $isCreateCrmEntities === true ? 1 : 0,
                     'CRM_SOURCE' => $sourceId,
                     'CRM_ENTITY_TYPE' => $crmEntityType?->value,
                     'CRM_ENTITY_ID' => $crmEntityId,
@@ -201,12 +198,7 @@ class ExternalCall extends AbstractService
      * @param non-empty-string $callId
      * @param non-empty-string $userInnerPhoneNumber
      * @param non-negative-int $duration
-     * @param Money $callCost
-     * @param TelephonyCallStatusCode $callStatus
-     * @param bool $isAddCallToChat
      * @param non-empty-string|null $failedReason
-     * @param int|null $userVote
-     * @return ExternalCallFinishedResult
      * @throws BaseException
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php
@@ -215,8 +207,8 @@ class ExternalCall extends AbstractService
         string                  $callId,
         string                  $userInnerPhoneNumber,
         int                     $duration,
-        Money                   $callCost,
-        TelephonyCallStatusCode $callStatus,
+        Money                   $money,
+        TelephonyCallStatusCode $telephonyCallStatusCode,
         bool                    $isAddCallToChat = false,
         ?string                 $failedReason = null,
         ?int                    $userVote = null,
@@ -227,9 +219,9 @@ class ExternalCall extends AbstractService
                 'CALL_ID' => $callId,
                 'USER_ID' => $userInnerPhoneNumber,
                 'DURATION' => $duration,
-                'COST' => $this->decimalMoneyFormatter->format($callCost),
-                'COST_CURRENCY' => $callCost->getCurrency()->getCode(),
-                'STATUS_CODE' => $callStatus->value,
+                'COST' => $this->decimalMoneyFormatter->format($money),
+                'COST_CURRENCY' => $money->getCurrency()->getCode(),
+                'STATUS_CODE' => $telephonyCallStatusCode->value,
                 'FAILED_REASON' => $failedReason,
                 'VOTE' => $userVote,
                 'ADD_TO_CHAT' => $isAddCallToChat ? 1 : 0
@@ -242,12 +234,7 @@ class ExternalCall extends AbstractService
      * @param non-empty-string $callId
      * @param positive-int $b24UserId
      * @param non-negative-int $duration
-     * @param Money $callCost
-     * @param TelephonyCallStatusCode $callStatus
-     * @param bool $isAddCallToChat
      * @param non-empty-string|null $failedReason
-     * @param int|null $userVote
-     * @return ExternalCallFinishedResult
      * @throws BaseException
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php
@@ -256,8 +243,8 @@ class ExternalCall extends AbstractService
         string                  $callId,
         int                     $b24UserId,
         int                     $duration,
-        Money                   $callCost,
-        TelephonyCallStatusCode $callStatus,
+        Money                   $money,
+        TelephonyCallStatusCode $telephonyCallStatusCode,
         bool                    $isAddCallToChat = false,
         ?string                 $failedReason = null,
         ?int                    $userVote = null,
@@ -268,9 +255,9 @@ class ExternalCall extends AbstractService
                 'CALL_ID' => $callId,
                 'USER_ID' => $b24UserId,
                 'DURATION' => $duration,
-                'COST' => $this->decimalMoneyFormatter->format($callCost),
-                'COST_CURRENCY' => $callCost->getCurrency()->getCode(),
-                'STATUS_CODE' => $callStatus->value,
+                'COST' => $this->decimalMoneyFormatter->format($money),
+                'COST_CURRENCY' => $money->getCurrency()->getCode(),
+                'STATUS_CODE' => $telephonyCallStatusCode->value,
                 'FAILED_REASON' => $failedReason,
                 'VOTE' => $userVote,
                 'ADD_TO_CHAT' => $isAddCallToChat ? 1 : 0
@@ -282,7 +269,6 @@ class ExternalCall extends AbstractService
      *
      * @param non-empty-string $callId
      * @param array<int> $b24UserId
-     * @return UserInterfaceDialogCallResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_show.php
@@ -301,7 +287,6 @@ class ExternalCall extends AbstractService
      *
      * @param non-empty-string $callId
      * @param array<int> $b24UserId
-     * @return UserInterfaceDialogCallResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_hide.php

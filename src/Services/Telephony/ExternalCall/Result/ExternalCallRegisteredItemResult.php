@@ -31,6 +31,7 @@ class ExternalCallRegisteredItemResult extends AbstractItem
                         CrmEntityType::from($item['ENTITY_TYPE'])
                     );
                 }
+
                 return $res;
             default:
                 return $this->data[$offset] ?? null;
@@ -42,6 +43,7 @@ class ExternalCallRegisteredItemResult extends AbstractItem
         if (!$this->isKeyExists('LEAD_CREATION_ERROR')) {
             return false;
         }
+
         return $this->data['LEAD_CREATION_ERROR'] !== '' && $this->data['LEAD_CREATION_ERROR'] !== null;
     }
 }

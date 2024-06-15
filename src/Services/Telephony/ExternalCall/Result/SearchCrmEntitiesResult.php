@@ -19,6 +19,7 @@ class SearchCrmEntitiesResult extends AbstractResult
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $item) {
             $res[] = new SearchCrmEntitiesItemResult($item);
         }
+
         return $res;
     }
 }

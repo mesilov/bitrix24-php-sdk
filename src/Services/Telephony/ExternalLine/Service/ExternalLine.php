@@ -6,27 +6,12 @@ namespace Bitrix24\SDK\Services\Telephony\ExternalLine\Service;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
-use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\AbstractResult;
 use Bitrix24\SDK\Core\Result\EmptyResult;
-use Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult;
-use Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\Telephony\Common\CallType;
-use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
-use Bitrix24\SDK\Services\Telephony\Common\TelephonyCallStatusCode;
-use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\CallRecordFileUploadedResult;
-use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\CallRecordUploadUrlResult;
-use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\ExternalCallFinishedResult;
-use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\ExternalCallRegisteredResult;
-use Bitrix24\SDK\Services\Telephony\ExternalCall\Result\SearchCrmEntitiesResult;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLineAddedResult;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLinesResult;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\Batch;
-use Carbon\CarbonImmutable;
-use Money\Money;
 use Psr\Log\LoggerInterface;
 
 class ExternalLine extends AbstractService
@@ -34,10 +19,10 @@ class ExternalLine extends AbstractService
     public function __construct(
         readonly public Batch $batch,
         CoreInterface         $core,
-        LoggerInterface       $log
+        LoggerInterface       $logger
     )
     {
-        parent::__construct($core, $log);
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -63,8 +48,6 @@ class ExternalLine extends AbstractService
     /**
      * Method for deleting an external line.
      *
-     * @param string $lineNumber
-     * @return EmptyResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_delete.php

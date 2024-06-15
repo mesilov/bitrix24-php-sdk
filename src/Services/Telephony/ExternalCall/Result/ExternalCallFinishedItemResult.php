@@ -9,7 +9,6 @@ use Bitrix24\SDK\Services\Telephony\Common\CrmEntity;
 use Bitrix24\SDK\Services\Telephony\Common\CrmEntityType;
 use Money\Currency;
 use Money\Money;
-use Money\Parser\DecimalMoneyParser;
 
 /**
  * @property-read  string $CALL_ID Call ID inside Bitrix24.
@@ -63,6 +62,7 @@ class ExternalCallFinishedItemResult extends AbstractItem
                         CrmEntityType::from($item['ENTITY_TYPE'])
                     );
                 }
+
                 return $res;
             default:
                 return $this->data[$offset] ?? null;

@@ -14,6 +14,7 @@ class ExternalLinesResult extends AbstractResult
         foreach ($this->getCoreResponse()->getResponseData()->getResult() as $line) {
             $lines[] = new ExternalLineItemResult($line);
         }
+
         return $lines;
     }
 }

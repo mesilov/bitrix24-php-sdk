@@ -18,16 +18,11 @@ class SearchCrmEntitiesItemResult extends AbstractItem
 {
     public function __get($offset)
     {
-        switch ($offset) {
-            case'CRM_ENTITY_TYPE':
-                return CrmEntityType::from($this->data[$offset]);
-            case 'CRM_ENTITY_ID':
-            case 'ASSIGNED_BY_ID':
-                return (int)$this->data[$offset];
-            case 'ASSIGNED_BY':
-                return new UserDigestItemResult($this->data[$offset]);
-            default:
-                return $this->data[$offset] ?? null;
-        }
+        return match ($offset) {
+            'CRM_ENTITY_TYPE' => CrmEntityType::from($this->data[$offset]),
+            'CRM_ENTITY_ID', 'ASSIGNED_BY_ID' => (int)$this->data[$offset],
+            'ASSIGNED_BY' => new UserDigestItemResult($this->data[$offset]),
+            default => $this->data[$offset] ?? null,
+        };
     }
 }
