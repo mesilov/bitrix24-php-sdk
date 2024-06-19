@@ -9,19 +9,20 @@ use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-
+#[CoversClass(Credentials::class)]
 class CredentialsTest extends TestCase
 {
-    /**
-     * @dataProvider credentialsDataProviderWithDomainUrlVariants
-     *
-     * @param \Bitrix24\SDK\Core\Credentials\Credentials $credentials
-     * @param                                            $expectedDomainUrl
-     *
-     * @return void
-     */
+    #[Test]
+    #[TestDox('tests get domain url')]
+    #[DataProvider('credentialsDataProviderWithDomainUrlVariants')]
     public function testGetDomainUrl(
         Credentials $credentials,
         $expectedDomainUrl
@@ -31,9 +32,11 @@ class CredentialsTest extends TestCase
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws InvalidArgumentException
+     * @throws UnknownScopeCodeException
      */
+    #[Test]
+    #[TestDox('tests get domain url without protocol')]
     public function testDomainUrlWithoutProtocol(): void
     {
         $credentials = Credentials::createFromOAuth(
@@ -46,12 +49,25 @@ class CredentialsTest extends TestCase
             $credentials->getDomainUrl()
         );
     }
+    #[Test]
+    #[TestDox('tests isWebhookContext')]
+    public function testIsWebhookContext():void
+    {
+        $credentials = Credentials::createFromOAuth(
+            new AccessToken('', '', 0),
+            new ApplicationProfile('', '', new Scope(['crm'])),
+            'bitrix24-php-sdk-playground.bitrix24.ru'
+        );
+        $this->assertFalse($credentials->isWebhookContext());
+    }
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws InvalidArgumentException
+     * @throws UnknownScopeCodeException
      */
+    #[Test]
+    #[TestDox('tests domain url with protocol')]
     public function testDomainUrlWithProtocol(): void
     {
         $credentials = Credentials::createFromOAuth(
@@ -66,9 +82,9 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * @return \Generator
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @return Generator
+     * @throws InvalidArgumentException
+     * @throws UnknownScopeCodeException
      */
     public static function credentialsDataProviderWithDomainUrlVariants(): Generator
     {

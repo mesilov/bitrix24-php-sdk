@@ -7,11 +7,6 @@ namespace Bitrix24\SDK\Core\Credentials;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Application\Requests\Placement\PlacementRequest;
 
-/**
- * Class Credentials
- *
- * @package Bitrix24\SDK\Core\Credentials
- */
 class Credentials
 {
     protected ?WebhookUrl $webhookUrl;
@@ -22,19 +17,20 @@ class Credentials
     /**
      * Credentials constructor.
      *
-     * @param WebhookUrl|null         $webhookUrl
-     * @param AccessToken|null        $accessToken
+     * @param WebhookUrl|null $webhookUrl
+     * @param AccessToken|null $accessToken
      * @param ApplicationProfile|null $applicationProfile
-     * @param string|null             $domainUrl
+     * @param string|null $domainUrl
      *
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
-        ?WebhookUrl $webhookUrl,
-        ?AccessToken $accessToken,
+        ?WebhookUrl         $webhookUrl,
+        ?AccessToken        $accessToken,
         ?ApplicationProfile $applicationProfile,
-        ?string $domainUrl
-    ) {
+        ?string             $domainUrl
+    )
+    {
         $this->webhookUrl = $webhookUrl;
         $this->accessToken = $accessToken;
         $this->applicationProfile = $applicationProfile;
@@ -65,7 +61,7 @@ class Credentials
      * @param string $domainUrl
      *
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setDomainUrl(string $domainUrl): void
     {
@@ -78,6 +74,11 @@ class Credentials
             throw new InvalidArgumentException(sprintf('domain URL %s is invalid', $domainUrl));
         }
         $this->domainUrl = $domainUrl;
+    }
+
+    public function isWebhookContext(): bool
+    {
+        return $this->webhookUrl !== null && $this->accessToken === null;
     }
 
     /**
@@ -122,7 +123,7 @@ class Credentials
      * @param WebhookUrl $webhookUrl
      *
      * @return self
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function createFromWebhook(WebhookUrl $webhookUrl): self
     {
@@ -135,12 +136,12 @@ class Credentials
     }
 
     /**
-     * @param AccessToken        $accessToken
+     * @param AccessToken $accessToken
      * @param ApplicationProfile $applicationProfile
-     * @param string             $domainUrl
+     * @param string $domainUrl
      *
      * @return self
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function createFromOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
     {
@@ -154,10 +155,10 @@ class Credentials
 
     /**
      * @param \Bitrix24\SDK\Application\Requests\Placement\PlacementRequest $placementRequest
-     * @param \Bitrix24\SDK\Core\Credentials\ApplicationProfile             $applicationProfile
+     * @param \Bitrix24\SDK\Core\Credentials\ApplicationProfile $applicationProfile
      *
      * @return self
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function createFromPlacementRequest(PlacementRequest $placementRequest, ApplicationProfile $applicationProfile): self
     {

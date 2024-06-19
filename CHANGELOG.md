@@ -40,13 +40,15 @@
         * `list` – List of workflow tasks
     * add `WorkflowActivityDocumentType`
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
-* add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
-* add `\Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
-* add `\Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult` result of call UI
+* add `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
+* add `Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+* add `Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException` if api call waiting for confirm
+* add `Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult` result of call UI
 * add `IncomingRobotRequest` wrapper for data from crm-robot request
 * add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
 * add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
 * add `Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException` exception if user not found, or it is not active
+* add `Bitrix24\SDK\Core\Credentials::isWebhookContext` - for check is current context init from webhook
 
 ### Changed
 
@@ -56,29 +58,31 @@
         * `attachCallRecordInBase64` – attach call record encoded in base64
         * `register` – registers a call in Bitrix24
         * `searchCrmEntities` – retrieve information about a client from CRM by a telephone number via single request
-        * `finishForUserPhoneInner` – completes the call, registers it in the statistics and hides the call ID screen from the user
-        * `finishForUserId` – completes the call, registers it in the statistics and hides the call ID screen from the user
+        * `finishForUserPhoneInner` – completes the call, registers it in the statistics and hides the call ID screen
+          from the user
+        * `finishForUserId` – completes the call, registers it in the statistics and hides the call ID screen from the
+          user
         * `show` – displays a call ID screen to the user
         * `hide` – hides call information window
-    * `Call` – work with call: 
+    * `Call` – work with call:
         * `attachTranscription` – method adds a call transcript
     * `ExternalLine` – work with external line:
-        * `add` – method adds an external line 
-        * `delete` – method delete external line 
-        * `get` – method gets external lines list 
+        * `add` – method adds an external line
+        * `delete` – method delete external line
+        * `get` – method gets external lines list
     * `Voximplant` – work with voximplant namespace:
         * `Sip` – work with sip lines:
-          * `get` - get sip lines list
-          * `add` - add new sip line
-          * `delete` - delete sip line
-          * `status` - pbx sip line registration status
-          * `update` - update sip line settings
+            * `get` - get sip lines list
+            * `add` - add new sip line
+            * `delete` - delete sip line
+            * `status` - pbx sip line registration status
+            * `update` - update sip line settings
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum
     * add `CrmEntityType` – crm entity type enum
     * add `PbxType` – pbx type enum
-    * add `SipRegistrationStatus` – pbx sip line registration status 
+    * add `SipRegistrationStatus` – pbx sip line registration status
 
 ## 2.0-beta.2 — 1.04.2024
 
