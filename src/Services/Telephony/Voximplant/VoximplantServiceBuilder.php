@@ -36,4 +36,30 @@ class VoximplantServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function infoCall(): Telephony\Voximplant\InfoCall\Service\InfoCall
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Telephony\Voximplant\InfoCall\Service\InfoCall(
+                new Telephony\Voximplant\InfoCall\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function ttsVoices(): Telephony\Voximplant\TTS\Voices\Service\Voices
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Telephony\Voximplant\TTS\Voices\Service\Voices(
+                new Telephony\Voximplant\TTS\Voices\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

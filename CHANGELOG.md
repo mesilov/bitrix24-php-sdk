@@ -52,7 +52,7 @@
 
 ### Changed
 
-* update scope `telephony`, scope fully rewritten
+* ❗️ update scope `telephony`, scope fully rewritten
     * `ExternalCall` – work with external call:
         * `getCallRecordUploadUrl` – get url for upload call record file
         * `attachCallRecordInBase64` – attach call record encoded in base64
@@ -81,6 +81,12 @@
             * `deactivatePhone` - method disables an indicator of SIP-phone availability
             * `activatePhone` - method raises the event of SIP-phone availability for an employee
             * `get` - method returns user settings
+        * `Voices` - work with voximplant tts voices
+            * `get` - method returns all voximplant voices
+        * `InfoCall` - work with voximplant info call functional
+            * `startWithText` - method performs the call to the specified number with automatic voiceover of specified
+              text
+            * `startWithSound` - method makes a call to the specified number with playback of .mp3 format file by URL.
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum
