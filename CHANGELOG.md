@@ -1,6 +1,6 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.3 — 1.05.2024
+## 2.0-beta.3 — 1.07.2024
 
 ### Added
 
@@ -77,6 +77,10 @@
             * `delete` - delete sip line
             * `status` - pbx sip line registration status
             * `update` - update sip line settings
+        * `User` - work with voximplant sip user mapped on bitrix24 user
+            * `deactivatePhone` - method disables an indicator of SIP-phone availability
+            * `activatePhone` - method raises the event of SIP-phone availability for an employee
+            * `get` - method returns user settings
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum

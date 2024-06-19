@@ -23,4 +23,17 @@ class VoximplantServiceBuilder extends AbstractServiceBuilder
 
         return $this->serviceCache[__METHOD__];
     }
+
+    public function user(): Telephony\Voximplant\User\Service\User
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Telephony\Voximplant\User\Service\User(
+                new Telephony\Voximplant\User\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }
