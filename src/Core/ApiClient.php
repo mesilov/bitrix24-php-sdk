@@ -133,6 +133,9 @@ class ApiClient implements ApiClientInterface
             return $newAccessToken;
         }
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
+            $this->logger->warning('getNewAccessToken.badRequest',[
+                'url'=> $url
+            ]);
             throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
         }
         throw new TransportException('getting new access token failure with unknown http-status code %s', $response->getStatusCode());
