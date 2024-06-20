@@ -65,7 +65,6 @@ class Line extends AbstractService
      * This method is available to the user with granted access permissions for Manage numbers - Edit - Any.
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_line_outgoing_set.php
      * @param string $lineId Line identifier obtained from the method voximplant.line.get or voximplant.line.outgoing.get.
-     * @return UserInterfaceDialogCallResult
      * @throws BaseException
      * @throws TransportException
      */

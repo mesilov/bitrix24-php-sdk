@@ -30,8 +30,8 @@ class VoicesTest extends TestCase
     #[TestDox('test list available voices for generation of speech')]
     public function testGet(): void
     {
-        $res = $this->voices->get();
-        $this->assertGreaterThanOrEqual(1, count($res->getVoices()));
+        $voximplantVoicesResult = $this->voices->get();
+        $this->assertGreaterThanOrEqual(1, count($voximplantVoicesResult->getVoices()));
     }
 
     protected function setUp(): void

@@ -24,6 +24,7 @@ use Symfony\Component\Uid\Uuid;
 class LineTest extends TestCase
 {
     private Line $line;
+
     private Sip $sip;
 
     #[Test]
