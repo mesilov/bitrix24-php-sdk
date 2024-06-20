@@ -77,6 +77,7 @@
             * `delete` - delete sip line
             * `status` - pbx sip line registration status
             * `update` - update sip line settings
+            * `getConnectorStatus` - returns the current status of the SIP Connector.
         * `User` - work with voximplant sip user mapped on bitrix24 user
             * `deactivatePhone` - method disables an indicator of SIP-phone availability
             * `activatePhone` - method raises the event of SIP-phone availability for an employee

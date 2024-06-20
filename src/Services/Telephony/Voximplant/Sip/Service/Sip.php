@@ -9,15 +9,12 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\EmptyResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Telephony\Common\PbxType;
-use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLineAddedResult;
-use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLinesResult;
+use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipConnectorStatusResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineAddedResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLinesResult;
-use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineStatusItemResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineStatusResult;
 use Psr\Log\LoggerInterface;
 
@@ -30,6 +27,19 @@ class Sip extends AbstractService
     )
     {
         parent::__construct($core, $logger);
+    }
+
+    /**
+     * Returns the current status of the SIP Connector.
+     *
+     * This method is available to the user with granted access permissions for Manage numbers - Edit - Any.
+     * @throws BaseException
+     * @throws TransportException
+     * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_connector_status.php
+     */
+    public function getConnectorStatus(): SipConnectorStatusResult
+    {
+        return new SipConnectorStatusResult($this->core->call('voximplant.sip.connector.status'));
     }
 
     /**

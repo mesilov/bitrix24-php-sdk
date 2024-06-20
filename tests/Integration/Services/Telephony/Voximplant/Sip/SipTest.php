@@ -7,7 +7,6 @@ namespace Bitrix24\SDK\Tests\Integration\Services\Telephony\Voximplant\Sip;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\Telephony\Common\PbxType;
-use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\ExternalLine;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Service\Sip;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,6 +19,13 @@ use Symfony\Component\Uid\Uuid;
 class SipTest extends TestCase
 {
     private Sip $sip;
+
+    #[Test]
+    #[TestDox('Method tests return current status of the SIP Connector')]
+    public function testGetConnectorStatus():void
+    {
+        $this->assertGreaterThanOrEqual(0, $this->sip->getConnectorStatus()->getStatus()->FREE_MINUTES);
+    }
 
     /**
      * @throws TransportException
