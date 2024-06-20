@@ -92,6 +92,8 @@
             * `startWithText` - method performs the call to the specified number with automatic voiceover of specified
               text
             * `startWithSound` - method makes a call to the specified number with playback of .mp3 format file by URL.
+        * `Url` - work with links for browsing telephony scope pages
+            * `get` - returns a set of links for browsing telephony scope pages.
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum
