@@ -83,6 +83,11 @@
             * `get` - method returns user settings
         * `Voices` - work with voximplant tts voices
             * `get` - method returns all voximplant voices
+      * `Line` - work with voximplant sip lines
+          * `outgoingSipSet` - method sets the selected SIP line as an outgoing line by default.
+          * `get` - returns list of all of the available outgoing lines 
+          * `outgoingGet` - returns the currently selected line as an outgoing line by default. 
+          * `outgoingSet` - sets the selected line as an outgoing line by default. 
         * `InfoCall` - work with voximplant info call functional
             * `startWithText` - method performs the call to the specified number with automatic voiceover of specified
               text
