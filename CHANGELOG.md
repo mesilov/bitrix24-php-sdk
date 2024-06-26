@@ -94,7 +94,13 @@
               text
             * `startWithSound` - method makes a call to the specified number with playback of .mp3 format file by URL.
         * `Url` - work with links for browsing telephony scope pages
-            * `get` - returns a set of links for browsing telephony scope pages.
+            * `get` - returns a set of links for browsing telephony scope pages.    
+    * add events with payload:
+        *  `OnExternalCallBackStart` - It is called when a visitor fills out a CRM form for callback. Your application shall be selected in the form settings as the line that to be used for a callback.
+        *  `OnExternalCallStart` - The event handler is called whenever a user clicks a phone number in CRM object to initiate an outbound call.
+        *  `OnVoximplantCallEnd` - The event is raised when conversation ends (history entry).
+        *  `OnVoximplantCallInit` - The event is raised when a call is being initialized (regarding the entry or start of an outbound call).
+        *  `OnVoximplantCallStart` - The event is raised when a conversation starts (operator responds to an inbound call; call recipient responds to an outbound call).
     * add `TranscriptMessage` – data structure for transcript message item
     * add `TranscriptMessageSide` – enum for describe side of diarization
     * add `CallType` – call types enum

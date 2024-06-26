@@ -15,7 +15,7 @@ readonly class Endpoints
          */
         public string $authServerUrl,
         /**
-         * @phpstan-param non-empty-string $authServerUrl
+         * @phpstan-param non-empty-string $clientUrl
          */
         public string $clientUrl,
     )

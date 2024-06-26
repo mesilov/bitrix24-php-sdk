@@ -7,14 +7,15 @@ namespace Bitrix24\SDK\Application\Requests\Events;
 use Bitrix24\SDK\Application\Requests\AbstractRequest;
 use Symfony\Component\HttpFoundation\Request;
 
-abstract class AbstractEventRequest extends AbstractRequest
+abstract class AbstractEventRequest extends AbstractRequest implements EventInterface
 {
     protected string $eventCode;
     protected int $timestamp;
     protected array $eventPayload;
+    protected int $eventId;
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -25,29 +26,31 @@ abstract class AbstractEventRequest extends AbstractRequest
 
         $this->eventCode = $this->eventPayload['event'];
         $this->timestamp = (int)$this->eventPayload['ts'];
+        $this->eventId = (int)$this->eventPayload['event_id'];
     }
 
-    /**
-     * @return int
-     */
+    public function getEventId(): int
+    {
+        return $this->eventId;
+    }
+
     public function getTimestamp(): int
     {
         return $this->timestamp;
     }
 
-    /**
-     * @return string
-     */
     public function getEventCode(): string
     {
         return $this->eventCode;
     }
 
-    /**
-     * @return array
-     */
     public function getEventPayload(): array
     {
         return $this->eventPayload;
+    }
+
+    public function getAuth(): EventAuthItem
+    {
+        return new EventAuthItem($this->eventPayload['auth']);
     }
 }

@@ -8,43 +8,47 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation;
 
-/**
- * Class AccessToken
- *
- * @package Bitrix24\SDK\Core\Credentials
- */
 class AccessToken
 {
     protected string $accessToken;
-    protected string $refreshToken;
+    protected ?string $refreshToken;
     protected int $expires;
+    protected ?int $expiresIn;
 
     /**
      * AccessToken constructor.
      *
      * @param string $accessToken
-     * @param string $refreshToken
-     * @param int    $expires
+     * @param string|null $refreshToken
+     * @param int $expires
+     * @param int|null $expiresIn
      */
-    public function __construct(string $accessToken, string $refreshToken, int $expires)
+    public function __construct(string $accessToken, ?string $refreshToken, int $expires, ?int $expiresIn = null)
     {
         $this->accessToken = $accessToken;
         $this->refreshToken = $refreshToken;
         $this->expires = $expires;
+        $this->expiresIn = $expiresIn;
     }
 
     /**
-     * @return string
+     * Is this one-off token from event
+     *
+     * One-off tokens do not have refresh token field
+     *
+     * @return bool
      */
+    public function isOneOff(): bool
+    {
+        return $this->refreshToken === null;
+    }
+
     public function getAccessToken(): string
     {
         return $this->accessToken;
     }
 
-    /**
-     * @return string
-     */
-    public function getRefreshToken(): string
+    public function getRefreshToken(): ?string
     {
         return $this->refreshToken;
     }
@@ -83,6 +87,17 @@ class AccessToken
     {
         $requestFields = $request->request->all();
         return self::initFromArray($requestFields['auth']);
+    }
+
+    public static function initFromEventRequest(Request $request): self
+    {
+        $requestFields = $request->request->all();
+        return new self(
+            $requestFields['auth']['access_token'],
+            null,
+            (int)$requestFields['auth']['expires'],
+            (int)$requestFields['auth']['expires_in'],
+        );
     }
 
     /**
