@@ -17,3 +17,5 @@ test-integration-scope-telephony:
 	vendor/bin/phpunit --testsuite integration_tests_scope_telephony
 test-integration-scope-workflows:
 	vendor/bin/phpunit --testsuite integration_tests_scope_workflows
+test-integration-scope-user:
+	vendor/bin/phpunit --testsuite integration_tests_scope_user

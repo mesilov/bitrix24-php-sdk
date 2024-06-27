@@ -9,11 +9,6 @@ use Bitrix24\SDK\Services\User\Service\User;
 
 class UserServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * get user service
-     *
-     * @return User
-     */
     public function user(): User
     {
         if (!isset($this->serviceCache[__METHOD__])) {

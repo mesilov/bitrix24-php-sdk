@@ -18,7 +18,6 @@ class User extends AbstractService
 {
     /**
      * Get user entity fields
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_fields.php
@@ -30,7 +29,6 @@ class User extends AbstractService
 
     /**
      * Get current user
-     * @return UserResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_current.php
@@ -44,8 +42,6 @@ class User extends AbstractService
      * Invites a user. Available only for users with invitation permissions, usually an administrator. Sends a standard account invitation to the user on success.
      *
      * @param array $fields = ['ID','XML_ID','ACTIVE','NAME','LAST_NAME','SECOND_NAME','TITLE','EMAIL','PERSONAL_PHONE','WORK_PHONE','WORK_POSITION','WORK_COMPANY','IS_ONLINE','TIME_ZONE','TIMESTAMP_X','TIME_ZONE_OFFSET','DATE_REGISTER','LAST_ACTIVITY_DATE','PERSONAL_PROFESSION','PERSONAL_GENDER','PERSONAL_BIRTHDAY','PERSONAL_PHOTO','PERSONAL_FAX','PERSONAL_MOBILE','PERSONAL_PAGER','PERSONAL_STREET','PERSONAL_MAILBOX','PERSONAL_CITY','PERSONAL_STATE','PERSONAL_ZIP','PERSONAL_COUNTRY','PERSONAL_NOTES','WORK_DEPARTMENT','WORK_WWW','WORK_FAX','WORK_PAGER','WORK_STREET','WORK_MAILBOX','WORK_CITY','WORK_STATE','WORK_ZIP','WORK_COUNTRY','WORK_PROFILE','WORK_LOGO','WORK_NOTES','UF_DEPARTMENT','UF_DISTRICT','UF_SKYPE','UF_SKYPE_LINK','UF_ZOOM','UF_TWITTER','UF_FACEBOOK','UF_LINKEDIN','UF_XING','UF_WEB_SITES','UF_PHONE_INNER','UF_EMPLOYMENT_DATE','UF_TIMEMAN','UF_SKILLS','UF_INTERESTS','USER_TYPE']
-     * @param string $messageText
-     * @return AddedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_add.php
@@ -53,7 +49,7 @@ class User extends AbstractService
     public function add(array $fields, string $messageText = ''): AddedItemResult
     {
         if (!array_key_exists('EXTRANET', $fields)) {
-            throw new InvalidArgumentException(sprintf('field EXTRANET is required'));
+            throw new InvalidArgumentException('field EXTRANET is required');
         }
 
         return new AddedItemResult($this->core->call(
@@ -68,10 +64,7 @@ class User extends AbstractService
     }
 
     /**
-     * @param array $order
      * @param array $filter = ['ID','XML_ID','ACTIVE','NAME','LAST_NAME','SECOND_NAME','TITLE','EMAIL','PERSONAL_PHONE','WORK_PHONE','WORK_POSITION','WORK_COMPANY','IS_ONLINE','TIME_ZONE','TIMESTAMP_X','TIME_ZONE_OFFSET','DATE_REGISTER','LAST_ACTIVITY_DATE','PERSONAL_PROFESSION','PERSONAL_GENDER','PERSONAL_BIRTHDAY','PERSONAL_PHOTO','PERSONAL_FAX','PERSONAL_MOBILE','PERSONAL_PAGER','PERSONAL_STREET','PERSONAL_MAILBOX','PERSONAL_CITY','PERSONAL_STATE','PERSONAL_ZIP','PERSONAL_COUNTRY','PERSONAL_NOTES','WORK_DEPARTMENT','WORK_WWW','WORK_FAX','WORK_PAGER','WORK_STREET','WORK_MAILBOX','WORK_CITY','WORK_STATE','WORK_ZIP','WORK_COUNTRY','WORK_PROFILE','WORK_LOGO','WORK_NOTES','UF_DEPARTMENT','UF_DISTRICT','UF_SKYPE','UF_SKYPE_LINK','UF_ZOOM','UF_TWITTER','UF_FACEBOOK','UF_LINKEDIN','UF_XING','UF_WEB_SITES','UF_PHONE_INNER','UF_EMPLOYMENT_DATE','UF_TIMEMAN','UF_SKILLS','UF_INTERESTS','USER_TYPE']
-     * @param bool $isAdminMode
-     * @return UsersResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -87,9 +80,6 @@ class User extends AbstractService
 
     /**
      * Updates user information. Available only for users with invitation permissions.
-     * @param int $userId
-     * @param array $fields
-     * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_update.php
@@ -107,8 +97,6 @@ class User extends AbstractService
     /**
      * This method is used to retrieve list of users with expedited personal data search (name, last name, middle name, name of department, position). Works in two modes: Quick mode, via Fulltext Index and slower mode via right LIKE (support is determined automatically).
      *
-     * @param array $filterFields
-     * @return UsersResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_search.php

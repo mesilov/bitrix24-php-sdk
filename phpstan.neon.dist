@@ -3,6 +3,7 @@ parameters:
   paths:
     - src/
     - tests/Integration/Services/Telephony
+    - tests/Integration/Services/User
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
