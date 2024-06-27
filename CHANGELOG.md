@@ -95,7 +95,7 @@
             * `startWithSound` - method makes a call to the specified number with playback of .mp3 format file by URL.
         * `Url` - work with links for browsing telephony scope pages
             * `get` - returns a set of links for browsing telephony scope pages.    
-    * add events with payload:
+    * add events with payload and `TelephonyEventsFabric`:
         *  `OnExternalCallBackStart` - It is called when a visitor fills out a CRM form for callback. Your application shall be selected in the form settings as the line that to be used for a callback.
         *  `OnExternalCallStart` - The event handler is called whenever a user clicks a phone number in CRM object to initiate an outbound call.
         *  `OnVoximplantCallEnd` - The event is raised when conversation ends (history entry).
@@ -107,6 +107,9 @@
     * add `CrmEntityType` – crm entity type enum
     * add `PbxType` – pbx type enum
     * add `SipRegistrationStatus` – pbx sip line registration status
+
+### Deleted
+
 
 ## 2.0-beta.2 — 1.04.2024
 

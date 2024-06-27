@@ -26,6 +26,7 @@ readonly class TelephonyEventsFabric
         if (!array_key_exists('event', $eventPayload)) {
             throw new InvalidArgumentException('«event» key not found in event payload');
         }
+
         return match ($eventPayload['event']) {
             OnExternalCallBackStart::CODE => new OnExternalCallBackStart($request),
             OnExternalCallStart::CODE => new OnExternalCallStart($request),
