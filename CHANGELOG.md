@@ -40,18 +40,26 @@
         * `list` – List of workflow tasks
     * add `WorkflowActivityDocumentType`
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromEventRequest`
 * add `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
 * add `Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
 * add `Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException` if api call waiting for confirm
+* add `Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException` exception if user not found, or it is not active 
 * add `Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult` result of call UI
+* add `Bitrix24\SDK\Core\Result\EmptyResult` empty result
 * add `IncomingRobotRequest` wrapper for data from crm-robot request
 * add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
-* add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
-* add `Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException` exception if user not found, or it is not active
 * add `Bitrix24\SDK\Core\Credentials::isWebhookContext` - for check is current context init from webhook
+* add method `Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest::getEventId` - for get event id
+* add method `Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest::getAuth` - get event auth token
+* add method `Bitrix24\SDK\Application\Requests\Events\EventAuthItem` - event auth token
+* add method `Bitrix24\SDK\Application\Requests\Events\EventInterface` - for event fabrics
+* add method `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder::encodeCallRecord(string $filename): string` - for work with call records
+* add class `Bitrix24\SDK\Services\Main\Service\EventManager` - improve DX for work with events lifecycle bind or unbind
+* add method `Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata` - improve DX for work with install events
+* improve DX - add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle 
 
 ### Changed
-
 * ❗️ update scope `telephony`, scope fully rewritten
     * `ExternalCall` – work with external call:
         * `getCallRecordUploadUrl` – get url for upload call record file
@@ -107,9 +115,16 @@
     * add `CrmEntityType` – crm entity type enum
     * add `PbxType` – pbx type enum
     * add `SipRegistrationStatus` – pbx sip line registration status
+* change signature `Bitrix24\SDK\Core\Credentials\AccessToken::getRefreshToken()?string;` - add nullable option for event tokens    
 
 ### Deleted
-
+* remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\Auth`
+* remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\Auth`
+* remove method `Bitrix24\SDK\Core\Response\Response::__destruct`
+* remove interface `Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface`
+* remove class `Bitrix24\SDK\Services\Telephony\Common\StatusSipRegistrations`
+* remove class `Bitrix24\SDK\Services\Telephony\Common\TypeAtc`
+    
 
 ## 2.0-beta.2 — 1.04.2024
 
