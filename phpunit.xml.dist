@@ -13,6 +13,9 @@
     <testsuite name="integration_tests_scope_telephony">
       <directory>./tests/Integration/Services/Telephony/</directory>
     </testsuite>
+    <testsuite name="integration_tests_scope_user">
+      <directory>./tests/Integration/Services/User/</directory>
+    </testsuite>
     <testsuite name="integration_tests_scope_workflows">
       <directory>./tests/Integration/Services/Workflows/</directory>
     </testsuite>

@@ -124,7 +124,10 @@
 * remove interface `Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface`
 * remove class `Bitrix24\SDK\Services\Telephony\Common\StatusSipRegistrations`
 * remove class `Bitrix24\SDK\Services\Telephony\Common\TypeAtc`
-    
+
+### Bugfix
+
+* fix [typehint for Bitrix24 User entity with field ID](https://github.com/mesilov/bitrix24-php-sdk/issues/382)    
 
 ## 2.0-beta.2 — 1.04.2024
 

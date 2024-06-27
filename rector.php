@@ -11,6 +11,8 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src/Services/Telephony',
         __DIR__ . '/tests/Integration/Services/Telephony',
+        __DIR__ . '/src/Services/User',
+        __DIR__ . '/tests/Integration/Services/User',
     ])
     ->withCache(cacheDirectory: __DIR__ . '.cache/rector')
     ->withSets(
