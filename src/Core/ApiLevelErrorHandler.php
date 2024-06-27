@@ -10,6 +10,7 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
+use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
@@ -83,12 +84,16 @@ class ApiLevelErrorHandler
         if ($batchCommandId !== null) {
             $batchErrorPrefix = sprintf(' batch command id: %s', $batchCommandId);
         }
-        // fix error code responses
+        // todo send issues to bitrix24
+        // fix errors without error_code responses
         if ($errorCode === '' && strtolower($errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
             $errorCode = 'bizproc_workflow_template_access_denied';
         }
         if ($errorCode === '' && strtolower($errorDescription) === strtolower('No fields to update.')) {
             $errorCode = 'bad_request_no_fields_to_update';
+        }
+        if ($errorCode === '' && strtolower($errorDescription) === strtolower('User is not found or is not active')) {
+            $errorCode = 'user_not_found_or_is_not_active';
         }
 
         switch ($errorCode) {
@@ -109,6 +114,8 @@ class ApiLevelErrorHandler
                 throw new ActivityOrRobotAlreadyInstalledException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'error_activity_validation_failure':
                 throw new ActivityOrRobotValidationFailureException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'user_not_found_or_is_not_active':
+                throw new UserNotFoundOrIsNotActiveException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }

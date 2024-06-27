@@ -9,6 +9,7 @@ use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
@@ -127,34 +128,40 @@ class Core implements CoreInterface
                         ]
                     );
 
-                    if ($body['error'] === 'expired_token') {
-                        // renew access token
-                        $renewedToken = $this->apiClient->getNewAccessToken();
-                        $this->logger->debug(
-                            'access token renewed',
-                            [
-                                'newAccessToken' => $renewedToken->getAccessToken()->getAccessToken(),
-                                'newRefreshToken' => $renewedToken->getAccessToken()->getRefreshToken(),
-                                'newExpires' => $renewedToken->getAccessToken()->getExpires(),
-                                'appStatus' => $renewedToken->getApplicationStatus(),
-                            ]
-                        );
-                        $this->apiClient->getCredentials()->setAccessToken($renewedToken->getAccessToken());
+                    switch (strtolower((string)$body['error'])) {
+                        case 'expired_token':
+                            // renew access token
+                            $renewedToken = $this->apiClient->getNewAccessToken();
+                            $this->logger->debug(
+                                'access token renewed',
+                                [
+                                    'newAccessToken' => $renewedToken->getAccessToken()->getAccessToken(),
+                                    'newRefreshToken' => $renewedToken->getAccessToken()->getRefreshToken(),
+                                    'newExpires' => $renewedToken->getAccessToken()->getExpires(),
+                                    'appStatus' => $renewedToken->getApplicationStatus(),
+                                ]
+                            );
+                            $this->apiClient->getCredentials()->setAccessToken($renewedToken->getAccessToken());
 
-                        // repeat api-call
-                        $response = $this->call($apiMethod, $parameters);
-                        $this->logger->debug(
-                            'api call repeated',
-                            [
-                                'repeatedApiMethod' => $apiMethod,
-                                'httpStatusCode' => $response->getHttpResponse()->getStatusCode(),
-                            ]
-                        );
+                            // repeat api-call
+                            $response = $this->call($apiMethod, $parameters);
+                            $this->logger->debug(
+                                'api call repeated',
+                                [
+                                    'repeatedApiMethod' => $apiMethod,
+                                    'httpStatusCode' => $response->getHttpResponse()->getStatusCode(),
+                                ]
+                            );
 
-                        // dispatch event
-                        $this->eventDispatcher->dispatch(new AuthTokenRenewedEvent($renewedToken));
-                    } else {
-                        throw new BaseException('UNAUTHORIZED request error');
+                            // dispatch event
+                            $this->eventDispatcher->dispatch(new AuthTokenRenewedEvent($renewedToken));
+                            break;
+                        case 'method_confirm_waiting':
+                            throw new MethodConfirmWaitingException(
+                                $apiMethod,
+                                sprintf('api call method «%s» revoked, waiting confirm from portal administrator', $apiMethod));
+                        default:
+                            throw new BaseException('UNAUTHORIZED request error');
                     }
                     break;
                 case StatusCodeInterface::STATUS_FORBIDDEN:

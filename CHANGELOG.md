@@ -1,6 +1,6 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.3 — 1.05.2024
+## 2.0-beta.3 — 1.07.2024
 
 ### Added
 
@@ -40,11 +40,91 @@
         * `list` – List of workflow tasks
     * add `WorkflowActivityDocumentType`
 * add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
-* add `\Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
-* add `\Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromEventRequest`
+* add `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
+* add `Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+* add `Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException` if api call waiting for confirm
+* add `Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException` exception if user not found, or it is not active 
+* add `Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult` result of call UI
+* add `Bitrix24\SDK\Core\Result\EmptyResult` empty result
 * add `IncomingRobotRequest` wrapper for data from crm-robot request
 * add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
-* add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
+* add `Bitrix24\SDK\Core\Credentials::isWebhookContext` - for check is current context init from webhook
+* add method `Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest::getEventId` - for get event id
+* add method `Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest::getAuth` - get event auth token
+* add method `Bitrix24\SDK\Application\Requests\Events\EventAuthItem` - event auth token
+* add method `Bitrix24\SDK\Application\Requests\Events\EventInterface` - for event fabrics
+* add method `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder::encodeCallRecord(string $filename): string` - for work with call records
+* add class `Bitrix24\SDK\Services\Main\Service\EventManager` - improve DX for work with events lifecycle bind or unbind
+* add method `Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata` - improve DX for work with install events
+* improve DX - add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle 
+
+### Changed
+* ❗️ update scope `telephony`, scope fully rewritten
+    * `ExternalCall` – work with external call:
+        * `getCallRecordUploadUrl` – get url for upload call record file
+        * `attachCallRecordInBase64` – attach call record encoded in base64
+        * `register` – registers a call in Bitrix24
+        * `searchCrmEntities` – retrieve information about a client from CRM by a telephone number via single request
+        * `finishForUserPhoneInner` – completes the call, registers it in the statistics and hides the call ID screen
+          from the user
+        * `finishForUserId` – completes the call, registers it in the statistics and hides the call ID screen from the
+          user
+        * `show` – displays a call ID screen to the user
+        * `hide` – hides call information window
+    * `Call` – work with call:
+        * `attachTranscription` – method adds a call transcript
+    * `ExternalLine` – work with external line:
+        * `add` – method adds an external line
+        * `delete` – method delete external line
+        * `get` – method gets external lines list
+    * `Voximplant` – work with voximplant namespace:
+        * `Sip` – work with sip lines:
+            * `get` - get sip lines list
+            * `add` - add new sip line
+            * `delete` - delete sip line
+            * `status` - pbx sip line registration status
+            * `update` - update sip line settings
+            * `getConnectorStatus` - returns the current status of the SIP Connector.
+        * `User` - work with voximplant sip user mapped on bitrix24 user
+            * `deactivatePhone` - method disables an indicator of SIP-phone availability
+            * `activatePhone` - method raises the event of SIP-phone availability for an employee
+            * `get` - method returns user settings
+        * `Voices` - work with voximplant tts voices
+            * `get` - method returns all voximplant voices
+      * `Line` - work with voximplant sip lines
+          * `outgoingSipSet` - method sets the selected SIP line as an outgoing line by default.
+          * `get` - returns list of all of the available outgoing lines 
+          * `outgoingGet` - returns the currently selected line as an outgoing line by default. 
+          * `outgoingSet` - sets the selected line as an outgoing line by default. 
+        * `InfoCall` - work with voximplant info call functional
+            * `startWithText` - method performs the call to the specified number with automatic voiceover of specified
+              text
+            * `startWithSound` - method makes a call to the specified number with playback of .mp3 format file by URL.
+        * `Url` - work with links for browsing telephony scope pages
+            * `get` - returns a set of links for browsing telephony scope pages.    
+    * add events with payload and `TelephonyEventsFabric`:
+        *  `OnExternalCallBackStart` - It is called when a visitor fills out a CRM form for callback. Your application shall be selected in the form settings as the line that to be used for a callback.
+        *  `OnExternalCallStart` - The event handler is called whenever a user clicks a phone number in CRM object to initiate an outbound call.
+        *  `OnVoximplantCallEnd` - The event is raised when conversation ends (history entry).
+        *  `OnVoximplantCallInit` - The event is raised when a call is being initialized (regarding the entry or start of an outbound call).
+        *  `OnVoximplantCallStart` - The event is raised when a conversation starts (operator responds to an inbound call; call recipient responds to an outbound call).
+    * add `TranscriptMessage` – data structure for transcript message item
+    * add `TranscriptMessageSide` – enum for describe side of diarization
+    * add `CallType` – call types enum
+    * add `CrmEntityType` – crm entity type enum
+    * add `PbxType` – pbx type enum
+    * add `SipRegistrationStatus` – pbx sip line registration status
+* change signature `Bitrix24\SDK\Core\Credentials\AccessToken::getRefreshToken()?string;` - add nullable option for event tokens    
+
+### Deleted
+* remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\Auth`
+* remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\Auth`
+* remove method `Bitrix24\SDK\Core\Response\Response::__destruct`
+* remove interface `Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface`
+* remove class `Bitrix24\SDK\Services\Telephony\Common\StatusSipRegistrations`
+* remove class `Bitrix24\SDK\Services\Telephony\Common\TypeAtc`
+    
 
 ## 2.0-beta.2 — 1.04.2024
 

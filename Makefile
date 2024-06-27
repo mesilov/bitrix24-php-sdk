@@ -2,7 +2,7 @@ default:
 	@echo "make needs target:"
 	@egrep -e '^\S+' ./Makefile | grep -v default | sed -r 's/://' | sed -r 's/^/ - /'
 
-phpstan:
+lint-phpstan:
 	vendor/bin/phpstan --memory-limit=1G analyse
 lint-rector:
 	vendor/bin/rector process --dry-run
@@ -11,3 +11,9 @@ lint-rector-fix:
 
 test-unit:
 	vendor/bin/phpunit --testsuite unit_tests
+
+# integration tests with granularity by api-scope
+test-integration-scope-telephony:
+	vendor/bin/phpunit --testsuite integration_tests_scope_telephony
+test-integration-scope-workflows:
+	vendor/bin/phpunit --testsuite integration_tests_scope_workflows

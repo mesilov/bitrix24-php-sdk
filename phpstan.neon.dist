@@ -2,6 +2,7 @@ parameters:
   level: 5
   paths:
     - src/
+    - tests/Integration/Services/Telephony
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:

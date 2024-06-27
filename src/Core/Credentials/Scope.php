@@ -111,7 +111,7 @@ class Scope
     }
 
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws UnknownScopeCodeException
      */
     public static function initFromString(string $scope): self
     {

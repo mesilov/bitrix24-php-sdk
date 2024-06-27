@@ -10,6 +10,12 @@
     <testsuite name="integration_tests">
       <directory>./tests/Integration</directory>
     </testsuite>
+    <testsuite name="integration_tests_scope_telephony">
+      <directory>./tests/Integration/Services/Telephony/</directory>
+    </testsuite>
+    <testsuite name="integration_tests_scope_workflows">
+      <directory>./tests/Integration/Services/Workflows/</directory>
+    </testsuite>
   </testsuites>
   <source>
     <include>
