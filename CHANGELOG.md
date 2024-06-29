@@ -129,6 +129,7 @@
 
 * fix [typehint for Bitrix24 User entity with field ID](https://github.com/mesilov/bitrix24-php-sdk/issues/382)    
 * fix [default arguments for Bitrix24 User get method](https://github.com/mesilov/bitrix24-php-sdk/issues/381)    
+* fix [limit argument not worked in batch list and read model](https://github.com/mesilov/bitrix24-php-sdk/issues/389)    
 
 ## 2.0-beta.2 — 1.04.2024
 
@@ -214,10 +215,7 @@
 * fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
 * fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
 * fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
-*
-
-fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
-
+* fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
 * fix [add return type for crm multifields phone, email, im](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
 * fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
 * fix errors for `ApplicationProfile` with empty scope
