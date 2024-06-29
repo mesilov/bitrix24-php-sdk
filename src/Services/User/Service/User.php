@@ -70,6 +70,10 @@ class User extends AbstractService
      */
     public function get(array $order, array $filter, bool $isAdminMode = false): UsersResult
     {
+        if ($order === []) {
+            $order = ['ID' => 'ASC'];
+        }
+
         return new UsersResult($this->core->call('user.get', [
             'sort' => array_keys($order)[0],
             'order' => array_values($order)[0],

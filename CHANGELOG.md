@@ -128,6 +128,7 @@
 ### Bugfix
 
 * fix [typehint for Bitrix24 User entity with field ID](https://github.com/mesilov/bitrix24-php-sdk/issues/382)    
+* fix [default arguments for Bitrix24 User get method](https://github.com/mesilov/bitrix24-php-sdk/issues/381)    
 
 ## 2.0-beta.2 — 1.04.2024
 
