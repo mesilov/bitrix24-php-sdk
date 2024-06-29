@@ -48,6 +48,12 @@ class UserTest extends TestCase
         );
     }
 
+    #[TestDox('test get users list with default arguments')]
+    public function testGetWithDefaultArguments(): void
+    {
+        $this->assertGreaterThanOrEqual(1, $this->userService->get([], [], true)->getCoreResponse()->getResponseData()->getPagination()->getTotal());
+    }
+
     /**
      * @throws BaseException
      * @throws TransportException
