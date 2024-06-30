@@ -8,8 +8,6 @@ interface UpdatedItemResultInterface
 {
     /**
      * Success update flag
-     *
-     * @return bool
      */
     public function isSuccess(): bool;
 }

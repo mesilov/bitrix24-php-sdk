@@ -23,6 +23,7 @@ readonly class Endpoints
         if (filter_var($authServerUrl, FILTER_VALIDATE_URL) === false) {
             throw new InvalidArgumentException(sprintf('authServer endpoint URL «%s» is invalid', $authServerUrl));
         }
+
         if (filter_var($clientUrl, FILTER_VALIDATE_URL) === false) {
             throw new InvalidArgumentException(sprintf('client endpoint URL «%s» is invalid', $clientUrl));
         }

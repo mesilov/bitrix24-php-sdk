@@ -8,11 +8,8 @@ use Throwable;
 
 class MethodConfirmWaitingException extends BaseException
 {
-    public readonly string $methodName;
-
-    public function __construct(string $methodName, string $message, int $code = 0, ?Throwable $previous = null)
+    public function __construct(public readonly string $methodName, string $message, int $code = 0, ?Throwable $throwable = null)
     {
-        parent::__construct($message, $code, $previous);
-        $this->methodName = $methodName;
+        parent::__construct($message, $code, $throwable);
     }
 }

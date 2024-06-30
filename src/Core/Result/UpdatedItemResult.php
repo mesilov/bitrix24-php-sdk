@@ -14,7 +14,6 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 class UpdatedItemResult extends AbstractResult
 {
     /**
-     * @return bool
      * @throws BaseException
      */
     public function isSuccess(): bool

@@ -73,15 +73,11 @@ class Scope
         'userfieldconfig',
     ];
 
-    /**
-     * @var array
-     */
     protected array $currentScope = [];
 
     /**
      * Scope constructor.
      *
-     * @param array $scope
      *
      * @throws UnknownScopeCodeException
      */
@@ -102,9 +98,6 @@ class Scope
         $this->currentScope = $scope;
     }
 
-    /**
-     * @return array
-     */
     public function getScopeCodes(): array
     {
         return $this->currentScope;

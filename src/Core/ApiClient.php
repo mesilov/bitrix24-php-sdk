@@ -18,42 +18,31 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class ApiClient implements ApiClientInterface
 {
-    protected HttpClientInterface $client;
-    protected LoggerInterface $logger;
-    protected Credentials $credentials;
-    protected RequestIdGeneratorInterface $requestIdGenerator;
     /**
      * @const string
      */
     protected const BITRIX24_OAUTH_SERVER_URL = 'https://oauth.bitrix.info';
+
     /**
      * @const string
      */
     protected const SDK_VERSION = '2.0.0';
+
     protected const SDK_USER_AGENT = 'bitrix24-php-sdk';
 
     /**
      * ApiClient constructor.
-     *
-     * @param Credentials $credentials
-     * @param HttpClientInterface $client
-     * @param RequestIdGeneratorInterface $requestIdGenerator
-     * @param LoggerInterface $logger
      */
     public function __construct(
-        Credentials                 $credentials,
-        HttpClientInterface         $client,
-        RequestIdGeneratorInterface $requestIdGenerator,
-        LoggerInterface             $logger)
+        protected Credentials                 $credentials,
+        protected HttpClientInterface         $client,
+        protected RequestIdGeneratorInterface $requestIdGenerator,
+        protected LoggerInterface             $logger)
     {
-        $this->credentials = $credentials;
-        $this->client = $client;
-        $this->requestIdGenerator = $requestIdGenerator;
-        $this->logger = $logger;
         $this->logger->debug(
             'ApiClient.init',
             [
-                'httpClientType' => get_class($client),
+                'httpClientType' => $this->client::class,
             ]
         );
     }
@@ -72,16 +61,12 @@ class ApiClient implements ApiClientInterface
         ];
     }
 
-    /**
-     * @return Credentials
-     */
     public function getCredentials(): Credentials
     {
         return $this->credentials;
     }
 
     /**
-     * @return RenewedAccessToken
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
      * @throws TransportException
@@ -92,10 +77,11 @@ class ApiClient implements ApiClientInterface
         $this->logger->debug('getNewAccessToken.start', [
             'requestId' => $requestId
         ]);
-        if ($this->getCredentials()->getApplicationProfile() === null) {
+        if (!$this->getCredentials()->getApplicationProfile() instanceof \Bitrix24\SDK\Core\Credentials\ApplicationProfile) {
             throw new InvalidArgumentException('application profile not set');
         }
-        if ($this->getCredentials()->getAccessToken() === null) {
+
+        if (!$this->getCredentials()->getAccessToken() instanceof \Bitrix24\SDK\Core\Credentials\AccessToken) {
             throw new InvalidArgumentException('access token in credentials not set');
         }
 
@@ -132,20 +118,20 @@ class ApiClient implements ApiClientInterface
             ]);
             return $newAccessToken;
         }
+
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
             $this->logger->warning('getNewAccessToken.badRequest',[
                 'url'=> $url
             ]);
             throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
         }
+
         throw new TransportException('getting new access token failure with unknown http-status code %s', $response->getStatusCode());
     }
 
     /**
-     * @param string $apiMethod
      * @param array<mixed> $parameters
      *
-     * @return ResponseInterface
      * @throws TransportExceptionInterface
      * @throws InvalidArgumentException
      */
@@ -163,16 +149,18 @@ class ApiClient implements ApiClientInterface
         );
 
         $method = 'POST';
-        if ($this->getCredentials()->getWebhookUrl() !== null) {
+        if ($this->getCredentials()->getWebhookUrl() instanceof \Bitrix24\SDK\Core\Credentials\WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
         } else {
             $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
 
-            if ($this->getCredentials()->getAccessToken() === null) {
-                throw new InvalidArgumentException(sprintf('access token in credentials not found '));
+            if (!$this->getCredentials()->getAccessToken() instanceof \Bitrix24\SDK\Core\Credentials\AccessToken) {
+                throw new InvalidArgumentException('access token in credentials not found ');
             }
+
             $parameters['auth'] = $this->getCredentials()->getAccessToken()->getAccessToken();
         }
+
         // duplicate request id in query string for current version of bitrix24 api
         // vendor don't use request id from headers =(
         $url .= '?' . $this->requestIdGenerator->getQueryStringParameterName() . '=' . $requestId;

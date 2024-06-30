@@ -19,3 +19,5 @@ test-integration-scope-workflows:
 	vendor/bin/phpunit --testsuite integration_tests_scope_workflows
 test-integration-scope-user:
 	vendor/bin/phpunit --testsuite integration_tests_scope_user
+test-integration-core:
+	vendor/bin/phpunit --testsuite integration_tests_core
