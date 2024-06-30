@@ -16,6 +16,7 @@ use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use Bitrix24\SDK\Events\PortalDomainUrlChangedEvent;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -29,7 +30,7 @@ class Core implements CoreInterface
     /**
      * Main constructor.
      */
-    public function __construct(protected ApiClientInterface       $apiClient, protected ApiLevelErrorHandler     $apiLevelErrorHandler, protected EventDispatcherInterface $eventDispatcher, protected LoggerInterface          $logger)
+    public function __construct(protected ApiClientInterface $apiClient, protected ApiLevelErrorHandler $apiLevelErrorHandler, protected EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
     {
     }
 
@@ -176,7 +177,7 @@ class Core implements CoreInterface
                     $this->apiLevelErrorHandler->handle($body);
                     break;
             }
-        } catch (TransportExceptionInterface $exception) {
+        } catch (TransportExceptionInterface|JsonException $exception) {
             // catch symfony http client transport exception
             $this->logger->error(
                 'call.transportException',
@@ -185,7 +186,7 @@ class Core implements CoreInterface
                     'message' => $exception->getMessage(),
                 ]
             );
-            throw new TransportException(sprintf('transport error - %s', $exception->getMessage()), $exception->getCode(), $exception);
+            throw new TransportException(sprintf('transport error - %s, type %s', $exception->getMessage(), $exception::class), $exception->getCode(), $exception);
         } catch (BaseException $exception) {
             // rethrow known bitrix24 php sdk exception
             throw $exception;
@@ -194,6 +195,7 @@ class Core implements CoreInterface
                 'call.unknownException',
                 [
                     'message' => $exception->getMessage(),
+                    'class' => $exception::class,
                     'trace' => $exception->getTrace(),
                 ]
             );
