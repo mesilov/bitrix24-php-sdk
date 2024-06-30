@@ -9,6 +9,7 @@ use Rector\Set\ValueObject\DowngradeLevelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
+        __DIR__ . '/src/Core/',
         __DIR__ . '/src/Services/Telephony',
         __DIR__ . '/tests/Integration/Services/Telephony',
         __DIR__ . '/src/Services/User',
