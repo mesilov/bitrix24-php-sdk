@@ -14,63 +14,39 @@ use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
-/**
- * Class Response
- *
- * @package Bitrix24\SDK\Core\Response
- */
 class Response
 {
-    protected ResponseInterface $httpResponse;
-    protected ?DTO\ResponseData $responseData;
-    protected Command $apiCommand;
-    protected ApiLevelErrorHandler $apiLevelErrorHandler;
-    protected LoggerInterface $logger;
+    protected ?DTO\ResponseData $responseData = null;
 
     /**
      * Response constructor.
-     *
-     * @param ResponseInterface $httpResponse
-     * @param Command $apiCommand
-     * @param ApiLevelErrorHandler $apiLevelErrorHandler
-     * @param LoggerInterface $logger
      */
-    public function __construct(ResponseInterface    $httpResponse, Command $apiCommand,
-                                ApiLevelErrorHandler $apiLevelErrorHandler,
-                                LoggerInterface      $logger)
+    public function __construct(
+        protected ResponseInterface    $httpResponse,
+        protected Command              $apiCommand,
+        protected ApiLevelErrorHandler $apiLevelErrorHandler,
+        protected LoggerInterface      $logger)
     {
-        $this->httpResponse = $httpResponse;
-        $this->apiCommand = $apiCommand;
-        $this->apiLevelErrorHandler = $apiLevelErrorHandler;
-        $this->logger = $logger;
-        $this->responseData = null;
     }
 
-    /**
-     * @return ResponseInterface
-     */
     public function getHttpResponse(): ResponseInterface
     {
         return $this->httpResponse;
     }
 
-    /**
-     * @return Command
-     */
     public function getApiCommand(): Command
     {
         return $this->apiCommand;
     }
 
     /**
-     * @return DTO\ResponseData
      * @throws BaseException
      */
     public function getResponseData(): DTO\ResponseData
     {
         $this->logger->debug('getResponseData.start');
 
-        if ($this->responseData === null) {
+        if (!$this->responseData instanceof \Bitrix24\SDK\Core\Response\DTO\ResponseData) {
             try {
                 $this->logger->debug('getResponseData.parseResponse.start');
                 $responseResult = $this->httpResponse->toArray(true);
@@ -90,6 +66,7 @@ class Response
                 if (array_key_exists('next', $responseResult)) {
                     $nextItem = (int)$responseResult['next'];
                 }
+
                 if (array_key_exists('total', $responseResult)) {
                     $total = (int)$responseResult['total'];
                 }
@@ -110,21 +87,19 @@ class Response
                 throw new BaseException(sprintf('api request error: %s', $exception->getMessage()), $exception->getCode(), $exception);
             }
         }
+
         $this->logger->debug('getResponseData.finish');
 
         return $this->responseData;
     }
 
-    /**
-     * @return string|null
-     */
     private function getHttpResponseContent(): ?string
     {
         $content = null;
         try {
             $content = $this->httpResponse->getContent(false);
-        } catch (Throwable $exception) {
-            $this->logger->error($exception->getMessage());
+        } catch (Throwable $throwable) {
+            $this->logger->error($throwable->getMessage());
         }
 
         return $content;
