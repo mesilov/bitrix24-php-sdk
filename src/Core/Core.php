@@ -26,37 +26,14 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 class Core implements CoreInterface
 {
-    protected ApiClientInterface $apiClient;
-    protected LoggerInterface $logger;
-    protected EventDispatcherInterface $eventDispatcher;
-    protected ApiLevelErrorHandler $apiLevelErrorHandler;
-
     /**
      * Main constructor.
-     *
-     * @param ApiClientInterface $apiClient
-     * @param ApiLevelErrorHandler $apiLevelErrorHandler
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param LoggerInterface $logger
      */
-    public function __construct(
-        ApiClientInterface       $apiClient,
-        ApiLevelErrorHandler     $apiLevelErrorHandler,
-        EventDispatcherInterface $eventDispatcher,
-        LoggerInterface          $logger
-    )
+    public function __construct(protected ApiClientInterface       $apiClient, protected ApiLevelErrorHandler     $apiLevelErrorHandler, protected EventDispatcherInterface $eventDispatcher, protected LoggerInterface          $logger)
     {
-        $this->apiClient = $apiClient;
-        $this->apiLevelErrorHandler = $apiLevelErrorHandler;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->logger = $logger;
     }
 
     /**
-     * @param string $apiMethod
-     * @param array $parameters
-     *
-     * @return Response
      * @throws BaseException
      * @throws TransportException
      */
@@ -163,6 +140,7 @@ class Core implements CoreInterface
                         default:
                             throw new BaseException('UNAUTHORIZED request error');
                     }
+
                     break;
                 case StatusCodeInterface::STATUS_FORBIDDEN:
                     $body = $apiCallResponse->toArray(false);
@@ -221,14 +199,12 @@ class Core implements CoreInterface
             );
             throw new BaseException(sprintf('unknown error - %s', $exception->getMessage()), $exception->getCode(), $exception);
         }
+
         $this->logger->debug('call.finish');
 
         return $response;
     }
 
-    /**
-     * @return \Bitrix24\SDK\Core\Contracts\ApiClientInterface
-     */
     public function getApiClient(): ApiClientInterface
     {
         return $this->apiClient;

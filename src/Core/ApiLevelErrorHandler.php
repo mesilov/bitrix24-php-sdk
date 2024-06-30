@@ -21,20 +21,19 @@ use Psr\Log\LoggerInterface;
  */
 class ApiLevelErrorHandler
 {
-    protected LoggerInterface $logger;
     protected const ERROR_KEY = 'error';
+
     protected const RESULT_KEY = 'result';
+
     protected const RESULT_ERROR_KEY = 'result_error';
+
     protected const ERROR_DESCRIPTION_KEY = 'error_description';
 
     /**
      * ApiLevelErrorHandler constructor.
-     *
-     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(protected LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
     /**
@@ -84,14 +83,17 @@ class ApiLevelErrorHandler
         if ($batchCommandId !== null) {
             $batchErrorPrefix = sprintf(' batch command id: %s', $batchCommandId);
         }
+
         // todo send issues to bitrix24
         // fix errors without error_code responses
         if ($errorCode === '' && strtolower($errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
             $errorCode = 'bizproc_workflow_template_access_denied';
         }
+
         if ($errorCode === '' && strtolower($errorDescription) === strtolower('No fields to update.')) {
             $errorCode = 'bad_request_no_fields_to_update';
         }
+
         if ($errorCode === '' && strtolower($errorDescription) === strtolower('User is not found or is not active')) {
             $errorCode = 'user_not_found_or_is_not_active';
         }
@@ -119,6 +121,7 @@ class ApiLevelErrorHandler
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }
+
         //            switch (strtoupper(trim($apiResponse['error']))) {
 //                case 'EXPIRED_TOKEN':
 //                    throw new Bitrix24TokenIsExpiredException($errorMsg);

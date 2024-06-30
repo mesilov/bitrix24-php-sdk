@@ -15,7 +15,6 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 class AddedItemResult extends AbstractResult implements AddedItemIdResultInterface
 {
     /**
-     * @return int
      * @throws BaseException
      */
     public function getId(): int

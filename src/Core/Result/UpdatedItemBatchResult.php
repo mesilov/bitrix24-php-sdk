@@ -9,27 +9,15 @@ use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 
 class UpdatedItemBatchResult implements UpdatedItemResultInterface
 {
-    private ResponseData $responseData;
-
-    /**
-     * @param \Bitrix24\SDK\Core\Response\DTO\ResponseData $responseData
-     */
-    public function __construct(ResponseData $responseData)
+    public function __construct(private readonly ResponseData $responseData)
     {
-        $this->responseData = $responseData;
     }
 
-    /**
-     * @return \Bitrix24\SDK\Core\Response\DTO\ResponseData
-     */
     public function getResponseData(): ResponseData
     {
         return $this->responseData;
     }
 
-    /**
-     * @return bool
-     */
     public function isSuccess(): bool
     {
         return (bool)$this->getResponseData()->getResult()[0];

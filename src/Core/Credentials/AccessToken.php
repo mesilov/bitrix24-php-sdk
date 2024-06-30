@@ -10,33 +10,17 @@ use Symfony\Component\HttpFoundation;
 
 class AccessToken
 {
-    protected string $accessToken;
-    protected ?string $refreshToken;
-    protected int $expires;
-    protected ?int $expiresIn;
-
     /**
      * AccessToken constructor.
-     *
-     * @param string $accessToken
-     * @param string|null $refreshToken
-     * @param int $expires
-     * @param int|null $expiresIn
      */
-    public function __construct(string $accessToken, ?string $refreshToken, int $expires, ?int $expiresIn = null)
+    public function __construct(protected string $accessToken, protected ?string $refreshToken, protected int $expires, protected ?int $expiresIn = null)
     {
-        $this->accessToken = $accessToken;
-        $this->refreshToken = $refreshToken;
-        $this->expires = $expires;
-        $this->expiresIn = $expiresIn;
     }
 
     /**
      * Is this one-off token from event
      *
      * One-off tokens do not have refresh token field
-     *
-     * @return bool
      */
     public function isOneOff(): bool
     {
@@ -53,27 +37,17 @@ class AccessToken
         return $this->refreshToken;
     }
 
-    /**
-     * @return int
-     */
     public function getExpires(): int
     {
         return $this->expires;
     }
 
-    /**
-     * @return bool
-     */
     public function hasExpired(): bool
     {
         return $this->getExpires() <= time();
     }
 
-    /**
-     * @param array $request
-     *
-     * @return self
-     */
+    
     public static function initFromArray(array $request): self
     {
         return new self(
@@ -109,9 +83,11 @@ class AccessToken
         if (!array_key_exists('AUTH_ID', $requestFields)) {
             throw new InvalidArgumentException('field AUTH_ID not fount in request');
         }
+
         if (!array_key_exists('REFRESH_ID', $requestFields)) {
             throw new InvalidArgumentException('field REFRESH_ID not fount in request');
         }
+
         if (!array_key_exists('AUTH_EXPIRES', $requestFields)) {
             throw new InvalidArgumentException('field AUTH_EXPIRES not fount in request');
         }
