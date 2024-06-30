@@ -387,6 +387,7 @@ class Batch implements BatchOperationsInterface
 
             $params = array_merge($params, $additionalParameters);
         }
+
         $keyId = $isCrmItemsInBatch ? 'id' : 'ID';
 
         $firstResultPage = $this->core->call($apiMethod, $params);

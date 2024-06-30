@@ -12,33 +12,26 @@ class Credentials
     protected ?string $domainUrl = null;
 
     /**
-     * Credentials constructor.
-     *
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(
         protected ?WebhookUrl         $webhookUrl,
         protected ?AccessToken        $accessToken,
         protected ?ApplicationProfile $applicationProfile,
-        ?string             $domainUrl
+        ?string                       $domainUrl
     )
     {
         if ($domainUrl !== null) {
             $this->setDomainUrl($domainUrl);
         }
 
-        if (!$this->accessToken instanceof \Bitrix24\SDK\Core\Credentials\AccessToken && !$this->webhookUrl instanceof \Bitrix24\SDK\Core\Credentials\WebhookUrl) {
-            throw new \LogicException('you must set on of auth type: webhook or OAuth 2.0');
+        if (!$this->accessToken instanceof AccessToken && !$this->webhookUrl instanceof WebhookUrl) {
+            throw new InvalidArgumentException('you must set on of auth type: webhook or OAuth 2.0');
         }
 
-        if (!$this->accessToken instanceof \Bitrix24\SDK\Core\Credentials\AccessToken) {
-            return;
+        if ($this->accessToken instanceof AccessToken && $this->domainUrl === null) {
+            throw new InvalidArgumentException('for oauth type you must set domain url');
         }
-        if ($this->domainUrl !== null) {
-            return;
-        }
-        throw new \LogicException('for oauth type you must set domain url');
     }
 
     public function setAccessToken(AccessToken $accessToken): void
@@ -68,7 +61,7 @@ class Credentials
 
     public function isWebhookContext(): bool
     {
-        return $this->webhookUrl instanceof \Bitrix24\SDK\Core\Credentials\WebhookUrl && !$this->accessToken instanceof \Bitrix24\SDK\Core\Credentials\AccessToken;
+        return $this->webhookUrl instanceof WebhookUrl && !$this->accessToken instanceof AccessToken;
     }
 
     public function getApplicationProfile(): ?ApplicationProfile
@@ -78,7 +71,7 @@ class Credentials
 
     public function getDomainUrl(): string
     {
-        $arUrl = $this->getWebhookUrl() instanceof \Bitrix24\SDK\Core\Credentials\WebhookUrl ? parse_url($this->getWebhookUrl()->getUrl()) : parse_url((string) $this->domainUrl);
+        $arUrl = $this->getWebhookUrl() instanceof WebhookUrl ? parse_url($this->getWebhookUrl()->getUrl()) : parse_url((string)$this->domainUrl);
 
         return sprintf('%s://%s', $arUrl['scheme'], $arUrl['host']);
     }
