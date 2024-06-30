@@ -8,8 +8,6 @@ interface DeletedItemResultInterface
 {
     /**
      * Success deletion flag
-     *
-     * @return bool
      */
     public function isSuccess(): bool;
 }

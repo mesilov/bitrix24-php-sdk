@@ -18,12 +18,9 @@ interface BatchOperationsInterface
     /**
      * Batch wrapper for *.list methods without counting elements on every api-call
      *
-     * @param string $apiMethod
      * @param array<string,mixed> $order
      * @param array<string,mixed> $filter
      * @param array<string,mixed> $select
-     * @param int|null $limit
-     * @param array|null $additionalParameters
      * @return Generator<mixed>
      * @throws BaseException
      */
@@ -41,13 +38,7 @@ interface BatchOperationsInterface
      *
      * ⚠️ Call this wrapper is more expensive than getTraversableList method, use this method carefully
      *
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
      *
-     * @return Generator
      * @throws BaseException
      */
     public function getTraversableListWithCount(
@@ -61,7 +52,6 @@ interface BatchOperationsInterface
     /**
      * Add entity items with batch call
      *
-     * @param string            $apiMethod
      * @param array<int, array> $entityItems
      *
      * @return Generator<int, ResponseData>|ResponseData[]
@@ -72,7 +62,6 @@ interface BatchOperationsInterface
     /**
      * Delete entity items with batch call
      *
-     * @param string          $apiMethod
      * @param array<int, int> $entityItemId
      *
      * @return Generator<int, ResponseData>|ResponseData[]
@@ -83,7 +72,6 @@ interface BatchOperationsInterface
     /**
      * Update entity items with batch call
      *
-     * @param string            $apiMethod
      * @param array<int, array> $entityItems
      *
      * @return Generator<int, ResponseData>|ResponseData[]

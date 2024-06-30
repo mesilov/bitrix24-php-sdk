@@ -1,59 +1,71 @@
 <?php
-declare(strict_types=1);
 
-/*
- * This file is part of the bitrix24-php-sdk package.
- *
- *  Kirill  Кhramov <k_hram@mail.ru>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Telephony;
 
+use Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder;
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
-use Bitrix24\SDK\Services\Telephony\Service\Call;
-use Bitrix24\SDK\Services\Telephony\Service\ExternalLine;
-use Bitrix24\SDK\Services\Telephony\Service\ExternalCall;
-
+use Bitrix24\SDK\Services\Telephony;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TelephonyServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return ExternalLine
-     */
-    public function externalLine(): ExternalLine
+    public function externalCall(): Telephony\ExternalCall\Service\ExternalCall
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ExternalLine($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Telephony\ExternalCall\Service\ExternalCall(
+                new Telephony\ExternalCall\Service\Batch($this->batch, $this->log),
+                new Base64Encoder(
+                    new Filesystem(),
+                    new \Symfony\Component\Mime\Encoder\Base64Encoder(),
+                    $this->log,
+                ),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return ExternalCall
-     */
-    public function externalCall(): ExternalCall
+    public function call(): Telephony\Call\Service\Call
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new ExternalCall($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Telephony\Call\Service\Call(
+                new Telephony\Call\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Call
-     */
-    public function call(): Call
+    public function externalLine(): Telephony\ExternalLine\Service\ExternalLine
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Call($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new Telephony\ExternalLine\Service\ExternalLine(
+                new Telephony\ExternalLine\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
         }
 
         return $this->serviceCache[__METHOD__];
     }
 
+    public function getVoximplantServiceBuilder(): Telephony\Voximplant\VoximplantServiceBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Telephony\Voximplant\VoximplantServiceBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
 }

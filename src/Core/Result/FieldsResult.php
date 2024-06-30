@@ -14,7 +14,6 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 class FieldsResult extends AbstractResult
 {
     /**
-     * @return array
      * @throws BaseException
      */
     public function getFieldsDescription(): array

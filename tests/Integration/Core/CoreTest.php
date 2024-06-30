@@ -10,8 +10,8 @@ use Bitrix24\SDK\Core\Credentials\AccessToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Scope;
-use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -37,13 +37,14 @@ class CoreTest extends TestCase
     public function testConnectToNonExistsBitrix24PortalInCloud():void
     {
         $core = (new CoreBuilder())
+        ->withLogger($this->log)
         ->withCredentials(Credentials::createFromOAuth(
             new AccessToken('non-exists-access-token','refresh-token', 3600),
             new ApplicationProfile('non-exists-client-id', 'non-exists-client-secret', new Scope([])),
             'non-exists-domain.bitrix24.com'
         ))
         ->build();
-        $this->expectException(AuthForbiddenException::class);
+        $this->expectException(TransportException::class);
         $core->call('app.info');
     }
 

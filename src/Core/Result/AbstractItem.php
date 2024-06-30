@@ -7,6 +7,8 @@ namespace Bitrix24\SDK\Core\Result;
 use ArrayIterator;
 use Bitrix24\SDK\Core\Exceptions\ImmutableResultViolationException;
 use IteratorAggregate;
+use Money\Currencies\ISOCurrencies;
+use Money\Parser\DecimalMoneyParser;
 use Traversable;
 
 /**
@@ -16,22 +18,15 @@ use Traversable;
  */
 abstract class AbstractItem implements IteratorAggregate
 {
-    protected array $data;
+    protected DecimalMoneyParser $decimalMoneyParser;
 
-    /**
-     * AbstractItem constructor.
-     *
-     * @param array $data
-     */
-    public function __construct(array $data)
+    public function __construct(protected array $data)
     {
-        $this->data = $data;
+        $this->decimalMoneyParser = new DecimalMoneyParser(new ISOCurrencies());
     }
 
     /**
      * @param int|string $offset
-     *
-     * @return bool
      */
     public function __isset($offset): bool
     {
@@ -50,13 +45,12 @@ abstract class AbstractItem implements IteratorAggregate
 
     /**
      * @param int|string $offset
-     * @param mixed      $value
      *
      * @return void
      * @throws ImmutableResultViolationException
      *
      */
-    public function __set($offset, $value)
+    public function __set($offset, mixed $value)
     {
         throw new ImmutableResultViolationException(sprintf('Result is immutable, violation at offset %s', $offset));
     }
@@ -74,16 +68,12 @@ abstract class AbstractItem implements IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator():Traversable
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->data);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
+    
     protected function isKeyExists(string $key): bool
     {
         return array_key_exists($key, $this->data);

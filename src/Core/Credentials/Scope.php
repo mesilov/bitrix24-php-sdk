@@ -12,9 +12,14 @@ class Scope
      * @var string[]
      */
     protected array $availableScope = [
+        'ai_admin',
+        'appform',
+        'baas',
         'bizproc',
         'biconnector',
         'calendar',
+        'calendarmobile',
+        'catalogmobile',
         'call',
         'cashbox',
         'catalog',
@@ -32,6 +37,8 @@ class Scope
         'im',
         'imbot',
         'imopenlines',
+        'im.import',
+        'imconnector',
         'intranet',
         'landing',
         'landing_cloud',
@@ -40,6 +47,7 @@ class Scope
         'mailservice',
         'messageservice',
         'mobile',
+        'notifications',
         'pay_system',
         'placement',
         'pull',
@@ -54,6 +62,7 @@ class Scope
         'task',
         'tasks',
         'tasks_extended',
+        'tasksmobile',
         'telephony',
         'timeman',
         'user',
@@ -64,15 +73,11 @@ class Scope
         'userfieldconfig',
     ];
 
-    /**
-     * @var array
-     */
     protected array $currentScope = [];
 
     /**
      * Scope constructor.
      *
-     * @param array $scope
      *
      * @throws UnknownScopeCodeException
      */
@@ -93,16 +98,13 @@ class Scope
         $this->currentScope = $scope;
     }
 
-    /**
-     * @return array
-     */
     public function getScopeCodes(): array
     {
         return $this->currentScope;
     }
 
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws UnknownScopeCodeException
      */
     public static function initFromString(string $scope): self
     {

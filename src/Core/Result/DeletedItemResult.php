@@ -15,7 +15,6 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 class DeletedItemResult extends AbstractResult implements DeletedItemResultInterface
 {
     /**
-     * @return bool
      * @throws BaseException
      */
     public function isSuccess(): bool

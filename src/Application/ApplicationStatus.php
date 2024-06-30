@@ -24,30 +24,17 @@ class ApplicationStatus
      */
     public function __construct(string $statusShortCode)
     {
-        switch ($statusShortCode) {
-            case self::STATUS_SHORT_FREE:
-                $this->statusCode = 'free';
-                break;
-            case self::STATUS_SHORT_DEMO:
-                $this->statusCode = 'demo';
-                break;
-            case self::STATUS_SHORT_TRIAL:
-                $this->statusCode = 'trial';
-                break;
-            case self::STATUS_SHORT_PAID:
-                $this->statusCode = 'paid';
-                break;
-            case self::STATUS_SHORT_LOCAL:
-                $this->statusCode = 'local';
-                break;
-            case self::STATUS_SHORT_SUBSCRIPTION:
-                $this->statusCode = 'subscription';
-                break;
-            default:
-                throw new InvalidArgumentException(
-                    sprintf('unknown application status code %s', $statusShortCode)
-                );
-        }
+        $this->statusCode = match ($statusShortCode) {
+            self::STATUS_SHORT_FREE => 'free',
+            self::STATUS_SHORT_DEMO => 'demo',
+            self::STATUS_SHORT_TRIAL => 'trial',
+            self::STATUS_SHORT_PAID => 'paid',
+            self::STATUS_SHORT_LOCAL => 'local',
+            self::STATUS_SHORT_SUBSCRIPTION => 'subscription',
+            default => throw new InvalidArgumentException(
+                sprintf('unknown application status code %s', $statusShortCode)
+            ),
+        };
     }
 
     /**

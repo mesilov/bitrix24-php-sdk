@@ -8,8 +8,6 @@ interface AddedItemIdResultInterface
 {
     /**
      * added entity id
-     *
-     * @return int
      */
     public function getId(): int;
 }

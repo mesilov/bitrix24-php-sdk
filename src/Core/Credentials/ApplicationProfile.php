@@ -14,45 +14,28 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 class ApplicationProfile
 {
     private const BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID = 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID';
+
     private const BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET = 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET';
+
     private const BITRIX24_PHP_SDK_APPLICATION_SCOPE = 'BITRIX24_PHP_SDK_APPLICATION_SCOPE';
-    private string $clientId;
-    private string $clientSecret;
-    private Scope $scope;
 
     /**
      * ApplicationProfile constructor.
-     *
-     * @param string $clientId
-     * @param string $clientSecret
-     * @param Scope  $scope
      */
-    public function __construct(string $clientId, string $clientSecret, Scope $scope)
+    public function __construct(private readonly string $clientId, private readonly string $clientSecret, private readonly Scope $scope)
     {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->scope = $scope;
     }
 
-    /**
-     * @return string
-     */
     public function getClientId(): string
     {
         return $this->clientId;
     }
 
-    /**
-     * @return string
-     */
     public function getClientSecret(): string
     {
         return $this->clientSecret;
     }
 
-    /**
-     * @return Scope
-     */
     public function getScope(): Scope
     {
         return $this->scope;
@@ -66,9 +49,11 @@ class ApplicationProfile
         if (!array_key_exists(self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID, $appProfile)) {
             throw new InvalidArgumentException(sprintf('in array key %s not found', self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID));
         }
+
         if (!array_key_exists(self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET, $appProfile)) {
             throw new InvalidArgumentException(sprintf('in array key %s not found', self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET));
         }
+
         if (!array_key_exists(self::BITRIX24_PHP_SDK_APPLICATION_SCOPE, $appProfile)) {
             throw new InvalidArgumentException(sprintf('in array key %s not found', self::BITRIX24_PHP_SDK_APPLICATION_SCOPE));
         }
@@ -76,7 +61,7 @@ class ApplicationProfile
         return new self(
             $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID],
             $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET],
-            new Scope(str_replace(' ', '', explode(',', $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_SCOPE]))),
+            new Scope(str_replace(' ', '', explode(',', (string) $appProfile[self::BITRIX24_PHP_SDK_APPLICATION_SCOPE]))),
         );
     }
 }
