@@ -494,7 +494,7 @@ class Batch implements BatchOperationsInterface
             }
 
             $params = [
-                'order' => [],
+                'order' => $order,
                 'filter' => $this->updateFilterForBatch($keyId, $startId, $lastElementIdInPage, $isLastPage, $filter),
                 'select' => $select,
                 'start' => -1,

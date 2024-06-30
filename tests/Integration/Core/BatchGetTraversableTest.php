@@ -106,6 +106,49 @@ class BatchGetTraversableTest extends TestCase
         $this->assertCount($greaterThanDefaultPageSize / 2, $readContactsId);
     }
 
+    #[TestDox('test get contacts in batch mode with less than one page but only one batch query and limit argument')]
+    public function testSingleBatchWithLessThanOnePageAndLimit(): void
+    {
+        $greaterThanDefaultPageSize = 40;
+        $originatorId = Uuid::v7()->toRfc4122();
+        // add contacts
+        $contacts = [];
+        for ($i = 0; $i < $greaterThanDefaultPageSize; $i++) {
+            $contacts[] = [
+                'fields' => [
+                    'NAME' => 'name-' . $i,
+                    'ORIGINATOR_ID' => $originatorId
+                ]
+            ];
+        }
+        $cnt = 0;
+        foreach ($this->batch->addEntityItems('crm.contact.add', $contacts) as $addedContactResult) {
+            $this->createdContactIds[] = $addedContactResult->getResult()[0];
+            $cnt++;
+        }
+        $this->assertEquals(count($contacts), $cnt);
+        $this->assertEquals(count($contacts), $this->serviceBuilder->getCRMScope()->contact()->countByFilter([
+            'ORIGINATOR_ID' => $originatorId
+        ]));
+
+        // test batch with limit
+        $readContactsId = [];
+        foreach ($this->batch->getTraversableList('crm.contact.list',
+            [],
+            [
+                'ORIGINATOR_ID' => $originatorId
+            ],
+            [
+                'ID',
+                'NAME',
+                'ORIGINATOR_ID'
+            ],
+            $greaterThanDefaultPageSize / 2
+        ) as $cnt => $itemContact) {
+            $readContactsId[] = $itemContact['ID'];
+        }
+        $this->assertCount($greaterThanDefaultPageSize / 2, $readContactsId);
+    }
 
     /**
      * @throws InvalidArgumentException
