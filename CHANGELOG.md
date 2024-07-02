@@ -60,6 +60,7 @@
 * improve DX - add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle 
 
 ### Changed
+* ❗️ migrate from `ramsey/uuid` to `symfony/uid`
 * ❗️ update scope `telephony`, scope fully rewritten
     * `ExternalCall` – work with external call:
         * `getCallRecordUploadUrl` – get url for upload call record file
@@ -115,7 +116,9 @@
     * add `CrmEntityType` – crm entity type enum
     * add `PbxType` – pbx type enum
     * add `SipRegistrationStatus` – pbx sip line registration status
-* change signature `Bitrix24\SDK\Core\Credentials\AccessToken::getRefreshToken()?string;` - add nullable option for event tokens    
+* change signature `Bitrix24\SDK\Core\Credentials\AccessToken::getRefreshToken()?string;` - add nullable option for event tokens
+* change signature `Bitrix24\SDK\Core\Commands\Command::getName():?string` renamed to `getId():string`
+
 
 ### Deleted
 * remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\Auth`
