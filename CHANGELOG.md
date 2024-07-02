@@ -61,6 +61,8 @@
 
 ### Changed
 * ❗️ migrate from `ramsey/uuid` to `symfony/uid`
+* ❗️ refactor `Bitrix24\SDK\Application\Contracts`:
+
 * ❗️ update scope `telephony`, scope fully rewritten
     * `ExternalCall` – work with external call:
         * `getCallRecordUploadUrl` – get url for upload call record file
