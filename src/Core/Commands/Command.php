@@ -4,35 +4,18 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Commands;
 
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Uid\Uuid;
 
-/**
- * Class Command
- *
- * @package Bitrix24\SDK\Core\Commands
- */
 class Command
 {
-    private readonly string $name;
-
-    private readonly \Ramsey\Uuid\UuidInterface $uuid;
-
-    /**
-     * BatchCommand constructor.
-     *
-     *
-     * @throws \Exception
-     */
-    public function __construct(private readonly string $apiMethod, private readonly array $parameters, ?string $name = null)
+    public function __construct(
+        private readonly string $apiMethod,
+        private readonly array  $parameters,
+        private ?string         $id = null)
     {
-        $this->uuid = Uuid::uuid4();
-        $this->name = $name ?? $this->uuid->toString();
-    }
-
-    public function getUuid(): UuidInterface
-    {
-        return $this->uuid;
+        if ($id === null) {
+            $this->id = (Uuid::v7())->toRfc4122();
+        }
     }
 
     public function getApiMethod(): string
@@ -45,8 +28,8 @@ class Command
         return $this->parameters;
     }
 
-    public function getName(): ?string
+    public function getId(): string
     {
-        return $this->name;
+        return $this->id;
     }
 }

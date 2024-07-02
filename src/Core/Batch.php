@@ -737,7 +737,7 @@ class Batch implements BatchOperationsInterface
                 [
                     'batchItemNumber' => $batchItem,
                     'batchApiCommand' => $traversableBatchResult->getApiCommand()->getApiMethod(),
-                    'batchApiCommandUuid' => $traversableBatchResult->getApiCommand()->getUuid()->toString(),
+                    'batchApiCommandId' => $traversableBatchResult->getApiCommand()->getId(),
                 ]
             );
             // todo try to multiplex requests
@@ -831,7 +831,7 @@ class Batch implements BatchOperationsInterface
     {
         $apiCommands = [];
         foreach ($this->commands as $command) {
-            $apiCommands[$command->getName() ?? $command->getUuid()->toString()] = sprintf(
+            $apiCommands[$command->getId()] = sprintf(
                 '%s?%s',
                 $command->getApiMethod(),
                 http_build_query($command->getParameters())
