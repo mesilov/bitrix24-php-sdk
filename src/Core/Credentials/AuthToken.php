@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core\Credentials;
 
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation;
 
-class AccessToken
+class AuthToken
 {
-    /**
-     * AccessToken constructor.
-     */
-    public function __construct(protected string $accessToken, protected ?string $refreshToken, protected int $expires, protected ?int $expiresIn = null)
+    public function __construct(
+        protected string  $accessToken,
+        protected ?string $refreshToken,
+        protected int     $expires,
+        protected ?int    $expiresIn = null)
     {
     }
 
@@ -47,7 +47,7 @@ class AccessToken
         return $this->getExpires() <= time();
     }
 
-    
+
     public static function initFromArray(array $request): self
     {
         return new self(
@@ -57,13 +57,13 @@ class AccessToken
         );
     }
 
-    public static function initFromWorkflowRequest(Request $request): self
+    public static function initFromWorkflowRequest(HttpFoundation\Request $request): self
     {
         $requestFields = $request->request->all();
         return self::initFromArray($requestFields['auth']);
     }
 
-    public static function initFromEventRequest(Request $request): self
+    public static function initFromEventRequest(HttpFoundation\Request $request): self
     {
         $requestFields = $request->request->all();
         return new self(

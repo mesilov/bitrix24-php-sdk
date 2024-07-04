@@ -20,17 +20,13 @@ use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-/**
- * Class Core
- *
- * @package Bitrix24\SDK\Core
- */
 class Core implements CoreInterface
 {
-    /**
-     * Main constructor.
-     */
-    public function __construct(protected ApiClientInterface $apiClient, protected ApiLevelErrorHandler $apiLevelErrorHandler, protected EventDispatcherInterface $eventDispatcher, protected LoggerInterface $logger)
+    public function __construct(
+        protected ApiClientInterface       $apiClient,
+        protected ApiLevelErrorHandler     $apiLevelErrorHandler,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected LoggerInterface          $logger)
     {
     }
 
@@ -109,17 +105,17 @@ class Core implements CoreInterface
                     switch (strtolower((string)$body['error'])) {
                         case 'expired_token':
                             // renew access token
-                            $renewedToken = $this->apiClient->getNewAccessToken();
+                            $renewedToken = $this->apiClient->getNewAuthToken();
                             $this->logger->debug(
                                 'access token renewed',
                                 [
-                                    'newAccessToken' => $renewedToken->getAccessToken()->getAccessToken(),
-                                    'newRefreshToken' => $renewedToken->getAccessToken()->getRefreshToken(),
-                                    'newExpires' => $renewedToken->getAccessToken()->getExpires(),
-                                    'appStatus' => $renewedToken->getApplicationStatus(),
+                                    'newAccessToken' => $renewedToken->authToken->getAccessToken(),
+                                    'newRefreshToken' => $renewedToken->authToken->getRefreshToken(),
+                                    'newExpires' => $renewedToken->authToken->getExpires(),
+                                    'appStatus' => $renewedToken->applicationStatus->getStatusCode(),
                                 ]
                             );
-                            $this->apiClient->getCredentials()->setAccessToken($renewedToken->getAccessToken());
+                            $this->apiClient->getCredentials()->setAuthToken($renewedToken->authToken);
 
                             // repeat api-call
                             $response = $this->call($apiMethod, $parameters);
