@@ -6,7 +6,7 @@ namespace Bitrix24\SDK\Tests\Integration\Core;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
 use Bitrix24\SDK\Core\CoreBuilder;
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Scope;
@@ -39,7 +39,7 @@ class CoreTest extends TestCase
         $core = (new CoreBuilder())
         ->withLogger($this->log)
         ->withCredentials(Credentials::createFromOAuth(
-            new AccessToken('non-exists-access-token','refresh-token', 3600),
+            new AuthToken('non-exists-access-token','refresh-token', 3600),
             new ApplicationProfile('non-exists-client-id', 'non-exists-client-secret', new Scope([])),
             'non-exists-domain.bitrix24.com'
         ))

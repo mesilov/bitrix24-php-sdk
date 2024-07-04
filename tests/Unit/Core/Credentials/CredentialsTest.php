@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Core\Credentials;
 
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\Scope;
@@ -40,7 +40,7 @@ class CredentialsTest extends TestCase
     public function testDomainUrlWithoutProtocol(): void
     {
         $credentials = Credentials::createFromOAuth(
-            new AccessToken('', '', 0),
+            new AuthToken('', '', 0),
             new ApplicationProfile('', '', new Scope(['crm'])),
             'bitrix24-php-sdk-playground.bitrix24.ru'
         );
@@ -54,7 +54,7 @@ class CredentialsTest extends TestCase
     public function testIsWebhookContext():void
     {
         $credentials = Credentials::createFromOAuth(
-            new AccessToken('', '', 0),
+            new AuthToken('', '', 0),
             new ApplicationProfile('', '', new Scope(['crm'])),
             'bitrix24-php-sdk-playground.bitrix24.ru'
         );
@@ -71,7 +71,7 @@ class CredentialsTest extends TestCase
     public function testDomainUrlWithProtocol(): void
     {
         $credentials = Credentials::createFromOAuth(
-            new AccessToken('', '', 0),
+            new AuthToken('', '', 0),
             new ApplicationProfile('', '', new Scope(['crm'])),
             'https://bitrix24-php-sdk-playground.bitrix24.ru'
         );
@@ -94,7 +94,7 @@ class CredentialsTest extends TestCase
         ];
         yield 'with oauth domain url with end /' => [
             Credentials::createFromOAuth(
-                new AccessToken('', '', 0),
+                new AuthToken('', '', 0),
                 new ApplicationProfile('', '', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru/'
             ),
@@ -102,7 +102,7 @@ class CredentialsTest extends TestCase
         ];
         yield 'with oauth domain url without end /' => [
             Credentials::createFromOAuth(
-                new AccessToken('', '', 0),
+                new AuthToken('', '', 0),
                 new ApplicationProfile('', '', new Scope(['crm'])),
                 'https://bitrix24-php-sdk-playground.bitrix24.ru'
             ),
