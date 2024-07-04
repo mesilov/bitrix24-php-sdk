@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Application\Requests\Placement;
 
 use Bitrix24\SDK\Application\ApplicationStatus;
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Application\Requests\AbstractRequest;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 class PlacementRequest extends AbstractRequest
 {
-    private AccessToken $accessToken;
+    private AuthToken $accessToken;
     private string $memberId;
     private ApplicationStatus $applicationStatus;
     private string $code;
@@ -38,7 +38,7 @@ class PlacementRequest extends AbstractRequest
         $this->domainUrl = sprintf('https://%s', $queryArgs['DOMAIN']);
         $this->languageCode = $queryArgs['LANG'];
 
-        $this->accessToken = AccessToken::initFromPlacementRequest($request);
+        $this->accessToken = AuthToken::initFromPlacementRequest($request);
         $this->applicationStatus = ApplicationStatus::initFromRequest($request);
         $this->memberId = $request->request->get('member_id');
         $this->code = (string)$request->request->get('PLACEMENT');
@@ -68,9 +68,9 @@ class PlacementRequest extends AbstractRequest
     }
 
     /**
-     * @return \Bitrix24\SDK\Core\Credentials\AccessToken
+     * @return \Bitrix24\SDK\Core\Credentials\AuthToken
      */
-    public function getAccessToken(): AccessToken
+    public function getAccessToken(): AuthToken
     {
         return $this->accessToken;
     }

@@ -44,13 +44,7 @@ class ServiceBuilderFactory
     {
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
-                AuthToken::initFromArray(
-                    [
-                        'access_token' => $bitrix24Account->getAuthToken()->getAccessToken(),
-                        'refresh_token' => $bitrix24Account->getAuthToken()->getRefreshToken(),
-                        'expires' => $bitrix24Account->getAuthToken()->getExpires(),
-                    ]
-                ),
+                $bitrix24Account->getAuthToken(),
                 $applicationProfile,
                 $bitrix24Account->getDomainUrl()
             )
