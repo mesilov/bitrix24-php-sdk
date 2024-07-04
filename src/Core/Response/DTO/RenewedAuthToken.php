@@ -11,11 +11,9 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 readonly class RenewedAuthToken
 {
     /**
-     * @param AuthToken $authToken
      * @param non-empty-string $memberId
      * @param non-empty-string $clientEndpoint
      * @param non-empty-string $serverEndpoint
-     * @param ApplicationStatus $applicationStatus
      * @param non-empty-string $domain
      */
     public function __construct(

@@ -103,11 +103,11 @@ class Credentials
      *
      * @throws InvalidArgumentException
      */
-    public static function createFromOAuth(AuthToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
+    public static function createFromOAuth(AuthToken $authToken, ApplicationProfile $applicationProfile, string $domainUrl): self
     {
         return new self(
             null,
-            $accessToken,
+            $authToken,
             $applicationProfile,
             $domainUrl
         );
