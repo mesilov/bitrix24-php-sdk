@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity;
 
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
@@ -71,11 +72,13 @@ interface Bitrix24AccountInterface
 
     /**
      * @param non-empty-string $applicationToken Application installed on portal and finish installation flow,  set status «active»
+     * @throws InvalidArgumentException
      */
     public function applicationInstalled(string $applicationToken): void;
 
     /**
      * @param string $applicationToken Application uninstalled from portal, set status «deleted»
+     * @throws InvalidArgumentException
      */
     public function applicationUninstalled(string $applicationToken): void;
 
@@ -100,20 +103,23 @@ interface Bitrix24AccountInterface
     /**
      * Update application version if application was updated in marketplace
      *
-     * @param int $version application version from marketplace
+     * @param positive-int $version application version from marketplace
      * @param Scope|null $newScope new scope if scope was changed
+     * @throws InvalidArgumentException
      */
     public function updateApplicationVersion(int $version, ?Scope $newScope): void;
 
     /**
      * Change account status to active
      * @param non-empty-string|null $comment
+     * @throws InvalidArgumentException
      */
     public function markAsActive(?string $comment): void;
 
     /**
      * Change account status to blocked
      * @param non-empty-string|null $comment
+     * @throws InvalidArgumentException
      */
     public function markAsBlocked(?string $comment): void;
 
