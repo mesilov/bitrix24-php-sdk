@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
-
 #[CoversClass(Bitrix24AccountInterface::class)]
 abstract class Bitrix24AccountInterfaceTest extends TestCase
 {
@@ -288,6 +287,9 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         $this->assertEquals($newDomainUrl, $ob->getDomainUrl());
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     #[Test]
     #[DataProvider('bitrix24AccountForInstallDataProvider')]
     #[TestDox('test applicationInstalled method')]
@@ -319,19 +321,19 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
     #[DataProvider('bitrix24AccountForUninstallDataProvider')]
     #[TestDox('test applicationUninstalled method')]
     final public function testApplicationUninstalled(
-        Uuid                   $id,
-        int                    $bitrix24UserId,
-        bool                   $isBitrix24UserAdmin,
-        string                 $memberId,
-        string                 $domainUrl,
-        Bitrix24AccountStatus  $accountStatusForInstall,
-        AuthToken              $authToken,
-        CarbonImmutable        $createdAt,
-        CarbonImmutable        $updatedAt,
-        int                    $applicationVersion,
-        Scope                  $applicationScope,
-        string                 $applicationToken,
-        ?Throwable             $exception
+        Uuid                  $id,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $accountStatusForInstall,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope,
+        string                $applicationToken,
+        ?Throwable            $exception
     ): void
     {
         if ($exception !== null) {
@@ -341,6 +343,266 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         $ob->applicationInstalled($applicationToken);
         $ob->applicationUninstalled($applicationToken);
         $this->assertEquals(Bitrix24AccountStatus::deleted, $ob->getStatus());
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountWithStatusNewDataProvider')]
+    #[TestDox('test isApplicationTokenValid method')]
+    final public function testIsApplicationTokenValid(
+        Uuid                  $id,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $accountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope,
+        string                $applicationToken,
+    ): void
+    {
+        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertFalse($ob->isApplicationTokenValid($applicationToken));
+        $ob->applicationInstalled($applicationToken);
+        $this->assertTrue($ob->isApplicationTokenValid($applicationToken));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountWithStatusNewDataProvider')]
+    #[TestDox('test getCreatedAt method')]
+    final public function testGetCreatedAt(
+        Uuid                  $id,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $accountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope,
+        string                $applicationToken,
+    ): void
+    {
+        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertTrue($ob->getCreatedAt()->equalTo($createdAt));
+        $ob->applicationInstalled($applicationToken);
+        $this->assertTrue($ob->getCreatedAt()->equalTo($createdAt));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountWithStatusNewDataProvider')]
+    #[TestDox('test getUpdatedAt method')]
+    final public function testGetUpdatedAt(
+        Uuid                  $id,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $accountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope,
+        string                $applicationToken,
+    ): void
+    {
+        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertTrue($ob->getUpdatedAt()->equalTo($updatedAt));
+        $ob->applicationInstalled($applicationToken);
+        $this->assertFalse($ob->getUpdatedAt()->equalTo($createdAt));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountWithStatusNewDataProvider')]
+    #[TestDox('test updateApplicationVersion method')]
+    final public function testUpdateApplicationVersion(
+        Uuid                  $id,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $accountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope,
+        string                $applicationToken,
+        int                   $newApplicationVersion,
+        Scope                 $newApplicationScope,
+        ?Throwable            $exception
+    ): void
+    {
+        if ($exception !== null) {
+            $this->expectException($exception::class);
+        }
+        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $ob->applicationInstalled($applicationToken);
+        $ob->updateApplicationVersion($newApplicationVersion, $newApplicationScope);
+        $this->assertEquals($newApplicationVersion, $ob->getApplicationVersion());
+        $this->assertTrue($newApplicationScope->equal($ob->getApplicationScope()));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountForInstallDataProvider')]
+    #[TestDox('test markAsBlocked and getComment methods')]
+    final public function testMarkAsBlocked(
+        Uuid                  $id,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $accountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope,
+        string                $applicationToken,
+        ?Throwable            $exception
+    ): void
+    {
+        if ($exception !== null) {
+            $this->expectException($exception::class);
+        }
+        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $ob->applicationInstalled($applicationToken);
+        $comment = 'block account just for fun';
+        $ob->markAsBlocked($comment);
+        $this->assertEquals(Bitrix24AccountStatus::blocked, $ob->getStatus());
+        $this->assertEquals($comment, $ob->getComment());
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('bitrix24AccountForInstallDataProvider')]
+    #[TestDox('test markAsActive and getComment methods')]
+    final public function testMarkAsActive(
+        Uuid                  $id,
+        int                   $bitrix24UserId,
+        bool                  $isBitrix24UserAdmin,
+        string                $memberId,
+        string                $domainUrl,
+        Bitrix24AccountStatus $accountStatus,
+        AuthToken             $authToken,
+        CarbonImmutable       $createdAt,
+        CarbonImmutable       $updatedAt,
+        int                   $applicationVersion,
+        Scope                 $applicationScope,
+        string                $applicationToken,
+        ?Throwable            $exception
+    ): void
+    {
+        if ($exception !== null) {
+            $this->expectException($exception::class);
+        }
+        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $ob->applicationInstalled($applicationToken);
+        $comment = 'block account just for fun';
+        $ob->markAsBlocked($comment);
+        $this->assertEquals(Bitrix24AccountStatus::blocked, $ob->getStatus());
+        $this->assertEquals($comment, $ob->getComment());
+        $comment = 'activate account';
+        $ob->markAsActive($comment);
+        $this->assertEquals(Bitrix24AccountStatus::active, $ob->getStatus());
+        $this->assertEquals($comment, $ob->getComment());
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     */
+    public static function bitrix24AccountWithStatusNewDataProvider(): Generator
+    {
+        yield 'valid-update' => [
+            Uuid::v7(),
+            12345,
+            true,
+            'member123',
+            'https://example.com',
+            Bitrix24AccountStatus::new,
+            new AuthToken('access_token', 'refresh_token', 1609459200),
+            CarbonImmutable::now(),
+            CarbonImmutable::now(),
+            1,
+            new Scope(['crm', 'task']),
+            'application_token',
+            2,
+            new Scope(['crm', 'task', 'telephony']),
+            null
+        ];
+        yield 'valid-update-same-scope' => [
+            Uuid::v7(),
+            12345,
+            true,
+            'member123',
+            'https://example.com',
+            Bitrix24AccountStatus::new,
+            new AuthToken('access_token', 'refresh_token', 1609459200),
+            CarbonImmutable::now(),
+            CarbonImmutable::now(),
+            1,
+            new Scope(['crm', 'task']),
+            'application_token',
+            2,
+            new Scope(['task','crm']),
+            null
+        ];
+        yield 'valid-downgrade-scope' => [
+            Uuid::v7(),
+            12345,
+            true,
+            'member123',
+            'https://example.com',
+            Bitrix24AccountStatus::new,
+            new AuthToken('access_token', 'refresh_token', 1609459200),
+            CarbonImmutable::now(),
+            CarbonImmutable::now(),
+            1,
+            new Scope([]),
+            'application_token',
+            2,
+            new Scope(['task','crm']),
+            null
+        ];
+        yield 'invalid-version' => [
+            Uuid::v7(),
+            12345,
+            true,
+            'member123',
+            'https://example.com',
+            Bitrix24AccountStatus::new,
+            new AuthToken('access_token', 'refresh_token', 1609459200),
+            CarbonImmutable::now(),
+            CarbonImmutable::now(),
+            1,
+            new Scope(['crm', 'task']),
+            'application_token',
+            1,
+            new Scope(['crm', 'task', 'telephony']),
+            new InvalidArgumentException()
+        ];
     }
 
     public static function bitrix24AccountForUninstallDataProvider(): Generator
@@ -424,6 +686,9 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         ];
     }
 
+    /**
+     * @throws UnknownScopeCodeException
+     */
     public static function bitrix24AccountForInstallDataProvider(): Generator
     {
         yield 'empty-application-token' => [

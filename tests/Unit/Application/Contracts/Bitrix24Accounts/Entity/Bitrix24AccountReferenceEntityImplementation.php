@@ -9,6 +9,7 @@ use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountSt
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
@@ -18,7 +19,6 @@ use Symfony\Component\Uid\Uuid;
  *
  * This class uses ONLY for demonstration and tests interface, use cases for work with Bitrix24AccountInterface methods
  *
- * @implements Bitrix24AccountInterface
  */
 final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24AccountInterface
 {
@@ -112,6 +112,9 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         return $this->applicationVersion;
     }
 
+    /**
+     * @throws UnknownScopeCodeException
+     */
     public function getApplicationScope(): Scope
     {
         return new Scope($this->applicationScope);
@@ -249,7 +252,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
             throw new InvalidArgumentException('you cannot block account in status «deleted»');
         }
 
-        $this->accountStatus = Bitrix24AccountStatus::active;
+        $this->accountStatus = Bitrix24AccountStatus::blocked;
         $this->comment = $comment;
         $this->updatedAt = new CarbonImmutable();
     }

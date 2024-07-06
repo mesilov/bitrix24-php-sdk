@@ -12,9 +12,10 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Carbon\CarbonImmutable;
 use Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
-
+#[CoversClass(Bitrix24AccountInterface::class)]
 class Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24AccountInterfaceTest
 {
     protected function createBitrix24AccountImplementation(

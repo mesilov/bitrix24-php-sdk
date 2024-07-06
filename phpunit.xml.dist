@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="tests/bootstrap.php" failOnRisky="true" failOnWarning="true">
-  <php>
-    <ini name="error_reporting" value="-1"/>
-  </php>
-  <testsuites>
-    <testsuite name="unit_tests">
-      <directory>./tests/Unit</directory>
-    </testsuite>
-    <testsuite name="integration_tests">
-      <directory>./tests/Integration</directory>
-    </testsuite>
-    <testsuite name="integration_tests_core">
-      <directory>./tests/Integration/Core/</directory>
-    </testsuite>
-    <testsuite name="integration_tests_scope_telephony">
-      <directory>./tests/Integration/Services/Telephony/</directory>
-    </testsuite>
-    <testsuite name="integration_tests_scope_user">
-      <directory>./tests/Integration/Services/User/</directory>
-    </testsuite>
-    <testsuite name="integration_tests_scope_workflows">
-      <directory>./tests/Integration/Services/Workflows/</directory>
-    </testsuite>
-  </testsuites>
-  <source>
-    <include>
-      <directory>./src</directory>
-    </include>
-  </source>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="unit_tests">
+            <directory>./tests/Unit</directory>
+            <exclude>./tests/Unit/Application/Contracts/Bitrix24Accounts/Entity/Bitrix24AccountInterfaceTest.php</exclude>
+        </testsuite>
+        <testsuite name="integration_tests">
+            <directory>./tests/Integration</directory>
+        </testsuite>
+        <testsuite name="integration_tests_core">
+            <directory>./tests/Integration/Core/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_telephony">
+            <directory>./tests/Integration/Services/Telephony/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_user">
+            <directory>./tests/Integration/Services/User/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_workflows">
+            <directory>./tests/Integration/Services/Workflows/</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>./src</directory>
+        </include>
+    </source>
 </phpunit>
