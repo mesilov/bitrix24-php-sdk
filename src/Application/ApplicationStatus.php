@@ -37,6 +37,11 @@ class ApplicationStatus
         };
     }
 
+    public static function free(): self
+    {
+        return new self(self::STATUS_SHORT_FREE);
+    }
+
     /**
      * @return bool
      */
@@ -53,12 +58,22 @@ class ApplicationStatus
         return 'demo' === $this->statusCode;
     }
 
+    public static function demo(): self
+    {
+        return new self(self::STATUS_SHORT_DEMO);
+    }
+
     /**
      * @return bool
      */
     public function isTrial(): bool
     {
         return 'trial' === $this->statusCode;
+    }
+
+    public static function trial(): self
+    {
+        return new self(self::STATUS_SHORT_TRIAL);
     }
 
     /**
@@ -69,6 +84,11 @@ class ApplicationStatus
         return 'paid' === $this->statusCode;
     }
 
+    public static function paid(): self
+    {
+        return new self(self::STATUS_SHORT_PAID);
+    }
+
     /**
      * @return bool
      */
@@ -77,12 +97,22 @@ class ApplicationStatus
         return 'local' === $this->statusCode;
     }
 
+    public static function local(): self
+    {
+        return new self(self::STATUS_SHORT_LOCAL);
+    }
+
     /**
      * @return bool
      */
     public function isSubscription(): bool
     {
         return 'subscription' === $this->statusCode;
+    }
+
+    public static function subscription(): self
+    {
+        return new self(self::STATUS_SHORT_SUBSCRIPTION);
     }
 
     /**

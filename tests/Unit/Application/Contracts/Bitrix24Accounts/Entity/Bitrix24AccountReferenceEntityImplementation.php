@@ -14,19 +14,19 @@ use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * Class Bitrix24AccountInterfaceTestEntityImplementation
+ * Class Bitrix24AccountReferenceEntityImplementation
  *
- * This class use for test interface and use cases for work with Bitrix24AccountInterface methods
+ * This class uses ONLY for demonstration and tests interface, use cases for work with Bitrix24AccountInterface methods
  *
  * @implements Bitrix24AccountInterface
  */
-final class Bitrix24AccountInterfaceTestEntityImplementation implements Bitrix24AccountInterface
+final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24AccountInterface
 {
     private string $accessToken;
     private string $refreshToken;
     private int $expires;
     private array $applicationScope;
-    private ?string $applicationToken;
+    private ?string $applicationToken = null;
     private ?string $comment;
 
     public function __construct(
@@ -146,7 +146,9 @@ final class Bitrix24AccountInterfaceTestEntityImplementation implements Bitrix24
     public function applicationInstalled(string $applicationToken): void
     {
         if (Bitrix24AccountStatus::new !== $this->accountStatus) {
-            throw new InvalidArgumentException('new account must be in status new');
+            throw new InvalidArgumentException(sprintf(
+                'for finish installation bitrix24 account must be in status «new», current status - «%s»',
+                $this->accountStatus->name));
         }
         if ($applicationToken === '') {
             throw new InvalidArgumentException('application token cannot be empty');
@@ -165,10 +167,15 @@ final class Bitrix24AccountInterfaceTestEntityImplementation implements Bitrix24
         if ($applicationToken === '') {
             throw new InvalidArgumentException('application token cannot be empty');
         }
+        if (Bitrix24AccountStatus::active !== $this->accountStatus) {
+            throw new InvalidArgumentException(sprintf(
+                'for uninstall account must be in status «active», current status - «%s»',
+                $this->accountStatus->name));
+        }
         if ($this->applicationToken !== $applicationToken) {
             throw new InvalidArgumentException(
                 sprintf(
-                    'application token %s mismatch with application token %s for bitrix24 account %s for domain %s',
+                    'application token «%s» mismatch with application token «%s» for bitrix24 account %s for domain %s',
                     $applicationToken,
                     $this->applicationToken,
                     $this->id->toRfc4122(),

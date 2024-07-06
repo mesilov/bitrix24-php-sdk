@@ -46,6 +46,36 @@ class ApplicationStatusTest extends TestCase
         $this->assertTrue(ApplicationStatus::initFromString('F')->isFree());
     }
 
+    public function testFree(): void
+    {
+        $this->assertTrue(ApplicationStatus::free()->isFree());
+    }
+
+    public function testDemo(): void
+    {
+        $this->assertTrue(ApplicationStatus::demo()->isDemo());
+    }
+
+    public function testTrial(): void
+    {
+        $this->assertTrue(ApplicationStatus::trial()->isTrial());
+    }
+
+    public function testPaid(): void
+    {
+        $this->assertTrue(ApplicationStatus::paid()->isPaid());
+    }
+
+    public function testLocal(): void
+    {
+        $this->assertTrue(ApplicationStatus::local()->isLocal());
+    }
+
+    public function testSubscription(): void
+    {
+        $this->assertTrue(ApplicationStatus::subscription()->isLocal());
+    }
+
     /**
      * @return \Generator
      */
