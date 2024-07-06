@@ -8,15 +8,10 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ScopeTest
- *
- * @package Bitrix24\SDK\Tests\Unit\Core
- */
 class ScopeTest extends TestCase
 {
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws UnknownScopeCodeException
      */
     public function testBuildScopeFromArray(): void
     {
@@ -76,6 +71,16 @@ class ScopeTest extends TestCase
     /**
      * @throws UnknownScopeCodeException
      */
+    public function testEqual(): void
+    {
+        $scope = Scope::initFromString('crm,telephony');
+        $this->assertTrue($scope->equal(Scope::initFromString('telephony,crm')));
+        $this->assertFalse($scope->equal(Scope::initFromString('telephony')));
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     */
     public function testEmptyScope(): void
     {
         $scope = new Scope(['']);
@@ -89,18 +94,20 @@ class ScopeTest extends TestCase
     {
         $scope = new Scope(['CRM', 'Call', 'im']);
 
-        $this->assertEquals(['crm', 'call', 'im'], $scope->getScopeCodes());
+        $this->assertEquals(['call', 'crm', 'im'], $scope->getScopeCodes());
     }
 
     /**
      * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws UnknownScopeCodeException
      * @covers  \Bitrix24\SDK\Core\Credentials\Scope::initFromString
      * @testdox Test init Scope from string
      */
     public function testInitFromString(): void
     {
+        $scopeList = ['crm', 'telephony', 'call', 'user_basic', 'placement', 'im', 'imopenlines'];
+        sort($scopeList);
         $scope = Scope::initFromString('crm,telephony,call,user_basic,placement,im,imopenlines');
-        $this->assertEquals(['crm', 'telephony', 'call', 'user_basic', 'placement', 'im', 'imopenlines'], $scope->getScopeCodes());
+        $this->assertEquals($scopeList, $scope->getScopeCodes());
     }
 }
