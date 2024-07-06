@@ -12,19 +12,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PlacementRequest extends AbstractRequest
 {
-    private AuthToken $accessToken;
-    private string $memberId;
-    private ApplicationStatus $applicationStatus;
-    private string $code;
+    private readonly AuthToken $accessToken;
+
+    private readonly string $memberId;
+
+    private readonly ApplicationStatus $applicationStatus;
+
+    private readonly string $code;
+
     /**
      * @var array<string, mixed>
      */
-    private array $placementOptions;
-    private string $domainUrl;
-    private string $languageCode;
+    private readonly array $placementOptions;
+
+    private readonly string $domainUrl;
+
+    private readonly string $languageCode;
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @throws \JsonException
@@ -47,10 +52,12 @@ class PlacementRequest extends AbstractRequest
         if ($options === null) {
             throw new InvalidArgumentException('invalid data in PLACEMENT_OPTIONS json payload');
         }
+
         // fix "undefined" string in options when placement loaded in telephony settings
         if (!is_array($options)) {
             $options = [];
         }
+
         $this->placementOptions = $options;
     }
 
@@ -59,50 +66,35 @@ class PlacementRequest extends AbstractRequest
         return $this->applicationStatus;
     }
 
-    /**
-     * @return string
-     */
     public function getMemberId(): string
     {
         return $this->memberId;
     }
 
-    /**
-     * @return \Bitrix24\SDK\Core\Credentials\AuthToken
-     */
     public function getAccessToken(): AuthToken
     {
         return $this->accessToken;
     }
 
-    /**
-     * @return string
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return array|mixed
-     */
-    public function getPlacementOptions()
+
+    public function getPlacementOptions(): array
     {
         return $this->placementOptions;
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function getDomainUrl()
+
+    public function getDomainUrl(): string
     {
         return $this->domainUrl;
     }
 
-    /**
-     * @return mixed|string
-     */
-    public function getLanguageCode()
+
+    public function getLanguageCode(): string
     {
         return $this->languageCode;
     }

@@ -4,6 +4,7 @@ parameters:
     - src/
     - tests/Integration/Services/Telephony
     - tests/Integration/Services/User
+    - tests/Unit/
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:
@@ -12,3 +13,4 @@ parameters:
     minimumNumberOfJobsPerProcess: 2
   editorUrlTitle: '%%relFile%%:%%line%%'
   editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+  treatPhpDocTypesAsCertain: false

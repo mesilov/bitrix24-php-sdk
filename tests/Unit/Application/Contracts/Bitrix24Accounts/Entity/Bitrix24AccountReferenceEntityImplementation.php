@@ -23,21 +23,26 @@ use Symfony\Component\Uid\Uuid;
 final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24AccountInterface
 {
     private string $accessToken;
+
     private string $refreshToken;
+
     private int $expires;
+
     private array $applicationScope;
+
     private ?string $applicationToken = null;
-    private ?string $comment;
+
+    private ?string $comment = null;
 
     public function __construct(
-        private Uuid                  $id,
-        private int                   $bitrix24UserId,
-        private bool                  $isBitrix24UserAdmin,
-        private string                $memberId,
+        private readonly Uuid                  $id,
+        private readonly int                   $bitrix24UserId,
+        private readonly bool                  $isBitrix24UserAdmin,
+        private readonly string                $memberId,
         private string                $domainUrl,
         private Bitrix24AccountStatus $accountStatus,
         AuthToken                     $authToken,
-        private CarbonImmutable       $createdAt,
+        private readonly CarbonImmutable       $createdAt,
         private CarbonImmutable       $updatedAt,
         private int                   $applicationVersion,
         Scope                         $applicationScope,
@@ -89,13 +94,13 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
      */
     public function renewAuthToken(RenewedAuthToken $renewedAuthToken): void
     {
-        if ($this->getMemberId() !== $renewedAuthToken->memberId) {
+        if ($this->memberId !== $renewedAuthToken->memberId) {
             throw new InvalidArgumentException(
                 sprintf(
                     'member id %s for bitrix24 account %s for domain %s mismatch with member id %s for renewed access token',
-                    $this->getMemberId(),
-                    $this->getId()->toRfc4122(),
-                    $this->getDomainUrl(),
+                    $this->memberId,
+                    $this->id->toRfc4122(),
+                    $this->domainUrl,
                     $renewedAuthToken->memberId,
                 )
             );
@@ -128,6 +133,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         if ($newDomainUrl === '') {
             throw new InvalidArgumentException('new domain url cannot be empty');
         }
+
         if (Bitrix24AccountStatus::blocked === $this->accountStatus || Bitrix24AccountStatus::deleted === $this->accountStatus) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -153,6 +159,7 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
                 'for finish installation bitrix24 account must be in status «new», current status - «%s»',
                 $this->accountStatus->name));
         }
+
         if ($applicationToken === '') {
             throw new InvalidArgumentException('application token cannot be empty');
         }
@@ -170,11 +177,13 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         if ($applicationToken === '') {
             throw new InvalidArgumentException('application token cannot be empty');
         }
+
         if (Bitrix24AccountStatus::active !== $this->accountStatus) {
             throw new InvalidArgumentException(sprintf(
                 'for uninstall account must be in status «active», current status - «%s»',
                 $this->accountStatus->name));
         }
+
         if ($this->applicationToken !== $applicationToken) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -214,16 +223,19 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
         if (Bitrix24AccountStatus::active !== $this->accountStatus) {
             throw new InvalidArgumentException(sprintf('account must be in status «active», but now account in status «%s»', $this->accountStatus->name));
         }
+
         if ($this->applicationVersion >= $version) {
             throw new InvalidArgumentException(
                 sprintf('you cannot downgrade application version or set some version, current version «%s», but you try to upgrade to «%s»',
                     $this->applicationVersion,
                     $version));
         }
+
         $this->applicationVersion = $version;
-        if ($newScope !== null) {
+        if ($newScope instanceof \Bitrix24\SDK\Core\Credentials\Scope) {
             $this->applicationScope = $newScope->getScopeCodes();
         }
+
         $this->updatedAt = new CarbonImmutable();
     }
 

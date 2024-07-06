@@ -8,19 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractRequest
 {
-    protected Request $request;
-
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request = $request;
     }
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\Request
-     */
     public function getRequest(): Request
     {
         return $this->request;

@@ -26,12 +26,12 @@ use Throwable;
 abstract class Bitrix24AccountInterfaceTest extends TestCase
 {
     abstract protected function createBitrix24AccountImplementation(
-        Uuid                  $id,
+        Uuid                  $uuid,
         int                   $bitrix24UserId,
         bool                  $isBitrix24UserAdmin,
         string                $memberId,
         string                $domainUrl,
-        Bitrix24AccountStatus $accountStatus,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken             $authToken,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -56,8 +56,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($id, $ob->getId());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($id, $bitrix24Account->getId());
     }
 
     #[Test]
@@ -77,8 +77,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($bitrix24UserId, $ob->getBitrix24UserId());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($bitrix24UserId, $bitrix24Account->getBitrix24UserId());
     }
 
     #[Test]
@@ -98,8 +98,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($isBitrix24UserAdmin, $ob->isBitrix24UserAdmin());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($isBitrix24UserAdmin, $bitrix24Account->isBitrix24UserAdmin());
     }
 
     #[Test]
@@ -119,8 +119,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($memberId, $ob->getMemberId());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($memberId, $bitrix24Account->getMemberId());
     }
 
     #[Test]
@@ -140,8 +140,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($domainUrl, $ob->getDomainUrl());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($domainUrl, $bitrix24Account->getDomainUrl());
     }
 
     #[Test]
@@ -161,8 +161,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($accountStatus, $ob->getStatus());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($accountStatus, $bitrix24Account->getStatus());
     }
 
     #[Test]
@@ -182,8 +182,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($authToken, $ob->getAuthToken());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($authToken, $bitrix24Account->getAuthToken());
     }
 
     #[Test]
@@ -203,7 +203,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
         $newAuthToken = new AuthToken('access_token-2', 'refresh_token=2', 1609459202);
         $appStatus = ApplicationStatus::subscription();
 
@@ -215,10 +215,10 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
             $appStatus,
             $domainUrl
         );
-        $ob->renewAuthToken($renewedAuthToken);
+        $bitrix24Account->renewAuthToken($renewedAuthToken);
 
 
-        $this->assertEquals($newAuthToken, $ob->getAuthToken());
+        $this->assertEquals($newAuthToken, $bitrix24Account->getAuthToken());
     }
 
     #[Test]
@@ -238,8 +238,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($applicationVersion, $ob->getApplicationVersion());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($applicationVersion, $bitrix24Account->getApplicationVersion());
     }
 
 
@@ -260,8 +260,8 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         Scope                 $applicationScope
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertEquals($applicationScope, $ob->getApplicationScope());
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertEquals($applicationScope, $bitrix24Account->getApplicationScope());
     }
 
     #[Test]
@@ -306,15 +306,16 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         int                   $applicationVersion,
         Scope                 $applicationScope,
         string                $applicationToken,
-        ?Throwable            $exception
+        ?Throwable            $throwable
     ): void
     {
-        if ($exception !== null) {
-            $this->expectException($exception::class);
+        if ($throwable instanceof \Throwable) {
+            $this->expectException($throwable::class);
         }
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $ob->applicationInstalled($applicationToken);
-        $this->assertTrue($ob->isApplicationTokenValid($applicationToken));
+
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account->applicationInstalled($applicationToken);
+        $this->assertTrue($bitrix24Account->isApplicationTokenValid($applicationToken));
     }
 
     #[Test]
@@ -326,7 +327,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         bool                  $isBitrix24UserAdmin,
         string                $memberId,
         string                $domainUrl,
-        Bitrix24AccountStatus $accountStatusForInstall,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken             $authToken,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -336,13 +337,14 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         ?Throwable            $exception
     ): void
     {
-        if ($exception !== null) {
+        if ($exception instanceof \Throwable) {
             $this->expectException($exception::class);
         }
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatusForInstall, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $ob->applicationInstalled($applicationToken);
-        $ob->applicationUninstalled($applicationToken);
-        $this->assertEquals(Bitrix24AccountStatus::deleted, $ob->getStatus());
+
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account->applicationInstalled($applicationToken);
+        $bitrix24Account->applicationUninstalled($applicationToken);
+        $this->assertEquals(Bitrix24AccountStatus::deleted, $bitrix24Account->getStatus());
     }
 
     /**
@@ -357,7 +359,7 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         bool                  $isBitrix24UserAdmin,
         string                $memberId,
         string                $domainUrl,
-        Bitrix24AccountStatus $accountStatus,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken             $authToken,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -366,10 +368,10 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         string                $applicationToken,
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertFalse($ob->isApplicationTokenValid($applicationToken));
-        $ob->applicationInstalled($applicationToken);
-        $this->assertTrue($ob->isApplicationTokenValid($applicationToken));
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $bitrix24AccountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertFalse($bitrix24Account->isApplicationTokenValid($applicationToken));
+        $bitrix24Account->applicationInstalled($applicationToken);
+        $this->assertTrue($bitrix24Account->isApplicationTokenValid($applicationToken));
     }
 
     /**
@@ -393,10 +395,10 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         string                $applicationToken,
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertTrue($ob->getCreatedAt()->equalTo($createdAt));
-        $ob->applicationInstalled($applicationToken);
-        $this->assertTrue($ob->getCreatedAt()->equalTo($createdAt));
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertTrue($bitrix24Account->getCreatedAt()->equalTo($createdAt));
+        $bitrix24Account->applicationInstalled($applicationToken);
+        $this->assertTrue($bitrix24Account->getCreatedAt()->equalTo($createdAt));
     }
 
     /**
@@ -420,10 +422,10 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         string                $applicationToken,
     ): void
     {
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $this->assertTrue($ob->getUpdatedAt()->equalTo($updatedAt));
-        $ob->applicationInstalled($applicationToken);
-        $this->assertFalse($ob->getUpdatedAt()->equalTo($createdAt));
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $this->assertTrue($bitrix24Account->getUpdatedAt()->equalTo($updatedAt));
+        $bitrix24Account->applicationInstalled($applicationToken);
+        $this->assertFalse($bitrix24Account->getUpdatedAt()->equalTo($createdAt));
     }
 
     /**
@@ -447,17 +449,18 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         string                $applicationToken,
         int                   $newApplicationVersion,
         Scope                 $newApplicationScope,
-        ?Throwable            $exception
+        ?Throwable            $throwable
     ): void
     {
-        if ($exception !== null) {
-            $this->expectException($exception::class);
+        if ($throwable instanceof \Throwable) {
+            $this->expectException($throwable::class);
         }
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $ob->applicationInstalled($applicationToken);
-        $ob->updateApplicationVersion($newApplicationVersion, $newApplicationScope);
-        $this->assertEquals($newApplicationVersion, $ob->getApplicationVersion());
-        $this->assertTrue($newApplicationScope->equal($ob->getApplicationScope()));
+
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account->applicationInstalled($applicationToken);
+        $bitrix24Account->updateApplicationVersion($newApplicationVersion, $newApplicationScope);
+        $this->assertEquals($newApplicationVersion, $bitrix24Account->getApplicationVersion());
+        $this->assertTrue($newApplicationScope->equal($bitrix24Account->getApplicationScope()));
     }
 
     /**
@@ -482,15 +485,17 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         ?Throwable            $exception
     ): void
     {
-        if ($exception !== null) {
+        if ($exception instanceof \Throwable) {
             $this->expectException($exception::class);
         }
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $ob->applicationInstalled($applicationToken);
+
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account->applicationInstalled($applicationToken);
+
         $comment = 'block account just for fun';
-        $ob->markAsBlocked($comment);
-        $this->assertEquals(Bitrix24AccountStatus::blocked, $ob->getStatus());
-        $this->assertEquals($comment, $ob->getComment());
+        $bitrix24Account->markAsBlocked($comment);
+        $this->assertEquals(Bitrix24AccountStatus::blocked, $bitrix24Account->getStatus());
+        $this->assertEquals($comment, $bitrix24Account->getComment());
     }
 
     /**
@@ -515,19 +520,21 @@ abstract class Bitrix24AccountInterfaceTest extends TestCase
         ?Throwable            $exception
     ): void
     {
-        if ($exception !== null) {
+        if ($exception instanceof \Throwable) {
             $this->expectException($exception::class);
         }
-        $ob = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
-        $ob->applicationInstalled($applicationToken);
+
+        $bitrix24Account = $this->createBitrix24AccountImplementation($id, $bitrix24UserId, $isBitrix24UserAdmin, $memberId, $domainUrl, $accountStatus, $authToken, $createdAt, $updatedAt, $applicationVersion, $applicationScope);
+        $bitrix24Account->applicationInstalled($applicationToken);
+
         $comment = 'block account just for fun';
-        $ob->markAsBlocked($comment);
-        $this->assertEquals(Bitrix24AccountStatus::blocked, $ob->getStatus());
-        $this->assertEquals($comment, $ob->getComment());
+        $bitrix24Account->markAsBlocked($comment);
+        $this->assertEquals(Bitrix24AccountStatus::blocked, $bitrix24Account->getStatus());
+        $this->assertEquals($comment, $bitrix24Account->getComment());
         $comment = 'activate account';
-        $ob->markAsActive($comment);
-        $this->assertEquals(Bitrix24AccountStatus::active, $ob->getStatus());
-        $this->assertEquals($comment, $ob->getComment());
+        $bitrix24Account->markAsActive($comment);
+        $this->assertEquals(Bitrix24AccountStatus::active, $bitrix24Account->getStatus());
+        $this->assertEquals($comment, $bitrix24Account->getComment());
     }
 
     /**

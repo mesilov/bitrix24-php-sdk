@@ -10,10 +10,12 @@ use Rector\Set\ValueObject\DowngradeLevelSetList;
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src/Core/',
+        __DIR__ . '/src/Application/',
         __DIR__ . '/src/Services/Telephony',
         __DIR__ . '/tests/Integration/Services/Telephony',
         __DIR__ . '/src/Services/User',
         __DIR__ . '/tests/Integration/Services/User',
+        __DIR__ . '/tests/Unit/',
     ])
     ->withCache(cacheDirectory: __DIR__ . '.cache/rector')
     ->withSets(

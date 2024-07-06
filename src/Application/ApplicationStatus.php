@@ -10,16 +10,20 @@ use Symfony\Component\HttpFoundation\Request;
 class ApplicationStatus
 {
     private const STATUS_SHORT_FREE = 'F';
+
     private const STATUS_SHORT_DEMO = 'D';
+
     private const STATUS_SHORT_TRIAL = 'T';
+
     private const STATUS_SHORT_PAID = 'P';
+
     private const STATUS_SHORT_LOCAL = 'L';
+
     private const STATUS_SHORT_SUBSCRIPTION = 'S';
-    private string $statusCode;
+
+    private readonly string $statusCode;
 
     /**
-     * @param string $statusShortCode
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(string $statusShortCode)
@@ -42,17 +46,11 @@ class ApplicationStatus
         return new self(self::STATUS_SHORT_FREE);
     }
 
-    /**
-     * @return bool
-     */
     public function isFree(): bool
     {
         return 'free' === $this->statusCode;
     }
 
-    /**
-     * @return bool
-     */
     public function isDemo(): bool
     {
         return 'demo' === $this->statusCode;
@@ -63,9 +61,6 @@ class ApplicationStatus
         return new self(self::STATUS_SHORT_DEMO);
     }
 
-    /**
-     * @return bool
-     */
     public function isTrial(): bool
     {
         return 'trial' === $this->statusCode;
@@ -76,9 +71,6 @@ class ApplicationStatus
         return new self(self::STATUS_SHORT_TRIAL);
     }
 
-    /**
-     * @return bool
-     */
     public function isPaid(): bool
     {
         return 'paid' === $this->statusCode;
@@ -89,9 +81,6 @@ class ApplicationStatus
         return new self(self::STATUS_SHORT_PAID);
     }
 
-    /**
-     * @return bool
-     */
     public function isLocal(): bool
     {
         return 'local' === $this->statusCode;
@@ -102,9 +91,6 @@ class ApplicationStatus
         return new self(self::STATUS_SHORT_LOCAL);
     }
 
-    /**
-     * @return bool
-     */
     public function isSubscription(): bool
     {
         return 'subscription' === $this->statusCode;
@@ -115,18 +101,12 @@ class ApplicationStatus
         return new self(self::STATUS_SHORT_SUBSCRIPTION);
     }
 
-    /**
-     * @return string
-     */
     public function getStatusCode(): string
     {
         return $this->statusCode;
     }
 
     /**
-     * @param Request $request
-     *
-     * @return self
      * @throws InvalidArgumentException
      */
     public static function initFromRequest(Request $request): self
@@ -135,9 +115,6 @@ class ApplicationStatus
     }
 
     /**
-     * @param string $shortStatusCode
-     *
-     * @return self
      * @throws InvalidArgumentException
      */
     public static function initFromString(string $shortStatusCode): self

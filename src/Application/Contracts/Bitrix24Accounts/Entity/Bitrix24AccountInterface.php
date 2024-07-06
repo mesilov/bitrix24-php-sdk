@@ -48,11 +48,7 @@ interface Bitrix24AccountInterface
      */
     public function getAuthToken(): AuthToken;
 
-    /**
-     * @param RenewedAuthToken $renewedAuthToken
-     *
-     * @return void
-     */
+    
     public function renewAuthToken(RenewedAuthToken $renewedAuthToken): void;
 
     /**

@@ -8,6 +8,7 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Core\Credentials\Scope::class)]
 class ScopeTest extends TestCase
 {
     /**
@@ -65,7 +66,7 @@ class ScopeTest extends TestCase
     {
         $this->expectException(UnknownScopeCodeException::class);
 
-        $scope = new Scope(['fooo']);
+        new Scope(['fooo']);
     }
 
     /**
@@ -98,11 +99,9 @@ class ScopeTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws UnknownScopeCodeException
-     * @covers  \Bitrix24\SDK\Core\Credentials\Scope::initFromString
-     * @testdox Test init Scope from string
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('Test init Scope from string')]
     public function testInitFromString(): void
     {
         $scopeList = ['crm', 'telephony', 'call', 'user_basic', 'placement', 'im', 'imopenlines'];

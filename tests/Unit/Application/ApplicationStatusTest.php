@@ -9,16 +9,14 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Application\ApplicationStatus::class)]
 class ApplicationStatusTest extends TestCase
 {
     /**
-     * @param string $shortCode
-     * @param string $longCode
      *
-     * @return void
-     * @dataProvider statusDataProvider
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusDataProvider')]
     public function testGetStatusCode(string $shortCode, string $longCode): void
     {
         $this->assertEquals(
@@ -27,9 +25,6 @@ class ApplicationStatusTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testInvalidStatusCode(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -37,9 +32,7 @@ class ApplicationStatusTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @covers \Bitrix24\SDK\Application\ApplicationStatus::initFromString
      */
     public function testInitFromString(): void
     {
@@ -76,9 +69,6 @@ class ApplicationStatusTest extends TestCase
         $this->assertTrue(ApplicationStatus::subscription()->isSubscription());
     }
 
-    /**
-     * @return \Generator
-     */
     public static function statusDataProvider(): Generator
     {
         yield 'free' => [

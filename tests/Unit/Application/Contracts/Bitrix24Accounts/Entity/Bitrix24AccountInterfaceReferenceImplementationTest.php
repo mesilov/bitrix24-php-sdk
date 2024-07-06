@@ -19,12 +19,12 @@ use Symfony\Component\Uid\Uuid;
 class Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24AccountInterfaceTest
 {
     protected function createBitrix24AccountImplementation(
-        Uuid                  $id,
+        Uuid                  $uuid,
         int                   $bitrix24UserId,
         bool                  $isBitrix24UserAdmin,
         string                $memberId,
         string                $domainUrl,
-        Bitrix24AccountStatus $accountStatus,
+        Bitrix24AccountStatus $bitrix24AccountStatus,
         AuthToken             $authToken,
         CarbonImmutable       $createdAt,
         CarbonImmutable       $updatedAt,
@@ -33,12 +33,12 @@ class Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24Accoun
     ): Bitrix24AccountInterface
     {
         return new Bitrix24AccountReferenceEntityImplementation(
-            $id,
+            $uuid,
             $bitrix24UserId,
             $isBitrix24UserAdmin,
             $memberId,
             $domainUrl,
-            $accountStatus,
+            $bitrix24AccountStatus,
             $authToken,
             $createdAt,
             $updatedAt,

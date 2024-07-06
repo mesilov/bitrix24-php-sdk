@@ -17,8 +17,8 @@ class TimeTest extends TestCase
 {
     /**
      * @throws \Exception
-     * @dataProvider timingsDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('timingsDataProvider')]
     public function testInitFromResponseData(array $result): void
     {
         $time = Time::initFromResponse($result);
@@ -33,9 +33,6 @@ class TimeTest extends TestCase
         $this->assertEquals($result['date_finish'], $time->getDateFinish()->format(\DATE_ATOM));
     }
 
-    /**
-     * @return \Generator
-     */
     public static function timingsDataProvider(): Generator
     {
         yield 'without operating reset at' => [

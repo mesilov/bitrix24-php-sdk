@@ -20,10 +20,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 class NullCore implements CoreInterface
 {
     /**
-     * @param string $apiMethod
-     * @param array $parameters
      *
-     * @return Response
      * @throws \Exception
      */
     public function call(string $apiMethod, array $parameters = []): Response

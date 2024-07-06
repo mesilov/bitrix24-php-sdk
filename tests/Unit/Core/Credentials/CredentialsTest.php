@@ -25,13 +25,12 @@ class CredentialsTest extends TestCase
     #[DataProvider('credentialsDataProviderWithDomainUrlVariants')]
     public function testGetDomainUrl(
         Credentials $credentials,
-        $expectedDomainUrl
+        string $expectedDomainUrl
     ): void {
         $this->assertEquals($expectedDomainUrl, $credentials->getDomainUrl());
     }
 
     /**
-     * @return void
      * @throws InvalidArgumentException
      * @throws UnknownScopeCodeException
      */
@@ -49,6 +48,7 @@ class CredentialsTest extends TestCase
             $credentials->getDomainUrl()
         );
     }
+
     #[Test]
     #[TestDox('tests isWebhookContext')]
     public function testIsWebhookContext():void
@@ -62,7 +62,6 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws InvalidArgumentException
      * @throws UnknownScopeCodeException
      */
@@ -82,7 +81,6 @@ class CredentialsTest extends TestCase
     }
 
     /**
-     * @return Generator
      * @throws InvalidArgumentException
      * @throws UnknownScopeCodeException
      */
