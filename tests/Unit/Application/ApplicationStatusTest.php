@@ -73,7 +73,7 @@ class ApplicationStatusTest extends TestCase
 
     public function testSubscription(): void
     {
-        $this->assertTrue(ApplicationStatus::subscription()->isLocal());
+        $this->assertTrue(ApplicationStatus::subscription()->isSubscription());
     }
 
     /**
