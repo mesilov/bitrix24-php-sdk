@@ -1,28 +1,29 @@
 # Bitrix24 account entity
 
-| Method                        | Return Type             | Description                                                 | Throws                   |
-|-------------------------------|-------------------------|-------------------------------------------------------------|--------------------------|
-| ` getId()                   ` | `Uuid                 ` | Returns the unique account ID.                              | -                        |
-| ` getBitrix24UserId()       ` | `int                  ` | Returns the Bitrix24 user ID who installed the application. | -                        |
-| ` isBitrix24UserAdmin()     ` | `bool                 ` | Checks if the Bitrix24 user has admin rights.               | -                        |
-| ` getMemberId()             ` | `string               ` | Returns the unique portal ID.                               | -                        |
-| ` getDomainUrl()            ` | `string               ` | Returns the portal domain URL.                              | -                        |
-| ` getStatus()               ` | `Bitrix24AccountStatus` | Returns the account status.                                 | -                        |
-| ` getAuthToken()            ` | `AuthToken            ` | Returns the authentication token.                           | -                        |
-| ` renewAuthToken()          ` | `void                 ` | Renews the authentication token.                            | -                        |
-| ` getApplicationVersion()   ` | `int                  ` | Returns the application version.                            | -                        |
-| ` getApplicationScope()     ` | `Scope                ` | Returns the application scope (permissions).                | -                        |
-| ` changeDomainUrl()         ` | `void                 ` | Changes the domain URL after a portal rename.               | -                        |
-| ` applicationInstalled()    ` | `void                 ` | Sets the account status to "active".                        | InvalidArgumentException |
-| ` applicationUninstalled()  ` | `void                 ` | Sets the account status to "deleted".                       | InvalidArgumentException |
-| ` isApplicationTokenValid() ` | `bool                 ` | Checks if the provided application token is valid.          | -                        |
-| ` getCreatedAt()            ` | `CarbonImmutable      ` | Returns the account creation date and time.                 | -                        |
-| ` getUpdatedAt()            ` | `CarbonImmutable      ` | Returns the last account update date and time.              | -                        |
-| ` updateApplicationVersion()` | `void                 ` | Updates the application version.                            | InvalidArgumentException |
-| ` markAsActive()            ` | `void                 ` | Changes the account status to active.                       | InvalidArgumentException |
-| ` markAsBlocked()           ` | `void                 ` | Changes the account status to blocked.                      | InvalidArgumentException |
-| ` getComment()              ` | `?string              ` | Returns the comment for this account.                       | -                        |
+Store auth tokens and provides methods for work with Bitrix24 account.
 
+| Method                       | Return Type             | Description                                                 | Throws                   |
+|------------------------------|-------------------------|-------------------------------------------------------------|--------------------------|
+| `getId()`                    | `Uuid`                  | Returns the unique account ID.                              | -                        |
+| `getBitrix24UserId()`        | `int`                   | Returns the Bitrix24 user ID who installed the application. | -                        |
+| `isBitrix24UserAdmin()`      | `bool`                  | Checks if the Bitrix24 user has admin rights.               | -                        |
+| `getMemberId()`              | `string`                | Returns the unique portal ID.                               | -                        |
+| `getDomainUrl()`             | `string`                | Returns the portal domain URL.                              | -                        |
+| `getStatus()`                | `Bitrix24AccountStatus` | Returns the account status.                                 | -                        |
+| `getAuthToken()`             | `AuthToken`             | Returns the authentication token.                           | -                        |
+| `renewAuthToken()`           | `void`                  | Renews the authentication token.                            | -                        |
+| `getApplicationVersion()`    | `int`                   | Returns the application version.                            | -                        |
+| `getApplicationScope()`      | `Scope`                 | Returns the application scope (permissions).                | -                        |
+| `changeDomainUrl()`          | `void`                  | Changes the domain URL after a portal rename.               | -                        |
+| `applicationInstalled()`     | `void`                  | Sets the account status to "active".                        | InvalidArgumentException |
+| `applicationUninstalled()`   | `void`                  | Sets the account status to "deleted".                       | InvalidArgumentException |
+| `isApplicationTokenValid()`  | `bool`                  | Checks if the provided application token is valid.          | -                        |
+| `getCreatedAt()`             | `CarbonImmutable`       | Returns the account creation date and time.                 | -                        |
+| `getUpdatedAt()`             | `CarbonImmutable`       | Returns the last account update date and time.              | -                        |
+| `updateApplicationVersion()` | `void`                  | Updates the application version.                            | InvalidArgumentException |
+| `markAsActive()`             | `void`                  | Changes the account status to active.                       | InvalidArgumentException |
+| `markAsBlocked()`            | `void`                  | Changes the account status to blocked.                      | InvalidArgumentException |
+| `getComment()`               | `?string`               | Returns the comment for this account.                       | -                        |
 
 ## Bitrix24 account state diagram
 
