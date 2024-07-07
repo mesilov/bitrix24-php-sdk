@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Tests\ApplicationBridge;
 
 
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 readonly class ApplicationCredentialsProvider
 {
-    public function __construct(private AccessTokenRepositoryInterface $repository)
+    public function __construct(private AuthTokenRepositoryInterface $repository)
     {
     }
 
@@ -24,9 +24,9 @@ readonly class ApplicationCredentialsProvider
         return $this->repository->isAvailable();
     }
 
-    public function saveAccessToken(AccessToken $accessToken): void
+    public function saveAuthToken(AuthToken $authToken): void
     {
-        $this->repository->saveAccessToken($accessToken);
+        $this->repository->saveToken($authToken);
     }
 
     /**
@@ -36,7 +36,7 @@ readonly class ApplicationCredentialsProvider
     {
         return new Credentials(
             null,
-            $this->repository->getAccessToken(),
+            $this->repository->getToken(),
             $applicationProfile,
             $domainUrl
         );
@@ -46,11 +46,11 @@ readonly class ApplicationCredentialsProvider
     public function onAuthTokenRenewedEventListener(AuthTokenRenewedEvent $event): void
     {
         // update credentials
-        $this->repository->saveRenewedAccessToken($event->getRenewedToken());
+        $this->repository->saveRenewedToken($event->getRenewedToken());
     }
 
     public static function buildProviderForLocalApplication(): self
     {
-        return new ApplicationCredentialsProvider(new AccessTokenFileStorage(new Filesystem()));
+        return new ApplicationCredentialsProvider(new AuthTokenFileStorage(new Filesystem()));
     }
 }

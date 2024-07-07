@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tests\ApplicationBridge\ApplicationCredentialsProvider;
@@ -45,12 +45,12 @@ $log->pushProcessor(new MemoryUsageProcessor(true, true));
 
 $b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
 $appProfile = ApplicationProfile::initFromArray($_ENV);
-$accessToken = AccessToken::initFromPlacementRequest($request);
+$accessToken = AuthToken::initFromPlacementRequest($request);
 $b24Service = $b24ServiceFactory->initFromRequest($appProfile, $accessToken, $_REQUEST['DOMAIN']);
 
 // save new access token for integration tests
 $credentialsProvider = ApplicationCredentialsProvider::buildProviderForLocalApplication();
-$credentialsProvider->saveAccessToken($accessToken);
+$credentialsProvider->saveAuthToken($accessToken);
 
 // call rest-api
 print_r($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());

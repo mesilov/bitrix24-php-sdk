@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\ApplicationBridge;
 
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
-use Bitrix24\SDK\Core\Response\DTO\RenewedAccessToken;
+use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use JsonException;
 use Symfony\Component\Filesystem\Filesystem;
 
-readonly class AccessTokenFileStorage implements AccessTokenRepositoryInterface
+readonly class AuthTokenFileStorage implements AuthTokenRepositoryInterface
 {
     private const TOKEN_FILE_NAME = 'auth.json';
 
@@ -33,29 +33,32 @@ readonly class AccessTokenFileStorage implements AccessTokenRepositoryInterface
      * @throws FileNotFoundException
      * @throws JsonException
      */
-    public function getAccessToken(): AccessToken
+    public function getToken(): AuthToken
     {
         if (!$this->filesystem->exists($this->getFileName())) {
             throw new FileNotFoundException(sprintf('file «%s» with stored access token not found', $this->getFileName()));
         }
 
         $payload = file_get_contents($this->getFileName());
-        return AccessToken::initFromArray(json_decode($payload, true, 512, JSON_THROW_ON_ERROR));
+        return AuthToken::initFromArray(json_decode($payload, true, 512, JSON_THROW_ON_ERROR));
     }
 
-    public function saveAccessToken(AccessToken $accessToken): void
+    /**
+     * @throws JsonException
+     */
+    public function saveToken(AuthToken $authToken): void
     {
-        $accessTokenPayload = json_encode([
-            'access_token' => $accessToken->getAccessToken(),
-            'refresh_token' => $accessToken->getRefreshToken(),
-            'expires' => $accessToken->getExpires()
+        $tokenPayload = json_encode([
+            'access_token' => $authToken->getAccessToken(),
+            'refresh_token' => $authToken->getRefreshToken(),
+            'expires' => $authToken->getExpires()
         ], JSON_THROW_ON_ERROR);
 
-        $this->filesystem->dumpFile($this->getFileName(), $accessTokenPayload);
+        $this->filesystem->dumpFile($this->getFileName(), $tokenPayload);
     }
 
-    public function saveRenewedAccessToken(RenewedAccessToken $renewedAccessToken): void
+    public function saveRenewedToken(RenewedAuthToken $renewedAuthToken): void
     {
-        $this->saveAccessToken($renewedAccessToken->getAccessToken());
+        $this->saveToken($renewedAuthToken->authToken);
     }
 }
