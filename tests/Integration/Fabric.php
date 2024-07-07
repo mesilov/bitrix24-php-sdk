@@ -15,7 +15,6 @@ use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use Bitrix24\SDK\Services\ServiceBuilder;
-use Bitrix24\SDK\Tests\ApplicationBridge\AccessTokenFileStorage;
 use Bitrix24\SDK\Tests\ApplicationBridge\ApplicationCredentialsProvider;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
