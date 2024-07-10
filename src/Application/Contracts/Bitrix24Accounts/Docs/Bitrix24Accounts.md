@@ -64,3 +64,31 @@ stateDiagram-v2
 - `findByDomain(string $domainUrl, ?Bitrix24AccountStatus $status = null, ?bool $isAdmin = null): array`
     - use case ChangeDomainUrl
 - `findOneAdminByMemberId(string $memberId): ?Bitrix24AccountInterface`  
+
+## Events
+```mermaid
+%%{init: { 'logLevel': 'debug', 'theme': 'neutral' } }%%
+timeline
+    title Bitrix24 account timeline
+    section Application installation period
+        Create new account when install start : Bitrix24 Account Created Event
+        Activate account if install finish : Bitrix24 Account Application Installed Event
+        Block Account if install failure : Bitrix24 Account Blocked Event
+    section Application active period
+        Change domain URL if portal renamed : Bitrix24 Account DomainUrl Changed Event
+        Block Account : Bitrix24 Account Blocked Event
+        Unblock Account : Bitrix24 Account Unblocked Event
+        Update Application Version : Bitrix24 Account Application Version Updated Event
+    section Application uninstall period
+        Administrator Uninstalled Application : Bitrix24 Account Application Uninstalled Event
+        Delete account : Bitrix24 Account Deleted Event
+```
+
+- `Bitrix24AccountCreatedEvent` — event is triggered when a new Bitrix24 account is created. The account is initially in a `New` state, and the installation process has begun.
+- `Bitrix24AccountApplicationInstalledEvent` — event is triggered when an application is successfully installed. It signifies that account finish installation flow.   
+- `Bitrix24AccountDomainUrlChangedEvent` — event is triggered when the domain URL associated with a Bitrix24 account is modified.
+- `Bitrix24AccountBlockedEvent` — event occurs when a Bitrix24 account is blocked. This could be due to various reasons such as lost auth token, policy violations, or at the request of the account owner.
+- `Bitrix24AccountUnblockedEvent` — event is triggered when a previously blocked Bitrix24 account is unblocked and restored to normal functioning. 
+- `Bitrix24AccountApplicationVersionUpdatedEvent` — event is triggered when an installed application within a Bitrix24 account is updated to a newer version. It signifies that the application has been successfully upgraded with new features or fixes.  
+- `Bitrix24AccountApplicationUninstalledEvent` —  event is triggered when an application uninstalled from a Bitrix24 account.
+- `Bitrix24AccountDeletedEvent` — event is triggered when a Bitrix24 account is permanently deleted. This likely represents the final stage in an account's lifecycle and might involve data removal and cleanup processes.
