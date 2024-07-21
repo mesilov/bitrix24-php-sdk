@@ -30,8 +30,8 @@ class ExternalLineTest extends TestCase
     public function testExternalLineAdd(): void
     {
         $lineNumber = time() . abs(random_int(PHP_INT_MIN, PHP_INT_MAX));
-        $res = $this->externalLine->add($lineNumber, true, sprintf('line-name-%s', $lineNumber));
-        $this->assertGreaterThan(0, $res->getExternalLineAddResultItem()->ID);
+        $externalLineAddedResult = $this->externalLine->add($lineNumber, true, sprintf('line-name-%s', $lineNumber));
+        $this->assertGreaterThan(0, $externalLineAddedResult->getExternalLineAddResultItem()->ID);
         $this->assertContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
     }
 
@@ -57,8 +57,8 @@ class ExternalLineTest extends TestCase
 
         $this->assertContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
 
-        $deleteRes = $this->externalLine->delete($lineNumber);
-        $this->assertEquals([], $deleteRes->getCoreResponse()->getResponseData()->getResult());
+        $emptyResult = $this->externalLine->delete($lineNumber);
+        $this->assertEquals([], $emptyResult->getCoreResponse()->getResponseData()->getResult());
 
         $this->assertNotContains($lineNumber, array_column($this->externalLine->get()->getExternalLines(), 'NUMBER'));
     }

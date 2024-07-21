@@ -55,7 +55,7 @@ class CallTest extends TestCase
                 'UF_PHONE_INNER' => $innerPhoneNumber
             ]
         );
-        $res = $externalCall->register(
+        $externalCallRegisteredResult = $externalCall->register(
             $innerPhoneNumber,
             $currentB24UserId,
             $phoneNumber,
@@ -70,7 +70,7 @@ class CallTest extends TestCase
         );
 
         yield 'default callId' => [
-            $res->getExternalCallRegistered()->CALL_ID,
+            $externalCallRegisteredResult->getExternalCallRegistered()->CALL_ID,
             $currentB24UserId
         ];
     }
@@ -102,7 +102,7 @@ class CallTest extends TestCase
             $filename
         );
 
-        $res = $this->call->attachTranscription(
+        $transcriptAttachedResult = $this->call->attachTranscription(
             $callId,
             $money,
             [
@@ -121,7 +121,7 @@ class CallTest extends TestCase
             ]
         );
 
-        $this->assertGreaterThan(0, $res->getTranscriptAttachItem()->TRANSCRIPT_ID);
+        $this->assertGreaterThan(0, $transcriptAttachedResult->getTranscriptAttachItem()->TRANSCRIPT_ID);
     }
 
     protected function setUp(): void
