@@ -2,14 +2,51 @@
 
 namespace Bitrix24\SDK\Tests\Builders;
 
+use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\FullName;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Darsyn\IP\Version\Multi;
+use Faker;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumber;
+use libphonenumber\PhoneNumberUtil;
+
 class DemoDataGenerator
 {
-    public static function getMobilePhone():string
+    /**
+     * @throws InvalidArgumentException|NumberParseException
+     */
+    public static function getMobilePhone(): PhoneNumber
     {
-        return '+1-703-740-8301';
+        $num = PhoneNumberUtil::getInstance()->parse(Faker\Factory::create()->phoneNumber(), 'US');
+        if ($num === null) {
+            throw new InvalidArgumentException('cannot parse phone number');
+        }
+        return $num;
     }
-    public static function getRecordFileUrl():string
+
+    public static function getRecordFileUrl(): string
     {
-        return  'https://github.com/mesilov/bitrix24-php-sdk/raw/384-update-scope-telephony/tests/Integration/Services/Telephony/call-record-test.mp3';
+        return 'https://github.com/mesilov/bitrix24-php-sdk/raw/384-update-scope-telephony/tests/Integration/Services/Telephony/call-record-test.mp3';
+    }
+
+    public static function getFullName(): FullName
+    {
+        $faker = Faker\Factory::create();
+        return new FullName($faker->lastName(), $faker->lastName(), $faker->lastName());
+    }
+
+    public static function getEmail(): string
+    {
+        return Faker\Factory::create()->email();
+    }
+
+    public static function getUserAgent(): string
+    {
+        return Faker\Factory::create()->userAgent();
+    }
+
+    public static function getUserAgentIp(): Multi
+    {
+        return Multi::factory(Faker\Factory::create()->ipv4());
     }
 }

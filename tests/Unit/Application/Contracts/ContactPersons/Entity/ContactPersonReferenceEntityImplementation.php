@@ -62,6 +62,19 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         $this->updatedAt = new CarbonImmutable();
     }
 
+    public function markAsDeleted(?string $comment): void
+    {
+        if (ContactPersonStatus::deleted === $this->contactPersonStatus) {
+            throw new InvalidArgumentException(
+                sprintf('you cannot mark account as deleted in status %s',
+                    $this->contactPersonStatus->name));
+        }
+
+        $this->contactPersonStatus = ContactPersonStatus::deleted;
+        $this->comment = $comment;
+        $this->updatedAt = new CarbonImmutable();
+    }
+
     /**
      * @throws InvalidArgumentException
      */
@@ -101,6 +114,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
 
     public function changeEmail(?string $email, ?bool $isEmailVerified = null): void
     {
+        $this->emailVerifiedAt = null;
         $this->email = $email;
         if ($isEmailVerified === true) {
             $this->emailVerifiedAt = new CarbonImmutable();
@@ -126,6 +140,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
 
     public function changeMobilePhone(?PhoneNumber $mobilePhone, ?bool $isMobilePhoneVerified = null): void
     {
+        $this->mobilePhoneVerifiedAt = null;
         $this->mobilePhone = $mobilePhone;
         if ($isMobilePhoneVerified === true) {
             $this->mobilePhoneVerifiedAt = new CarbonImmutable();

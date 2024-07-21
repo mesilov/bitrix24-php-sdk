@@ -37,6 +37,12 @@ interface ContactPersonInterface
     public function markAsBlocked(?string $comment): void;
 
     /**
+     * Set contact person status to deleted, use this for soft delete
+     * @param non-empty-string|null $comment
+     * @throws InvalidArgumentException
+     */
+    public function markAsDeleted(?string $comment): void;
+    /**
      * @return FullName return contact person full name
      */
     public function getFullName(): FullName;
