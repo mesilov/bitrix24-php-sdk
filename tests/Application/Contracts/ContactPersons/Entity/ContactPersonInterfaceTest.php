@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity;
+namespace Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Entity;
 
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonInterface;
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonStatus;

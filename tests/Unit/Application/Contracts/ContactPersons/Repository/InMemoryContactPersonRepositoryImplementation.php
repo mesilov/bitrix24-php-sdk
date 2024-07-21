@@ -9,9 +9,9 @@ use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonStatus
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Exceptions\ContactPersonNotFoundException;
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use libphonenumber\PhoneNumber;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
-use libphonenumber\PhoneNumber;
 
 
 class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepositoryInterface

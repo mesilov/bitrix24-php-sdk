@@ -11,12 +11,12 @@ use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonStatus
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterface;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterfaceTest;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity\ContactPersonReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
-use Generator;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Uid\Uuid;

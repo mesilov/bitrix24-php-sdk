@@ -6,6 +6,7 @@ namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\ContactPersons\Entity;
 
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonInterface;
 use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonStatus;
+use Bitrix24\SDK\Tests\Application\Contracts\ContactPersons\Entity\ContactPersonInterfaceTest;
 use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
 use libphonenumber\PhoneNumber;

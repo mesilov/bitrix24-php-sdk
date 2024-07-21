@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity;
 
-use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Scope;
-use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Tests\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterfaceTest;
 use Carbon\CarbonImmutable;
-use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
+
 #[CoversClass(Bitrix24AccountInterface::class)]
-class Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24AccountInterfaceTest
+class
+Bitrix24AccountInterfaceReferenceImplementationTest extends Bitrix24AccountInterfaceTest
 {
     protected function createBitrix24AccountImplementation(
         Uuid                  $uuid,
