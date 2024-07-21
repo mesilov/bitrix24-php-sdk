@@ -37,13 +37,14 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
     {
         $this->logger->debug('b24AccountRepository.delete', ['id' => $uuid->toRfc4122()]);
 
-        $item = $this->getById($uuid);
-        if (Bitrix24AccountStatus::deleted !== $item->getStatus()) {
+        $bitrix24Account = $this->getById($uuid);
+        if (Bitrix24AccountStatus::deleted !== $bitrix24Account->getStatus()) {
             throw new InvalidArgumentException(sprintf('you cannot delete bitrix24account «%s», they must be in status deleted, current status «%s»',
-                $item->getId()->toRfc4122(),
-                $item->getStatus()->name
+                $bitrix24Account->getId()->toRfc4122(),
+                $bitrix24Account->getStatus()->name
             ));
         }
+
         unset($this->items[$uuid->toRfc4122()]);
     }
 
@@ -54,6 +55,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
         if (!array_key_exists($uuid->toRfc4122(), $this->items)) {
             throw new Bitrix24AccountNotFoundException(sprintf('bitrix24 account not found for id «%s» ', $uuid->toRfc4122()));
         }
+
         return $this->items[$uuid->toRfc4122()];
     }
 
@@ -80,11 +82,11 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
     /**
      * @throws InvalidArgumentException
      */
-    public function findByMemberId(string $memberId, ?Bitrix24AccountStatus $status = null, ?bool $isAdmin = null): array
+    public function findByMemberId(string $memberId, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array
     {
         $this->logger->debug('b24AccountRepository.findByMemberId', [
             'memberId' => $memberId,
-            'status' => $status?->name,
+            'status' => $bitrix24AccountStatus?->name,
             'isAdmin' => $isAdmin
         ]);
 
@@ -98,7 +100,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
                 continue;
             }
 
-            $isStatusMatch = ($status === null || $status === $item->getStatus());
+            $isStatusMatch = (!$bitrix24AccountStatus instanceof Bitrix24AccountStatus || $bitrix24AccountStatus === $item->getStatus());
             $isAdminMatch = ($isAdmin === null || $isAdmin === $item->isBitrix24UserAdmin());
 
             if ($isStatusMatch && $isAdminMatch) {
@@ -106,17 +108,18 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
             }
 
         }
+
         return $items;
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function findByDomain(string $domainUrl, ?Bitrix24AccountStatus $status = null, ?bool $isAdmin = null): array
+    public function findByDomain(string $domainUrl, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array
     {
         $this->logger->debug('b24AccountRepository.findByDomain', [
             'domain' => $domainUrl,
-            'status' => $status?->name,
+            'status' => $bitrix24AccountStatus?->name,
             'isAdmin' => $isAdmin
         ]);
 
@@ -130,7 +133,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
                 continue;
             }
 
-            $isStatusMatch = ($status === null || $status === $item->getStatus());
+            $isStatusMatch = (!$bitrix24AccountStatus instanceof Bitrix24AccountStatus || $bitrix24AccountStatus === $item->getStatus());
             $isAdminMatch = ($isAdmin === null || $isAdmin === $item->isBitrix24UserAdmin());
 
             if ($isStatusMatch && $isAdminMatch) {
@@ -138,6 +141,7 @@ class InMemoryBitrix24AccountRepositoryImplementation implements Bitrix24Account
             }
 
         }
+
         return $items;
     }
 }

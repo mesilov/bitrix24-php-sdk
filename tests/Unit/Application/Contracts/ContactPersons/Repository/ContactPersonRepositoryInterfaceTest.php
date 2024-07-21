@@ -35,7 +35,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -62,7 +62,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -70,11 +70,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
-        $repo->save($contactPerson);
-        $acc = $repo->getById($contactPerson->getId());
+        $contactPersonRepository->save($contactPerson);
+        $acc = $contactPersonRepository->getById($contactPerson->getId());
         $this->assertEquals($contactPerson, $acc);
     }
 
@@ -96,7 +96,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -104,16 +104,17 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
-        $repo->save($contactPerson);
-        $contactPerson = $repo->getById($contactPerson->getId());
+        $contactPersonRepository->save($contactPerson);
+        $contactPerson = $contactPersonRepository->getById($contactPerson->getId());
         $contactPerson->markAsDeleted('soft delete account');
-        $repo->delete($contactPerson->getId());
+
+        $contactPersonRepository->delete($contactPerson->getId());
 
         $this->expectException(ContactPersonNotFoundException::class);
-        $repo->getById($contactPerson->getId());
+        $contactPersonRepository->getById($contactPerson->getId());
     }
 
     #[Test]
@@ -130,7 +131,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -138,11 +139,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
         $this->expectException(ContactPersonNotFoundException::class);
-        $repo->delete($contactPerson->getId());
+        $contactPersonRepository->delete($contactPerson->getId());
     }
 
     #[Test]
@@ -159,7 +160,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -167,11 +168,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
-        $repo->save($contactPerson);
-        $acc = $repo->getById($contactPerson->getId());
+        $contactPersonRepository->save($contactPerson);
+        $acc = $contactPersonRepository->getById($contactPerson->getId());
         $this->assertEquals($contactPerson, $acc);
     }
 
@@ -189,7 +190,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -197,10 +198,10 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
 
         $this->expectException(ContactPersonNotFoundException::class);
-        $repo->getById(Uuid::v7());
+        $contactPersonRepository->getById(Uuid::v7());
     }
 
     #[Test]
@@ -217,7 +218,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -225,11 +226,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
-        $repo->save($contactPerson);
-        $contactPersons = $repo->findByEmail($email);
+        $contactPersonRepository->save($contactPerson);
+        $contactPersons = $contactPersonRepository->findByEmail($email);
         $this->assertEquals($contactPerson, $contactPersons[0]);
     }
 
@@ -247,7 +248,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -255,11 +256,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
-        $repo->save($contactPerson);
-        $contactPersons = $repo->findByEmail('this.email.doesnt.exists@b24.com');
+        $contactPersonRepository->save($contactPerson);
+        $contactPersons = $contactPersonRepository->findByEmail('this.email.doesnt.exists@b24.com');
         $this->assertEmpty($contactPersons);
     }
 
@@ -277,7 +278,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -285,11 +286,11 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
-        $repo->save($contactPerson);
-        $contactPersons = $repo->findByEmail($email, $contactPersonStatus);
+        $contactPersonRepository->save($contactPerson);
+        $contactPersons = $contactPersonRepository->findByEmail($email, $contactPersonStatus);
         $this->assertEquals($contactPerson, $contactPersons[0]);
     }
 
@@ -298,18 +299,18 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
     #[TestDox('test find by email with verified email')]
     final public function testFindByEmailWithVerifiedEmail(array $items): void
     {
-        $repo = $this->createContactPersonRepositoryImplementation();$emailToFind = null;
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
         $expectedContactPerson = null;
         foreach ($items as $item) {
             [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
             $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
-            $repo->save($contactPerson);
-            if ($expectedContactPerson === null) {
+            $contactPersonRepository->save($contactPerson);
+            if (!$expectedContactPerson instanceof \Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonInterface) {
                 $expectedContactPerson = $contactPerson;
             }
         }
 
-        $result = $repo->findByEmail($expectedContactPerson->getEmail());
+        $result = $contactPersonRepository->findByEmail($expectedContactPerson->getEmail());
         $this->assertCount(1, $result);
         $this->assertEquals($expectedContactPerson, $result[0]);
 

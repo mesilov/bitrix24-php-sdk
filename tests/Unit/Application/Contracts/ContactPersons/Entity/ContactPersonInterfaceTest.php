@@ -34,7 +34,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -46,7 +46,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getId method')]
     final public function testGetId(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -56,7 +56,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -64,15 +64,15 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
-        $this->assertEquals($id, $contactPerson->getId());
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $this->assertEquals($uuid, $contactPerson->getId());
     }
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getStatus method')]
     final public function testGetStatus(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -82,7 +82,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -90,7 +90,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($contactPersonStatus, $contactPerson->getStatus());
     }
 
@@ -98,7 +98,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test markAsActive method')]
     final public function testMarkAsActive(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -108,7 +108,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -116,7 +116,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $contactPerson->markAsBlocked('block contact person');
         $this->assertEquals(ContactPersonStatus::blocked, $contactPerson->getStatus());
         $message = 'unblock contact person';
@@ -129,7 +129,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test markAsBlocked method')]
     final public function testMarkAsBlocked(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -139,7 +139,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -147,7 +147,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'block contact person';
         $contactPerson->markAsBlocked($message);
         $this->assertEquals(ContactPersonStatus::blocked, $contactPerson->getStatus());
@@ -158,7 +158,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test markAsDeleted method')]
     final public function testMarkAsDeleted(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -168,7 +168,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -176,7 +176,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'soft delete contact person';
         $contactPerson->markAsDeleted($message);
         $this->assertEquals(ContactPersonStatus::deleted, $contactPerson->getStatus());
@@ -187,7 +187,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test markAsDeleted method for blocked account')]
     final public function testMarkAsDeletedBlockedAccount(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -197,7 +197,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -205,7 +205,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'block contact person';
         $contactPerson->markAsBlocked($message);
         $this->assertEquals(ContactPersonStatus::blocked, $contactPerson->getStatus());
@@ -220,7 +220,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test markAsDeleted method')]
     final public function testMarkAsDeletedDeletedAccount(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -230,7 +230,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -238,7 +238,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'soft delete contact person';
         $contactPerson->markAsDeleted($message);
         $this->expectException(InvalidArgumentException::class);
@@ -249,7 +249,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getFullName method')]
     final public function testGetFullName(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -259,7 +259,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -267,7 +267,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals(new FullName($name, $surname, $patronymic), $contactPerson->getFullName());
     }
 
@@ -275,7 +275,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test changeFullName method')]
     final public function testChangeFullName(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -285,7 +285,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -293,7 +293,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $newFullName = DemoDataGenerator::getFullName();
         $contactPerson->changeFullName($newFullName);
         $this->assertEquals($newFullName, $contactPerson->getFullName());
@@ -303,7 +303,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getUpdatedAt method')]
     final public function testGetUpdatedAt(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -313,7 +313,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -321,7 +321,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $contactPerson->markAsBlocked('test block');
         $this->assertEquals($createdAt, $contactPerson->getCreatedAt());
         $this->assertNotEquals($updatedAt, $contactPerson->getUpdatedAt());
@@ -331,7 +331,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getCreatedAt method')]
     final public function testCreatedAt(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -341,7 +341,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -349,7 +349,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($createdAt, $contactPerson->getCreatedAt());
     }
 
@@ -357,7 +357,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getEmail method')]
     final public function testGetEmail(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -367,7 +367,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -375,7 +375,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($email, $contactPerson->getEmail());
     }
 
@@ -383,7 +383,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test changeEmail method')]
     final public function testChangeEmail(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -393,7 +393,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -401,7 +401,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
         $newEmail = DemoDataGenerator::getEmail();
         $contactPerson->changeEmail($newEmail);
@@ -427,7 +427,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test markEmailAsVerified method')]
     final public function testMarkEmailAsVerified(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -437,7 +437,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -445,7 +445,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
         $newEmail = DemoDataGenerator::getEmail();
         // email not verified
@@ -460,7 +460,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getMobilePhone method')]
     final public function testGetMobilePhone(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -470,7 +470,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -478,15 +478,15 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
-        $this->assertEquals($mobilePhone, $contactPerson->getMobilePhone());
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $this->assertEquals($phoneNumber, $contactPerson->getMobilePhone());
     }
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test changeMobilePhone method')]
     final public function testChangeMobilePhone(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -496,7 +496,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -504,7 +504,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
 
         $phone = DemoDataGenerator::getMobilePhone();
         $contactPerson->changeMobilePhone($phone);
@@ -523,7 +523,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getMobilePhoneVerifiedAt method')]
     final public function testGetMobilePhoneVerifiedAt(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -533,7 +533,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -541,8 +541,8 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
-        $this->assertEquals($mobilePhone, $contactPerson->getMobilePhone());
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $this->assertEquals($phoneNumber, $contactPerson->getMobilePhone());
 
         $phone = DemoDataGenerator::getMobilePhone();
         $contactPerson->changeMobilePhone($phone, true);
@@ -553,7 +553,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test markMobilePhoneAsVerified method')]
     final public function testMarkMobilePhoneAsVerified(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -563,7 +563,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -571,8 +571,8 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
-        $this->assertEquals($mobilePhone, $contactPerson->getMobilePhone());
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $this->assertEquals($phoneNumber, $contactPerson->getMobilePhone());
 
         $phone = DemoDataGenerator::getMobilePhone();
         $contactPerson->changeMobilePhone($phone);
@@ -585,7 +585,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getComment method')]
     final public function testGetComment(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -595,7 +595,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -603,7 +603,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $comment = 'block reason';
         $contactPerson->markAsBlocked($comment);
         $this->assertEquals($comment, $contactPerson->getComment());
@@ -613,7 +613,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test setExternalId method')]
     final public function testSetExternalId(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -623,7 +623,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -631,18 +631,18 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
-        $uuid = Uuid::v7();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $uuidV7 = Uuid::v7();
 
-        $contactPerson->setExternalId($uuid->toRfc4122());
-        $this->assertEquals($uuid->toRfc4122(), $contactPerson->getExternalId());
+        $contactPerson->setExternalId($uuidV7->toRfc4122());
+        $this->assertEquals($uuidV7->toRfc4122(), $contactPerson->getExternalId());
     }
 
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getExternalId method')]
     final public function testGetExternalId(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -652,7 +652,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -661,12 +661,12 @@ abstract class ContactPersonInterfaceTest extends TestCase
     ): void
     {
         $externalId = null;
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertNull($contactPerson->getExternalId());
 
-        $uuid = Uuid::v7();
-        $externalId = $uuid->toRfc4122();
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $uuidV7 = Uuid::v7();
+        $externalId = $uuidV7->toRfc4122();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($externalId, $contactPerson->getExternalId());
     }
 
@@ -674,7 +674,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getUserAgent method')]
     final public function testGetUserAgent(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -684,7 +684,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -692,7 +692,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($userAgent, $contactPerson->getUserAgent());
     }
 
@@ -700,7 +700,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getUserAgentReferer method')]
     final public function testGetUserAgentReferer(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -710,7 +710,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -718,7 +718,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($userAgentReferer, $contactPerson->getUserAgentReferer());
     }
 
@@ -726,7 +726,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getUserAgentIp method')]
     final public function testGetUserAgentIp(
-        Uuid                $id,
+        Uuid                $uuid,
         CarbonImmutable     $createdAt,
         CarbonImmutable     $updatedAt,
         ContactPersonStatus $contactPersonStatus,
@@ -736,7 +736,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?string             $email,
         ?CarbonImmutable    $emailVerifiedAt,
         ?string             $comment,
-        ?PhoneNumber        $mobilePhone,
+        ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?string             $userAgent,
@@ -744,7 +744,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($id, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($userAgentIp, $contactPerson->getUserAgentIp());
     }
 

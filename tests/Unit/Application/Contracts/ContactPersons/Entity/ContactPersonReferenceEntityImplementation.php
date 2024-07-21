@@ -119,6 +119,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         if ($isEmailVerified === true) {
             $this->emailVerifiedAt = new CarbonImmutable();
         }
+
         $this->updatedAt = new CarbonImmutable();
     }
 
@@ -138,13 +139,14 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         $this->updatedAt = new CarbonImmutable();
     }
 
-    public function changeMobilePhone(?PhoneNumber $mobilePhone, ?bool $isMobilePhoneVerified = null): void
+    public function changeMobilePhone(?PhoneNumber $phoneNumber, ?bool $isMobilePhoneVerified = null): void
     {
         $this->mobilePhoneVerifiedAt = null;
-        $this->mobilePhone = $mobilePhone;
+        $this->mobilePhone = $phoneNumber;
         if ($isMobilePhoneVerified === true) {
             $this->mobilePhoneVerifiedAt = new CarbonImmutable();
         }
+
         $this->updatedAt = new CarbonImmutable();
     }
 

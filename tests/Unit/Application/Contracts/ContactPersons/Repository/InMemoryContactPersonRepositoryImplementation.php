@@ -38,13 +38,14 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
     {
         $this->logger->debug('InMemoryContactPersonRepositoryImplementation.delete', ['id' => $uuid->toRfc4122()]);
 
-        $item = $this->getById($uuid);
-        if (ContactPersonStatus::deleted !== $item->getStatus()) {
+        $contactPerson = $this->getById($uuid);
+        if (ContactPersonStatus::deleted !== $contactPerson->getStatus()) {
             throw new InvalidArgumentException(sprintf('you cannot delete contact person «%s», in status «%s», mark contact person as deleted before',
-                $item->getId()->toRfc4122(),
-                $item->getStatus()->name,
+                $contactPerson->getId()->toRfc4122(),
+                $contactPerson->getStatus()->name,
             ));
         }
+
         unset($this->items[$uuid->toRfc4122()]);
     }
 
@@ -58,54 +59,64 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
         if (!array_key_exists($uuid->toRfc4122(), $this->items)) {
             throw new ContactPersonNotFoundException(sprintf('contact person not found by id «%s» ', $uuid->toRfc4122()));
         }
+
         return $this->items[$uuid->toRfc4122()];
     }
 
-    public function findByEmail(string $email, ?ContactPersonStatus $status = null, ?bool $isEmailVerified = null): array
+    public function findByEmail(string $email, ?ContactPersonStatus $contactPersonStatus = null, ?bool $isEmailVerified = null): array
     {
         $result = [];
-        foreach ($this->items as $contactPerson) {
-            if ($email !== $contactPerson->getEmail()) {
+        foreach ($this->items as $item) {
+            if ($email !== $item->getEmail()) {
                 continue;
             }
-            if ($status !== null && $status !== $contactPerson->getStatus()) {
+
+            if ($contactPersonStatus instanceof ContactPersonStatus && $contactPersonStatus !== $item->getStatus()) {
                 continue;
             }
-            if ($isEmailVerified !== null && $isEmailVerified !== ($contactPerson->getEmailVerifiedAt() !== null)) {
+
+            if ($isEmailVerified !== null && $isEmailVerified !== ($item->getEmailVerifiedAt() !== null)) {
                 continue;
             }
-            $result[] = $contactPerson;
+
+            $result[] = $item;
         }
+
         return $result;
     }
 
-    public function findByPhone(PhoneNumber $phoneNumber, ?ContactPersonStatus $status = null, ?bool $isPhoneVerified = null): array
+    public function findByPhone(PhoneNumber $phoneNumber, ?ContactPersonStatus $contactPersonStatus = null, ?bool $isPhoneVerified = null): array
     {
         $result = [];
-        foreach ($this->items as $contactPerson) {
-            if ($phoneNumber !== $contactPerson->getMobilePhone()) {
+        foreach ($this->items as $item) {
+            if ($phoneNumber !== $item->getMobilePhone()) {
                 continue;
             }
-            if ($status !== null && $status !== $contactPerson->getStatus()) {
+
+            if ($contactPersonStatus instanceof ContactPersonStatus && $contactPersonStatus !== $item->getStatus()) {
                 continue;
             }
-            if ($isPhoneVerified !== null && $isPhoneVerified !== ($contactPerson->getMobilePhoneVerifiedAt() !== null)) {
+
+            if ($isPhoneVerified !== null && $isPhoneVerified !== ($item->getMobilePhoneVerifiedAt() !== null)) {
                 continue;
             }
-            $result[] = $contactPerson;
+
+            $result[] = $item;
         }
+
         return $result;
     }
 
     public function findByExternalId(string $externalId): ?ContactPersonInterface
     {
         $result = null;
-        foreach ($this->items as $contactPerson) {
-            if ($externalId === $contactPerson->getExternalId()) {
-                $result = $contactPerson;
+        foreach ($this->items as $item) {
+            if ($externalId === $item->getExternalId()) {
+                $result = $item;
                 break;
             }
         }
+
         return $result;
     }
 }
