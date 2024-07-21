@@ -34,7 +34,6 @@ interface Bitrix24AccountRepositoryInterface
     /**
      * Find one admin bitrix24 account by member_id
      * @param non-empty-string $memberId
-     * @return Bitrix24AccountInterface|null
      */
     public function findOneAdminByMemberId(string $memberId): ?Bitrix24AccountInterface;
 
@@ -43,12 +42,12 @@ interface Bitrix24AccountRepositoryInterface
      * @param non-empty-string $memberId
      * @return Bitrix24AccountInterface[]
      */
-    public function findByMemberId(string $memberId, ?Bitrix24AccountStatus $status = null, ?bool $isAdmin = null): array;
+    public function findByMemberId(string $memberId, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array;
 
     /**
      * Find bitrix24 accounts by domain url and filter by status adn isAdmin flag
      * @param non-empty-string $domainUrl
      * @return Bitrix24AccountInterface[]
      */
-    public function findByDomain(string $domainUrl, ?Bitrix24AccountStatus $status = null, ?bool $isAdmin = null): array;
+    public function findByDomain(string $domainUrl, ?Bitrix24AccountStatus $bitrix24AccountStatus = null, ?bool $isAdmin = null): array;
 }

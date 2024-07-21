@@ -42,6 +42,7 @@ interface ContactPersonInterface
      * @throws InvalidArgumentException
      */
     public function markAsDeleted(?string $comment): void;
+
     /**
      * @return FullName return contact person full name
      */
@@ -64,11 +65,6 @@ interface ContactPersonInterface
      */
     public function getEmail(): ?string;
 
-    /**
-     * @param string|null $email
-     * @param bool|null $isEmailVerified
-     * @return void
-     */
     public function changeEmail(?string $email, ?bool $isEmailVerified = null): void;
 
     /**
@@ -83,12 +79,8 @@ interface ContactPersonInterface
 
     /**
      * Change mobile phone for contact person
-     *
-     * @param PhoneNumber|null $mobilePhone
-     * @param bool|null $isMobilePhoneVerified
-     * @return void
      */
-    public function changeMobilePhone(?PhoneNumber $mobilePhone, ?bool $isMobilePhoneVerified = null): void;
+    public function changeMobilePhone(?PhoneNumber $phoneNumber, ?bool $isMobilePhoneVerified = null): void;
 
     public function getMobilePhone(): ?PhoneNumber;
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Application\Contracts\ContactPersons\Entity;
 
-class FullName
+use Stringable;
+
+class FullName implements Stringable
 {
     public function __construct(
         public string  $name,
@@ -15,8 +17,9 @@ class FullName
         if ($surname !== null) {
             $this->surname = trim($surname);
         }
+
         if ($this->patronymic !== null) {
-            $this->patronymic = trim($patronymic);
+            $this->patronymic = trim((string) $patronymic);
         }
     }
 

@@ -35,26 +35,20 @@ interface ContactPersonRepositoryInterface
     /**
      * Find contact persons with email and filter by status and isEmailVerified flag
      * @param non-empty-string $email
-     * @param ContactPersonStatus|null $status
-     * @param bool|null $isEmailVerified
      * @return ContactPersonInterface[]
      */
-    public function findByEmail(string $email, ?ContactPersonStatus $status = null, ?bool $isEmailVerified = null): array;
+    public function findByEmail(string $email, ?ContactPersonStatus $contactPersonStatus = null, ?bool $isEmailVerified = null): array;
 
     /**
      * Find contact persons with PhoneNumber and filter by status and isEmailVerified flag
-     * @param PhoneNumber $phoneNumber
-     * @param ContactPersonStatus|null $status
-     * @param bool|null $isPhoneVerified
      * @return ContactPersonInterface[]
      */
-    public function findByPhone(PhoneNumber $phoneNumber, ?ContactPersonStatus $status = null, ?bool $isPhoneVerified = null): array;
+    public function findByPhone(PhoneNumber $phoneNumber, ?ContactPersonStatus $contactPersonStatus = null, ?bool $isPhoneVerified = null): array;
 
     /**
      * Find contact person by external id
      *
      * @param non-empty-string $externalId
-     * @return ContactPersonInterface|null
      */
     public function findByExternalId(string $externalId): ?ContactPersonInterface;
 }
