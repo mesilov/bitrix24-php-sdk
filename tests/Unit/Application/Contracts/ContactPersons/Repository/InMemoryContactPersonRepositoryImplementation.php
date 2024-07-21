@@ -107,13 +107,20 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
         return $result;
     }
 
-    public function findByExternalId(string $externalId): ?ContactPersonInterface
+    public function findByExternalId(string $externalId, ?ContactPersonStatus $contactPersonStatus = null): array
     {
-        $result = null;
+        $externalId = trim($externalId);
+        if ($externalId === '') {
+            throw new InvalidArgumentException('externalId cannot be empty');
+        }
+
+        $result = [];
         foreach ($this->items as $item) {
+            if ($contactPersonStatus instanceof ContactPersonStatus && $contactPersonStatus !== $item->getStatus()) {
+                continue;
+            }
             if ($externalId === $item->getExternalId()) {
-                $result = $item;
-                break;
+                $result[] = $item;
             }
         }
 

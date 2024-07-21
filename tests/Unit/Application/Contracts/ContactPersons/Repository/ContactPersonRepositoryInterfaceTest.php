@@ -117,6 +117,9 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         $contactPersonRepository->getById($contactPerson->getId());
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test delete method with unsaved element')]
@@ -146,6 +149,9 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
         $contactPersonRepository->delete($contactPerson->getId());
     }
 
+    /**
+     * @throws ContactPersonNotFoundException
+     */
     #[Test]
     #[DataProvider('contactPersonDataProvider')]
     #[TestDox('test getById method with happy path')]
@@ -305,21 +311,170 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
             [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
             $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
             $contactPersonRepository->save($contactPerson);
-            if (!$expectedContactPerson instanceof \Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonInterface) {
+            if (!$expectedContactPerson instanceof ContactPersonInterface) {
                 $expectedContactPerson = $contactPerson;
             }
         }
 
-        $result = $contactPersonRepository->findByEmail($expectedContactPerson->getEmail());
+        $result = $contactPersonRepository->findByEmail($expectedContactPerson->getEmail(), null, true);
         $this->assertCount(1, $result);
         $this->assertEquals($expectedContactPerson, $result[0]);
+
+    }
+
+    #[Test]
+    #[DataProvider('contactPersonManyAccountsDataProvider')]
+    #[TestDox('test find by phone with verified phone')]
+    final public function testFindByEmailWithVerifiedPhone(array $items): void
+    {
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $expectedContactPerson = null;
+        foreach ($items as $item) {
+            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+            $contactPersonRepository->save($contactPerson);
+            if (!$expectedContactPerson instanceof ContactPersonInterface) {
+                $expectedContactPerson = $contactPerson;
+            }
+        }
+
+        $result = $contactPersonRepository->findByPhone($expectedContactPerson->getMobilePhone(), null, true);
+        $this->assertCount(1, $result);
+        $this->assertEquals($expectedContactPerson, $result[0]);
+
+    }
+
+    /**
+     * @throws ContactPersonNotFoundException
+     */
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test findByExternalId method with happy path')]
+    final public function testFindByExternalId(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void
+    {
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+
+        $externalId = Uuid::v7();
+        $contactPerson->setExternalId($externalId->toRfc4122());
+
+        $contactPersonRepository->save($contactPerson);
+        $acc = $contactPersonRepository->findByExternalId($externalId->toRfc4122());
+        $this->assertEquals($contactPerson, $acc[0]);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test findByExternalId with non exist id')]
+    final public function testFindByExternalIdWithNonExistsId(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void
+    {
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+
+        $contactPersonRepository->save($contactPerson);
+        $this->assertEquals([], $contactPersonRepository->findByExternalId(Uuid::v7()->toRfc4122()));
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test findByExternalId with empty id')]
+    final public function testFindByExternalIdWithEmptyId(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void
+    {
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+
+        $contactPersonRepository->save($contactPerson);
+        $this->expectException(InvalidArgumentException::class);
+        $contactPersonRepository->findByExternalId('');
+    }
+
+    #[Test]
+    #[DataProvider('contactPersonManyAccountsDataProvider')]
+    #[TestDox('test findByExternalId with multiple installs by same contact person')]
+    final public function testFindByExternalIdWithMultipleInstalls(array $items): void
+    {
+        $contactPersonRepository = $this->createContactPersonRepositoryImplementation();
+        $expectedContactPersons = [];
+        $expectedExternalId = null;
+        foreach ($items as $item) {
+            [$uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp] = $item;
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $mobilePhone, $mobilePhoneVerifiedAt, $externalId, $userAgent, $userAgentReferer, $userAgentIp);
+            $contactPersonRepository->save($contactPerson);
+            if ($contactPerson->getExternalId() !== null) {
+                $expectedContactPersons[] = $contactPerson;
+                if ($expectedExternalId === null) {
+                    $expectedExternalId = $contactPerson->getExternalId();
+                }
+            }
+        }
+
+        $result = $contactPersonRepository->findByExternalId($expectedExternalId);
+        $this->assertCount(2, $result);
+        $this->assertEquals($expectedContactPersons, $result);
 
     }
 
     public static function contactPersonManyAccountsDataProvider(): Generator
     {
         $fullName = DemoDataGenerator::getFullName();
-
+        $externalId = Uuid::v7()->toRfc4122();
         yield 'many accounts with one verified email' =>
         [
             [
@@ -353,8 +508,8 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     null,
                     'comment',
                     DemoDataGenerator::getMobilePhone(),
-                    CarbonImmutable::now(),
                     null,
+                    $externalId,
                     DemoDataGenerator::getUserAgent(),
                     'https://bitrix24.com/apps/store?utm_source=bx24',
                     DemoDataGenerator::getUserAgentIp()
@@ -371,8 +526,8 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
                     null,
                     'comment',
                     DemoDataGenerator::getMobilePhone(),
-                    CarbonImmutable::now(),
                     null,
+                    $externalId,
                     DemoDataGenerator::getUserAgent(),
                     'https://bitrix24.com/apps/store?utm_source=bx24',
                     DemoDataGenerator::getUserAgentIp()

@@ -48,7 +48,11 @@ interface ContactPersonRepositoryInterface
     /**
      * Find contact person by external id
      *
+     * One contact person can install application in different portals in different times, but in external system (erp/crm) its only one contact
+     *
      * @param non-empty-string $externalId
+     * @return ContactPersonInterface[]
+     * @throws InvalidArgumentException
      */
-    public function findByExternalId(string $externalId): ?ContactPersonInterface;
+    public function findByExternalId(string $externalId, ?ContactPersonStatus $contactPersonStatus = null): array;
 }
