@@ -442,6 +442,7 @@ abstract class ContactPersonRepositoryInterfaceTest extends TestCase
 
         $contactPersonRepository->save($contactPerson);
         $this->expectException(InvalidArgumentException::class);
+        /** @phpstan-ignore-next-line */
         $contactPersonRepository->findByExternalId('');
     }
 
