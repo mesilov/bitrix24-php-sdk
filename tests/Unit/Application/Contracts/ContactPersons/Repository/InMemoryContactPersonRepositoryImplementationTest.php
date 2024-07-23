@@ -67,6 +67,7 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
+        ?int                $bitrix24UserId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
@@ -86,6 +87,7 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
             $phoneNumber,
             $mobilePhoneVerifiedAt,
             $externalId,
+            $bitrix24UserId,
             $userAgent,
             $userAgentReferer,
             $userAgentIp

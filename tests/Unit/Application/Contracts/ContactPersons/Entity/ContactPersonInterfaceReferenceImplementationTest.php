@@ -30,6 +30,7 @@ class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInt
         ?PhoneNumber        $phoneNumber,
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
+        ?int                $bitrix24UserId,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
@@ -49,6 +50,7 @@ class ContactPersonInterfaceReferenceImplementationTest extends ContactPersonInt
             $phoneNumber,
             $mobilePhoneVerifiedAt,
             $externalId,
+            $bitrix24UserId,
             $userAgent,
             $userAgentReferer,
             $userAgentIp

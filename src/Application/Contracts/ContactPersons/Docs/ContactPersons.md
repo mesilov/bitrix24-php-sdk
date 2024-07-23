@@ -2,31 +2,32 @@
 
 Store information about person who installed application
 
-| Method                        | Return Type           | Description                                                   | Throws                     |
-|-------------------------------|-----------------------|---------------------------------------------------------------|----------------------------|
-| `getId()`                     | `Uuid`                | Returns unique contact person id                              | -                          |
-| `getStatus()`                 | `ContactPersonStatus` | Returns contact person status                                 | -                          |
-| `markAsActive()`              | `void`                | Sets contact person status to active                          | `InvalidArgumentException` |
-| `markAsBlocked()`             | `void`                | Sets contact person status to blocked                         | `InvalidArgumentException` |
-| `markAsDeleted()`             | `void`                | Sets contact person status to deleted (soft delete)           | `InvalidArgumentException` |
-| `getFullName()`               | `FullName`            | Returns contact person full name                              | -                          |
-| `changeFullName()`            | `void`                | Changes contact person full name                              | -                          |
-| `getCreatedAt()`              | `CarbonImmutable`     | Returns date and time contact person was created              | -                          |
-| `getUpdatedAt()`              | `CarbonImmutable`     | Returns date and time contact person was last updated         | -                          |
-| `getEmail()`                  | `?string`             | Returns contact person email (if any)                         | -                          |
-| `changeEmail()`               | `void`                | Changes contact person email                                  | -                          |
-| `markEmailAsVerified()`       | `void`                | Marks contact person email as verified                        | -                          |
-| `getEmailVerifiedAt()`        | `?CarbonImmutable`    | Returns date and time email was verified (if verified)        | -                          |
-| `changeMobilePhone()`         | `void`                | Changes mobile phone for contact person                       | -                          |
-| `getMobilePhone()`            | `?PhoneNumber`        | Returns contact person mobile phone (if any)                  | -                          |
-| `getMobilePhoneVerifiedAt()`  | `?CarbonImmutable`    | Returns date and time mobile phone was verified (if verified) | -                          |
-| `markMobilePhoneAsVerified()` | `void`                | Marks contact person mobile phone as verified                 | -                          |
-| `getComment()`                | `?string`             | Returns comment for this contact person (if any)              | -                          |
-| `setExternalId()`             | `void`                | Sets external id for contact person from external system      | -                          |
-| `getExternalId()`             | `?string`             | Returns external id for contact person (if any)               | -                          |
-| `getUserAgent()`              | `?string`             | Returns user agent for contact person                         | -                          |
-| `getUserAgentReferer()`       | `?string`             | Returns user agent referer for contact person                 | -                          |
-| `getUserAgentIp()`            | `?IP`                 | Returns user agent IP for contact person                      | -                          |
+| Method                        | Return Type           | Description                                                                 | Throws                     |
+|-------------------------------|-----------------------|-----------------------------------------------------------------------------|----------------------------|
+| `getId()`                     | `Uuid`                | Returns unique contact person id                                            | -                          |
+| `getStatus()`                 | `ContactPersonStatus` | Returns contact person status                                               | -                          |
+| `markAsActive()`              | `void`                | Sets contact person status to active                                        | `InvalidArgumentException` |
+| `markAsBlocked()`             | `void`                | Sets contact person status to blocked                                       | `InvalidArgumentException` |
+| `markAsDeleted()`             | `void`                | Sets contact person status to deleted (soft delete)                         | `InvalidArgumentException` |
+| `getFullName()`               | `FullName`            | Returns contact person full name                                            | -                          |
+| `changeFullName()`            | `void`                | Changes contact person full name                                            | -                          |
+| `getCreatedAt()`              | `CarbonImmutable`     | Returns date and time contact person was created                            | -                          |
+| `getUpdatedAt()`              | `CarbonImmutable`     | Returns date and time contact person was last updated                       | -                          |
+| `getEmail()`                  | `?string`             | Returns contact person email (if any)                                       | -                          |
+| `changeEmail()`               | `void`                | Changes contact person email                                                | -                          |
+| `markEmailAsVerified()`       | `void`                | Marks contact person email as verified                                      | -                          |
+| `getEmailVerifiedAt()`        | `?CarbonImmutable`    | Returns date and time email was verified (if verified)                      | -                          |
+| `changeMobilePhone()`         | `void`                | Changes mobile phone for contact person                                     | -                          |
+| `getMobilePhone()`            | `?PhoneNumber`        | Returns contact person mobile phone (if any)                                | -                          |
+| `getMobilePhoneVerifiedAt()`  | `?CarbonImmutable`    | Returns date and time mobile phone was verified (if verified)               | -                          |
+| `markMobilePhoneAsVerified()` | `void`                | Marks contact person mobile phone as verified                               | -                          |
+| `getComment()`                | `?string`             | Returns comment for this contact person (if any)                            | -                          |
+| `setExternalId()`             | `void`                | Sets external id for contact person from external system                    | -                          |
+| `getExternalId()`             | `?string`             | Returns external id for contact person (if any)                             | -                          |
+| `getBitrix24UserId()`         | `?int`                | Returns bitrix24 user id if contact person mapped on bitrix24 user (if any) | -                          |
+| `getUserAgent()`              | `?string`             | Returns user agent for contact person                                       | -                          |
+| `getUserAgentReferer()`       | `?string`             | Returns user agent referer for contact person                               | -                          |
+| `getUserAgentIp()`            | `?IP`                 | Returns user agent IP for contact person                                    | -                          |
 
 ## Contact person state diagram
 

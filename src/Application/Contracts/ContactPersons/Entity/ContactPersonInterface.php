@@ -110,6 +110,11 @@ interface ContactPersonInterface
     public function getExternalId(): ?string;
 
     /**
+     * @return int|null get bitrix24 user id if contact person mapped on bitrix24 user
+     */
+    public function getBitrix24UserId(): ?int;
+
+    /**
      * get user agent for contact person, use for store metadata in consent agreements facts
      */
     public function getUserAgent(): ?string;
