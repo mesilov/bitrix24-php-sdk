@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity;
 
-use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
-use Bitrix24\SDK\Core\Credentials\AuthToken;
-use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
@@ -40,28 +37,99 @@ interface ApplicationInstallationInterface
     public function getContactPersonId(): ?Uuid;
 
     /**
+     * Change contact person
+     */
+    public function changeContactPerson(?Uuid $uuid): void;
+
+    /**
+     * @return Uuid|null get bitrix24 partner contact person id related with this installation, optional
+     */
+    public function getBitrix24PartnerContactPersonId(): ?Uuid;
+
+    /**
+     * Change bitrix24 partner contact person
+     */
+    public function changeBitrix24PartnerContactPerson(?Uuid $uuid): void;
+
+    /**
      * @return Uuid|null get Bitrix24 Partner id related with this installation, optional
      */
     public function getBitrix24PartnerId(): ?Uuid;
 
     /**
-     * @return mixed
-     * - new
-     * - active
-     * - blocked
-     * - uninstalled
+     * Change bitrix24 partner
      */
-    public function getInstallationStatus();
+    public function changeBitrix24Partner(?Uuid $uuid): void;
 
     /**
-     * @return string|null application instalation projection in crm /erp - lead or deal id
+     * Get external id for application installation projection in crm / erp - lead or deal id
+     * @return string|null application installation projection in crm / erp - lead or deal id
      */
     public function getExternalId(): ?string;
 
-    // get application status
+    /**
+     * set external id for application installation projection in crm / erp - lead or deal id
+     */
+    public function setExternalId(?string $externalId): void;
 
-    // get tariff code
+    /**
+     * Get application installation status
+     *
+     * @return ApplicationInstallationStatus
+     */
+    public function getStatus(): ApplicationInstallationStatus;
 
-    // get subscription mode?
+    /**
+     * Finish application installation
+     */
+    public function applicationInstalled(): void;
 
+    /**
+     * Application uninstalled
+     */
+    public function applicationUninstalled(): void;
+
+    /**
+     * Change status to active
+     * @param non-empty-string|null $comment
+     * @throws InvalidArgumentException
+     */
+    public function markAsActive(?string $comment): void;
+
+    /**
+     * Change  status to blocked
+     * @param non-empty-string|null $comment
+     * @throws InvalidArgumentException
+     */
+    public function markAsBlocked(?string $comment): void;
+
+    /**
+     * Get application status
+     */
+    public function getApplicationStatus(): ApplicationStatus;
+
+    /**
+     * Change application status
+     * @link https://training.bitrix24.com/rest_help/general/app_info.php
+     */
+    public function changeApplicationStatus(ApplicationStatus $applicationStatus): void;
+
+    /**
+     * Get plan designation without specified region.
+     *
+     * @link https://training.bitrix24.com/rest_help/general/app_info.php
+     */
+    public function getBitrix24LicenseFamily(): string;
+
+    /**
+     * Change plan designation without specified region.
+     *
+     * @link https://training.bitrix24.com/rest_help/general/app_info.php
+     */
+    public function changeBitrix24LicenseFamily(string $licenseCode): void;
+
+    /**
+     * Get comment
+     */
+    public function getComment(): ?string;
 }

@@ -119,6 +119,7 @@ class InMemoryContactPersonRepositoryImplementation implements ContactPersonRepo
             if ($contactPersonStatus instanceof ContactPersonStatus && $contactPersonStatus !== $item->getStatus()) {
                 continue;
             }
+
             if ($externalId === $item->getExternalId()) {
                 $result[] = $item;
             }
