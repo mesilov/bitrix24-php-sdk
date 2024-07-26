@@ -33,6 +33,7 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
         private ?CarbonImmutable         $mobilePhoneVerifiedAt,
         private ?string                  $externalId,
         private readonly ?int            $bitrix24UserId,
+        private ?Uuid                    $bitrix24PartnerUuid,
         private readonly ?string         $userAgent,
         private readonly ?string         $userAgentReferer,
         private readonly ?IP             $userAgentIp
@@ -186,6 +187,16 @@ final class ContactPersonReferenceEntityImplementation implements ContactPersonI
     public function getBitrix24UserId(): ?int
     {
         return $this->bitrix24UserId;
+    }
+
+    public function getBitrix24PartnerId(): ?Uuid
+    {
+        return $this->bitrix24PartnerUuid;
+    }
+
+    public function setBitrix24PartnerId(?Uuid $uuid): void
+    {
+        $this->bitrix24PartnerUuid = $uuid;
     }
 
     public function getUserAgent(): ?string
