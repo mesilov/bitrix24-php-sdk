@@ -115,6 +115,16 @@ interface ContactPersonInterface
     public function getBitrix24UserId(): ?int;
 
     /**
+     * @return Uuid|null get bitrix24 partner uuid if contact person is partner employee
+     */
+    public function getBitrix24PartnerId(): ?Uuid;
+
+    /**
+     * @param Uuid|null $uuid set bitrix24 partner uuid if contact person is partner employee
+     */
+    public function setBitrix24PartnerId(?Uuid $uuid): void;
+
+    /**
      * get user agent for contact person, use for store metadata in consent agreements facts
      */
     public function getUserAgent(): ?string;

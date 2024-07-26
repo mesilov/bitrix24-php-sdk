@@ -25,6 +25,8 @@ Store information about person who installed application
 | `setExternalId()`             | `void`                | Sets external id for contact person from external system                    | -                          |
 | `getExternalId()`             | `?string`             | Returns external id for contact person (if any)                             | -                          |
 | `getBitrix24UserId()`         | `?int`                | Returns bitrix24 user id if contact person mapped on bitrix24 user (if any) | -                          |
+| `getBitrix24PartnerId()`      | `?Uuid`               | Returns bitrix24 partner id if contact person is bitrix24 partner employee  | -                          |
+| `setBitrix24PartnerId()`      | `void`                | Change bitrix24 partner id if contact person is bitrix24 partner employee   | -                          |
 | `getUserAgent()`              | `?string`             | Returns user agent for contact person                                       | -                          |
 | `getUserAgentReferer()`       | `?string`             | Returns user agent referer for contact person                               | -                          |
 | `getUserAgentIp()`            | `?IP`                 | Returns user agent IP for contact person                                    | -                          |
@@ -54,6 +56,8 @@ stateDiagram-v2
     - use case VerifyMobilePhone
     - use case AddComment
     - use case LinkToExternalEntity
+    - use case LinkToBitrix24Partner
+    - use case UnlinkFromBitrix24Partner
 - `public function delete(Uuid $uuid): void;`
     - use case Delete
 - `public function getById(Uuid $uuid): ContactPersonInterface;`

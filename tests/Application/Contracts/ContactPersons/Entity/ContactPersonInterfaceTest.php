@@ -38,6 +38,7 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
@@ -61,12 +62,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($uuid, $contactPerson->getId());
     }
 
@@ -88,12 +90,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($contactPersonStatus, $contactPerson->getStatus());
     }
 
@@ -115,12 +118,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $contactPerson->markAsBlocked('block contact person');
         $this->assertEquals(ContactPersonStatus::blocked, $contactPerson->getStatus());
         $message = 'unblock contact person';
@@ -147,12 +151,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'block contact person';
         $contactPerson->markAsBlocked($message);
         $this->assertEquals(ContactPersonStatus::blocked, $contactPerson->getStatus());
@@ -177,12 +182,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'soft delete contact person';
         $contactPerson->markAsDeleted($message);
         $this->assertEquals(ContactPersonStatus::deleted, $contactPerson->getStatus());
@@ -207,12 +213,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'block contact person';
         $contactPerson->markAsBlocked($message);
         $this->assertEquals(ContactPersonStatus::blocked, $contactPerson->getStatus());
@@ -241,12 +248,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $message = 'soft delete contact person';
         $contactPerson->markAsDeleted($message);
         $this->expectException(InvalidArgumentException::class);
@@ -271,12 +279,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals(new FullName($name, $surname, $patronymic), $contactPerson->getFullName());
     }
 
@@ -298,12 +307,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $newFullName = DemoDataGenerator::getFullName();
         $contactPerson->changeFullName($newFullName);
         $this->assertEquals($newFullName, $contactPerson->getFullName());
@@ -327,12 +337,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $contactPerson->markAsBlocked('test block');
         $this->assertEquals($createdAt, $contactPerson->getCreatedAt());
         $this->assertNotEquals($updatedAt, $contactPerson->getUpdatedAt());
@@ -356,12 +367,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($createdAt, $contactPerson->getCreatedAt());
     }
 
@@ -383,12 +395,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($email, $contactPerson->getEmail());
     }
 
@@ -410,12 +423,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
 
         $newEmail = DemoDataGenerator::getEmail();
         $contactPerson->changeEmail($newEmail);
@@ -455,12 +469,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
 
         $newEmail = DemoDataGenerator::getEmail();
         // email not verified
@@ -489,12 +504,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($phoneNumber, $contactPerson->getMobilePhone());
     }
 
@@ -516,12 +532,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
 
         $phone = DemoDataGenerator::getMobilePhone();
         $contactPerson->changeMobilePhone($phone);
@@ -554,12 +571,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($phoneNumber, $contactPerson->getMobilePhone());
 
         $phone = DemoDataGenerator::getMobilePhone();
@@ -585,12 +603,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($phoneNumber, $contactPerson->getMobilePhone());
 
         $phone = DemoDataGenerator::getMobilePhone();
@@ -618,12 +637,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $comment = 'block reason';
         $contactPerson->markAsBlocked($comment);
         $this->assertEquals($comment, $contactPerson->getComment());
@@ -647,12 +667,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $uuidV7 = Uuid::v7();
 
         $contactPerson->setExternalId($uuidV7->toRfc4122());
@@ -677,18 +698,19 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
         $externalId = null;
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertNull($contactPerson->getExternalId());
 
         $uuidV7 = Uuid::v7();
         $externalId = $uuidV7->toRfc4122();
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($externalId, $contactPerson->getExternalId());
     }
 
@@ -710,18 +732,91 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
         $bitrix24UserId = null;
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertNull($contactPerson->getBitrix24UserId());
 
         $bitrix24UserId = random_int(1, 100);
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($bitrix24UserId, $contactPerson->getBitrix24UserId());
+    }
+
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test getBitrix24PartnerId method with happy path')]
+    final public function testGetBitrix24PartnerId(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void
+    {
+        if ($bitrix24PartnerUuid === null) {
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
+            $this->assertNull($contactPerson->getBitrix24PartnerId());
+        } else {
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
+            $this->assertEquals($bitrix24PartnerUuid, $contactPerson->getBitrix24PartnerId());
+        }
+    }
+
+    #[Test]
+    #[DataProvider('contactPersonDataProvider')]
+    #[TestDox('test setBitrix24PartnerId method with happy path')]
+    final public function testSetBitrix24PartnerId(
+        Uuid                $uuid,
+        CarbonImmutable     $createdAt,
+        CarbonImmutable     $updatedAt,
+        ContactPersonStatus $contactPersonStatus,
+        string              $name,
+        ?string             $surname,
+        ?string             $patronymic,
+        ?string             $email,
+        ?CarbonImmutable    $emailVerifiedAt,
+        ?string             $comment,
+        ?PhoneNumber        $phoneNumber,
+        ?CarbonImmutable    $mobilePhoneVerifiedAt,
+        ?string             $externalId,
+        ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
+        ?string             $userAgent,
+        ?string             $userAgentReferer,
+        ?IP                 $userAgentIp
+    ): void
+    {
+        if ($bitrix24PartnerUuid === null) {
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
+            $this->assertNull($contactPerson->getBitrix24PartnerId());
+
+            $bitrix24PartnerUuid = Uuid::v7();
+            $contactPerson->setBitrix24PartnerId($bitrix24PartnerUuid);
+            $this->assertEquals($bitrix24PartnerUuid, $contactPerson->getBitrix24PartnerId());
+        } else {
+            $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
+            $this->assertEquals($bitrix24PartnerUuid, $contactPerson->getBitrix24PartnerId());
+            $contactPerson->setBitrix24PartnerId(null);
+            $this->assertNull($contactPerson->getBitrix24PartnerId());
+        }
     }
 
     #[Test]
@@ -742,12 +837,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($userAgent, $contactPerson->getUserAgent());
     }
 
@@ -769,12 +865,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($userAgentReferer, $contactPerson->getUserAgentReferer());
     }
 
@@ -796,12 +893,13 @@ abstract class ContactPersonInterfaceTest extends TestCase
         ?CarbonImmutable    $mobilePhoneVerifiedAt,
         ?string             $externalId,
         ?int                $bitrix24UserId,
+        ?Uuid               $bitrix24PartnerUuid,
         ?string             $userAgent,
         ?string             $userAgentReferer,
         ?IP                 $userAgentIp
     ): void
     {
-        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $userAgent, $userAgentReferer, $userAgentIp);
+        $contactPerson = $this->createContactPersonImplementation($uuid, $createdAt, $updatedAt, $contactPersonStatus, $name, $surname, $patronymic, $email, $emailVerifiedAt, $comment, $phoneNumber, $mobilePhoneVerifiedAt, $externalId, $bitrix24UserId, $bitrix24PartnerUuid, $userAgent, $userAgentReferer, $userAgentIp);
         $this->assertEquals($userAgentIp, $contactPerson->getUserAgentIp());
     }
 
@@ -824,6 +922,27 @@ abstract class ContactPersonInterfaceTest extends TestCase
             CarbonImmutable::now(),
             null,
             null,
+            null,
+            DemoDataGenerator::getUserAgent(),
+            'https://bitrix24.com/apps/store?utm_source=bx24',
+            DemoDataGenerator::getUserAgentIp()
+        ];
+        yield 'contact-person-is-partner-employee' => [
+            Uuid::v7(),
+            CarbonImmutable::now(),
+            CarbonImmutable::now(),
+            ContactPersonStatus::active,
+            $fullName->name,
+            $fullName->surname,
+            $fullName->patronymic,
+            DemoDataGenerator::getEmail(),
+            CarbonImmutable::now(),
+            'comment',
+            DemoDataGenerator::getMobilePhone(),
+            CarbonImmutable::now(),
+            null,
+            null,
+            Uuid::v7(),
             DemoDataGenerator::getUserAgent(),
             'https://bitrix24.com/apps/store?utm_source=bx24',
             DemoDataGenerator::getUserAgentIp()
