@@ -28,27 +28,41 @@ interface ApplicationInstallationInterface
     public function getUpdatedAt(): CarbonImmutable;
 
     /**
-     * @return Uuid get Bitrix24 Account id related with this installation
+     * Get Bitrix24 Account id related with this installation
+     *
+     * Return bitrix24 account with tokens related with user who installed application on portal
+     *
+     * @return Uuid bitrix24 account id
      */
     public function getBitrix24AccountId(): Uuid;
 
     /**
-     * @return Uuid|null get contact person id related with this installation, optional
+     * Get Contact Person id
+     *
+     * Return contact person id who install application on portal, optional
+     *
+     * @return Uuid|null get contact person id
      */
     public function getContactPersonId(): ?Uuid;
 
     /**
      * Change contact person
+     *
+     * Change client contact person if client say he has new responsible for the application
      */
     public function changeContactPerson(?Uuid $uuid): void;
 
     /**
-     * @return Uuid|null get bitrix24 partner contact person id related with this installation, optional
+     * Get Bitrix24 Partner contact person id, optional
+     *
+     * Return bitrix24 partner contact person id - if application supported wih another partner
      */
     public function getBitrix24PartnerContactPersonId(): ?Uuid;
 
     /**
      * Change bitrix24 partner contact person
+     *
+     * Change bitrix24 partner contact person if partner say he has new responsible for the application
      */
     public function changeBitrix24PartnerContactPerson(?Uuid $uuid): void;
 
@@ -59,39 +73,56 @@ interface ApplicationInstallationInterface
 
     /**
      * Change bitrix24 partner
+     *
+     * Change bitrix24 partner if other partner starts support client portal
      */
     public function changeBitrix24Partner(?Uuid $uuid): void;
 
     /**
-     * Get external id for application installation projection in crm / erp - lead or deal id
-     * @return string|null application installation projection in crm / erp - lead or deal id
+     * Get external id for application installation
+     *
+     * Return external id for application installation related entity in crm or erp - lead or deal id
      */
     public function getExternalId(): ?string;
 
     /**
-     * set external id for application installation projection in crm / erp - lead or deal id
+     * Get external id for application installation
+     *
+     * Set external id for application installation related entity in crm or erp - lead or deal id
      */
     public function setExternalId(?string $externalId): void;
 
     /**
      * Get application installation status
      *
-     * @return ApplicationInstallationStatus
+     * new - started the installation procedure, but have not yet finalized, there is no “installation completed”
+     * active - installation procedure finished, active portal, there is a connection to B24
+     * deleted - application has been removed from the portal
+     * blocked - lost connection with the portal or the developer forcibly deactivated the account
      */
     public function getStatus(): ApplicationInstallationStatus;
 
     /**
      * Finish application installation
+     *
+     * Installation can be finished only for state «new»
+     * @throws InvalidArgumentException
      */
     public function applicationInstalled(): void;
 
     /**
      * Application uninstalled
+     *
+     * Application can be uninstalled by:
+     * - admin on portal active → deleted statuses
+     * - if installation will not complete new → blocked → deleted by background task
+     * @throws InvalidArgumentException
      */
     public function applicationUninstalled(): void;
 
     /**
-     * Change status to active
+     * Change status to active for blocked accounts
+     *
      * @param non-empty-string|null $comment
      * @throws InvalidArgumentException
      */

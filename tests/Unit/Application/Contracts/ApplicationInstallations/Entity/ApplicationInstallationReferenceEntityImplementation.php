@@ -8,6 +8,7 @@ use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
@@ -19,6 +20,8 @@ use Symfony\Component\Uid\Uuid;
  */
 final class ApplicationInstallationReferenceEntityImplementation implements ApplicationInstallationInterface
 {
+    private ?string $comment;
+
     public function __construct(
         private readonly Uuid                 $id,
         private ApplicationInstallationStatus $applicationInstallationStatus,
@@ -32,7 +35,6 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         private ?Uuid                         $partnerContactPersonUuid,
         private ?Uuid                         $bitrix24PartnerUuid,
         private ?string                       $externalId,
-        private ?string                       $comment
     )
     {
     }
@@ -133,14 +135,33 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
         $this->updatedAt = new CarbonImmutable();
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function applicationInstalled(): void
     {
+        if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
+            throw new InvalidArgumentException(sprintf('application installation must be in status «%s», сurrent status «%s»',
+                ApplicationInstallationStatus::new->name,
+                $this->applicationInstallationStatus->name
+            ));
+        }
         $this->applicationInstallationStatus = ApplicationInstallationStatus::active;
         $this->updatedAt = new CarbonImmutable();
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function applicationUninstalled(): void
     {
+        if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
+            throw new InvalidArgumentException(sprintf('application installation must be in status «%s» or «%s», сurrent status «%s»',
+                ApplicationInstallationStatus::active->name,
+                ApplicationInstallationStatus::blocked->name,
+                $this->applicationInstallationStatus->name
+            ));
+        }
         $this->applicationInstallationStatus = ApplicationInstallationStatus::deleted;
         $this->updatedAt = new CarbonImmutable();
     }

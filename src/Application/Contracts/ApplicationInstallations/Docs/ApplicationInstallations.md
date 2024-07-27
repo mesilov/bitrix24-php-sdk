@@ -15,7 +15,7 @@ Application Active
 - change contact person
 - change bitrix24 partner contact person
 - change bitrix24 partner
-- change bitrix24 licence
+- change bitrix24 licence family
 - change bitrix24 application status
 
 Uninstall
@@ -23,3 +23,8 @@ Uninstall
 - ?delete contact person
 - delete b24 account
 - mark installation as deleted
+
+Background periodical tasks
+- check portal license type 
+- check application status
+- check users count
