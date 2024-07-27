@@ -35,17 +35,17 @@ final class Bitrix24AccountReferenceEntityImplementation implements Bitrix24Acco
     private ?string $comment = null;
 
     public function __construct(
-        private readonly Uuid                  $id,
-        private readonly int                   $bitrix24UserId,
-        private readonly bool                  $isBitrix24UserAdmin,
-        private readonly string                $memberId,
-        private string                $domainUrl,
-        private Bitrix24AccountStatus $accountStatus,
-        AuthToken                     $authToken,
-        private readonly CarbonImmutable       $createdAt,
-        private CarbonImmutable       $updatedAt,
-        private int                   $applicationVersion,
-        Scope                         $applicationScope,
+        private readonly Uuid            $id,
+        private readonly int             $bitrix24UserId,
+        private readonly bool            $isBitrix24UserAdmin,
+        private readonly string          $memberId,
+        private string                   $domainUrl,
+        private Bitrix24AccountStatus    $accountStatus,
+        AuthToken                        $authToken,
+        private readonly CarbonImmutable $createdAt,
+        private CarbonImmutable          $updatedAt,
+        private int                      $applicationVersion,
+        Scope                            $applicationScope,
     )
     {
         $this->accessToken = $authToken->getAccessToken();

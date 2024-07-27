@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity;
 
 use Bitrix24\SDK\Application\ApplicationStatus;
+use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
@@ -119,14 +120,28 @@ interface ApplicationInstallationInterface
      *
      * @link https://training.bitrix24.com/rest_help/general/app_info.php
      */
-    public function getBitrix24LicenseFamily(): string;
+    public function getPortalLicenseFamily(): PortalLicenseFamily;
 
     /**
      * Change plan designation without specified region.
      *
      * @link https://training.bitrix24.com/rest_help/general/app_info.php
      */
-    public function changeBitrix24LicenseFamily(string $licenseCode): void;
+    public function changePortalLicenseFamily(PortalLicenseFamily $portalLicenseFamily): void;
+
+    /**
+     * Get bitrix24 portal users count
+     * @return int|null
+     */
+    public function getPortalUsersCount(): ?int;
+
+    /**
+     * Change bitrix24 portal users count
+     *
+     * @param int $usersCount
+     * @return void
+     */
+    public function changePortalUsersCount(int $usersCount): void;
 
     /**
      * Get comment
