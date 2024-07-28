@@ -2,21 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Bitrix24\SDK\Tests\Application\Contracts\ApplicationInstallations\Repository;
+namespace Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations\Repository;
 
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationInterface;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Exceptions\ApplicationInstallationNotFoundException;
 use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface;
-use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonInterface;
-use Bitrix24\SDK\Application\Contracts\ContactPersons\Entity\ContactPersonStatus;
-use Bitrix24\SDK\Application\Contracts\ContactPersons\Exceptions\ContactPersonNotFoundException;
-use Bitrix24\SDK\Application\Contracts\ContactPersons\Repository\ContactPersonRepositoryInterface;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use libphonenumber\PhoneNumber;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
-
 
 class InMemoryApplicationInstallationRepositoryImplementation implements ApplicationInstallationRepositoryInterface
 {
@@ -64,13 +58,13 @@ class InMemoryApplicationInstallationRepositoryImplementation implements Applica
         return $this->items[$uuid->toRfc4122()];
     }
 
-    public function findByBitrix24AccountId(Uuid $bitrix24AccountId): array
+    public function findByBitrix24AccountId(Uuid $uuid): array
     {
-        $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByBitrix24AccountId', ['id' => $bitrix24AccountId->toRfc4122()]);
+        $this->logger->debug('InMemoryApplicationInstallationRepositoryImplementation.findByBitrix24AccountId', ['id' => $uuid->toRfc4122()]);
 
         $result = [];
         foreach ($this->items as $item) {
-            if ($item->getBitrix24AccountId() === $bitrix24AccountId) {
+            if ($item->getBitrix24AccountId() === $uuid) {
                 $result[] = $item;
             }
         }

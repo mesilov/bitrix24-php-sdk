@@ -18,20 +18,20 @@ interface ApplicationInstallationRepositoryInterface
     public function save(ApplicationInstallationInterface $applicationInstallation): void;
 
     /**
-     * Delete application installation from persistence storage
-     *
-     * @throws ApplicationInstallationNotFoundException
-     * @throws InvalidArgumentException
-     */
-    public function delete(Uuid $uuid): void;
-
-    /**
      * Get application installation by id
      *
      *
      * @throws ApplicationInstallationNotFoundException
      */
     public function getById(Uuid $uuid): ApplicationInstallationInterface;
+
+    /**
+     * Delete application installation from persistence storage
+     *
+     * @throws ApplicationInstallationNotFoundException
+     * @throws InvalidArgumentException
+     */
+    public function delete(Uuid $uuid): void;
 
     /**
      * Find application installation by bitrix24 account id
