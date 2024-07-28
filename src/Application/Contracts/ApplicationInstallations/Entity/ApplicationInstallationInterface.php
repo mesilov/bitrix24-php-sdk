@@ -96,7 +96,7 @@ interface ApplicationInstallationInterface
      * Get application installation status
      *
      * new - started the installation procedure, but have not yet finalized, there is no “installation completed”
-     * active - installation procedure finished, active portal, there is a connection to B24
+     * active - installation finished, active portal, there is a connection to B24
      * deleted - application has been removed from the portal
      * blocked - lost connection with the portal or the developer forcibly deactivated the account
      */
@@ -121,7 +121,9 @@ interface ApplicationInstallationInterface
     public function applicationUninstalled(): void;
 
     /**
-     * Change status to active for blocked accounts
+     * Change status to active for blocked application installation accounts
+     *
+     * You can activate accounts only blocked state
      *
      * @param non-empty-string|null $comment
      * @throws InvalidArgumentException
@@ -129,7 +131,10 @@ interface ApplicationInstallationInterface
     public function markAsActive(?string $comment): void;
 
     /**
-     * Change  status to blocked
+     * Change status to blocked for application installation accounts in state new or active
+     *
+     *  You can block installation account if you need temporally  stop installation work
+     *
      * @param non-empty-string|null $comment
      * @throws InvalidArgumentException
      */
@@ -137,18 +142,26 @@ interface ApplicationInstallationInterface
 
     /**
      * Get application status
+     *
+     * Return current application status stored in persistence storage.
+     * This method do not call bitrix24 rest api to get actual data
+     * @link https://training.bitrix24.com/rest_help/general/app_info.php
      */
     public function getApplicationStatus(): ApplicationStatus;
 
     /**
      * Change application status
+     *
+     * You can check application status in periodical background task and store it in persistence storage for BI analytics
      * @link https://training.bitrix24.com/rest_help/general/app_info.php
      */
     public function changeApplicationStatus(ApplicationStatus $applicationStatus): void;
 
     /**
-     * Get plan designation without specified region.
+     * Get bitrix24 tariff plan designation without specified region.
      *
+     * Return current bitrix24 tariff plan designation without specified region stored in persistence storage.
+     * This method do not call bitrix24 rest api to get actual data
      * @link https://training.bitrix24.com/rest_help/general/app_info.php
      */
     public function getPortalLicenseFamily(): PortalLicenseFamily;
@@ -156,12 +169,16 @@ interface ApplicationInstallationInterface
     /**
      * Change plan designation without specified region.
      *
+     * You can check portal license family in periodical background task and store it in persistence storage for BI analytics
      * @link https://training.bitrix24.com/rest_help/general/app_info.php
      */
     public function changePortalLicenseFamily(PortalLicenseFamily $portalLicenseFamily): void;
 
     /**
      * Get bitrix24 portal users count
+     *
+     * Return bitrix24 portal users count stored in persistence storage
+     * This method do not call bitrix24 rest api to get actual data
      * @return int|null
      */
     public function getPortalUsersCount(): ?int;
@@ -169,6 +186,7 @@ interface ApplicationInstallationInterface
     /**
      * Change bitrix24 portal users count
      *
+     *  You can check portal users count background task and store it in persistence storage for BI analytics
      * @param int $usersCount
      * @return void
      */

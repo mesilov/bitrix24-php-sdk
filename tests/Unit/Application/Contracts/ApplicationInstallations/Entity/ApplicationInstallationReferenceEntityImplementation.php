@@ -141,7 +141,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function applicationInstalled(): void
     {
         if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::new) {
-            throw new InvalidArgumentException(sprintf('application installation must be in status «%s», сurrent status «%s»',
+            throw new InvalidArgumentException(sprintf('application installation must be in status «%s», current state «%s»',
                 ApplicationInstallationStatus::new->name,
                 $this->applicationInstallationStatus->name
             ));
@@ -156,7 +156,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
     public function applicationUninstalled(): void
     {
         if ($this->applicationInstallationStatus === ApplicationInstallationStatus::new || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
-            throw new InvalidArgumentException(sprintf('application installation must be in status «%s» or «%s», сurrent status «%s»',
+            throw new InvalidArgumentException(sprintf('application installation must be in status «%s» or «%s», current state «%s»',
                 ApplicationInstallationStatus::active->name,
                 ApplicationInstallationStatus::blocked->name,
                 $this->applicationInstallationStatus->name
@@ -168,6 +168,13 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
 
     public function markAsActive(?string $comment): void
     {
+        if ($this->applicationInstallationStatus !== ApplicationInstallationStatus::blocked) {
+            throw new InvalidArgumentException(sprintf('you can activate application install only in state «%s», current state «%s»',
+                ApplicationInstallationStatus::blocked->name,
+                $this->applicationInstallationStatus->name
+            ));
+        }
+
         $this->applicationInstallationStatus = ApplicationInstallationStatus::active;
         $this->comment = $comment;
         $this->updatedAt = new CarbonImmutable();
@@ -175,6 +182,14 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
 
     public function markAsBlocked(?string $comment): void
     {
+        if ($this->applicationInstallationStatus === ApplicationInstallationStatus::blocked || $this->applicationInstallationStatus === ApplicationInstallationStatus::deleted) {
+            throw new InvalidArgumentException(sprintf('you can block application install only in state «%s» or «%s», current state «%s»',
+                ApplicationInstallationStatus::new->name,
+                ApplicationInstallationStatus::active->name,
+                $this->applicationInstallationStatus->name
+            ));
+        }
+
         $this->applicationInstallationStatus = ApplicationInstallationStatus::blocked;
         $this->comment = $comment;
         $this->updatedAt = new CarbonImmutable();

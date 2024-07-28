@@ -375,6 +375,240 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $installation->applicationUninstalled();
     }
 
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test markAsActive method')]
+    final public function testMarkAsActive(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation->applicationInstalled();
+
+        // a few moments later
+        $installation->markAsBlocked('block installation');
+        $this->assertEquals(ApplicationInstallationStatus::blocked, $installation->getStatus());
+
+        // a few moments later
+        $installation->markAsActive('activate installation');
+        $this->assertEquals(ApplicationInstallationStatus::active, $installation->getStatus());
+
+
+        // try to activate installation in wrong state
+        $this->expectException(InvalidArgumentException::class);
+        $installation->markAsActive('activate installation in wrong state');
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test markAsBlocked method')]
+    final public function testMarkAsBlocked(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $installation->applicationInstalled();
+
+        // a few moments later
+        $installation->markAsBlocked('block installation');
+        $this->assertEquals(ApplicationInstallationStatus::blocked, $installation->getStatus());
+
+        // try to activate installation in wrong state
+        $this->expectException(InvalidArgumentException::class);
+        $installation->markAsBlocked('activate installation in wrong state');
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test getApplicationStatus method')]
+    final public function testGetApplicationStatus(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $this->assertEquals($applicationStatus, $installation->getApplicationStatus());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test changeApplicationStatus method')]
+    final public function testChangeApplicationStatus(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $this->assertEquals($applicationStatus, $installation->getApplicationStatus());
+
+        $newApplicationStatus = ApplicationStatus::trial();
+        $installation->changeApplicationStatus($newApplicationStatus);
+        $this->assertEquals($newApplicationStatus, $installation->getApplicationStatus());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test getPortalLicenseFamily method')]
+    final public function testGetPortalLicenseFamily(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $this->assertEquals($portalLicenseFamily, $installation->getPortalLicenseFamily());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test changePortalLicenseFamily method')]
+    final public function testChangePortalLicenseFamily(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $this->assertEquals($portalLicenseFamily, $installation->getPortalLicenseFamily());
+
+        $newLicenseFamily = PortalLicenseFamily::en;
+        $installation->changePortalLicenseFamily($newLicenseFamily);
+        $this->assertEquals($newLicenseFamily, $installation->getPortalLicenseFamily());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test getPortalUsersCount method')]
+    final public function testGetPortalUsersCount(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $this->assertEquals($portalUsersCount, $installation->getPortalUsersCount());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test changePortalUsersCount method')]
+    final public function testChangePortalUsersCount(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $this->assertEquals($portalUsersCount, $installation->getPortalUsersCount());
+
+        $newUsersCount= 249;
+        $installation->changePortalUsersCount($newUsersCount);
+        $this->assertEquals($newUsersCount, $installation->getPortalUsersCount());
+    }
+
+    #[Test]
+    #[DataProvider('applicationInstallationDataProvider')]
+    #[TestDox('test getComment method')]
+    final public function testGetComment(
+        Uuid                          $uuid,
+        ApplicationInstallationStatus $applicationInstallationStatus,
+        CarbonImmutable               $createdAt,
+        CarbonImmutable               $updatedAt,
+        Uuid                          $bitrix24AccountUuid,
+        ApplicationStatus             $applicationStatus,
+        PortalLicenseFamily           $portalLicenseFamily,
+        ?int                          $portalUsersCount,
+        ?Uuid                         $clientContactPersonUuid,
+        ?Uuid                         $partnerContactPersonUuid,
+        ?Uuid                         $partnerUuid,
+        ?string                       $externalId
+    ): void
+    {
+        $installation = $this->createApplicationInstallationImplementation($uuid, $applicationInstallationStatus, $createdAt, $updatedAt, $bitrix24AccountUuid, $applicationStatus, $portalLicenseFamily, $portalUsersCount, $clientContactPersonUuid, $partnerContactPersonUuid, $partnerUuid, $externalId);
+        $comment = 'test block';
+        $installation->applicationInstalled();
+        $installation->markAsBlocked($comment);
+        $this->assertEquals($comment, $installation->getComment());
+    }
+
     public static function applicationInstallationDataProvider(): Generator
     {
         yield 'status-new-all-fields' => [
