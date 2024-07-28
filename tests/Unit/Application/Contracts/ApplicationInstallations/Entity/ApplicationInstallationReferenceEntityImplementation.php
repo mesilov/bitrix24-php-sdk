@@ -20,7 +20,7 @@ use Symfony\Component\Uid\Uuid;
  */
 final class ApplicationInstallationReferenceEntityImplementation implements ApplicationInstallationInterface
 {
-    private ?string $comment;
+    private ?string $comment = null;
 
     public function __construct(
         private readonly Uuid                 $id,
@@ -131,6 +131,10 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
 
     public function setExternalId(?string $externalId): void
     {
+        if (($externalId !== null) && trim($externalId) === '') {
+            throw new InvalidArgumentException('externalId cannot be empty string');
+        }
+
         $this->externalId = $externalId;
         $this->updatedAt = new CarbonImmutable();
     }
@@ -146,6 +150,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
                 $this->applicationInstallationStatus->name
             ));
         }
+
         $this->applicationInstallationStatus = ApplicationInstallationStatus::active;
         $this->updatedAt = new CarbonImmutable();
     }
@@ -162,6 +167,7 @@ final class ApplicationInstallationReferenceEntityImplementation implements Appl
                 $this->applicationInstallationStatus->name
             ));
         }
+
         $this->applicationInstallationStatus = ApplicationInstallationStatus::deleted;
         $this->updatedAt = new CarbonImmutable();
     }

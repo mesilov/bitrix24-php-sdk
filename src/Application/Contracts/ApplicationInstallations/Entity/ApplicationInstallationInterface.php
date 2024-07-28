@@ -89,6 +89,8 @@ interface ApplicationInstallationInterface
      * Get external id for application installation
      *
      * Set external id for application installation related entity in crm or erp - lead or deal id
+     * @param non-empty-string|null $externalId
+     * @throws InvalidArgumentException
      */
     public function setExternalId(?string $externalId): void;
 
@@ -179,7 +181,6 @@ interface ApplicationInstallationInterface
      *
      * Return bitrix24 portal users count stored in persistence storage
      * This method do not call bitrix24 rest api to get actual data
-     * @return int|null
      */
     public function getPortalUsersCount(): ?int;
 
@@ -187,8 +188,6 @@ interface ApplicationInstallationInterface
      * Change bitrix24 portal users count
      *
      *  You can check portal users count background task and store it in persistence storage for BI analytics
-     * @param int $usersCount
-     * @return void
      */
     public function changePortalUsersCount(int $usersCount): void;
 

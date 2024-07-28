@@ -270,6 +270,9 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $this->assertEquals($externalId, $installation->getExternalId());
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     #[Test]
     #[DataProvider('applicationInstallationDataProvider')]
     #[TestDox('test setExternalId method')]
@@ -293,6 +296,12 @@ abstract class ApplicationInstallationInterfaceTest extends TestCase
         $newExternalId = Uuid::v7()->toRfc4122();
         $installation->setExternalId($newExternalId);
         $this->assertEquals($newExternalId, $installation->getExternalId());
+
+        $installation->setExternalId(null);
+        $this->assertNull($installation->getExternalId());
+
+        $this->expectException(InvalidArgumentException::class);
+        $installation->setExternalId('');
     }
 
     #[Test]
