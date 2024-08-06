@@ -30,6 +30,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24PartnerInterface, AggregateRootEventsEmitterInterface
 {
     private ?string $comment = null;
+
     private array $events = [];
 
     public function __construct(
@@ -76,10 +77,10 @@ final class Bitrix24PartnerReferenceEntityImplementation implements Bitrix24Part
         $this->updatedAt = new CarbonImmutable();
 
         $this->events[] = new Bitrix24PartnerExternalIdChangedEvent(
-            $this->getId(),
-            $this->getUpdatedAt(),
+            $this->id,
+            $this->updatedAt,
             $prevExternalId,
-            $this->getExternalId()
+            $this->externalId
         );
     }
 

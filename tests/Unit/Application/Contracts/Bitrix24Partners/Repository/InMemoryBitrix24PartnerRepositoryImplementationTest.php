@@ -26,6 +26,7 @@ use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Bitrix24PartnerRepositoryInterface::class)]
@@ -60,6 +61,6 @@ class InMemoryBitrix24PartnerRepositoryImplementationTest extends Bitrix24Partne
 
     protected function createBitrix24PartnerRepositoryImplementation(): Bitrix24PartnerRepositoryInterface
     {
-        return new InMemoryBitrix24PartnerRepositoryImplementation(Fabric::getLogger());
+        return new InMemoryBitrix24PartnerRepositoryImplementation(new NullLogger());
     }
 }

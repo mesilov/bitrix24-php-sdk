@@ -14,6 +14,7 @@ use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(ApplicationInstallationRepositoryInterface::class)]
@@ -39,6 +40,6 @@ class InMemoryApplicationInstallationRepositoryImplementationTest extends Applic
 
     protected function createApplicationInstallationRepositoryImplementation(): ApplicationInstallationRepositoryInterface
     {
-        return new InMemoryApplicationInstallationRepositoryImplementation(Fabric::getLogger());
+        return new InMemoryApplicationInstallationRepositoryImplementation(new NullLogger());
     }
 }

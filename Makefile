@@ -10,7 +10,7 @@ lint-rector-fix:
 	vendor/bin/rector process
 
 test-unit:
-	vendor/bin/phpunit --testsuite unit_tests
+	vendor/bin/phpunit --testsuite unit_tests --display-warnings
 
 # integration tests with granularity by api-scope
 test-integration-scope-telephony:

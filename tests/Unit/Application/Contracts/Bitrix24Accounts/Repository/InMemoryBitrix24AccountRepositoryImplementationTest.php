@@ -14,6 +14,7 @@ use Bitrix24\SDK\Tests\Integration\Fabric;
 use Bitrix24\SDK\Tests\Unit\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountReferenceEntityImplementation;
 use Carbon\CarbonImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(Bitrix24AccountRepositoryInterface::class)]
@@ -50,6 +51,6 @@ class InMemoryBitrix24AccountRepositoryImplementationTest extends Bitrix24Accoun
 
     protected function createBitrix24AccountRepositoryImplementation(): Bitrix24AccountRepositoryInterface
     {
-        return new InMemoryBitrix24AccountRepositoryImplementation(Fabric::getLogger());
+        return new InMemoryBitrix24AccountRepositoryImplementation(new NullLogger());
     }
 }

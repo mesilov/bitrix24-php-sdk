@@ -19,6 +19,7 @@ use Carbon\CarbonImmutable;
 use Darsyn\IP\Version\Multi as IP;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Psr\Log\NullLogger;
 use Symfony\Component\Uid\Uuid;
 
 #[CoversClass(ContactPersonRepositoryInterface::class)]
@@ -98,6 +99,6 @@ class InMemoryContactPersonRepositoryImplementationTest extends ContactPersonRep
 
     protected function createContactPersonRepositoryImplementation(): ContactPersonRepositoryInterface
     {
-        return new InMemoryContactPersonRepositoryImplementation(Fabric::getLogger());
+        return new InMemoryContactPersonRepositoryImplementation(new NullLogger());
     }
 }

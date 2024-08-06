@@ -75,7 +75,7 @@ class InMemoryBitrix24PartnerRepositoryImplementation implements Bitrix24Partner
     {
         $this->logger->debug('b24PartnerRepository.findByExternalId', [
             'externalId' => $externalId,
-            'bitrix24PartnerStatus' => $bitrix24PartnerStatus->name
+            'bitrix24PartnerStatus' => $bitrix24PartnerStatus?->name
         ]);
 
         if (trim($externalId) === '') {
