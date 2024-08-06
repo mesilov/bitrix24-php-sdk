@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Application\Contracts\Bitrix24Partners\Entity;
 
-use Bitrix24\SDK\Application\ApplicationStatus;
-use Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Entity\ApplicationInstallationStatus;
-use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Carbon\CarbonImmutable;
 use libphonenumber\PhoneNumber;
@@ -75,6 +72,14 @@ interface Bitrix24PartnerInterface
     public function markAsBlocked(?string $comment): void;
 
     /**
+     * Change status to deleted for bitrix24 partner account, use this for soft delete
+     *
+     * @param non-empty-string|null $comment
+     * @throws InvalidArgumentException
+     */
+    public function markAsDeleted(?string $comment): void;
+
+    /**
      * Get comment
      */
     public function getComment(): ?string;
@@ -86,6 +91,9 @@ interface Bitrix24PartnerInterface
 
     /**
      * Set partner title
+     *
+     * @param non-empty-string $title
+     * @throws InvalidArgumentException
      */
     public function setTitle(string $title): void;
 
@@ -96,8 +104,11 @@ interface Bitrix24PartnerInterface
 
     /**
      * Set partner site
+     *
+     * @param non-empty-string|null $site
+     * @throws InvalidArgumentException
      */
-    public function setSite(?string $siteUrl): void;
+    public function setSite(?string $site): void;
 
     /**
      * Get partner phone
@@ -107,7 +118,7 @@ interface Bitrix24PartnerInterface
     /**
      * Set partner phone
      */
-    public function setPhone(?PhoneNumber $phone): void;
+    public function setPhone(?PhoneNumber $phoneNumber): void;
 
     /**
      * Get partner email
@@ -116,6 +127,9 @@ interface Bitrix24PartnerInterface
 
     /**
      * Set partner email
+     *
+     * @param non-empty-string|null $email
+     * @throws InvalidArgumentException
      */
     public function setEmail(?string $email): void;
 
@@ -126,6 +140,8 @@ interface Bitrix24PartnerInterface
 
     /**
      * Set bitrix24 partner id
+     * @param positive-int|null $bitrix24PartnerId bitrix24 partner id from vendor site
+     * @throws InvalidArgumentException
      */
     public function setBitrix24PartnerId(?int $bitrix24PartnerId): void;
 
@@ -136,6 +152,8 @@ interface Bitrix24PartnerInterface
 
     /**
      * Set open line id
+     * @param non-empty-string|null $openLineId support open line identifier
+     * @throws InvalidArgumentException
      */
-    public function setOpenLineId(?string $openLineId);
+    public function setOpenLineId(?string $openLineId): void;
 }
