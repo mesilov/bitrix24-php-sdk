@@ -53,7 +53,7 @@ class ExternalCallTest extends TestCase
                 'UF_PHONE_INNER' => $innerPhoneNumber
             ]
         );
-        $res = $externalCall->register(
+        $externalCallRegisteredResult = $externalCall->register(
             $innerPhoneNumber,
             $currentB24UserId,
             $phoneNumber,
@@ -68,7 +68,7 @@ class ExternalCallTest extends TestCase
         );
 
         yield 'default callId' => [
-            $res->getExternalCallRegistered()->CALL_ID,
+            $externalCallRegisteredResult->getExternalCallRegistered()->CALL_ID,
             $currentB24UserId
         ];
     }
@@ -94,7 +94,7 @@ class ExternalCallTest extends TestCase
             ]
         );
 
-        $res = $this->externalCall->register(
+        $externalCallRegisteredResult = $this->externalCall->register(
             $innerPhoneNumber,
             $currentB24UserId,
             $phoneNumber,
@@ -108,7 +108,7 @@ class ExternalCallTest extends TestCase
 
         );
 
-        $this->assertNotEmpty($res->getExternalCallRegistered()->CALL_ID);
+        $this->assertNotEmpty($externalCallRegisteredResult->getExternalCallRegistered()->CALL_ID);
     }
 
     /**
@@ -143,7 +143,7 @@ class ExternalCallTest extends TestCase
         $money = new Money(10000, new Currency('USD'));
         $duration = 100;
 
-        $fr = $this->externalCall->finishForUserId(
+        $externalCallFinishedResult = $this->externalCall->finishForUserId(
             $callId,
             $currentB24UserId,
             $duration,
@@ -152,8 +152,8 @@ class ExternalCallTest extends TestCase
             true
         );
 
-        $this->assertTrue($fr->getExternalCallFinished()->COST->equals($money));
-        $this->assertEquals($fr->getExternalCallFinished()->CALL_DURATION, $duration);
+        $this->assertTrue($externalCallFinishedResult->getExternalCallFinished()->COST->equals($money));
+        $this->assertEquals($externalCallFinishedResult->getExternalCallFinished()->CALL_DURATION, $duration);
 
     }
 

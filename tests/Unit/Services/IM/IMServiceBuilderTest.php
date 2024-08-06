@@ -17,20 +17,18 @@ use Psr\Log\NullLogger;
  *
  * @package Bitrix24\SDK\Tests\Unit\Services\IM
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\IM\IMServiceBuilder::class)]
 class IMServiceBuilderTest extends TestCase
 {
     private IMServiceBuilder $serviceBuilder;
 
-    /**
-     * @covers \Bitrix24\SDK\Services\IM\IMServiceBuilder::IM
-     */
     public function testGetIMService(): void
     {
         $this->serviceBuilder->IM();
         $this::assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceBuilder = (
         new ServiceBuilder(

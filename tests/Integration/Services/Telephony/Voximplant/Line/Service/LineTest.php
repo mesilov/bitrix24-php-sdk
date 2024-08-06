@@ -36,7 +36,7 @@ class LineTest extends TestCase
         $login = Uuid::v4()->toRfc4122();
         $password = Uuid::v4()->toRfc4122();
 
-        $addedLine = $this->sip->add(
+        $sipLineAddedResult = $this->sip->add(
             PbxType::cloud,
             $sipTitle,
             $serverUrl,
@@ -44,8 +44,8 @@ class LineTest extends TestCase
             $password
         );
 
-        $this->assertTrue($this->line->outgoingSipSet($addedLine->getLine()->ID)->isSuccess());
-        $this->sip->delete($addedLine->getLine()->ID);
+        $this->assertTrue($this->line->outgoingSipSet($sipLineAddedResult->getLine()->ID)->isSuccess());
+        $this->sip->delete($sipLineAddedResult->getLine()->ID);
     }
 
     #[Test]

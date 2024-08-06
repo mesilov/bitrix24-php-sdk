@@ -17,17 +17,21 @@
     }
   ],
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   },
   "require": {
     "php": "8.2.* || 8.3.*",
     "ext-json": "*",
-    "ext-bcmath": "*",
     "ext-curl": "*",
     "ext-intl": "*",
     "psr/log": "^2 || ^3",
-    "fig/http-message-util": "1.1.*",
-    "nesbot/carbon": "3.3.*",
+    "fig/http-message-util": "^1",
+    "giggsey/libphonenumber-for-php": "^8",
+    "darsyn/ip": "^4 || ^5",
+    "nesbot/carbon": "^3",
     "moneyphp/money": "^3 || ^4",
     "symfony/http-client": "^6 || ^7",
     "symfony/console": "^6 || ^7",
@@ -40,14 +44,16 @@
     "symfony/uid": "^6 || ^7"
   },
   "require-dev": {
-    "monolog/monolog": "3.5.*",
-    "phpstan/phpstan": "1.10.*",
-    "phpunit/phpunit": "11.0.*",
-    "symfony/debug-bundle": "7.0.*",
-    "symfony/stopwatch": "7.0.*",
+    "fakerphp/faker": "^1",
+    "monolog/monolog": "^3",
+    "nunomaduro/phpinsights": "^2",
+    "phpstan/phpstan": "1.11.7",
+    "phpunit/phpunit": "^10 || ^11",
+    "psalm/phar": "^5",
+    "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
-    "fakerphp/faker": "1.23.*",
-    "rector/rector": "^1.0"
+    "symfony/debug-bundle": "^6 || ^7",
+    "symfony/stopwatch": "^6 || ^7"
   },
   "autoload": {
     "psr-4": {

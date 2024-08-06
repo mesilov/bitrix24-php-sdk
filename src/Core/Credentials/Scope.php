@@ -83,8 +83,8 @@ class Scope
      */
     public function __construct(array $scope = [])
     {
-        $scope = array_unique(array_map('strtolower', $scope));
-
+        $scope = array_unique(array_map(strtolower(...), $scope));
+        sort($scope);
         if (count($scope) === 1 && $scope[0] === '') {
             $scope = [];
         } else {
@@ -96,6 +96,11 @@ class Scope
         }
 
         $this->currentScope = $scope;
+    }
+
+    public function equal(self $scope): bool
+    {
+        return $this->currentScope === $scope->getScopeCodes();
     }
 
     public function getScopeCodes(): array

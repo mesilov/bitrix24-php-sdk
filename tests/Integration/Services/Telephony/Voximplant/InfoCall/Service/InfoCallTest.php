@@ -37,7 +37,7 @@ class InfoCallTest extends TestCase
 
         $this->assertTrue($this->infoCall->startWithText(
             $lines[0]->LINE_ID,
-            DemoDataGenerator::getMobilePhone(),
+            DemoDataGenerator::getMobilePhone()->getNationalNumber(),
             'test message'
         )->getCallResult()->RESULT);
     }
@@ -53,7 +53,7 @@ class InfoCallTest extends TestCase
 
         $this->assertTrue($this->infoCall->startWithSound(
             $lines[0]->LINE_ID,
-            DemoDataGenerator::getMobilePhone(),
+            DemoDataGenerator::getMobilePhone()->getNationalNumber(),
             DemoDataGenerator::getRecordFileUrl()
         )->getCallResult()->RESULT);
     }

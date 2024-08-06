@@ -16,38 +16,30 @@ use Psr\Log\NullLogger;
  *
  * @package Bitrix24\SDK\Tests\Unit\Services
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\ServiceBuilder::class)]
 class ServiceBuilderTest extends TestCase
 {
     private ServiceBuilder $serviceBuilder;
 
-    /**
-     * @covers \Bitrix24\SDK\Services\ServiceBuilder::getMainScope
-     */
     public function testGetMainScopeBuilder(): void
     {
         $this->serviceBuilder->getMainScope();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\ServiceBuilder::getIMScope
-     */
     public function testGetIMScopeBuilder(): void
     {
         $this->serviceBuilder->getIMScope();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\ServiceBuilder::getCRMScope
-     */
     public function testGetCrmScopeBuilder(): void
     {
         $this->serviceBuilder->getCRMScope();
         $this::assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceBuilder = new ServiceBuilder(
             new NullCore(),

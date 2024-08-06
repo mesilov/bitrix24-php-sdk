@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Core;
 
 use Bitrix24\SDK\Core\Contracts\ApiClientInterface;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Response\DTO\RenewedAccessToken;
+use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Bitrix24\SDK\Infrastructure\HttpClient\RequestId\RequestIdGeneratorInterface;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
@@ -71,17 +73,17 @@ class ApiClient implements ApiClientInterface
      * @throws TransportExceptionInterface
      * @throws TransportException
      */
-    public function getNewAccessToken(): RenewedAccessToken
+    public function getNewAuthToken(): RenewedAuthToken
     {
         $requestId = $this->requestIdGenerator->getRequestId();
-        $this->logger->debug('getNewAccessToken.start', [
+        $this->logger->debug('getNewAuthToken.start', [
             'requestId' => $requestId
         ]);
         if (!$this->getCredentials()->getApplicationProfile() instanceof \Bitrix24\SDK\Core\Credentials\ApplicationProfile) {
             throw new InvalidArgumentException('application profile not set');
         }
 
-        if (!$this->getCredentials()->getAccessToken() instanceof \Bitrix24\SDK\Core\Credentials\AccessToken) {
+        if (!$this->getCredentials()->getAuthToken() instanceof AuthToken) {
             throw new InvalidArgumentException('access token in credentials not set');
         }
 
@@ -94,7 +96,7 @@ class ApiClient implements ApiClientInterface
                     'grant_type' => 'refresh_token',
                     'client_id' => $this->getCredentials()->getApplicationProfile()->getClientId(),
                     'client_secret' => $this->getCredentials()->getApplicationProfile()->getClientSecret(),
-                    'refresh_token' => $this->getCredentials()->getAccessToken()->getRefreshToken(),
+                    'refresh_token' => $this->getCredentials()->getAuthToken()->getRefreshToken(),
                     $this->requestIdGenerator->getQueryStringParameterName() => $requestId
                 ]
             )
@@ -111,16 +113,16 @@ class ApiClient implements ApiClientInterface
         $response = $this->client->request($method, $url, $requestOptions);
         $responseData = $response->toArray(false);
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
-            $newAccessToken = RenewedAccessToken::initFromArray($responseData);
+            $newAuthToken = RenewedAuthToken::initFromArray($responseData);
 
-            $this->logger->debug('getNewAccessToken.finish', [
+            $this->logger->debug('getNewAuthToken.finish', [
                 'requestId' => $requestId
             ]);
-            return $newAccessToken;
+            return $newAuthToken;
         }
 
         if ($response->getStatusCode() === StatusCodeInterface::STATUS_BAD_REQUEST) {
-            $this->logger->warning('getNewAccessToken.badRequest',[
+            $this->logger->warning('getNewAuthToken.badRequest',[
                 'url'=> $url
             ]);
             throw new TransportException(sprintf('getting new access token failure: %s', $responseData['error']));
@@ -149,16 +151,16 @@ class ApiClient implements ApiClientInterface
         );
 
         $method = 'POST';
-        if ($this->getCredentials()->getWebhookUrl() instanceof \Bitrix24\SDK\Core\Credentials\WebhookUrl) {
+        if ($this->getCredentials()->getWebhookUrl() instanceof WebhookUrl) {
             $url = sprintf('%s/%s/', $this->getCredentials()->getWebhookUrl()->getUrl(), $apiMethod);
         } else {
             $url = sprintf('%s/rest/%s', $this->getCredentials()->getDomainUrl(), $apiMethod);
 
-            if (!$this->getCredentials()->getAccessToken() instanceof \Bitrix24\SDK\Core\Credentials\AccessToken) {
+            if (!$this->getCredentials()->getAuthToken() instanceof AuthToken) {
                 throw new InvalidArgumentException('access token in credentials not found ');
             }
 
-            $parameters['auth'] = $this->getCredentials()->getAccessToken()->getAccessToken();
+            $parameters['auth'] = $this->getCredentials()->getAuthToken()->getAccessToken();
         }
 
         // duplicate request id in query string for current version of bitrix24 api

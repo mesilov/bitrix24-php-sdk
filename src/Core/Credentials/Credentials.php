@@ -16,7 +16,7 @@ class Credentials
      */
     public function __construct(
         protected ?WebhookUrl         $webhookUrl,
-        protected ?AccessToken        $accessToken,
+        protected ?AuthToken          $authToken,
         protected ?ApplicationProfile $applicationProfile,
         ?string                       $domainUrl
     )
@@ -25,18 +25,18 @@ class Credentials
             $this->setDomainUrl($domainUrl);
         }
 
-        if (!$this->accessToken instanceof AccessToken && !$this->webhookUrl instanceof WebhookUrl) {
+        if (!$this->authToken instanceof AuthToken && !$this->webhookUrl instanceof WebhookUrl) {
             throw new InvalidArgumentException('you must set on of auth type: webhook or OAuth 2.0');
         }
 
-        if ($this->accessToken instanceof AccessToken && $this->domainUrl === null) {
+        if ($this->authToken instanceof AuthToken && $this->domainUrl === null) {
             throw new InvalidArgumentException('for oauth type you must set domain url');
         }
     }
 
-    public function setAccessToken(AccessToken $accessToken): void
+    public function setAuthToken(AuthToken $authToken): void
     {
-        $this->accessToken = $accessToken;
+        $this->authToken = $authToken;
     }
 
     /**
@@ -61,7 +61,7 @@ class Credentials
 
     public function isWebhookContext(): bool
     {
-        return $this->webhookUrl instanceof WebhookUrl && !$this->accessToken instanceof AccessToken;
+        return $this->webhookUrl instanceof WebhookUrl && !$this->authToken instanceof AuthToken;
     }
 
     public function getApplicationProfile(): ?ApplicationProfile
@@ -81,9 +81,9 @@ class Credentials
         return $this->webhookUrl;
     }
 
-    public function getAccessToken(): ?AccessToken
+    public function getAuthToken(): ?AuthToken
     {
-        return $this->accessToken;
+        return $this->authToken;
     }
 
     /**
@@ -103,11 +103,11 @@ class Credentials
      *
      * @throws InvalidArgumentException
      */
-    public static function createFromOAuth(AccessToken $accessToken, ApplicationProfile $applicationProfile, string $domainUrl): self
+    public static function createFromOAuth(AuthToken $authToken, ApplicationProfile $applicationProfile, string $domainUrl): self
     {
         return new self(
             null,
-            $accessToken,
+            $authToken,
             $applicationProfile,
             $domainUrl
         );

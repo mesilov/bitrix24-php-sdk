@@ -19,7 +19,7 @@ class CoreBuilderTest extends TestCase
      */
     public function testBuildWithCredentialsFromWebhook(): void
     {
-        $core = (new CoreBuilder())
+        (new CoreBuilder())
             ->withCredentials(Credentials::createFromWebhook(new WebhookUrl('https://127.0.0.1')))
             ->build();
         // successful build core
@@ -33,7 +33,7 @@ class CoreBuilderTest extends TestCase
     public function testBuildWithoutCredentials(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $core = (new CoreBuilder())
+        (new CoreBuilder())
             ->build();
     }
 }

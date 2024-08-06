@@ -13,22 +13,20 @@ class ApplicationProfileTest extends TestCase
 {
     /**
      *
-     * @param array $arr
-     * @param string|null $expectedException
      *
-     * @return void
      * @throws InvalidArgumentException
-     * @dataProvider arrayDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('arrayDataProvider')]
     public function testFromArray(array $arr, ?string $expectedException): void
     {
         if ($expectedException !== null) {
             $this->expectException($expectedException);
         }
-        $prof = ApplicationProfile::initFromArray($arr);
 
-        $this->assertEquals($prof->getClientId(), $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID']);
-        $this->assertEquals($prof->getClientSecret(), $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET']);
+        $applicationProfile = ApplicationProfile::initFromArray($arr);
+
+        $this->assertEquals($applicationProfile->getClientId(), $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID']);
+        $this->assertEquals($applicationProfile->getClientSecret(), $arr['BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET']);
     }
 
     public static function arrayDataProvider(): Generator

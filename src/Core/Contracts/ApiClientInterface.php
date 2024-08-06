@@ -6,7 +6,7 @@ namespace Bitrix24\SDK\Core\Contracts;
 
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use Bitrix24\SDK\Core\Response\DTO\RenewedAccessToken;
+use Bitrix24\SDK\Core\Response\DTO\RenewedAuthToken;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -22,7 +22,7 @@ interface ApiClientInterface
      * @throws InvalidArgumentException
      * @throws TransportExceptionInterface
      */
-    public function getNewAccessToken(): RenewedAccessToken;
+    public function getNewAuthToken(): RenewedAuthToken;
 
     public function getCredentials(): Credentials;
 }

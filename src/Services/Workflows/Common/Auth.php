@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\Workflows\Common;
 
 use Bitrix24\SDK\Application\ApplicationStatus;
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\Endpoints;
 use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -14,7 +14,7 @@ use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 readonly class Auth
 {
     public function __construct(
-        public AccessToken       $accessToken,
+        public AuthToken         $accessToken,
         public Endpoints         $endpoints,
         public Scope             $scope,
         public ApplicationStatus $applicationStatus,
@@ -34,7 +34,7 @@ readonly class Auth
     public static function initFromArray(array $auth): self
     {
         return new self(
-            AccessToken::initFromArray($auth),
+            AuthToken::initFromArray($auth),
             Endpoints::initFromArray($auth),
             Scope::initFromString($auth['scope']),
             ApplicationStatus::initFromString($auth['status']),

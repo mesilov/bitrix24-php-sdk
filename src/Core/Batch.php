@@ -390,15 +390,15 @@ class Batch implements BatchOperationsInterface
 
         $keyId = $isCrmItemsInBatch ? 'id' : 'ID';
 
-        $firstResultPage = $this->core->call($apiMethod, $params);
-        $totalElementsCount = $firstResultPage->getResponseData()->getPagination()->getTotal();
+        $response = $this->core->call($apiMethod, $params);
+        $totalElementsCount = $response->getResponseData()->getPagination()->getTotal();
         $this->logger->debug('getTraversableList.totalElementsCount', [
             'totalElementsCount' => $totalElementsCount,
         ]);
         // filtered elements count less than or equal one result page(50 elements)
         $elementsCounter = 0;
         if ($totalElementsCount <= self::MAX_ELEMENTS_IN_PAGE) {
-            foreach ($firstResultPage->getResponseData()->getResult() as $listElement) {
+            foreach ($response->getResponseData()->getResult() as $listElement) {
                 ++$elementsCounter;
                 if ($limit !== null && $elementsCounter > $limit) {
                     return;
@@ -416,7 +416,7 @@ class Batch implements BatchOperationsInterface
         // return first page
         $lastElementIdInFirstPage = null;
         if ($isCrmItemsInBatch) {
-            foreach ($firstResultPage->getResponseData()->getResult()['items'] as $listElement) {
+            foreach ($response->getResponseData()->getResult()['items'] as $listElement) {
                 ++$elementsCounter;
                 $lastElementIdInFirstPage = (int)$listElement[$keyId];
                 if ($limit !== null && $elementsCounter > $limit) {
@@ -426,7 +426,7 @@ class Batch implements BatchOperationsInterface
                 yield $listElement;
             }
         } else {
-            foreach ($firstResultPage->getResponseData()->getResult() as $listElement) {
+            foreach ($response->getResponseData()->getResult() as $listElement) {
                 ++$elementsCounter;
                 $lastElementIdInFirstPage = (int)$listElement[$keyId];
                 if ($limit !== null && $elementsCounter > $limit) {

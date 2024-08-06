@@ -40,7 +40,7 @@ class SipTest extends TestCase
         $login = Uuid::v4()->toRfc4122();
         $password = Uuid::v4()->toRfc4122();
 
-        $addedLine = $this->sip->add(
+        $sipLineAddedResult = $this->sip->add(
             PbxType::cloud,
             $sipTitle,
             $serverUrl,
@@ -48,7 +48,7 @@ class SipTest extends TestCase
             $password
         );
         $this->assertGreaterThanOrEqual(1, count($this->sip->get()->getLines()));
-        $this->assertTrue($this->sip->delete($addedLine->getLine()->CONFIG_ID)->isSuccess());
+        $this->assertTrue($this->sip->delete($sipLineAddedResult->getLine()->CONFIG_ID)->isSuccess());
     }
 
     #[Test]
@@ -60,18 +60,18 @@ class SipTest extends TestCase
         $login = Uuid::v4()->toRfc4122();
         $password = Uuid::v4()->toRfc4122();
 
-        $addedLine = $this->sip->add(
+        $sipLineAddedResult = $this->sip->add(
             PbxType::cloud,
             $sipTitle,
             $serverUrl,
             $login,
             $password
         );
-        $this->assertTrue(in_array($addedLine->getLine()->CONFIG_ID, array_column($this->sip->get()->getLines(), 'CONFIG_ID')));
+        $this->assertTrue(in_array($sipLineAddedResult->getLine()->CONFIG_ID, array_column($this->sip->get()->getLines(), 'CONFIG_ID')));
 
-        $this->assertTrue($this->sip->delete($addedLine->getLine()->CONFIG_ID)->isSuccess());
+        $this->assertTrue($this->sip->delete($sipLineAddedResult->getLine()->CONFIG_ID)->isSuccess());
 
-        $this->assertFalse(in_array($addedLine->getLine()->CONFIG_ID, array_column($this->sip->get()->getLines(), 'CONFIG_ID')));
+        $this->assertFalse(in_array($sipLineAddedResult->getLine()->CONFIG_ID, array_column($this->sip->get()->getLines(), 'CONFIG_ID')));
     }
 
     /**
@@ -87,19 +87,19 @@ class SipTest extends TestCase
         $login = Uuid::v4()->toRfc4122();
         $password = Uuid::v4()->toRfc4122();
 
-        $addedLine = $this->sip->add(
+        $sipLineAddedResult = $this->sip->add(
             PbxType::cloud,
             $sipTitle,
             $serverUrl,
             $login,
             $password
         );
-        $this->assertEquals($sipTitle, $addedLine->getLine()->TITLE);
-        $this->assertEquals($serverUrl, $addedLine->getLine()->SERVER);
-        $this->assertEquals($login, $addedLine->getLine()->LOGIN);
-        $this->assertEquals($password, $addedLine->getLine()->PASSWORD);
+        $this->assertEquals($sipTitle, $sipLineAddedResult->getLine()->TITLE);
+        $this->assertEquals($serverUrl, $sipLineAddedResult->getLine()->SERVER);
+        $this->assertEquals($login, $sipLineAddedResult->getLine()->LOGIN);
+        $this->assertEquals($password, $sipLineAddedResult->getLine()->PASSWORD);
 
-        $this->sip->delete($addedLine->getLine()->CONFIG_ID)->isSuccess();
+        $this->sip->delete($sipLineAddedResult->getLine()->CONFIG_ID)->isSuccess();
     }
 
     #[Test]
@@ -111,7 +111,7 @@ class SipTest extends TestCase
         $login = Uuid::v4()->toRfc4122();
         $password = Uuid::v4()->toRfc4122();
 
-        $addedLine = $this->sip->add(
+        $sipLineAddedResult = $this->sip->add(
             PbxType::cloud,
             $sipTitle,
             $serverUrl,
@@ -121,13 +121,13 @@ class SipTest extends TestCase
 
         $newTitle = 'test sip updated title - ' . Uuid::v4()->toRfc4122();
         $this->assertTrue($this->sip->update(
-            $addedLine->getLine()->CONFIG_ID,
-            $addedLine->getLine()->TYPE,
+            $sipLineAddedResult->getLine()->CONFIG_ID,
+            $sipLineAddedResult->getLine()->TYPE,
             $newTitle
         )->isSuccess());
 
 
-        $this->sip->delete($addedLine->getLine()->CONFIG_ID)->isSuccess();
+        $this->sip->delete($sipLineAddedResult->getLine()->CONFIG_ID)->isSuccess();
     }
 
     #[Test]
@@ -139,7 +139,7 @@ class SipTest extends TestCase
         $login = Uuid::v4()->toRfc4122();
         $password = Uuid::v4()->toRfc4122();
 
-        $addedLine = $this->sip->add(
+        $sipLineAddedResult = $this->sip->add(
             PbxType::cloud,
             $sipTitle,
             $serverUrl,
@@ -147,10 +147,10 @@ class SipTest extends TestCase
             $password
         );
 
-        $sipLineStatus = $this->sip->status($addedLine->getLine()->REG_ID)->getStatus();
-        $this->assertEquals($addedLine->getLine()->REG_ID, $sipLineStatus->REG_ID);
+        $sipLineStatusItemResult = $this->sip->status($sipLineAddedResult->getLine()->REG_ID)->getStatus();
+        $this->assertEquals($sipLineAddedResult->getLine()->REG_ID, $sipLineStatusItemResult->REG_ID);
 
-        $this->sip->delete($addedLine->getLine()->CONFIG_ID);
+        $this->sip->delete($sipLineAddedResult->getLine()->CONFIG_ID);
     }
 
     /**

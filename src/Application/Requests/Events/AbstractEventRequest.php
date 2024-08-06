@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class AbstractEventRequest extends AbstractRequest implements EventInterface
 {
     protected string $eventCode;
+
     protected int $timestamp;
+
     protected array $eventPayload;
+
     protected int $eventId;
 
-    /**
-     * @param Request $request
-     */
     public function __construct(Request $request)
     {
         parent::__construct($request);
