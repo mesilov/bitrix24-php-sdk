@@ -1,6 +1,6 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.3 — 1.07.2024
+## 2.0-beta.3 — 15.08.2024
 
 ### Added
 
@@ -61,6 +61,7 @@
 
 ### Changed
 * ❗️ migrate from `ramsey/uuid` to `symfony/uid`
+* ❗️ migrate from  `DateTimeImmutable` to `CarbonImmutable` from [carbon](https://github.com/briannesbitt/carbon) 
 * ❗️ refactor `Bitrix24\SDK\Application\Contracts`:
 
 * ❗️ update scope `telephony`, scope fully rewritten
