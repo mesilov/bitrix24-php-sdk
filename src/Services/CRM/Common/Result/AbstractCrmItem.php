@@ -12,7 +12,7 @@ use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealSemanticStage;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Money\Currency;
 use Money\Money;
 
@@ -36,7 +36,7 @@ class AbstractCrmItem extends AbstractItem
     /**
      * @param int|string $offset
      *
-     * @return bool|DateTimeImmutable|int|mixed|null
+     * @return bool|CarbonImmutable|int|mixed|null
      */
 
     public function __get($offset)
@@ -116,7 +116,7 @@ class AbstractCrmItem extends AbstractItem
             case 'movedTime':
             case 'lastActivityTime':
                 if ($this->data[$offset] !== '') {
-                    return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
 
                 return null;

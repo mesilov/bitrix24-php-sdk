@@ -426,10 +426,10 @@ class ListCommand extends Command
         );
 
         return [
-            'order_count'                 => $default->getResponseData()->getTime()->getDuration(),
-            'order_without_count'         => $orderAndNoCount->getResponseData()->getTime()->getDuration(),
-            'without_order_count'         => $noOrderAndCount->getResponseData()->getTime()->getDuration(),
-            'without_order_without_count' => $noOrderAndNoCount->getResponseData()->getTime()->getDuration(),
+            'order_count'                 => $default->getResponseData()->getTime()->duration,
+            'order_without_count'         => $orderAndNoCount->getResponseData()->getTime()->duration,
+            'without_order_count'         => $noOrderAndCount->getResponseData()->getTime()->duration,
+            'without_order_without_count' => $noOrderAndNoCount->getResponseData()->getTime()->duration,
         ];
     }
 }

@@ -6,14 +6,13 @@ namespace Bitrix24\SDK\Services\Workflows\Workflow\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowAutoExecutionType;
-use DateTimeImmutable;
-use DateTimeInterface;
+use Carbon\CarbonImmutable;
 
 /**
  * @property-read string $ID workflow ID
- * @property-read DateTimeImmutable $MODIFIED
- * @property-read ?DateTimeImmutable $OWNED_UNTIL time for blocking of a workflow. Process is considered as unresponsive, if the difference of blocking time with the current time is more than 5 minutes;
- * @property-read ?DateTimeImmutable $STARTED workflow launch date;
+ * @property-read CarbonImmutable $MODIFIED
+ * @property-read ?CarbonImmutable $OWNED_UNTIL time for blocking of a workflow. Process is considered as unresponsive, if the difference of blocking time with the current time is more than 5 minutes;
+ * @property-read ?CarbonImmutable $STARTED workflow launch date;
  * @property-read ?string $MODULE_ID module ID (as per document);
  * @property-read ?string $ENTITY entity ID (as per document);
  * @property-read ?int $DOCUMENT_ID document ID;
@@ -37,7 +36,7 @@ class WorkflowInstanceItemResult extends AbstractItem
             case 'MODIFIED':
             case 'STARTED':
                 if ($this->data[$offset] !== '') {
-                    return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
                 return null;
         }

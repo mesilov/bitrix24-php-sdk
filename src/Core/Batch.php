@@ -524,7 +524,7 @@ class Batch implements BatchOperationsInterface
                 [
                     'batchCommandItemNumber' => $queryCnt,
                     'nextItem' => $queryResultData->getPagination()->getNextItem(),
-                    'durationTime' => $queryResultData->getTime()->getDuration(),
+                    'durationTime' => $queryResultData->getTime()->duration,
                 ]
             );
 
@@ -691,7 +691,7 @@ class Batch implements BatchOperationsInterface
                 [
                     'batchCommandItemNumber' => $queryCnt,
                     'nextItem' => $queryResultData->getPagination()->getNextItem(),
-                    'durationTime' => $queryResultData->getTime()->getDuration(),
+                    'durationTime' => $queryResultData->getTime()->duration,
                 ]
             );
             // iterate items in batch query result

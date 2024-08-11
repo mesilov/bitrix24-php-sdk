@@ -9,7 +9,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Response\DTO\Pagination;
 use Bitrix24\SDK\Core\Response\DTO\ResponseData;
 use Bitrix24\SDK\Core\Response\DTO\Time;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Generator;
 
 class NullBatch implements BatchOperationsInterface
@@ -41,7 +41,7 @@ class NullBatch implements BatchOperationsInterface
      */
     public function addEntityItems(string $apiMethod, array $entityItems): Generator
     {
-        yield new ResponseData([],new Time(0,0,0,0,0, new DateTimeImmutable(),new DateTimeImmutable(),0,),new Pagination());
+        yield new ResponseData([],new Time(0,0,0,0,0, new CarbonImmutable(),new CarbonImmutable(),0,),new Pagination());
     }
 
     /**
@@ -49,7 +49,7 @@ class NullBatch implements BatchOperationsInterface
      */
     public function deleteEntityItems(string $apiMethod, array $entityItemId): Generator
     {
-        yield new ResponseData([],new Time(0,0,0,0,0, new DateTimeImmutable(),new DateTimeImmutable(),0,),new Pagination());
+        yield new ResponseData([],new Time(0,0,0,0,0, new CarbonImmutable(),new CarbonImmutable(),0,),new Pagination());
     }
 
     /**
@@ -57,6 +57,6 @@ class NullBatch implements BatchOperationsInterface
      */
     public function updateEntityItems(string $apiMethod, array $entityItems): Generator
     {
-        yield new ResponseData([],new Time(0,0,0,0,0, new DateTimeImmutable(),new DateTimeImmutable(),0,),new Pagination());
+        yield new ResponseData([],new Time(0,0,0,0,0, new CarbonImmutable(),new CarbonImmutable(),0,),new Pagination());
     }
 }

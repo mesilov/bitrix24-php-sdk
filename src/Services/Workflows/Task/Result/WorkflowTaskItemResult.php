@@ -11,7 +11,6 @@ use Bitrix24\SDK\Services\Workflows\Common\WorkflowTaskActivityType;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowTaskStatusType;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowTaskUserStatusType;
 use Carbon\CarbonImmutable;
-use DateTimeImmutable;
 
 /**
  * @property-read int $ID task ID

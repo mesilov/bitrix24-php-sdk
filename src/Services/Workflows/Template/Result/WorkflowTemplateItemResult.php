@@ -6,7 +6,7 @@ namespace Bitrix24\SDK\Services\Workflows\Template\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowAutoExecutionType;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 
 /**
  * @property-read int $ID
@@ -19,7 +19,7 @@ use DateTimeImmutable;
  * @property-read ?array $PARAMETERS
  * @property-read ?array $VARIABLES
  * @property-read ?array $CONSTANTS
- * @property-read ?DateTimeImmutable $MODIFIED
+ * @property-read ?CarbonImmutable $MODIFIED
  * @property-read ?bool $IS_MODIFIED
  * @property-read ?int $USER_ID
  * @property-read ?string $SYSTEM_CODE
@@ -39,7 +39,7 @@ class WorkflowTemplateItemResult extends AbstractItem
                 return null;
             case 'MODIFIED':
                 if ($this->data[$offset] !== '') {
-                    return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
                 return null;
             case 'IS_MODIFIED':

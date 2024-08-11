@@ -113,7 +113,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             }
 
             $this->log->debug('FilterWithoutBatchWithoutCountOrder.step', [
-                'duration'         => $resultPage->getResponseData()->getTime()->getDuration(),
+                'duration'         => $resultPage->getResponseData()->getTime()->duration,
                 'currentElementId' => $currentElementId,
                 'lastElementId'    => $lastElementId,
             ]);

@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Main\Result;
 
+use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AbstractResult;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
+use Exception;
 
 class ServerTimeResult extends AbstractResult
 {
     /**
-     * @return \DateTimeImmutable
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Exception
+     * @return CarbonImmutable
+     * @throws BaseException
+     * @throws Exception
      */
-    public function time(): DateTimeImmutable
+    public function time(): CarbonImmutable
     {
-        return new DateTimeImmutable($this->getCoreResponse()->getResponseData()->getResult()[0]);
+        return new CarbonImmutable($this->getCoreResponse()->getResponseData()->getResult()[0]);
     }
 }

@@ -7,9 +7,8 @@ namespace Bitrix24\SDK\Services\Catalog\Common\Result;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Money\Currency;
-use Money\Money;
 
 abstract class AbstractCatalogItem extends AbstractItem
 {
@@ -31,7 +30,7 @@ abstract class AbstractCatalogItem extends AbstractItem
     /**
      * @param int|string $offset
      *
-     * @return bool|DateTimeImmutable|int|mixed|null
+     * @return bool|CarbonImmutable|int|mixed|null
      */
 
     public function __get($offset)
@@ -72,7 +71,7 @@ abstract class AbstractCatalogItem extends AbstractItem
             case 'dateCreate':
             case 'timestampX':
                 if ($this->data[$offset] !== '') {
-                    return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
 
                 return null;
