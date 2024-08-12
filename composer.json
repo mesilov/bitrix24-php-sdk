@@ -33,6 +33,7 @@
     "darsyn/ip": "^4 || ^5",
     "nesbot/carbon": "^3",
     "moneyphp/money": "^3 || ^4",
+    "mesilov/moneyphp-percentage": "^0.2",
     "symfony/http-client": "^6 || ^7",
     "symfony/console": "^6 || ^7",
     "symfony/dotenv": "^6 || ^7",
@@ -44,6 +45,7 @@
     "symfony/uid": "^6 || ^7"
   },
   "require-dev": {
+    "typhoon/reflection": "^0.4",
     "fakerphp/faker": "^1",
     "monolog/monolog": "^3",
     "nunomaduro/phpinsights": "^2",

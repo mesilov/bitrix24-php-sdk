@@ -15,30 +15,18 @@ use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use Carbon\CarbonImmutable;
 use Money\Currency;
 use Money\Money;
+use MoneyPHP\Percentage\Percentage;
 
 class AbstractCrmItem extends AbstractItem
 {
-    private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
-
-    /**
-     * @var Currency
-     */
     private Currency $currency;
-
-    public function __construct(array $data, Currency $currency = null)
-    {
-        parent::__construct($data);
-        if ($currency !== null) {
-            $this->currency = $currency;
-        }
-    }
+    private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
     /**
      * @param int|string $offset
      *
      * @return bool|CarbonImmutable|int|mixed|null
      */
-
     public function __get($offset)
     {
         // todo унести в отдельный класс и покрыть тестами
@@ -104,6 +92,8 @@ class AbstractCrmItem extends AbstractItem
             case 'IS_RECURRING':
             case 'IS_RETURN_CUSTOMER':
             case 'IS_REPEATED_APPROACH':
+            case 'TAX_INCLUDED':
+            case 'CUSTOMIZED':
                 return $this->data[$offset] === 'Y';
             case 'DATE_CREATE':
             case 'CREATED_DATE':
@@ -125,6 +115,7 @@ class AbstractCrmItem extends AbstractItem
             case 'PRICE_NETTO':
             case 'PRICE_BRUTTO':
             case 'PRICE':
+            case 'DISCOUNT_SUM':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     $var = $this->data[$offset] * 100;
                     return new Money((string)$var, new Currency($this->currency->getCode()));
@@ -172,12 +163,17 @@ class AbstractCrmItem extends AbstractItem
                 return $items;
             case 'currencyId':
             case 'accountCurrencyId':
+            case 'CURRENCY_ID':
                 return new Currency($this->data[$offset]);
             case 'STAGE_SEMANTIC_ID':
                 if ($this->data[$offset] !== null) {
                     return DealSemanticStage::from($this->data[$offset]);
                 }
                 return null;
+            case 'DISCOUNT_TYPE_ID':
+                return DiscountType::from($this->data[$offset]);
+            case 'DISCOUNT_RATE':
+                return new Percentage((string)$this->data[$offset]);
             default:
                 return $this->data[$offset] ?? null;
         }
@@ -201,5 +197,13 @@ class AbstractCrmItem extends AbstractItem
         }
 
         return $this->$fieldName;
+    }
+
+    public function __construct(array $data, Currency $currency = null)
+    {
+        parent::__construct($data);
+        if ($currency !== null) {
+            $this->currency = $currency;
+        }
     }
 }

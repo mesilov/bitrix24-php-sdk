@@ -4,26 +4,58 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Deal\Service;
 
-use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
-use Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows;
-use Bitrix24\SDK\Tests\Integration\Fabric;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\CRM\Common\Result\DiscountType;
+use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult;
+use Bitrix24\SDK\Services\CRM\Deal\Service\Deal;
+use Bitrix24\SDK\Services\CRM\Deal\Service\DealProductRows;
+use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
+use Bitrix24\SDK\Tests\Integration\Fabric;
+use MoneyPHP\Percentage\Percentage;
 use PHPUnit\Framework\TestCase;
+use Typhoon\Reflection\TyphoonReflector;
 
-/**
- * Class DealsTest
- *
- * @package Bitrix24\SDK\Tests\Integration\Services\CRM\Deals\Service
- */
 class DealProductRowsTest extends TestCase
 {
-    protected Deal $dealService;
-    protected DealProductRows $dealProductRowsService;
+    private Deal $dealService;
+    private DealProductRows $dealProductRowsService;
+    private DecimalMoneyFormatter $decimalMoneyFormatter;
+    private TyphoonReflector $typhoonReflector;
+
+    public function testAllSystemPropertiesAnnotated(): void
+    {
+        $dealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
+        $this->dealProductRowsService->set(
+            $dealId,
+            [
+                [
+                    'PRODUCT_NAME' => sprintf('product name %s', time()),
+                    'PRICE' => $this->decimalMoneyFormatter->format(new Money(100000, DemoDataGenerator::getCurrency())),
+                ],
+            ]
+        );
+        // get response from server with actual keys
+        $propListFromApi = array_keys($this->dealProductRowsService->get($dealId)->getCoreResponse()->getResponseData()->getResult()['result']['rows'][0]);
+        // parse keys from phpdoc annotation
+        $props = $this->typhoonReflector->reflectClass(DealProductRowItemResult::class)->properties();
+        $propsFromAnnotations = [];
+        foreach ($props as $meta) {
+            if ($meta->isAnnotated() && !$meta->isNative()) {
+                $propsFromAnnotations[] = $meta->id->name;
+            }
+        }
+
+        $this->assertEquals($propListFromApi, $propsFromAnnotations,
+            sprintf('in phpdocs annotations for class %s cant find fields from actual api response: %s',
+                DealProductRowItemResult::class,
+                implode(', ', array_values(array_diff($propListFromApi, $propsFromAnnotations)))
+            ));
+    }
 
     /**
      * @throws BaseException
@@ -32,67 +64,65 @@ class DealProductRowsTest extends TestCase
      */
     public function testSet(): void
     {
-
-        $callCosts = new Money(1050, new Currency('USD'));
-        $currencies = new ISOCurrencies();
-
-        $moneyFormatter = new DecimalMoneyFormatter($currencies);
-        $newDealId = $this->dealService->add(['TITLE' => 'test deal'])->getId();
-        $this::assertCount(5, $this->dealProductRowsService->get($newDealId)->getProductRows());
+        $dealId = $this->dealService->add(['TITLE' => sprintf('test deal %s', time())])->getId();
+        $deal = $this->dealService->get($dealId)->deal();
+        $price = new Money(100000, $deal->CURRENCY_ID);
+        $discount = new Money(50012, $deal->CURRENCY_ID);
         $this::assertTrue(
             $this->dealProductRowsService->set(
-                $newDealId,
+                $dealId,
                 [
                     [
-                        'PRODUCT_NAME' => 'wine',
-                        'PRICE' => $moneyFormatter->format($callCosts),
+                        'PRODUCT_NAME' => sprintf('product name %s', time()),
+                        'PRICE' => $this->decimalMoneyFormatter->format($price),
+                        'DISCOUNT_TYPE_ID' => 1,
+                        'DISCOUNT_SUM' => $this->decimalMoneyFormatter->format($discount)
                     ],
                 ]
             )->isSuccess()
         );
-        $this::assertCount(1, $this->dealProductRowsService->get($newDealId)->getProductRows());
-
-
+        $productRows = $this->dealProductRowsService->get($dealId);
+        $this->assertCount(1, $productRows->getProductRows());
+        $productRow = $productRows->getProductRows()[0];
+        $this->assertEquals($price, $productRow->PRICE);
+        $this->assertEquals(DiscountType::monetary, $productRow->DISCOUNT_TYPE_ID);
+        $this->assertEquals($discount, $productRow->DISCOUNT_SUM);
+        $discount = $discount->multiply(100)->divide($this->decimalMoneyFormatter->format($price->add($discount)));
+        $calculatedPercentage = new Percentage((string)((int)$discount->getAmount() / 100));
+        $this->assertEquals($calculatedPercentage, $productRow->DISCOUNT_RATE);
     }
 
-    /**
-     * @throws BaseException
-     * @throws TransportException
-     */
     public function testGet(): void
     {
-        $callCosts = new Money(1050, new Currency('USD'));
-        $currencies = new ISOCurrencies();
-
-        $moneyFormatter = new DecimalMoneyFormatter($currencies);
-        $newDealId = $this->dealService->add(['TITLE' => 'test deal', 'CURRENCY_ID' => $callCosts->getCurrency()->getCode()])->getId();
+        $dealId = $this->dealService->add(['TITLE' => sprintf('test deal %s', time())])->getId();
+        $deal = $this->dealService->get($dealId)->deal();
+        $price = new Money(100000, $deal->CURRENCY_ID);
+        $discount = new Money(0, $deal->CURRENCY_ID);
         $this::assertTrue(
             $this->dealProductRowsService->set(
-                $newDealId,
+                $dealId,
                 [
                     [
-                        'PRODUCT_NAME' => 'wine',
-                        'PRICE' => $moneyFormatter->format($callCosts),
+                        'PRODUCT_NAME' => sprintf('product name %s', time()),
+                        'PRICE' => $this->decimalMoneyFormatter->format($price),
                     ],
                 ]
             )->isSuccess()
         );
-        $currency = $callCosts->getCurrency();
-
-        $resultWithoutAvailableCurrency = $this->dealProductRowsService->get($newDealId);
-        $resultWithAvailableCurrency = $this->dealProductRowsService->get($newDealId, $currency);
-        foreach ($resultWithoutAvailableCurrency->getProductRows() as $productRow) {
-            $this::assertEquals($callCosts, $productRow->PRICE);
-        }
-       foreach ($resultWithAvailableCurrency->getProductRows() as $productRow) {
-            $this::assertEquals($callCosts, $productRow->PRICE);
-        }
+        $productRows = $this->dealProductRowsService->get($dealId);
+        $this->assertCount(1, $productRows->getProductRows());
+        $productRow = $productRows->getProductRows()[0];
+        $this->assertEquals($price, $productRow->PRICE);
+        $this->assertEquals(DiscountType::percentage, $productRow->DISCOUNT_TYPE_ID);
+        $this->assertEquals($discount, $productRow->DISCOUNT_SUM);
+        $this->assertEquals(Percentage::zero(), $productRow->DISCOUNT_RATE);
     }
 
     public function setUp(): void
     {
         $this->dealService = Fabric::getServiceBuilder()->getCRMScope()->deal();
         $this->dealProductRowsService = Fabric::getServiceBuilder()->getCRMScope()->dealProductRows();
-        $this->core = Fabric::getCore();
+        $this->decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        $this->typhoonReflector = TyphoonReflector::build();
     }
 }

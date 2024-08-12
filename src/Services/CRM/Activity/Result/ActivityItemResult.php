@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Activity\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
-use DateTimeInterface;
+use Carbon\CarbonImmutable;
 
 /**
  * @see https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_fields.php

@@ -9,6 +9,9 @@ use Faker;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberUtil;
+use Money\Currency;
+use Money\Money;
+use Random\RandomException;
 
 class DemoDataGenerator
 {
@@ -48,5 +51,18 @@ class DemoDataGenerator
     public static function getUserAgentIp(): Multi
     {
         return Multi::factory(Faker\Factory::create()->ipv4());
+    }
+
+    public static function getCurrency(): Currency
+    {
+        return new Currency('USD');
+    }
+
+    /**
+     * @throws RandomException
+     */
+    public static function getMoneyAmount(): Money
+    {
+        return new Money(random_int(1000, 1000000), self::getCurrency());
     }
 }

@@ -10,6 +10,7 @@
     * `symfony/filesystem` version `^6 || ^7`
     * `symfony/mime` version `^6 || ^7`
     * `nesbot/carbon` version `3.3.*`
+    * `mesilov/moneyphp-percentage` version `0.2.*`
 * add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
     * `Activity` – service for work with application activities:
         * `add` – adds new activity to a workflow
@@ -57,6 +58,7 @@
 * add method `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder::encodeCallRecord(string $filename): string` - for work with call records
 * add class `Bitrix24\SDK\Services\Main\Service\EventManager` - improve DX for work with events lifecycle bind or unbind
 * add method `Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata` - improve DX for work with install events
+* add enum `Bitrix24\SDK\Services\CRM\Common\Result\DiscountType` 
 * improve DX - add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle 
 
 ### Changed
@@ -121,7 +123,7 @@
     * add `SipRegistrationStatus` – pbx sip line registration status
 * change signature `Bitrix24\SDK\Core\Credentials\AccessToken::getRefreshToken()?string;` - add nullable option for event tokens
 * change signature `Bitrix24\SDK\Core\Commands\Command::getName():?string` renamed to `getId():string`
-
+* add fields and change return types in `Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult`
 
 ### Deleted
 * remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\Auth`

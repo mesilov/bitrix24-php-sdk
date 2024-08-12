@@ -9,7 +9,7 @@ use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Website;
-use DateTimeInterface;
+use Carbon\CarbonImmutable;
 
 /**
  * Class LeadItemResult
@@ -20,7 +20,7 @@ use DateTimeInterface;
  * @property-read string                 $NAME
  * @property-read string                 $SECOND_NAME
  * @property-read string                 $LAST_NAME
- * @property-read DateTimeInterface|null $BIRTHDATE
+ * @property-read CarbonImmutable|null $BIRTHDATE
  * @property-read string                 $COMPANY_TITLE
  * @property-read string                 $SOURCE_ID
  * @property-read string                 $SOURCE_DESCRIPTION
