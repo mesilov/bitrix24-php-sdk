@@ -10,7 +10,9 @@ use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\EmailValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessengerValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\WebsiteValueType;
+use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Core;
@@ -23,8 +25,10 @@ use Faker;
  */
 class ContactTest extends TestCase
 {
-    protected Contact $contactService;
-    protected Faker\Generator $faker;
+    use CustomBitrix24Assertions;
+
+    private Contact $contactService;
+    private Faker\Generator $faker;
 
     /**
      * @throws BaseException
@@ -54,6 +58,12 @@ class ContactTest extends TestCase
     public function testFields(): void
     {
         self::assertIsArray($this->contactService->fields()->getFieldsDescription());
+    }
+
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->contactService->fields()->getFieldsDescription()));
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ContactItemResult::class);
     }
 
     /**
@@ -203,7 +213,7 @@ class ContactTest extends TestCase
                     'WEB' => [
                         [
                             'VALUE' => $url,
-                            'VALUE_TYPE' => WebsiteValueType::work,
+                            'VALUE_TYPE' => WebsiteValueType::work->name,
                         ]
                     ],
                 ])->getId())->contact()->WEB[0]->VALUE);

@@ -39,13 +39,13 @@
     "symfony/dotenv": "^6 || ^7",
     "symfony/filesystem": "^6 || ^7",
     "symfony/mime": "^6 || ^7",
+    "symfony/finder": "^6 || ^7",
     "symfony/http-client-contracts": "^2 || ^3",
     "symfony/http-foundation": "^6 || ^7",
     "symfony/event-dispatcher": "^6 || ^7",
     "symfony/uid": "^6 || ^7"
   },
   "require-dev": {
-    "typhoon/reflection": "^0.4",
     "fakerphp/faker": "^1",
     "monolog/monolog": "^3",
     "nunomaduro/phpinsights": "^2",
@@ -55,7 +55,8 @@
     "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
     "symfony/debug-bundle": "^6 || ^7",
-    "symfony/stopwatch": "^6 || ^7"
+    "symfony/stopwatch": "^6 || ^7",
+    "typhoon/reflection": "^0.4"
   },
   "autoload": {
     "psr-4": {
