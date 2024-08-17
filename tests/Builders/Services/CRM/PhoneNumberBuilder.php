@@ -26,6 +26,6 @@ class PhoneNumberBuilder
      */
     public function build(): string
     {
-        return '+7' . substr((string)time(), 2, $this->length) . substr((string)random_int(1000, PHP_INT_MAX), 0, 3);
+        return '+1' . substr((string)time(), 2, $this->length) . substr((string)random_int(1000, PHP_INT_MAX), 0, 3);
     }
 }

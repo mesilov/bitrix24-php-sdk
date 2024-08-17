@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace Bitrix24\SDK\Services\CRM\Common\Result;
 
 use Bitrix24\SDK\Core\Result\AbstractItem;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityNotifyType;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityPriority;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityStatus;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Email;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessenger;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\Phone;
@@ -29,17 +35,15 @@ class AbstractCrmItem extends AbstractItem
      */
     public function __get($offset)
     {
-        // todo унести в отдельный класс и покрыть тестами
-        // учитывать требования
-        //  - поддержка пользовательских полей с пользовательскими типами
-        //  - поддержка пользовательских полей со встроенными типами
-        //  - расширяемость для пользовательских полей в клиентском коде
-        //  - хранение связи поле-тип в аннотациях?
+        // todo move to separate service
+        //
+        //  - add user fields with custom user types
+        //  - add inheritance for user types
 
-        // приведение полей к реальным типам данных для основных сущностей CRM
         switch ($offset) {
             case 'ID':
             case 'ASSIGNED_BY_ID':
+            case 'RESPONSIBLE_ID':
             case 'CREATED_BY_ID':
             case 'MODIFY_BY_ID':
             case 'createdBy':
@@ -51,13 +55,10 @@ class AbstractCrmItem extends AbstractItem
             case 'opportunityAccount':
             case 'taxValueAccount':
             case 'taxValue':
-                // deal
             case 'LEAD_ID':
             case 'CONTACT_ID':
             case 'QUOTE_ID':
-                // productRow
             case 'OWNER_ID':
-                // DealCategoryItem
             case 'SORT':
             case 'id':
             case 'categoryId':
@@ -65,6 +66,13 @@ class AbstractCrmItem extends AbstractItem
             case 'assignedById':
             case 'contactId':
             case 'lastActivityBy':
+            case 'AUTHOR_ID':
+            case 'EDITOR_ID':
+            case 'RESULT_MARK':
+            case 'RESULT_STATUS':
+            case 'RESULT_STREAM':
+            case 'LAST_ACTIVITY_BY':
+            case 'ADDRESS_LOC_ADDR_ID':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
@@ -77,7 +85,6 @@ class AbstractCrmItem extends AbstractItem
                     return (int)$this->data[$offset];
                 }
                 return null;
-            // contact
             case 'EXPORT':
             case 'HAS_PHONE':
             case 'HAS_EMAIL':
@@ -94,9 +101,13 @@ class AbstractCrmItem extends AbstractItem
             case 'IS_REPEATED_APPROACH':
             case 'TAX_INCLUDED':
             case 'CUSTOMIZED':
+            case 'COMPLETED':
                 return $this->data[$offset] === 'Y';
             case 'DATE_CREATE':
             case 'CREATED_DATE':
+            case 'CREATED':
+            case 'DEADLINE':
+            case 'LAST_UPDATED':
             case 'DATE_MODIFY':
             case 'BIRTHDATE':
             case 'BEGINDATE':
@@ -105,20 +116,26 @@ class AbstractCrmItem extends AbstractItem
             case 'updatedTime':
             case 'movedTime':
             case 'lastActivityTime':
+            case 'LAST_ACTIVITY_TIME':
                 if ($this->data[$offset] !== '') {
                     return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
 
                 return null;
-            // deal
             case 'PRICE_EXCLUSIVE':
             case 'PRICE_NETTO':
             case 'PRICE_BRUTTO':
             case 'PRICE':
             case 'DISCOUNT_SUM':
+            case 'RESULT_SUM':
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     $var = $this->data[$offset] * 100;
                     return new Money((string)$var, new Currency($this->currency->getCode()));
+                }
+                return null;
+            case 'RESULT_CURRENCY_ID':
+                if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
+                    return new Currency($this->data[$offset]);
                 }
                 return null;
             case 'PHONE':
@@ -174,6 +191,18 @@ class AbstractCrmItem extends AbstractItem
                 return DiscountType::from($this->data[$offset]);
             case 'DISCOUNT_RATE':
                 return new Percentage((string)$this->data[$offset]);
+            case 'TYPE_ID':
+                return ActivityType::from((int)$this->data[$offset]);
+            case 'STATUS':
+                return ActivityStatus::from((int)$this->data[$offset]);
+            case 'PRIORITY':
+                return ActivityPriority::from((int)$this->data[$offset]);
+            case 'NOTIFY_TYPE':
+                return ActivityNotifyType::from((int)$this->data[$offset]);
+            case 'DESCRIPTION_TYPE':
+                return ActivityContentType::from((int)$this->data[$offset]);
+            case 'DIRECTION':
+                return ActivityDirectionType::from((int)$this->data[$offset]);
             default:
                 return $this->data[$offset] ?? null;
         }
@@ -187,7 +216,7 @@ class AbstractCrmItem extends AbstractItem
      * @return mixed|null
      * @throws UserfieldNotFoundException
      */
-    protected function getKeyWithUserfieldByFieldName(string $fieldName)
+    protected function getKeyWithUserfieldByFieldName(string $fieldName): mixed
     {
         if (!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
             $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;

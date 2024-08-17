@@ -13,55 +13,56 @@ use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
 use Carbon\CarbonImmutable;
 
 /**
- * Class ContactItemResult
- *
- * @property-read int $ID
- * @property-read string $HONORIFIC
- * @property-read string $NAME
- * @property-read string $SECOND_NAME
- * @property-read string $LAST_NAME
- * @property-read string $PHOTO
- * @property-read null|CarbonImmutable $BIRTHDATE
- * @property-read string $TYPE_ID
- * @property-read string $SOURCE_ID
- * @property-read string $SOURCE_DESCRIPTION
- * @property-read string $POST
- * @property-read string $ADDRESS
- * @property-read string $ADDRESS_2
- * @property-read string $ADDRESS_CITY
- * @property-read string $ADDRESS_POSTAL_CODE
- * @property-read string $ADDRESS_REGION
- * @property-read string $ADDRESS_PROVINCE
- * @property-read string $ADDRESS_COUNTRY
- * @property-read string $ADDRESS_COUNTRY_CODE
  * @property-read int $ADDRESS_LOC_ADDR_ID
- * @property-read string $COMMENTS
- * @property-read string $OPENED
- * @property-read bool $EXPORT
- * @property-read string $HAS_PHONE
- * @property-read string $HAS_EMAIL
- * @property-read string $HAS_IMOL
+ * @property-read string|null $ADDRESS
+ * @property-read string|null $ADDRESS_2
+ * @property-read string|null $ADDRESS_CITY
+ * @property-read string|null $ADDRESS_COUNTRY
+ * @property-read string|null $ADDRESS_COUNTRY_CODE
+ * @property-read string|null $ADDRESS_POSTAL_CODE
+ * @property-read string|null $ADDRESS_PROVINCE
+ * @property-read string|null $ADDRESS_REGION
  * @property-read int $ASSIGNED_BY_ID
+ * @property-read CarbonImmutable|null $BIRTHDATE
+ * @property-read string|null $COMMENTS
+ * @property-read int|null $COMPANY_ID
+ * @property-read array<int,int>|null $COMPANY_IDS
  * @property-read int $CREATED_BY_ID
- * @property-read int $MODIFY_BY_ID
  * @property-read CarbonImmutable $DATE_CREATE
  * @property-read CarbonImmutable $DATE_MODIFY
- * @property-read string $COMPANY_ID
- * @property-read string $COMPANY_IDS
- * @property-read int $LEAD_ID
- * @property-read string $ORIGINATOR_ID
- * @property-read string $ORIGIN_ID
- * @property-read string $ORIGIN_VERSION
- * @property-read int $FACE_ID
- * @property-read string $UTM_SOURCE
- * @property-read string $UTM_MEDIUM
- * @property-read string $UTM_CAMPAIGN
- * @property-read string $UTM_CONTENT
- * @property-read string $UTM_TERM
- * @property-read Phone[] $PHONE
+ * @property-read int|null $FACE_ID
+ * @property-read bool $EXPORT
  * @property-read Email[] $EMAIL
- * @property-read Website[] $WEB
+ * @property-read int $ID
+ * @property-read bool $HAS_EMAIL
+ * @property-read bool $HAS_IMOL
+ * @property-read bool $HAS_PHONE
+ * @property-read string|null $HONORIFIC
  * @property-read InstantMessenger[] $IM
+ * @property-read int|null $LEAD_ID
+ * @property-read CarbonImmutable $LAST_ACTIVITY_TIME
+ * @property-read int $LAST_ACTIVITY_BY
+ * @property-read string|null $LAST_NAME
+ * @property-read string|null $LINK
+ * @property-read int $MODIFY_BY_ID
+ * @property-read string $NAME
+ * @property-read string|null $ORIGIN_ID
+ * @property-read string|null $ORIGINATOR_ID
+ * @property-read string|null $ORIGIN_VERSION
+ * @property-read string $OPENED
+ * @property-read Phone[] $PHONE
+ * @property-read string|null $POST
+ * @property-read string|null $PHOTO
+ * @property-read string|null $SECOND_NAME
+ * @property-read string|null $SOURCE_DESCRIPTION
+ * @property-read string|null $SOURCE_ID
+ * @property-read string|null $TYPE_ID
+ * @property-read string|null $UTM_CAMPAIGN
+ * @property-read string|null $UTM_CONTENT
+ * @property-read string|null $UTM_MEDIUM
+ * @property-read string|null $UTM_SOURCE
+ * @property-read string|null $UTM_TERM
+ * @property-read Website[] $WEB
  */
 class ContactItemResult extends AbstractCrmItem
 {
@@ -71,7 +72,7 @@ class ContactItemResult extends AbstractCrmItem
      * @return mixed|null
      * @throws UserfieldNotFoundException
      */
-    public function getUserfieldByFieldName(string $userfieldName)
+    public function getUserfieldByFieldName(string $userfieldName): mixed
     {
         return $this->getKeyWithUserfieldByFieldName($userfieldName);
     }

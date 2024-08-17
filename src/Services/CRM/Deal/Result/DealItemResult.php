@@ -10,7 +10,6 @@ use Money\Currency;
 
 /**
  * Class DealItemResult
- *
  * @property-read int $ID
  * @property-read string|null $TITLE deal title
  * @property-read string|null $TYPE_ID
@@ -26,7 +25,7 @@ use Money\Currency;
  * @property-read string|null $TAX_VALUE
  * @property-read int|null $LEAD_ID
  * @property-read int|null $COMPANY_ID
- * @property-read int|null $CONTACT_ID
+ * @property-read int|null $CONTACT_ID deprecated
  * @property-read int|null $QUOTE_ID
  * @property-read CarbonImmutable|null $BEGINDATE
  * @property-read CarbonImmutable|null $CLOSEDATE

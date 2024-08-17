@@ -6,10 +6,17 @@ namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Activity\Service;
 
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityContentType;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityDirectionType;
+use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult;
 use Bitrix24\SDK\Services\CRM\Activity\Service\Activity;
+use Bitrix24\SDK\Services\CRM\Activity\ActivityType;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
+use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult;
+use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
+use Typhoon\Reflection\TyphoonReflector;
 
 class ActivityTest extends TestCase
 {
@@ -29,19 +36,19 @@ class ActivityTest extends TestCase
         $this->contactId[] = $contactId;
         $this->activityId[] = $this->activityService->add(
             [
-                'OWNER_ID'         => $contactId,
-                'OWNER_TYPE_ID'    => 3,
-                'TYPE_ID'          => 2,
-                'PROVIDER_ID'      => 'VOXIMPLANT_CALL',
+                'OWNER_ID' => $contactId,
+                'OWNER_TYPE_ID' => 3,
+                'TYPE_ID' => ActivityType::call->value,
+                'PROVIDER_ID' => 'VOXIMPLANT_CALL',
                 'PROVIDER_TYPE_ID' => 'CALL',
-                'SUBJECT'          => 'test activity',
-                'DESCRIPTION'      => 'test activity description',
+                'SUBJECT' => 'test activity',
+                'DESCRIPTION' => 'test activity description',
                 'DESCRIPTION_TYPE' => '1',
-                'DIRECTION'        => '2',
-                'COMMUNICATIONS'   => [
+                'DIRECTION' => '2',
+                'COMMUNICATIONS' => [
                     0 => [
-                        'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'TYPE' => 'PHONE',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ]
@@ -61,19 +68,19 @@ class ActivityTest extends TestCase
         $this->contactId[] = $contactId;
         $activityId = $this->activityService->add(
             [
-                'OWNER_ID'         => $contactId,
-                'OWNER_TYPE_ID'    => 3,
-                'TYPE_ID'          => 2,
-                'PROVIDER_ID'      => 'VOXIMPLANT_CALL',
+                'OWNER_ID' => $contactId,
+                'OWNER_TYPE_ID' => 3,
+                'TYPE_ID' => ActivityType::call->value,
+                'PROVIDER_ID' => 'VOXIMPLANT_CALL',
                 'PROVIDER_TYPE_ID' => 'CALL',
-                'SUBJECT'          => 'test activity',
-                'DESCRIPTION'      => 'test activity description',
+                'SUBJECT' => 'test activity',
+                'DESCRIPTION' => 'test activity description',
                 'DESCRIPTION_TYPE' => '1',
-                'DIRECTION'        => '2',
-                'COMMUNICATIONS'   => [
+                'DIRECTION' => '2',
+                'COMMUNICATIONS' => [
                     0 => [
-                        'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'TYPE' => 'PHONE',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ]
@@ -102,19 +109,19 @@ class ActivityTest extends TestCase
         $this->contactId[] = $contactId;
 
         $newActivity = [
-            'OWNER_ID'         => $contactId,
-            'OWNER_TYPE_ID'    => 3,
-            'TYPE_ID'          => 2,
-            'PROVIDER_ID'      => 'VOXIMPLANT_CALL',
+            'OWNER_ID' => $contactId,
+            'OWNER_TYPE_ID' => 3,
+            'TYPE_ID' => ActivityType::call->value,
+            'PROVIDER_ID' => 'VOXIMPLANT_CALL',
             'PROVIDER_TYPE_ID' => 'CALL',
-            'SUBJECT'          => 'test activity',
-            'DESCRIPTION'      => 'test activity description',
+            'SUBJECT' => 'test activity',
+            'DESCRIPTION' => 'test activity description',
             'DESCRIPTION_TYPE' => '1',
-            'DIRECTION'        => '2',
-            'COMMUNICATIONS'   => [
+            'DIRECTION' => '2',
+            'COMMUNICATIONS' => [
                 0 => [
-                    'TYPE'  => 'PHONE',
-                    'VALUE' => '+79780194444',
+                    'TYPE' => 'PHONE',
+                    'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                 ],
             ],
         ];
@@ -140,19 +147,19 @@ class ActivityTest extends TestCase
         $newActivity = [];
         for ($i = 1; $i < 10; $i++) {
             $newActivity[$i] = [
-                'OWNER_ID'         => $contactId,
-                'OWNER_TYPE_ID'    => 3,
-                'TYPE_ID'          => 2,
-                'PROVIDER_ID'      => 'VOXIMPLANT_CALL',
+                'OWNER_ID' => $contactId,
+                'OWNER_TYPE_ID' => 3,
+                'TYPE_ID' => ActivityType::call->value,
+                'PROVIDER_ID' => 'VOXIMPLANT_CALL',
                 'PROVIDER_TYPE_ID' => 'CALL',
-                'SUBJECT'          => sprintf('test activity - %s', $i),
-                'DESCRIPTION'      => 'test activity description',
+                'SUBJECT' => sprintf('test activity - %s', $i),
+                'DESCRIPTION' => 'test activity description',
                 'DESCRIPTION_TYPE' => '1',
-                'DIRECTION'        => '2',
-                'COMMUNICATIONS'   => [
+                'DIRECTION' => '2',
+                'COMMUNICATIONS' => [
                     0 => [
-                        'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'TYPE' => 'PHONE',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];
@@ -181,19 +188,19 @@ class ActivityTest extends TestCase
         $this->contactId[] = $contactId;
 
         $newActivity = [
-            'OWNER_ID'         => $contactId,
-            'OWNER_TYPE_ID'    => 3,
-            'TYPE_ID'          => 2,
-            'PROVIDER_ID'      => 'VOXIMPLANT_CALL',
+            'OWNER_ID' => $contactId,
+            'OWNER_TYPE_ID' => 3,
+            'TYPE_ID' => ActivityType::call->value,
+            'PROVIDER_ID' => 'VOXIMPLANT_CALL',
             'PROVIDER_TYPE_ID' => 'CALL',
-            'SUBJECT'          => 'test activity',
-            'DESCRIPTION'      => 'test activity description',
+            'SUBJECT' => 'test activity',
+            'DESCRIPTION' => 'test activity description',
             'DESCRIPTION_TYPE' => '1',
-            'DIRECTION'        => '2',
-            'COMMUNICATIONS'   => [
+            'DIRECTION' => '2',
+            'COMMUNICATIONS' => [
                 0 => [
-                    'TYPE'  => 'PHONE',
-                    'VALUE' => '+79780194444',
+                    'TYPE' => 'PHONE',
+                    'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                 ],
             ],
         ];
@@ -220,19 +227,19 @@ class ActivityTest extends TestCase
         $newActivity = [];
         for ($i = 1; $i < 10; $i++) {
             $newActivity[$i] = [
-                'OWNER_ID'         => $contactId,
-                'OWNER_TYPE_ID'    => 3,
-                'TYPE_ID'          => 2,
-                'PROVIDER_ID'      => 'VOXIMPLANT_CALL',
+                'OWNER_ID' => $contactId,
+                'OWNER_TYPE_ID' => 3,
+                'TYPE_ID' => ActivityType::call->value,
+                'PROVIDER_ID' => 'VOXIMPLANT_CALL',
                 'PROVIDER_TYPE_ID' => 'CALL',
-                'SUBJECT'          => sprintf('test activity - %s', $i),
-                'DESCRIPTION'      => 'test activity description',
+                'SUBJECT' => sprintf('test activity - %s', $i),
+                'DESCRIPTION' => 'test activity description',
                 'DESCRIPTION_TYPE' => '1',
-                'DIRECTION'        => '2',
-                'COMMUNICATIONS'   => [
+                'DIRECTION' => '2',
+                'COMMUNICATIONS' => [
                     0 => [
-                        'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'TYPE' => 'PHONE',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];

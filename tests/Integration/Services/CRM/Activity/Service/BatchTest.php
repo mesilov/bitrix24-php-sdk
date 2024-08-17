@@ -8,6 +8,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Activity\Service\Activity;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
+use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
@@ -43,7 +44,7 @@ class BatchTest extends TestCase
                 'COMMUNICATIONS'   => [
                     0 => [
                         'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];
@@ -89,7 +90,7 @@ class BatchTest extends TestCase
                 'COMMUNICATIONS'   => [
                     0 => [
                         'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];
@@ -146,7 +147,7 @@ class BatchTest extends TestCase
                 'COMMUNICATIONS'   => [
                     0 => [
                         'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];

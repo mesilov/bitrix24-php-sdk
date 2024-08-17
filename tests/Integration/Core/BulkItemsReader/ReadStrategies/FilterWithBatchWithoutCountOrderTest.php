@@ -7,6 +7,7 @@ namespace Bitrix24\SDK\Tests\Integration\Core\BulkItemsReader\ReadStrategies;
 use Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies\FilterWithBatchWithoutCountOrder;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Services\ServiceBuilder;
+use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -96,7 +97,7 @@ class FilterWithBatchWithoutCountOrderTest extends TestCase
                 'TITLE'                 => sprintf('deal-%s', $i),
                 'IS_MANUAL_OPPORTUNITY' => 'Y',
                 'OPPORTUNITY'           => sprintf('%s.00', random_int(100, 40000)),
-                'CURRENCY_ID'           => 'RUB',
+                'CURRENCY_ID'           => DemoDataGenerator::getCurrency()->getCode(),
                 'CONTACT_ID'            => $this->contactId,
             ];
         }
