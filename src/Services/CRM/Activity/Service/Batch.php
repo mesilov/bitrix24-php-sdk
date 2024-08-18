@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Activity\Service;
 
+use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
+use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
+use Bitrix24\SDK\Core\Contracts\DeletedItemResultInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
@@ -11,11 +15,7 @@ use Bitrix24\SDK\Services\AbstractBatchService;
 use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult;
 use Generator;
 
-/**
- * Class Batch
- *
- * @package Bitrix24\SDK\Services\CRM\Activity\Service
- */
+#[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch extends AbstractBatchService
 {
     /**
@@ -65,7 +65,7 @@ class Batch extends AbstractBatchService
      *   COMMUNICATIONS?: string,
      *   FILES?: string,
      *   WEBDAV_ELEMENTS?: string,
-     *   }             $order
+     *   } $order
      *
      * @param array{
      *   ID?: int,
@@ -111,22 +111,27 @@ class Batch extends AbstractBatchService
      *   COMMUNICATIONS?: string,
      *   FILES?: string,
      *   WEBDAV_ELEMENTS?: string,
-     *   }             $filter
-     * @param array    $select = ['ID','OWNER_ID','OWNER_TYPE_ID','TYPE_ID','PROVIDER_ID','PROVIDER_TYPE_ID','PROVIDER_GROUP_ID','ASSOCIATED_ENTITY_ID','SUBJECT','START_TIME','END_TIME','DEADLINE','COMPLETED','STATUS','RESPONSIBLE_ID','PRIORITY','NOTIFY_TYPE','NOTIFY_VALUE','DESCRIPTION','DESCRIPTION_TYPE','DIRECTION','LOCATION','CREATED','AUTHOR_ID','LAST_UPDATED','EDITOR_ID','SETTINGS','ORIGIN_ID','ORIGINATOR_ID','RESULT_STATUS','RESULT_STREAM','RESULT_SOURCE_ID','PROVIDER_PARAMS','PROVIDER_DATA','RESULT_MARK','RESULT_VALUE','RESULT_SUM','RESULT_CURRENCY_ID','AUTOCOMPLETE_RULE','BINDINGS','COMMUNICATIONS','FILES','WEBDAV_ELEMENTS','COMMUNICATIONS']
+     *   } $filter
+     * @param array $select = ['ID','OWNER_ID','OWNER_TYPE_ID','TYPE_ID','PROVIDER_ID','PROVIDER_TYPE_ID','PROVIDER_GROUP_ID','ASSOCIATED_ENTITY_ID','SUBJECT','START_TIME','END_TIME','DEADLINE','COMPLETED','STATUS','RESPONSIBLE_ID','PRIORITY','NOTIFY_TYPE','NOTIFY_VALUE','DESCRIPTION','DESCRIPTION_TYPE','DIRECTION','LOCATION','CREATED','AUTHOR_ID','LAST_UPDATED','EDITOR_ID','SETTINGS','ORIGIN_ID','ORIGINATOR_ID','RESULT_STATUS','RESULT_STREAM','RESULT_SOURCE_ID','PROVIDER_PARAMS','PROVIDER_DATA','RESULT_MARK','RESULT_VALUE','RESULT_SUM','RESULT_CURRENCY_ID','AUTOCOMPLETE_RULE','BINDINGS','COMMUNICATIONS','FILES','WEBDAV_ELEMENTS','COMMUNICATIONS']
      * @param int|null $limit
      *
-     * @return Generator<int, \Bitrix24\SDK\Services\CRM\Activity\Result\ActivityItemResult>|ActivityItemResult[]
+     * @return Generator<positive-int, ActivityItemResult>
      * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.activity.list',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_list.php',
+        'Returns in batch mode a list of activity'
+    )]
     public function list(array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         $this->log->debug(
             'list',
             [
-                'order'  => $order,
+                'order' => $order,
                 'filter' => $filter,
                 'select' => $select,
-                'limit'  => $limit,
+                'limit' => $limit,
             ]
         );
         foreach ($this->batch->getTraversableList('crm.activity.list', $order, $filter, $select, $limit) as $key => $value) {
@@ -183,9 +188,14 @@ class Batch extends AbstractBatchService
      *   WEBDAV_ELEMENTS?: string,
      *   }> $activities
      *
-     * @return \Generator
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @return Generator<positive-int, AddedItemBatchResult>
+     * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.activity.add',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_add.php',
+        'Adds in batch mode a new activity'
+    )]
     public function add(array $activities): Generator
     {
         $items = [];
@@ -204,9 +214,14 @@ class Batch extends AbstractBatchService
      *
      * @param int[] $itemId
      *
-     * @return \Generator|\Bitrix24\SDK\Core\Contracts\DeletedItemResultInterface[]
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @return Generator<positive-int, DeletedItemBatchResult>
+     * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.activity.delete',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_delete.php',
+        'Delete in batch mode activity'
+    )]
     public function delete(array $itemId): Generator
     {
         foreach ($this->batch->deleteEntityItems('crm.activity.delete', $itemId) as $key => $item) {

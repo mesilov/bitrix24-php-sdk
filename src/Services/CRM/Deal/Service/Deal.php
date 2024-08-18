@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Service;
 
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
@@ -15,12 +17,9 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealsResult;
 use Psr\Log\LoggerInterface;
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
 
-/**
- * Class Deals
- *
- * @package Bitrix24\SDK\Services\CRM\Deals\Client
- */
+#[ApiServiceMetadata(new Scope(['crm']))]
 class Deal extends AbstractService
 {
     public Batch $batch;
@@ -28,8 +27,8 @@ class Deal extends AbstractService
     /**
      * Deal constructor.
      *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
+     * @param Batch $batch
+     * @param CoreInterface $core
      * @param LoggerInterface $log
      */
     public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
@@ -89,6 +88,11 @@ class Deal extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.add',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_add.php',
+        'Add new deal'
+    )]
     public function add(array $fields, array $params = []): AddedItemResult
     {
         return new AddedItemResult(
@@ -113,6 +117,11 @@ class Deal extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.delete',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_delete.php',
+        'Delete deal'
+    )]
     public function delete(int $id): DeletedItemResult
     {
         return new DeletedItemResult(
@@ -160,9 +169,9 @@ class Deal extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_list.php
      *
-     * @param array   $order     - order of deal items
-     * @param array   $filter    - filter array
-     * @param array   $select    = ['ID','TITLE','TYPE_ID','CATEGORY_ID','STAGE_ID','STAGE_SEMANTIC_ID','IS_NEW','IS_RECURRING','PROBABILITY', 'CURRENCY_ID', 'OPPORTUNITY','IS_MANUAL_OPPORTUNITY','TAX_VALUE','LEAD_ID','COMPANY_ID','CONTACT_ID','QUOTE_ID','BEGINDATE','CLOSEDATE','OPENED','CLOSED','COMMENTS','ADDITIONAL_INFO','LOCATION_ID','IS_RETURN_CUSTOMER','IS_REPEATED_APPROACH','SOURCE_ID','SOURCE_DESCRIPTION','ORIGINATOR_ID','ORIGIN_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM']
+     * @param array $order - order of deal items
+     * @param array $filter - filter array
+     * @param array $select = ['ID','TITLE','TYPE_ID','CATEGORY_ID','STAGE_ID','STAGE_SEMANTIC_ID','IS_NEW','IS_RECURRING','PROBABILITY', 'CURRENCY_ID', 'OPPORTUNITY','IS_MANUAL_OPPORTUNITY','TAX_VALUE','LEAD_ID','COMPANY_ID','CONTACT_ID','QUOTE_ID','BEGINDATE','CLOSEDATE','OPENED','CLOSED','COMMENTS','ADDITIONAL_INFO','LOCATION_ID','IS_RETURN_CUSTOMER','IS_REPEATED_APPROACH','SOURCE_ID','SOURCE_DESCRIPTION','ORIGINATOR_ID','ORIGIN_ID','UTM_SOURCE','UTM_MEDIUM','UTM_CAMPAIGN','UTM_CONTENT','UTM_TERM']
      * @param integer $startItem - entity number to start from (usually returned in 'next' field of previous 'crm.deal.list' API call)
      *
      * @throws BaseException
@@ -175,10 +184,10 @@ class Deal extends AbstractService
             $this->core->call(
                 'crm.deal.list',
                 [
-                    'order'  => $order,
+                    'order' => $order,
                     'filter' => $filter,
                     'select' => $select,
-                    'start'  => $startItem,
+                    'start' => $startItem,
                 ]
             )
         );
@@ -242,7 +251,7 @@ class Deal extends AbstractService
             $this->core->call(
                 'crm.deal.update',
                 [
-                    'id'     => $id,
+                    'id' => $id,
                     'fields' => $fields,
                     'params' => $params,
                 ]
