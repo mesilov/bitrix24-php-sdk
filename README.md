@@ -190,7 +190,9 @@ mesilov.maxim@gmail.com for private consultations or dedicated support
 
 ## Documentation
 
-[Bitrix24 API documentation - Russian](http://dev.1c-bitrix.ru/rest_help/)
+[Bitrix24 API old documentation - Russian](http://dev.1c-bitrix.ru/rest_help/)
+
+[Bitrix24 API new documentation - Russian](https://apidocs.bitrix24.ru/api-reference/)
 
 [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
 
