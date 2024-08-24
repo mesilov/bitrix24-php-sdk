@@ -54,6 +54,7 @@ readonly class AttributesParser
                     // find return type file name
                     $returnTypeFileName = null;
                     if ($method->getReturnType() !== null) {
+                        /** @var @phpstan-ignore-next-line */
                         $returnTypeName = $method->getReturnType()->getName();
                         if (class_exists($returnTypeName)) {
                             $reflectionReturnType = new ReflectionClass($returnTypeName);
@@ -62,7 +63,7 @@ readonly class AttributesParser
                     }
 
                     $supportedInSdkMethods[$instance->name] = [
-                        'sdk_scope' => $apiServiceAttrInstance->scope->getScopeCodes()[0],
+                        'sdk_scope' => $apiServiceAttrInstance->scope->getScopeCodes() === [] ? '' : $apiServiceAttrInstance->scope->getScopeCodes()[0],
                         'name' => $instance->name,
                         'documentation_url' => $instance->documentationUrl,
                         'description' => $instance->description,
@@ -73,6 +74,7 @@ readonly class AttributesParser
                         'sdk_method_file_start_line' => $method->getStartLine(),
                         'sdk_method_file_end_line' => $method->getEndLine(),
                         'sdk_class_name' => $className,
+                        /** @var @phpstan-ignore-next-line */
                         'sdk_return_type_class' => $method->getReturnType()?->getName(),
                         'sdk_return_type_file_name' => $returnTypeFileName
                     ];

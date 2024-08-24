@@ -46,8 +46,8 @@ class Activity extends AbstractService
      * @param array{
      *   ID?: int,
      *   OWNER_ID?: int,
-     *   OWNER_TYPE_ID?: string,
-     *   TYPE_ID?: string,
+     *   OWNER_TYPE_ID?: int,
+     *   TYPE_ID?: int,
      *   PROVIDER_ID?: string,
      *   PROVIDER_TYPE_ID?: string,
      *   PROVIDER_GROUP_ID?: string,

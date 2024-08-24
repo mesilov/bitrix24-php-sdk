@@ -29,6 +29,7 @@ class UserProfileItemResult extends AbstractItem
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
+
                 return null;
             default:
                 return parent::__get($offset);

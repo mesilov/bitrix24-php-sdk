@@ -143,7 +143,7 @@ EOT;
                 $apiMethod['sdk_return_type_file_name']);
 
             $table .= sprintf("\n|`%s`|[%s](%s)|%s|[`%s`](%s)<br/>Return type<br/>[`%s`](%s)%s|",
-                $apiMethod['sdk_scope'],
+                $apiMethod['sdk_scope'] === '' ? '–' : $apiMethod['sdk_scope'],
                 $apiMethod['name'],
                 $apiMethod['documentation_url'],
                 $apiMethod['description'],
@@ -178,6 +178,12 @@ EOT;
             if ($targetFile === '') {
                 throw new InvalidArgumentException('you must provide a file to save generated documentation «file»');
             }
+            $this->logger->debug('GenerateCoverageDocumentationCommand.start', [
+                'b24Webhook' => $b24Webhook,
+                'publicRepoUrl' => $publicRepoUrl,
+                'targetRepoBranch' => $targetRepoBranch,
+                'targetFile' => $targetFile
+            ]);
 
             $io->info('Generate api coverage report');
             // get all available api methods

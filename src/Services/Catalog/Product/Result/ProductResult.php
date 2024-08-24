@@ -14,6 +14,7 @@ class ProductResult extends AbstractResult
             // fix for catalog.product.add
             return new ProductItemResult($this->getCoreResponse()->getResponseData()->getResult()['element']);
         }
+
         return new ProductItemResult($this->getCoreResponse()->getResponseData()->getResult()['product']);
     }
 }

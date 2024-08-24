@@ -14,15 +14,12 @@ abstract class AbstractCatalogItem extends AbstractItem
 {
     private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
-    /**
-     * @var Currency
-     */
     private Currency $currency;
 
     public function __construct(array $data, Currency $currency = null)
     {
         parent::__construct($data);
-        if ($currency !== null) {
+        if ($currency instanceof Currency) {
             $this->currency = $currency;
         }
     }
@@ -45,6 +42,7 @@ abstract class AbstractCatalogItem extends AbstractItem
                 if ($this->data[$offset] !== null) {
                     return $this->data[$offset] === 'Y';
                 }
+
                 return null;
             case 'code':
             case 'detailText':
@@ -65,6 +63,7 @@ abstract class AbstractCatalogItem extends AbstractItem
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
+
                 break;
             case 'dateActiveFrom':
             case 'dateActiveTo':
@@ -85,7 +84,6 @@ abstract class AbstractCatalogItem extends AbstractItem
     /**
      * get userfield by field name
      *
-     * @param string $fieldName
      *
      * @return mixed|null
      * @throws UserfieldNotFoundException
@@ -95,6 +93,7 @@ abstract class AbstractCatalogItem extends AbstractItem
         if (!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
             $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
         }
+
         if (!$this->isKeyExists($fieldName)) {
             throw new UserfieldNotFoundException(sprintf('crm userfield not found by field name %s', $fieldName));
         }

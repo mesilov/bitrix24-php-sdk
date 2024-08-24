@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class IsUserAdminResult extends AbstractResult
 {
     /**
-     * @return bool
      * @throws BaseException
      */
     public function isAdmin(): bool

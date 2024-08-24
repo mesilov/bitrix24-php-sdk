@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Telephony\ExternalCall\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\FileNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
@@ -24,6 +27,7 @@ use Carbon\CarbonImmutable;
 use Money\Money;
 use Psr\Log\LoggerInterface;
 
+#[ApiServiceMetadata(new Scope(['telephony']))]
 class ExternalCall extends AbstractService
 {
     public function __construct(
@@ -47,6 +51,11 @@ class ExternalCall extends AbstractService
      * @throws FileNotFoundException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalCall.attachRecord',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php',
+        'Get url for upload call record'
+    )]
     public function getCallRecordUploadUrl(
         string $callId,
         string $callRecordFileName,
@@ -70,6 +79,11 @@ class ExternalCall extends AbstractService
      * @throws FileNotFoundException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalCall.attachRecord',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_attachRecord.php',
+        'This method connects a record to a finished call and to the call Activity.'
+    )]
     public function attachCallRecordInBase64(
         string $callId,
         string $callRecordFileName,
@@ -125,6 +139,11 @@ class ExternalCall extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_register.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalcall.register',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_register.php',
+        'Method registers a call in Bitrix24. For this purpose, it searches an object that corresponds to the number in CRM.'
+    )]
     public function register(
         string          $userInnerPhoneNumber,
         int             $b24UserId,
@@ -184,6 +203,11 @@ class ExternalCall extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalCall.searchCrmEntities',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalCall_searchCrmEntities.php',
+        'This method allows to retrieve information about a client from CRM by a telephone number via single request.'
+    )]
     public function searchCrmEntities(string $phoneNumber): SearchCrmEntitiesResult
     {
         return new SearchCrmEntitiesResult($this->core->call('telephony.externalCall.searchCrmEntities',
@@ -203,6 +227,11 @@ class ExternalCall extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalcall.finish',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php',
+        'This method allows to retrieve information about a client from CRM by a telephone number via single request.'
+    )]
     public function finishForUserPhoneInner(
         string                  $callId,
         string                  $userInnerPhoneNumber,
@@ -239,6 +268,11 @@ class ExternalCall extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalcall.finish',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_finish.php',
+        'This method allows to retrieve information about a client from CRM by a telephone number via single request.'
+    )]
     public function finishForUserId(
         string                  $callId,
         int                     $b24UserId,
@@ -273,6 +307,11 @@ class ExternalCall extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_show.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalcall.show',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_show.php',
+        'The method displays a call ID screen to the user.'
+    )]
     public function show(string $callId, array $b24UserId): UserInterfaceDialogCallResult
     {
         return new UserInterfaceDialogCallResult($this->core->call('telephony.externalcall.show',
@@ -291,6 +330,11 @@ class ExternalCall extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_hide.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalcall.hide',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalcall_hide.php',
+        ' This method hides call information window.'
+    )]
     public function hide(string $callId, array $b24UserId): UserInterfaceDialogCallResult
     {
         return new UserInterfaceDialogCallResult($this->core->call('telephony.externalcall.hide',

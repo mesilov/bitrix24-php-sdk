@@ -11,7 +11,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class AddedMessageItemResult extends AbstractResult
 {
     /**
-     * @return bool
      * @throws BaseException
      */
     public function isSuccess(): bool

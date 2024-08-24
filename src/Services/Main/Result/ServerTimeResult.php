@@ -12,7 +12,6 @@ use Exception;
 class ServerTimeResult extends AbstractResult
 {
     /**
-     * @return CarbonImmutable
      * @throws BaseException
      * @throws Exception
      */

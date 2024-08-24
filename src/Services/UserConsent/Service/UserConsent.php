@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\UserConsent\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Services\AbstractService;
-
+#[ApiServiceMetadata(new Scope(['userconsent']))]
 class UserConsent extends AbstractService
 {
     /**
@@ -14,12 +19,15 @@ class UserConsent extends AbstractService
      *
      * @see https://training.bitrix24.com/rest_help/userconsent/userconsent_consent_add.php
      *
-     * @param array $consentFields
      *
-     * @return AddedItemResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'userconsent.consent.add',
+        'https://training.bitrix24.com/rest_help/userconsent/userconsent_consent_add.php',
+        'Add the received user agreement consent'
+    )]
     public function add(array $consentFields): AddedItemResult
     {
         return new AddedItemResult($this->core->call('userconsent.consent.add', $consentFields));

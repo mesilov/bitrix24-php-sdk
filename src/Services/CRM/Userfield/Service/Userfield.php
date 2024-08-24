@@ -9,7 +9,11 @@ use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\FieldsResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Userfield\Result\UserfieldTypesResult;
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 
+#[ApiServiceMetadata(new Scope(['crm']))]
 class Userfield extends AbstractService
 {
     /**
@@ -20,6 +24,11 @@ class Userfield extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.userfield.types',
+        'https://training.bitrix24.com/rest_help/crm/userfields/crm_userfield_types.php',
+        'Returns list of user field types.'
+    )]
     public function types(): UserfieldTypesResult
     {
         return new UserfieldTypesResult($this->core->call('crm.userfield.types'));
@@ -33,6 +42,11 @@ class Userfield extends AbstractService
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.userfield.fields',
+        'https://training.bitrix24.com/rest_help/crm/userfields/crm_userfield_fields.php',
+        'Returns field description for user fields.'
+    )]
     public function fields(): FieldsResult
     {
         return new FieldsResult($this->core->call('crm.userfield.fields'));
@@ -46,6 +60,11 @@ class Userfield extends AbstractService
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.userfield.fields',
+        'https://training.bitrix24.com/rest_help/crm/userfields/crm_userfield_fields.php',
+        'Returns field description for user fields.'
+    )]
     public function enumerationFields(): FieldsResult
     {
         return new FieldsResult($this->core->call('crm.userfield.enumeration.fields'));

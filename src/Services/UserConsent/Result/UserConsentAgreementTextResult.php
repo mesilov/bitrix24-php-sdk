@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class UserConsentAgreementTextResult extends AbstractResult
 {
     /**
-     * @return \Bitrix24\SDK\Services\UserConsent\Result\UserConsentAgreementTextItemResult
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     public function text(): UserConsentAgreementTextItemResult

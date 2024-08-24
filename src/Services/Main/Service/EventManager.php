@@ -20,7 +20,6 @@ readonly class EventManager
 
     /**
      * @param EventHandlerMetadata[] $eventHandlerMetadata
-     * @return void
      * @throws InvalidArgumentException
      */
     public function bindEventHandlers(array $eventHandlerMetadata): void
@@ -31,6 +30,7 @@ readonly class EventManager
                 throw new InvalidArgumentException(
                     sprintf('in eventHandlerMetadata we need only EventHandlerMetadata objects, we got an «%s»', gettype($eventHandler)));
             }
+
             $this->logger->debug('bindEventHandlers.handlerItem', [
                 'code' => $eventHandler->code,
                 'url' => $eventHandler->handlerUrl,
@@ -44,13 +44,13 @@ readonly class EventManager
         $alreadyInstalledHandlers = $this->eventService->get()->getEventHandlers();
         foreach ($eventHandlerMetadata as $eventHandler) {
             $isInstalled = false;
-            foreach ($alreadyInstalledHandlers as $installedHandler) {
+            foreach ($alreadyInstalledHandlers as $alreadyInstalledHandler) {
                 $this->logger->debug('bindEventHandlers.isHandlerInstalled', [
                     'handlerToInstallCode' => $eventHandler->code,
                     'handlerToInstallUrl' => $eventHandler->handlerUrl,
-                    'isInstalled' => $eventHandler->isInstalled($installedHandler)
+                    'isInstalled' => $eventHandler->isInstalled($alreadyInstalledHandler)
                 ]);
-                if ($eventHandler->isInstalled($installedHandler)) {
+                if ($eventHandler->isInstalled($alreadyInstalledHandler)) {
                     $this->logger->debug('bindEventHandlers.handlerAlreadyInstalled', [
                         'code' => $eventHandler->code,
                         'handlerUrl' => $eventHandler->handlerUrl
@@ -60,6 +60,7 @@ readonly class EventManager
                     break;
                 }
             }
+
             if (!$isInstalled) {
                 $toInstall[] = $eventHandler;
                 $this->logger->debug('bindEventHandlers.handlerAddedToInstallPlan', [
@@ -86,23 +87,24 @@ readonly class EventManager
 
     public function unbindAllEventHandlers(): EventHandlersResult
     {
-        $activeHandlers = $this->eventService->get();
-        if (count($activeHandlers->getEventHandlers()) === 0) {
-            return $activeHandlers;
+        $eventHandlersResult = $this->eventService->get();
+        if ($eventHandlersResult->getEventHandlers() === []) {
+            return $eventHandlersResult;
         }
 
-        $handlersToUnbind = $activeHandlers->getEventHandlers();
+        $handlersToUnbind = $eventHandlersResult->getEventHandlers();
         // todo replace to batch call
-        foreach ($handlersToUnbind as $itemHandler) {
+        foreach ($handlersToUnbind as $handlerToUnbind) {
             $this->logger->debug('unbindAllEventHandlers.handler', [
-                'code' => $itemHandler->event,
-                'handler' => $itemHandler->handler,
+                'code' => $handlerToUnbind->event,
+                'handler' => $handlerToUnbind->handler,
             ]);
             $this->eventService->unbind(
-                $itemHandler->event,
-                $itemHandler->handler
+                $handlerToUnbind->event,
+                $handlerToUnbind->handler
             );
         }
-        return $activeHandlers;
+
+        return $eventHandlersResult;
     }
 }

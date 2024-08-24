@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class JoinOpenLineResult extends AbstractResult implements AddedItemIdResultInterface
 {
     /**
-     * @return int
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     public function getId(): int

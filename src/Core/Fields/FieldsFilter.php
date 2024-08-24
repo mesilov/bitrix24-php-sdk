@@ -10,7 +10,7 @@ class FieldsFilter
     {
         $res = [];
         foreach ($fieldCodes as $fieldCode) {
-            if (strncmp($fieldCode, 'UF_CRM_', 7) !== 0) {
+            if (!str_starts_with((string) $fieldCode, 'UF_CRM_')) {
                 $res[] = $fieldCode;
             }
         }

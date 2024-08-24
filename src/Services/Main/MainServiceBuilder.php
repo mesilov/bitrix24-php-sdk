@@ -16,9 +16,6 @@ use Bitrix24\SDK\Services\Main\Service\Event;
  */
 class MainServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return Main
-     */
     public function main(): Main
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -28,9 +25,6 @@ class MainServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Event
-     */
     public function event(): Event
     {
         if (!isset($this->serviceCache[__METHOD__])) {

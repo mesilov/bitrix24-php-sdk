@@ -11,6 +11,7 @@ use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
+use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
 use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
@@ -118,6 +119,8 @@ class ApiLevelErrorHandler
                 throw new ActivityOrRobotValidationFailureException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'user_not_found_or_is_not_active':
                 throw new UserNotFoundOrIsNotActiveException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'wrong_auth_type':
+                throw new WrongAuthTypeException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }

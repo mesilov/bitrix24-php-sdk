@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class EventListResult extends AbstractResult
 {
     /**
-     * @return array
      * @throws BaseException
      */
     public function getEvents(): array

@@ -4,35 +4,50 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\UserConsent\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\UserConsent\Result\UserConsentAgreementsResult;
 use Bitrix24\SDK\Services\UserConsent\Result\UserConsentAgreementTextResult;
-
+#[ApiServiceMetadata(new Scope(['userconsent']))]
 class UserConsentAgreement extends AbstractService
 {
     /**
      * Get user consent agreement list
      *
-     * @return \Bitrix24\SDK\Services\UserConsent\Result\UserConsentAgreementsResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'userconsent.agreement.list',
+        'https://training.bitrix24.com/rest_help/userconsent/userconsent_consent_add.php',
+        'Add the received user agreement consent'
+    )]
     public function list(): UserConsentAgreementsResult
     {
         return new UserConsentAgreementsResult($this->core->call('userconsent.agreement.list'));
     }
 
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws TransportException
+     * @throws InvalidArgumentException
+     * @throws BaseException
      */
+    #[ApiEndpointMetadata(
+        'userconsent.agreement.text',
+        'https://training.bitrix24.com/rest_help/userconsent/userconsent_agreement_text.php',
+        'This method gets the agreement text'
+    )]
     public function text(int $agreementId, array $replace): UserConsentAgreementTextResult
     {
         if (!array_key_exists('button_caption', $replace)) {
             throw new InvalidArgumentException('field «button_caption» not found in argument replace ');
         }
+
         if (!array_key_exists('fields', $replace)) {
             throw new InvalidArgumentException('field «fields» not found in argument replace');
         }

@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class PlacementBindResult extends AbstractResult
 {
     /**
-     * @return bool
      * @throws BaseException
      */
     public function isSuccess(): bool

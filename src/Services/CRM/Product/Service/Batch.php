@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Product\Service;
 
+use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
+use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Services\AbstractBatchService;
 use Bitrix24\SDK\Services\CRM\Product\Result\ProductItemResult;
 use Generator;
 
-/**
- * Class Batch
- *
- * @package Bitrix24\SDK\Services\CRM\Product\Service
- */
+#[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch extends AbstractBatchService
 {
     /**
-     * batch list method
+     * batch product list method
      *
      * @param array{
      *                         ID?: string
@@ -33,6 +32,11 @@ class Batch extends AbstractBatchService
      * @return Generator<int, ProductItemResult>
      * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.product.list',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_list.php',
+        'batch product list method'
+    )]
     public function list(array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         $this->log->debug(
@@ -76,8 +80,13 @@ class Batch extends AbstractBatchService
      *                         CREATED_BY?: int
      *                         }> $products
      *
-     * @return Generator<int, AddedItemBatchResult>|AddedItemBatchResult[]
+     * @return Generator<int, AddedItemBatchResult>
      */
+    #[ApiBatchMethodMetadata(
+        'crm.product.add',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_add.php',
+        'Batch adding product'
+    )]
     public function add(array $products): Generator
     {
         $items = [];

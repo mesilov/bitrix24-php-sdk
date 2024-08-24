@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Telephony\ExternalLine\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\EmptyResult;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLineAddedResult;
 use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLinesResult;
-use Bitrix24\SDK\Services\Telephony\ExternalLine\Service\Batch;
 use Psr\Log\LoggerInterface;
-
+#[ApiServiceMetadata(new Scope(['telephony']))]
 class ExternalLine extends AbstractService
 {
     public function __construct(
@@ -36,6 +38,11 @@ class ExternalLine extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_add.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalLine.add',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_add.php',
+        'Method adds an external line'
+    )]
     public function add(string $lineNumber, bool $isAutoCreateCrmEntities = true, ?string $lineName = null): ExternalLineAddedResult
     {
         return new ExternalLineAddedResult($this->core->call('telephony.externalLine.add', [
@@ -52,6 +59,11 @@ class ExternalLine extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_delete.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalLine.delete',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_delete.php',
+        'Method for deleting an external line.'
+    )]
     public function delete(string $lineNumber): EmptyResult
     {
         return new EmptyResult($this->core->call('telephony.externalLine.delete', [
@@ -66,6 +78,11 @@ class ExternalLine extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_get.php
      */
+    #[ApiEndpointMetadata(
+        'telephony.externalLine.get',
+        'https://training.bitrix24.com/rest_help/scope_telephony/telephony/telephony_externalLine_delete.php',
+        'Method allows to retrieve the list of external lines of an application.'
+    )]
     public function get(): ExternalLinesResult
     {
         return new ExternalLinesResult($this->core->call('telephony.externalLine.get'));

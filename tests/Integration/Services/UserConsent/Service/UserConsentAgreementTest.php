@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\UserConsent\Service;
 
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\UserConsent\Service\UserConsentAgreement;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 class UserConsentAgreementTest extends TestCase
@@ -13,45 +16,42 @@ class UserConsentAgreementTest extends TestCase
     private UserConsentAgreement $userConsentAgreementService;
 
     /**
-     * @covers  UserConsentAgreement::list
-     * @testdox test get agreements list
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[TestDox('test get agreements list')]
     public function testList(): void
     {
         $this->assertIsArray($this->userConsentAgreementService->list()->getAgreements());
     }
 
     /**
-     * @covers  UserConsentAgreement::text
-     * @testdox test get agreements list
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[TestDox('test get agreements list')]
     public function testText(): void
     {
         // get agreement id
         $agreements = $this->userConsentAgreementService->list()->getAgreements();
         // empty agreement list
-        if (count($agreements) === 0) {
+        if ($agreements === []) {
             $this->assertTrue(true);
 
             return;
         }
+
         $agreementId = $agreements[0]->ID;
-        $agreementText = $this->userConsentAgreementService->text($agreementId, [
+        $userConsentAgreementTextItemResult = $this->userConsentAgreementService->text($agreementId, [
             'button_caption' => 'Button call to action title',
             'fields'         => 'fields collection: email, phone',
         ])->text();
 
-        $this->assertNotNull($agreementText->TEXT);
-        $this->assertNotNull($agreementText->LABEL);
+        $this->assertNotNull($userConsentAgreementTextItemResult->TEXT);
+        $this->assertNotNull($userConsentAgreementTextItemResult->LABEL);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->userConsentAgreementService = Fabric::getServiceBuilder()->getUserConsentScope()->UserConsentAgreement();
     }

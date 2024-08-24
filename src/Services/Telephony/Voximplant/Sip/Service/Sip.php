@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -17,7 +20,7 @@ use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineAddedResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLinesResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineStatusResult;
 use Psr\Log\LoggerInterface;
-
+#[ApiServiceMetadata(new Scope(['telephony']))]
 class Sip extends AbstractService
 {
     public function __construct(
@@ -37,6 +40,11 @@ class Sip extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_connector_status.php
      */
+    #[ApiEndpointMetadata(
+        'voximplant.sip.connector.status',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_connector_status.php',
+        'Returns the current status of the SIP Connector.'
+    )]
     public function getConnectorStatus(): SipConnectorStatusResult
     {
         return new SipConnectorStatusResult($this->core->call('voximplant.sip.connector.status'));
@@ -49,6 +57,11 @@ class Sip extends AbstractService
      *
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_add.php
      */
+    #[ApiEndpointMetadata(
+        'voximplant.sip.add',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_add.php',
+        'Сreates a new SIP line linked to the application. Once created, this line becomes an outbound line by default.'
+    )]
     public function add(
         PbxType $pbxType,
         string  $title,
@@ -75,6 +88,11 @@ class Sip extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_delete.php
      */
+    #[ApiEndpointMetadata(
+        'voximplant.sip.delete',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_delete.php',
+        'Deletes the current SIP line (created by the application).'
+    )]
     public function delete(int $sipConfigId): DeletedItemResult
     {
         return new DeletedItemResult($this->core->call('voximplant.sip.delete', [
@@ -90,6 +108,11 @@ class Sip extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_get.php
      */
+    #[ApiEndpointMetadata(
+        'voximplant.sip.get',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_get.php',
+        'Returns the list of all SIP lines created by the application. It is a list method.'
+    )]
     public function get(): SipLinesResult
     {
         return new SipLinesResult($this->core->call('voximplant.sip.get'));
@@ -105,6 +128,11 @@ class Sip extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'voximplant.sip.status',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_status.php',
+        'Returns the current status of the SIP registration (for cloud hosted PBX only).'
+    )]
     public function status(int $sipRegistrationId): SipLineStatusResult
     {
         return new SipLineStatusResult($this->core->call('voximplant.sip.status', [
@@ -120,6 +148,11 @@ class Sip extends AbstractService
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_update.php
      * @throws InvalidArgumentException
      */
+    #[ApiEndpointMetadata(
+        'voximplant.sip.update',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_sip_update.php',
+        'Updates the existing SIP line (created by the application).'
+    )]
     public function update(int     $sipConfigId,
                            PbxType $pbxType,
                            ?string $title = null,

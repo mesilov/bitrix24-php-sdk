@@ -9,9 +9,6 @@ use Bitrix24\SDK\Services\IMOpenLines\Service\Network;
 
 class IMOpenLinesServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return \Bitrix24\SDK\Services\IMOpenLines\Service\Network
-     */
     public function Network(): Network
     {
         if (!isset($this->serviceCache[__METHOD__])) {

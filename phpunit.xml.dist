@@ -19,8 +19,20 @@
         <testsuite name="integration_tests_scope_telephony">
             <directory>./tests/Integration/Services/Telephony/</directory>
         </testsuite>
+        <testsuite name="integration_tests_scope_im">
+            <directory>./tests/Integration/Services/IM/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_im_open_lines">
+            <directory>./tests/Integration/Services/IMOpenLines/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_placement">
+            <directory>./tests/Integration/Services/Placement/</directory>
+        </testsuite>
         <testsuite name="integration_tests_scope_user">
             <directory>./tests/Integration/Services/User/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_user_consent">
+            <directory>./tests/Integration/Services/UserConsent/</directory>
         </testsuite>
         <testsuite name="integration_tests_scope_workflows">
             <directory>./tests/Integration/Services/Workflows/</directory>

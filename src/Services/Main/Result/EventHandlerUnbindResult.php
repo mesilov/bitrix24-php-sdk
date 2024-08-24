@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class EventHandlerUnbindResult extends AbstractResult
 {
     /**
-     * @return int
      * @throws BaseException
      */
     public function getUnbindedHandlersCount(): int

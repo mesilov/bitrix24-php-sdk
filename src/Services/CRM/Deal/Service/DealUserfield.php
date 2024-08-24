@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
 use Bitrix24\SDK\Core\Result\DeletedItemResult;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
@@ -11,7 +16,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldsResult;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNameIsTooLongException;
-
+#[ApiServiceMetadata(new Scope(['crm']))]
 class DealUserfield extends AbstractService
 {
     /**
@@ -61,10 +66,15 @@ class DealUserfield extends AbstractService
      *   } $filter
      *
      * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldsResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_list.php
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.userfield.list',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_list.php',
+        'Returns list of user deal fields by filter.'
+    )]
     public function list(array $order, array $filter): DealUserfieldsResult
     {
         return new DealUserfieldsResult(
@@ -106,12 +116,17 @@ class DealUserfield extends AbstractService
      *   } $userfieldItemFields
      *
      * @return \Bitrix24\SDK\Core\Result\AddedItemResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @throws UserfieldNameIsTooLongException
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_add.php
      *
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.userfield.add',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_add.php',
+        'Created new user field for deals.'
+    )]
     public function add(array $userfieldItemFields): AddedItemResult
     {
         if (strlen($userfieldItemFields['FIELD_NAME']) > 13) {
@@ -140,11 +155,16 @@ class DealUserfield extends AbstractService
      * @param int $userfieldId
      *
      * @return \Bitrix24\SDK\Core\Result\DeletedItemResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link  https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_delete.php
      *
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.userfield.delete',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_delete.php',
+        'Deleted userfield for deals'
+    )]
     public function delete(int $userfieldId): DeletedItemResult
     {
         return new DeletedItemResult(
@@ -162,11 +182,16 @@ class DealUserfield extends AbstractService
      *
      * @param int $userfieldItemId
      *
-     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealUserfieldResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @return DealUserfieldResult
+     * @throws BaseException
+     * @throws TransportException
      * @link  https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_get.php
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.userfield.get',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_get.php',
+        'Returns a userfield for deal by ID.'
+    )]
     public function get(int $userfieldItemId): DealUserfieldResult
     {
         return new DealUserfieldResult(
@@ -186,10 +211,15 @@ class DealUserfield extends AbstractService
      * @param array $userfieldFieldsToUpdate
      *
      * @return \Bitrix24\SDK\Core\Result\UpdatedItemResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_update.php
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.userfield.update',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_userfield_update.php',
+        'Updates an existing user field for deals.'
+    )]
     public function update(int $userfieldItemId, array $userfieldFieldsToUpdate): UpdatedItemResult
     {
         return new UpdatedItemResult(

@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class RegisterUserTypeResult extends AbstractResult
 {
     /**
-     * @return bool
      * @throws BaseException
      */
     public function isSuccess(): bool

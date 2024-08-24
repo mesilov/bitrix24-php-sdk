@@ -20,8 +20,6 @@ class Catalog extends AbstractService
     /**
      * The method gets field values of commercial catalog by ID.
      *
-     * @param int $catalogId
-     * @return CatalogResult
      * @throws BaseException
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/catalog/catalog/catalog_catalog_get.php
@@ -40,11 +38,6 @@ class Catalog extends AbstractService
      * The method gets field value of commercial catalog product list
      *
      * @see https://training.bitrix24.com/rest_help/catalog/catalog/catalog_catalog_list.php
-     * @param array $select
-     * @param array $filter
-     * @param array $order
-     * @param int $start
-     * @return CatalogsResult
      * @throws BaseException
      * @throws TransportException
      */

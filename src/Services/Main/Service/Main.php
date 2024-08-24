@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Main\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Response\Response;
@@ -14,21 +17,21 @@ use Bitrix24\SDK\Services\Main\Result\MethodAffordabilityResult;
 use Bitrix24\SDK\Services\Main\Result\ServerTimeResult;
 use Bitrix24\SDK\Services\Main\Result\UserProfileResult;
 
-/**
- * Class Main
- *
- * @package Bitrix24\SDK\Services
- */
+#[ApiServiceMetadata(new Scope([]))]
 class Main extends AbstractService
 {
     /**
      * Method returns current server time in the format YYYY-MM-DDThh:mm:ss±hh:mm.
      *
      * @link https://training.bitrix24.com/rest_help/general/server_time.php
-     * @return \Bitrix24\SDK\Services\Main\Result\ServerTimeResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'server.time',
+        'https://training.bitrix24.com/rest_help/general/server_time.php',
+        'Method returns current server time in the format YYYY-MM-DDThh:mm:ss±hh:mm.'
+    )]
     public function getServerTime(): ServerTimeResult
     {
         return new ServerTimeResult($this->core->call('server.time'));
@@ -38,10 +41,14 @@ class Main extends AbstractService
      * Allows to return basic Information about the current user without any scopes, in contrast to user.current.
      *
      * @link https://training.bitrix24.com/rest_help/general/profile.php
-     * @return \Bitrix24\SDK\Services\Main\Result\UserProfileResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'profile',
+        'https://training.bitrix24.com/rest_help/general/profile.php',
+        'Allows to return basic Information about the current user without any scopes, in contrast to user.current.'
+    )]
     public function getCurrentUserProfile(): UserProfileResult
     {
         return new UserProfileResult($this->core->call('profile'));
@@ -50,13 +57,16 @@ class Main extends AbstractService
     /**
      * Returns access permission names.
      *
-     * @param array $accessList
      *
-     * @return \Bitrix24\SDK\Core\Response\Response
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/general/access_name.php
      */
+    #[ApiEndpointMetadata(
+        'access.name',
+        'https://training.bitrix24.com/rest_help/general/access_name.php',
+        'Returns access permission names.'
+    )]
     public function getAccessName(array $accessList): Response
     {
         return $this->core->call('access.name', [
@@ -67,13 +77,16 @@ class Main extends AbstractService
     /**
      * Checks if the current user has at least one permission of those specified by the ACCESS parameter.
      *
-     * @param array $accessToCheck
      *
-     * @return \Bitrix24\SDK\Core\Response\Response
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/general/user_access.php
      */
+    #[ApiEndpointMetadata(
+        'user.access',
+        'https://training.bitrix24.com/rest_help/general/user_access.php',
+        'Checks if the current user has at least one permission of those specified by the ACCESS parameter.'
+    )]
     public function checkUserAccess(array $accessToCheck): Response
     {
         return $this->core->call('user.access', [
@@ -84,13 +97,16 @@ class Main extends AbstractService
     /**
      * Method returns 2 parameters - isExisting and isAvailable
      *
-     * @param string $methodName
      *
-     * @return \Bitrix24\SDK\Services\Main\Result\MethodAffordabilityResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/general/method_get.php
      */
+    #[ApiEndpointMetadata(
+        'method.get',
+        'https://training.bitrix24.com/rest_help/general/method_get.php',
+        'Method returns 2 parameters - isExisting and isAvailable'
+    )]
     public function getMethodAffordability(string $methodName): MethodAffordabilityResult
     {
         return new MethodAffordabilityResult(
@@ -103,11 +119,15 @@ class Main extends AbstractService
     /**
      * It will return permissions available to the current application.
      *
-     * @return Response
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/general/scope.php
      */
+    #[ApiEndpointMetadata(
+        'scope',
+        'https://training.bitrix24.com/rest_help/general/scope.php',
+        'Method returns 2 parameters - isExisting and isAvailable'
+    )]
     public function getCurrentScope(): Response
     {
         return $this->core->call('scope');
@@ -116,11 +136,15 @@ class Main extends AbstractService
     /**
      * Method will return a list of all possible permissions.
      *
-     * @return Response
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/general/scope.php
      */
+    #[ApiEndpointMetadata(
+        'scope',
+        'https://training.bitrix24.com/rest_help/general/scope.php',
+        'Method will return a list of all possible permissions.'
+    )]
     public function getAvailableScope(): Response
     {
         return $this->core->call('scope', ['full' => true]);
@@ -129,12 +153,16 @@ class Main extends AbstractService
     /**
      * Returns the methods available to the current application
      *
-     * @return Response
      * @throws BaseException
      * @throws TransportException
      * @deprecated use method.get
      * @link       https://training.bitrix24.com/rest_help/general/methods.php
      */
+    #[ApiEndpointMetadata(
+        'methods',
+        'https://training.bitrix24.com/rest_help/general/methods.php',
+        'Returns the methods available to the current application'
+    )]
     public function getAvailableMethods(): Response
     {
         return $this->core->call('methods', []);
@@ -143,12 +171,16 @@ class Main extends AbstractService
     /**
      * Returns the methods available
      *
-     * @return Response
      * @throws BaseException
      * @throws TransportException
      * @deprecated use method.get
      * @link       https://training.bitrix24.com/rest_help/general/methods.php
      */
+    #[ApiEndpointMetadata(
+        'methods',
+        'https://training.bitrix24.com/rest_help/general/methods.php',
+        'Returns the methods available to the current application'
+    )]
     public function getAllMethods(): Response
     {
         return $this->core->call('methods', ['full' => true]);
@@ -157,14 +189,17 @@ class Main extends AbstractService
     /**
      * Returns the methods available to the current application
      *
-     * @param string $scope
      *
-     * @return Response
      * @throws BaseException
      * @throws TransportException
      * @deprecated use method.get
      * @link       https://training.bitrix24.com/rest_help/general/methods.php
      */
+    #[ApiEndpointMetadata(
+        'methods',
+        'https://training.bitrix24.com/rest_help/general/methods.php',
+        'Returns the methods available to the current application'
+    )]
     public function getMethodsByScope(string $scope): Response
     {
         return $this->core->call('methods', ['scope' => $scope]);
@@ -173,11 +208,15 @@ class Main extends AbstractService
     /**
      * Displays application information. The method supports secure calling convention.
      *
-     * @return ApplicationInfoResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/general/app_info.php
      */
+    #[ApiEndpointMetadata(
+        'app.info',
+        'https://training.bitrix24.com/rest_help/general/app_info.php',
+        'Displays application information. The method supports secure calling convention.'
+    )]
     public function getApplicationInfo(): ApplicationInfoResult
     {
         return new ApplicationInfoResult($this->core->call('app.info'));
@@ -186,11 +225,15 @@ class Main extends AbstractService
     /**
      * Checks if a current user has permissions to manage application parameters.
      *
-     * @return IsUserAdminResult
      * @throws BaseException
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/general/user_admin.php
      */
+    #[ApiEndpointMetadata(
+        'user.admin',
+        'https://training.bitrix24.com/rest_help/general/user_admin.php',
+        'Checks if a current user has permissions to manage application parameters.'
+    )]
     public function isCurrentUserHasAdminRights(): IsUserAdminResult
     {
         return new IsUserAdminResult($this->core->call('user.admin'));

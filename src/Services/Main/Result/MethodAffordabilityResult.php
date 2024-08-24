@@ -10,7 +10,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class MethodAffordabilityResult extends AbstractResult
 {
     /**
-     * @return bool
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     public function isExisting(): bool
@@ -19,7 +18,6 @@ class MethodAffordabilityResult extends AbstractResult
     }
 
     /**
-     * @return bool
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     public function isAvailable(): bool

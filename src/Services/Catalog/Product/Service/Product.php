@@ -22,16 +22,13 @@ use Psr\Log\LoggerInterface;
 #[ApiServiceMetadata(new Scope(['catalog']))]
 class Product extends AbstractService
 {
-    public Batch $batch;
-
     public function __construct(
-        Batch           $batch,
+        public Batch           $batch,
         CoreInterface   $core,
-        LoggerInterface $log
+        LoggerInterface $logger
     )
     {
-        parent::__construct($core, $log);
-        $this->batch = $batch;
+        parent::__construct($core, $logger);
     }
 
     /**
@@ -55,8 +52,6 @@ class Product extends AbstractService
      * The method adds a commercial catalog product.
      *
      * @see https://training.bitrix24.com/rest_help/catalog/product/catalog_product_add.php
-     * @param array $productFields
-     * @return ProductResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -77,8 +72,6 @@ class Product extends AbstractService
      * The method deletes commercial catalog product.
      *
      * @see https://training.bitrix24.com/rest_help/catalog/product/catalog_product_delete.php
-     * @param int $productId
-     * @return DeletedItemResult
      * @throws BaseException
      * @throws TransportException
      */
@@ -118,10 +111,6 @@ class Product extends AbstractService
      * The method returns commercial catalog product fields by filter.
      * @see https://training.bitrix24.com/rest_help/catalog/product/catalog_product_getfieldsbyfilter.php
      *
-     * @param int $iblockId
-     * @param ProductType $productType
-     * @param array|null $additionalFilter
-     * @return FieldsResult
      * @throws BaseException
      * @throws TransportException
      */

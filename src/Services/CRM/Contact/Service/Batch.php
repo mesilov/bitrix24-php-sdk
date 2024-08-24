@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Contact\Service;
 
+use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
+use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
@@ -12,11 +15,7 @@ use Bitrix24\SDK\Services\AbstractBatchService;
 use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Generator;
 
-/**
- * Class Batch
- *
- * @package Bitrix24\SDK\Services\CRM\Contact\Service
- */
+#[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch extends AbstractBatchService
 {
     /**
@@ -127,6 +126,11 @@ class Batch extends AbstractBatchService
      * @return Generator<int, ContactItemResult>
      * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.contact.list',
+        'https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_list.php',
+        'Returns in batch mode a list of contacts'
+    )]
     public function list(array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         $this->log->debug(
@@ -196,8 +200,14 @@ class Batch extends AbstractBatchService
      *                         IM?: string,
      *                         }> $contacts
      *
-     * @return Generator<int, AddedItemBatchResult>|AddedItemBatchResult[]
+     * @return Generator<int, AddedItemBatchResult>
+     * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.contact.add',
+        'https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_add.php',
+        'Add in batch mode a list of contacts'
+    )]
     public function add(array $contacts): Generator
     {
         $items = [];
@@ -221,9 +231,14 @@ class Batch extends AbstractBatchService
      * ]
      *
      * @param array<int, array> $entityItems
-     * @return Generator
+     * @return Generator<int, UpdatedItemBatchResult>
      * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.contact.update',
+        'https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_update.php',
+        'Update in batch mode a list of contacts'
+    )]
     public function update(array $entityItems): Generator
     {
         foreach ($this->batch->updateEntityItems('crm.contact.update', $entityItems) as $key => $item) {
@@ -236,9 +251,14 @@ class Batch extends AbstractBatchService
      *
      * @param int[] $contactId
      *
-     * @return \Generator
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @return Generator<int, DeletedItemBatchResult>
+     * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.contact.delete',
+        'https://training.bitrix24.com/rest_help/crm/contacts/crm_contact_delete.php',
+        'Delete in batch mode a list of contacts'
+    )]
     public function delete(array $contactId): Generator
     {
         foreach ($this->batch->deleteEntityItems('crm.contact.delete', $contactId) as $key => $item) {

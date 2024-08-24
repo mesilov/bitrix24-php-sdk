@@ -143,6 +143,11 @@ class Deal extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.fields',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_fields.php',
+        'Get fields of deal'
+    )]
     public function fields(): FieldsResult
     {
         return new FieldsResult($this->core->call('crm.deal.fields'));
@@ -159,6 +164,11 @@ class Deal extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.fields',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_get.php',
+        'Get deal by id'
+    )]
     public function get(int $id): DealResult
     {
         return new DealResult($this->core->call('crm.deal.get', ['id' => $id]));
@@ -178,6 +188,11 @@ class Deal extends AbstractService
      * @throws TransportException
      * @return DealsResult
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.list',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_list.php',
+        'Get deal list by filter'
+    )]
     public function list(array $order, array $filter, array $select, int $startItem = 0): DealsResult
     {
         return new DealsResult(
@@ -245,6 +260,11 @@ class Deal extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.update',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_update.php',
+        'Update deal list by filter'
+    )]
     public function update(int $id, array $fields, array $params = []): UpdatedItemResult
     {
         return new UpdatedItemResult(
@@ -301,8 +321,8 @@ class Deal extends AbstractService
      *   } $filter
      *
      * @return int
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function countByFilter(array $filter = []): int
     {

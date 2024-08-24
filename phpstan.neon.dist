@@ -2,9 +2,15 @@ parameters:
   level: 5
   paths:
     - src/
+    - tests/Unit/
     - tests/Integration/Services/Telephony
     - tests/Integration/Services/User
-    - tests/Unit/
+    - tests/Integration/Services/UserConsent
+    - tests/Integration/Services/IM
+    - tests/Integration/Services/Catalog
+    - tests/Integration/Services/IMOpenLines
+    - tests/Integration/Services/Main
+    - tests/Integration/Services/Placement
   bootstrapFiles:
     - tests/bootstrap.php
   parallel:

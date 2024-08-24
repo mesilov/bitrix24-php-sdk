@@ -10,9 +10,6 @@ use Bitrix24\SDK\Services\Placement\Service\UserFieldType;
 
 class PlacementServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return Placement
-     */
     public function placement(): Placement
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -22,9 +19,6 @@ class PlacementServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\Placement\Service\UserFieldType
-     */
     public function userfieldtype(): UserFieldType
     {
         if (!isset($this->serviceCache[__METHOD__])) {

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Workflows\Template\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -16,7 +19,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
 use Psr\Log\LoggerInterface;
 
-
+#[ApiServiceMetadata(new Scope(['bizproc']))]
 class Template extends AbstractService
 {
     public function __construct(
@@ -37,6 +40,11 @@ class Template extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_add.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.template.add',
+        'https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_add.php',
+        'Add a workflow template, requires administrator access permissions'
+    )]
     public function add(
         Workflows\Common\WorkflowDocumentType      $workflowDocumentType,
         string                                     $name,
@@ -67,6 +75,11 @@ class Template extends AbstractService
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      * @see https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_update.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.template.update',
+        'https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_update.php',
+        'Update workflow template'
+    )]
     public function update(
         int                                         $templateId,
         ?Workflows\Common\WorkflowDocumentType      $workflowDocumentType,
@@ -115,6 +128,11 @@ class Template extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_delete.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.template.delete',
+        'https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_delete.php',
+        'The method deletes workflow template. Requires the administrator access permissions.'
+    )]
     public function delete(int $templateId): DeletedItemResult
     {
         return new DeletedItemResult($this->core->call('bizproc.workflow.template.delete', [
@@ -129,6 +147,11 @@ class Template extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_list.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.template.list',
+        'https://training.bitrix24.com/rest_help/workflows/wirkflow_template/bizproc_workflow_template_list.php',
+        'The method bizproc.workflow.template.list returns list of workflow templates, specified for a site. '
+    )]
     public function list(
         array $select = ['ID', 'MODULE_ID', 'ENTITY', 'DOCUMENT_TYPE', 'AUTO_EXECUTE', 'NAME', 'NAME', 'TEMPLATE', 'PARAMETERS', 'VARIABLES', 'CONSTANTS', 'MODIFIED', 'IS_MODIFIED', 'USER_ID', 'SYSTEM_CODE'],
         array $filter = []): Workflows\Template\Result\WorkflowTemplatesResult

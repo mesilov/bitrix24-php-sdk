@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Placement\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Placement\Result\DeleteUserTypeResult;
 use Bitrix24\SDK\Services\Placement\Result\RegisterUserTypeResult;
 use Bitrix24\SDK\Services\Placement\Result\UserFieldTypesResult;
-
+#[ApiServiceMetadata(new Scope(['placement']))]
 class UserFieldType extends AbstractService
 {
     /**
@@ -19,11 +24,15 @@ class UserFieldType extends AbstractService
      * @param string $title       Type text name. Will be displayed in the admin interface of user field settings.
      * @param string $description Type text description. Will be displayed in the admin interface of user field settings.
      *
-     * @return \Bitrix24\SDK\Services\Placement\Result\RegisterUserTypeResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_add.php
      */
+    #[ApiEndpointMetadata(
+        'userfieldtype.add',
+        'https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_add.php',
+        'Registration of new type of user fields. This method returns true or an error with description.'
+    )]
     public function add(string $userTypeId, string $handlerUrl, string $title, string $description): RegisterUserTypeResult
     {
         return new RegisterUserTypeResult(
@@ -42,11 +51,15 @@ class UserFieldType extends AbstractService
     /**
      * Retrieves list of user field types, registrered by the application. List method. Results in the list of field types with page-by-page navigation.
      *
-     * @return UserFieldTypesResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_list.php
      */
+    #[ApiEndpointMetadata(
+        'userfieldtype.list',
+        'https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_list.php',
+        'Retrieves list of user field types, registrered by the application. List method. Results in the list of field types with page-by-page navigation.'
+    )]
     public function list(): UserFieldTypesResult
     {
         return new UserFieldTypesResult(
@@ -62,11 +75,15 @@ class UserFieldType extends AbstractService
      * @param string $title       Type text name. Will be displayed in the admin interface of user field settings.
      * @param string $description Type text description. Will be displayed in the admin interface of user field settings.
      *
-     * @return \Bitrix24\SDK\Services\Placement\Result\RegisterUserTypeResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_update.php
      */
+    #[ApiEndpointMetadata(
+        'userfieldtype.update',
+        'https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_update.php',
+        'Modifies settings of user field types, registered by the application. This method returns true or an error with description.'
+    )]
     public function update(string $userTypeId, string $handlerUrl, string $title, string $description): RegisterUserTypeResult
     {
         return new RegisterUserTypeResult(
@@ -87,11 +104,15 @@ class UserFieldType extends AbstractService
      *
      * @param string $userTypeId Inline code of the type. Required parameter. a-z0-9
      *
-     * @return \Bitrix24\SDK\Services\Placement\Result\DeleteUserTypeResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_delete.php
      */
+    #[ApiEndpointMetadata(
+        'userfieldtype.delete',
+        'https://training.bitrix24.com/rest_help/application_embedding/user_field/userfieldtype_delete.php',
+        'Deletes user field type, registered by the application. This method returns true or an error with description.'
+    )]
     public function delete(string $userTypeId): DeleteUserTypeResult
     {
         return new DeleteUserTypeResult(

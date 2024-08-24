@@ -77,6 +77,10 @@ Performance improvements 🚀
     output: b24 response dto
     process: b24 entities, operate with immutable objects  
 ```
+## Documentation
+
+- [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
+- [Internal documentation](docs/EN/documentation.md) for bitrix24-php-sdk
 
 ## Sponsors
 
@@ -220,8 +224,4 @@ in this project.
 
 ## Need custom Bitrix24 application?
 
-mesilov.maxim@gmail.com for private consultations or dedicated support
-
-## Documentation
-
-[Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
+Email to mesilov.maxim@gmail.com for private consultations or dedicated support.

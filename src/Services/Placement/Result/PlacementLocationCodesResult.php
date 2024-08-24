@@ -9,7 +9,6 @@ use Bitrix24\SDK\Core\Result\AbstractResult;
 class PlacementLocationCodesResult extends AbstractResult
 {
     /**
-     * @return array
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      */
     public function getLocationCodes(): array

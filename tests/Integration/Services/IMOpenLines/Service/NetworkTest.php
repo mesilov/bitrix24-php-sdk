@@ -4,46 +4,47 @@ declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\IMOpenLines\Service;
 
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\IMOpenLines\Service\Network;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Network::class)]
 class NetworkTest extends TestCase
 {
     private Network $networkService;
 
     /**
-     * @covers  \Bitrix24\SDK\Services\IMOpenLines\Service\Network::join
-     * @testdox test get agreements list
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[TestDox('test get agreements list')]
     public function testJoin(): void
     {
-        $res = $this->networkService->join(Fabric::getOpenLineCode());
-        $this->assertGreaterThanOrEqual(1, $res->getId());
+        $joinOpenLineResult = $this->networkService->join(Fabric::getOpenLineCode());
+        $this->assertGreaterThanOrEqual(1, $joinOpenLineResult->getId());
     }
 
     /**
-     * @covers  \Bitrix24\SDK\Services\IMOpenLines\Service\Network::join
-     * @testdox test get agreements list
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[TestDox('test get agreements list')]
     public function testMessageAdd(): void
     {
-        $res = $this->networkService->messageAdd(
+        $addedMessageItemResult = $this->networkService->messageAdd(
             Fabric::getOpenLineCode(),
             (int)$this->networkService->core->call('PROFILE')->getResponseData()->getResult()['ID'],
             sprintf('Test message at %s', time())
         );
 
-        $this->assertTrue($res->isSuccess());
+        $this->assertTrue($addedMessageItemResult->isSuccess());
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->networkService = Fabric::getServiceBuilder()->getIMOpenLinesScope()->Network();
     }

@@ -12,8 +12,6 @@ class UserConsentServiceBuilder extends AbstractServiceBuilder
 {
     /**
      * get user consent agreement service
-     *
-     * @return UserConsentAgreement
      */
     public function UserConsentAgreement(): UserConsentAgreement
     {
@@ -26,8 +24,6 @@ class UserConsentServiceBuilder extends AbstractServiceBuilder
 
     /**
      * get user consent service
-     *
-     * @return UserConsent
      */
     public function UserConsent(): UserConsent
     {
