@@ -10,9 +10,9 @@
     }
   ],
   "require": {
-    "mesilov/bitrix24-php-sdk": "dev-371-publish-b24-php-sdk-beta-2",
-    "monolog/monolog": "3.5.*",
-    "symfony/dotenv": "7.0.*"
+    "mesilov/bitrix24-php-sdk": "dev-feature/390-prepare-publish-2-0",
+    "monolog/monolog": "^3",
+    "symfony/dotenv": "^7"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"

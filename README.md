@@ -99,27 +99,43 @@ Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. 
 ## Examples
 
 ### Work with webhook
-
+1. Go to `/examples/webhook` folder
+2. Open console and install dependencies
+```shell
+composer install
+```
+3. Open example file and insert webhook url into `$webhookUrl`
 ```php
 declare(strict_types=1);
 
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
-use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Processor\MemoryUsageProcessor;
 
-require_once  'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 $webhookUrl = 'INSERT_HERE_YOUR_WEBHOOK_URL';
 
 $log = new Logger('bitrix24-php-sdk');
-$b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
+$log->pushHandler(new StreamHandler('bitrix24-php-sdk.log'));
+$log->pushProcessor(new MemoryUsageProcessor(true, true));
 
-// init bitrix24-php-sdk service
+// create service builder factory
+$b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
+// init bitrix24-php-sdk service from webhook
 $b24Service = $b24ServiceFactory->initFromWebhook($webhookUrl);
 
 // work with interested scope
 var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());
-var_dump($b24Service->getCRMScope()->lead()->list([],[],['ID','TITLE'])->getLeads()[0]->TITLE);
+// get deals list and address to first element
+var_dump($b24Service->getCRMScope()->lead()->list([], [], ['ID', 'TITLE'])->getLeads()[0]->TITLE);
+```
+4. call php file in cli
+```shell
+php -f example.php
+
 ```
 
 ### Create application for Bitrix24 marketplace
