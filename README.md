@@ -84,10 +84,6 @@ Performance improvements 🚀
 - [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
 - [Internal documentation](docs/EN/documentation.md) for bitrix24-php-sdk
 
-## Sponsors
-
-Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)
-
 ## Requirements
 
 - php: >=8.2
@@ -346,6 +342,10 @@ Maksim Mesilov - mesilov.maxim@gmail.com
 
 See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/graphs/contributors) which participated
 in this project.
+
+## Sponsors
+
+Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)
 
 ## Need custom Bitrix24 application?
 
