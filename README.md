@@ -35,7 +35,8 @@ API - level features
 
 Performance improvements 🚀
 
-- [x] Batch queries implemented with [PHP Generators](https://www.php.net/manual/en/language.generators.overview.php) – constant low memory and low CPI usage:
+- [x] Batch queries implemented with [PHP Generators](https://www.php.net/manual/en/language.generators.overview.php) –
+  constant low memory and low CPI usage:
 - [x] batch read data from bitrix24
 - [x] batch write data to bitrix24
 - [x] read without count flag
@@ -77,6 +78,7 @@ Performance improvements 🚀
     output: b24 response dto
     process: b24 entities, operate with immutable objects  
 ```
+
 ## Documentation
 
 - [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
@@ -99,12 +101,20 @@ Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. 
 ## Examples
 
 ### Work with webhook
+
 1. Go to `/examples/webhook` folder
 2. Open console and install dependencies
+
 ```shell
 composer install
 ```
-3. Open example file and insert webhook url into `$webhookUrl`
+
+3. Open Bitrix24 portal: Developer resources → Other → Inbound webhook
+4. Open example file and insert webhook url into `$webhookUrl`
+
+<details>
+  <summary>see example.php file</summary>
+
 ```php
 declare(strict_types=1);
 
@@ -132,11 +142,102 @@ var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserPr
 // get deals list and address to first element
 var_dump($b24Service->getCRMScope()->lead()->list([], [], ['ID', 'TITLE'])->getLeads()[0]->TITLE);
 ```
-4. call php file in cli
+
+</details>
+
+5. Call php file in shell
+
 ```shell
 php -f example.php
-
 ```
+
+### Work with local application
+
+1. Go to `/examples/local-application` folder
+2. Open console and install dependencies
+
+```shell
+composer install
+```
+
+3. Start local development server
+
+```shell
+sudo php -S 127.0.0.1:80
+```
+
+4. Expose local server to public via [ngrok](https://ngrok.com/) and remember temporally public url –
+   `https://****.ngrok-free.app`
+
+```shell
+ngrok http 127.0.0.1
+```
+
+5. Check public url from ngrok and see `x-powered-by` header with **200** status-code.
+
+```shell
+curl https://****.ngrok-free.app -I
+HTTP/2 200 
+content-type: text/html; charset=UTF-8
+date: Mon, 26 Aug 2024 19:09:24 GMT
+host: ****.ngrok-free.app
+x-powered-by: PHP/8.3.8
+```
+
+6. Open Bitrix24 portal: Developer resources → Other → Local application and create new local application:
+   - `type`: server
+   - `handler path`: `https://****.ngrok-free.app/index.php`
+   - `Initial installation path`: `https://****.ngrok-free.app/install.php`
+   - `Menu item text`: `Test local app`
+   - `scope`: `crm`
+7. Save application parameters in `index.php` file: 
+   - `Application ID (client_id)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID` 
+   - `Application key (client_secret)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET` 
+   - `Assing permitions (scope)` — `BITRIX24_PHP_SDK_APPLICATION_SCOPE`
+<details>
+  <summary>see index.php file</summary>
+
+```php
+declare(strict_types=1);
+
+use Bitrix24\SDK\Core\Credentials\AuthToken;
+use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
+use Bitrix24\SDK\Services\ServiceBuilderFactory;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Processor\MemoryUsageProcessor;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
+
+require_once 'vendor/autoload.php';
+?>
+    <pre>
+    Application is worked, auth tokens from bitrix24:
+    <?= print_r($_REQUEST, true) ?>
+</pre>
+<?php
+$request = Request::createFromGlobals();
+
+$log = new Logger('bitrix24-php-sdk');
+$log->pushHandler(new StreamHandler('bitrix24-php-sdk.log'));
+$log->pushProcessor(new MemoryUsageProcessor(true, true));
+
+$b24ServiceBuilderFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
+$appProfile = ApplicationProfile::initFromArray([
+    'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => 'INSERT_HERE_YOUR_DATA',
+    'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => 'INSERT_HERE_YOUR_DATA',
+    'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => 'INSERT_HERE_YOUR_DATA'
+]);
+$b24Service = $b24ServiceBuilderFactory->initFromRequest($appProfile, AuthToken::initFromPlacementRequest($request), $request->get('DOMAIN'));
+
+var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());
+// get deals list and address to first element
+var_dump($b24Service->getCRMScope()->lead()->list([], [], ['ID', 'TITLE'])->getLeads()[0]->TITLE);
+```
+
+</details>
+8. Save local application in Bitrix24 tab and press «OPEN APPLICATION» button.    
+
 
 ### Create application for Bitrix24 marketplace
 
@@ -146,16 +247,22 @@ if you want to create application you can use production-ready contracts in name
 - `Bitrix24Accounts` — Store auth tokens and
   provides [methods](src/Application/Contracts/Bitrix24Accounts/Docs/Bitrix24Accounts.md) for work with Bitrix24
   account.
-- `ApplicationInstallations` — Store information about [application installation](src/Application/Contracts/ApplicationInstallations/Docs/ApplicationInstallations.md), linked with Bitrix24 Account with auth
+- `ApplicationInstallations` — Store information
+  about [application installation](src/Application/Contracts/ApplicationInstallations/Docs/ApplicationInstallations.md),
+  linked with Bitrix24 Account with auth
   tokens. Optional can store links to:
     - Client contact person: client person who responsible for application usage
     - Bitrix24 Partner contact person: partner contact person who supports client and configure application
     - Bitrix24 Partner: partner who supports client portal
-- `ContactPersons` – Store information [about person](src/Application/Contracts/ContactPersons/Docs/ContactPersons.md) who installed application.
-- `Bitrix24Partners` – Store information about [Bitrix24 Partner](src/Application/Contracts/Bitrix24Partners/Docs/Bitrix24Partners.md) who supports client portal and install or configure application. 
+- `ContactPersons` – Store information [about person](src/Application/Contracts/ContactPersons/Docs/ContactPersons.md)
+  who installed application.
+- `Bitrix24Partners` – Store information
+  about [Bitrix24 Partner](src/Application/Contracts/Bitrix24Partners/Docs/Bitrix24Partners.md) who supports client
+  portal and install or configure application.
 
 Steps:
-1. Create own entity of this bounded contexts. 
+
+1. Create own entity of this bounded contexts.
 2. Implement all methods in contract interfaces.
 3. Test own implementation behavior with contract-tests `tests/Unit/Application/Contracts/*` – examples.
 
@@ -171,6 +278,7 @@ Call in command line
 ```shell
 make lint-phpstan
 ```
+
 ### PHP Static Analysis Tool – rector
 
 Call in command line for validate
@@ -178,6 +286,7 @@ Call in command line for validate
 ```shell
 make lint-rector
 ```
+
 Call in command line for fix codebase
 
 ```shell
