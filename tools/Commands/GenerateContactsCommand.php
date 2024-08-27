@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tools\Commands;
@@ -157,7 +166,7 @@ class GenerateContactsCommand extends Command
                 );
             }
             $timeEnd = microtime(true);
-            $io->writeln(GenerateContactsCommand . phpsprintf('batch query duration: %s seconds', round($timeEnd - $timeStart, 2)) . PHP_EOL . PHP_EOL);
+            $io->writeln(sprintf('batch query duration: %s seconds', round($timeEnd - $timeStart, 2)) . PHP_EOL . PHP_EOL);
             $io->success('contacts added');
         } catch (BaseException $exception) {
             $io = new SymfonyStyle($input, $output);

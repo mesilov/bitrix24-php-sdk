@@ -1,3 +1,10 @@
+# This file is part of the bitrix24-php-sdk package.
+#
+#  © Maksim Mesilov <mesilov.maxim@gmail.com>
+#
+#  For the full copyright and license information, please view the MIT-LICENSE.txt
+#  file that was distributed with this source code.
+
 default:
 	@echo "make needs target:"
 	@egrep -e '^\S+' ./Makefile | grep -v default | sed -r 's/://' | sed -r 's/^/ - /'
