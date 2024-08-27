@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Core\Credentials;
@@ -8,15 +17,11 @@ use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ScopeTest
- *
- * @package Bitrix24\SDK\Tests\Unit\Core
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Core\Credentials\Scope::class)]
 class ScopeTest extends TestCase
 {
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws UnknownScopeCodeException
      */
     public function testBuildScopeFromArray(): void
     {
@@ -70,7 +75,26 @@ class ScopeTest extends TestCase
     {
         $this->expectException(UnknownScopeCodeException::class);
 
-        $scope = new Scope(['fooo']);
+        new Scope(['fooo']);
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     */
+    public function testEqual(): void
+    {
+        $scope = Scope::initFromString('crm,telephony');
+        $this->assertTrue($scope->equal(Scope::initFromString('telephony,crm')));
+        $this->assertFalse($scope->equal(Scope::initFromString('telephony')));
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     */
+    public function testEmptyScope(): void
+    {
+        $scope = new Scope(['']);
+        $this->assertEquals([], $scope->getScopeCodes());
     }
 
     /**
@@ -80,6 +104,18 @@ class ScopeTest extends TestCase
     {
         $scope = new Scope(['CRM', 'Call', 'im']);
 
-        $this->assertEquals(['crm', 'call', 'im'], $scope->getScopeCodes());
+        $this->assertEquals(['call', 'crm', 'im'], $scope->getScopeCodes());
+    }
+
+    /**
+     * @throws UnknownScopeCodeException
+     */
+    #[\PHPUnit\Framework\Attributes\TestDox('Test init Scope from string')]
+    public function testInitFromString(): void
+    {
+        $scopeList = ['crm', 'telephony', 'call', 'user_basic', 'placement', 'im', 'imopenlines'];
+        sort($scopeList);
+        $scope = Scope::initFromString('crm,telephony,call,user_basic,placement,im,imopenlines');
+        $this->assertEquals($scopeList, $scope->getScopeCodes());
     }
 }

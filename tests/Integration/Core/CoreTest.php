@@ -1,11 +1,26 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Core;
 
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\CoreBuilder;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
+use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
+use Bitrix24\SDK\Core\Credentials\Credentials;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -25,7 +40,21 @@ class CoreTest extends TestCase
     public function testCallExistingApiMethod(): void
     {
         $response = $this->core->call('app.info');
-        $this->assertIsArray($response->getResponseData()->getResult()->getResultData());
+        $this->assertIsArray($response->getResponseData()->getResult());
+    }
+
+    public function testConnectToNonExistsBitrix24PortalInCloud():void
+    {
+        $core = (new CoreBuilder())
+        ->withLogger($this->log)
+        ->withCredentials(Credentials::createFromOAuth(
+            new AuthToken('non-exists-access-token','refresh-token', 3600),
+            new ApplicationProfile('non-exists-client-id', 'non-exists-client-secret', new Scope([])),
+            'non-exists-domain.bitrix24.com'
+        ))
+        ->build();
+        $this->expectException(TransportException::class);
+        $core->call('app.info');
     }
 
     /**

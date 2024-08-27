@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\CRM;
@@ -17,74 +26,54 @@ use Psr\Log\NullLogger;
  *
  * @package Bitrix24\SDK\Tests\Unit\Services\CRM
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\CRM\CRMServiceBuilder::class)]
 class CRMServiceBuilderTest extends TestCase
 {
     private CRMServiceBuilder $serviceBuilder;
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\CRMServiceBuilder::settings
-     */
     public function testGetSettingsService(): void
     {
         $this->serviceBuilder->settings();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\CRMServiceBuilder::dealContact
-     */
     public function testGetDealContactService(): void
     {
         $this->serviceBuilder->dealContact();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\CRMServiceBuilder::dealCategory
-     */
     public function testGetDealCategoryService(): void
     {
         $this->serviceBuilder->dealCategory();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\CRMServiceBuilder::dealCategory
-     */
     public function testDealService(): void
     {
         $this->serviceBuilder->deal();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\CRMServiceBuilder::contact
-     */
     public function testContactService(): void
     {
         $this->serviceBuilder->contact();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\CRMServiceBuilder::dealProductRows
-     */
     public function testDealProductRowsService(): void
     {
         $this->serviceBuilder->dealProductRows();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\CRM\CRMServiceBuilder::dealCategoryStage
-     */
     public function testDealCategoryStageService(): void
     {
         $this->serviceBuilder->dealCategoryStage();
         $this::assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceBuilder = (new ServiceBuilder(
             new NullCore(),

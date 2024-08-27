@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies;
@@ -11,27 +20,12 @@ use Psr\Log\LoggerInterface;
 
 class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
 {
-    private CoreInterface $core;
-    private LoggerInterface $log;
-
-    /**
-     * @param \Bitrix24\SDK\Core\Contracts\CoreInterface $core
-     * @param \Psr\Log\LoggerInterface                   $log
-     */
-    public function __construct(CoreInterface $core, LoggerInterface $log)
+    public function __construct(private readonly CoreInterface $core, private readonly LoggerInterface $log)
     {
-        $this->core = $core;
-        $this->log = $log;
     }
 
     /**
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
      *
-     * @return \Generator
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */
@@ -87,6 +81,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
 
             return;
         }
+
         $lastElementId = $this->getLastElementId($apiMethod, $filter, $select);
         if ($lastElementId === null) {
             $this->log->debug('FilterWithoutBatchWithoutCountOrder.getTraversableList.emptySelect');
@@ -119,7 +114,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             );
 
 
-            foreach ($resultPage->getResponseData()->getResult()->getResultData() as $cnt => $item) {
+            foreach ($resultPage->getResponseData()->getResult() as $cnt => $item) {
 
 
                 $currentElementId = (int)$item['ID'];
@@ -127,7 +122,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             }
 
             $this->log->debug('FilterWithoutBatchWithoutCountOrder.step', [
-                'duration'         => $resultPage->getResponseData()->getTime()->getDuration(),
+                'duration'         => $resultPage->getResponseData()->getTime()->duration,
                 'currentElementId' => $currentElementId,
                 'lastElementId'    => $lastElementId,
             ]);
@@ -140,11 +135,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
     /**
      * Get first element id in filtered result ordered by id asc
      *
-     * @param string $apiMethod
-     * @param array  $filter
-     * @param array  $select
      *
-     * @return int|null
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @todo Кандидат на вынос
@@ -157,7 +148,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             'select'    => $select,
         ]);
 
-        $firstResultPage = $this->core->call(
+        $response = $this->core->call(
             $apiMethod,
             [
                 'order'  => ['ID' => 'ASC'],
@@ -167,7 +158,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             ]
         );
 
-        $elementId = $firstResultPage->getResponseData()->getResult()->getResultData()[0]['ID'];
+        $elementId = $response->getResponseData()->getResult()[0]['ID'];
 
         $this->log->debug('FilterWithoutBatchWithoutCountOrder.getFirstElementId.finish', [
             'elementId' => $elementId,
@@ -179,11 +170,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
     /**
      * Get first element id in filtered result ordered by id asc
      *
-     * @param string $apiMethod
-     * @param array  $filter
-     * @param array  $select
      *
-     * @return int|null
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      * @todo Кандидат на вынос
@@ -196,7 +183,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             'select'    => $select,
         ]);
 
-        $lastResultPage = $this->core->call(
+        $response = $this->core->call(
             $apiMethod,
             [
                 'order'  => ['ID' => 'DESC'],
@@ -206,7 +193,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             ]
         );
 
-        $elementId = $lastResultPage->getResponseData()->getResult()->getResultData()[0]['ID'];
+        $elementId = $response->getResponseData()->getResult()[0]['ID'];
 
         $this->log->debug('FilterWithoutBatchWithoutCountOrder.getLastElementId.finish', [
             'elementId' => $elementId,

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services;
@@ -16,38 +25,30 @@ use Psr\Log\NullLogger;
  *
  * @package Bitrix24\SDK\Tests\Unit\Services
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\ServiceBuilder::class)]
 class ServiceBuilderTest extends TestCase
 {
     private ServiceBuilder $serviceBuilder;
 
-    /**
-     * @covers \Bitrix24\SDK\Services\ServiceBuilder::getMainScope
-     */
     public function testGetMainScopeBuilder(): void
     {
         $this->serviceBuilder->getMainScope();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\ServiceBuilder::getIMScope
-     */
     public function testGetIMScopeBuilder(): void
     {
         $this->serviceBuilder->getIMScope();
         $this::assertTrue(true);
     }
 
-    /**
-     * @covers \Bitrix24\SDK\Services\ServiceBuilder::getCRMScope
-     */
     public function testGetCrmScopeBuilder(): void
     {
         $this->serviceBuilder->getCRMScope();
         $this::assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceBuilder = new ServiceBuilder(
             new NullCore(),

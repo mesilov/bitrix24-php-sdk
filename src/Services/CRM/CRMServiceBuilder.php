@@ -1,26 +1,22 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM;
 
 use Bitrix24\SDK\Services\AbstractServiceBuilder;
-use Bitrix24\SDK\Services\CRM\Contact;
-use Bitrix24\SDK\Services\CRM\Deal;
-use Bitrix24\SDK\Services\CRM\Product;
-use Bitrix24\SDK\Services\CRM\Settings;
 
-
-/**
- * Class CRMServiceBuilder
- *
- * @package Bitrix24\SDK\Services\CRM
- */
 class CRMServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return Settings\Service\Settings
-     */
     public function settings(): Settings\Service\Settings
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -30,9 +26,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Deal\Service\DealContact
-     */
     public function dealContact(): Deal\Service\DealContact
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -42,9 +35,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Deal\Service\DealCategory
-     */
     public function dealCategory(): Deal\Service\DealCategory
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -54,9 +44,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Deal\Service\Deal
-     */
     public function deal(): Deal\Service\Deal
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -70,9 +57,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Deal\Service\DealUserfield
-     */
     public function dealUserfield(): Deal\Service\DealUserfield
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -85,9 +69,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Contact\Service\Contact
-     */
     public function contact(): Contact\Service\Contact
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -101,9 +82,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\CRM\Contact\Service\ContactUserfield
-     */
     public function contactUserfield(): Contact\Service\ContactUserfield
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -128,9 +106,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Deal\Service\DealCategoryStage
-     */
     public function dealCategoryStage(): Deal\Service\DealCategoryStage
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -140,9 +115,6 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Product\Service\Product
-     */
     public function product(): Product\Service\Product
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -156,13 +128,75 @@ class CRMServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return Userfield\Service\Userfield
-     */
     public function userfield(): Userfield\Service\Userfield
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Userfield\Service\Userfield(
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function lead(): Lead\Service\Lead
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Lead\Service\Lead(
+                new Lead\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function activity(): Activity\Service\Activity
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Activity\Service\Activity(
+                new Activity\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function activityFetcher(): Activity\ActivityFetcherBuilder
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Activity\ActivityFetcherBuilder(
+                $this->core,
+                $this->batch,
+                $this->bulkItemsReader,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function item(): Item\Service\Item
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Item\Service\Item(
+                new Item\Service\Batch($this->batch, $this->log),
+                $this->core,
+                $this->log
+            );
+        }
+
+        return $this->serviceCache[__METHOD__];
+    }
+
+    public function duplicate(): Duplicates\Service\Duplicate
+    {
+        if (!isset($this->serviceCache[__METHOD__])) {
+            $this->serviceCache[__METHOD__] = new Duplicates\Service\Duplicate(
                 $this->core,
                 $this->log
             );

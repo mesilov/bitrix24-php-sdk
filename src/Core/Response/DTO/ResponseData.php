@@ -1,54 +1,41 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Response\DTO;
 
-/**
- * Class ResponseData
- *
- * @package Bitrix24\SDK\Core\Response\DTO
- */
 class ResponseData
 {
-    protected Result $result;
-    protected Time $time;
-    protected Pagination $pagination;
-
     /**
      * ResponseData constructor.
-     *
-     * @param Result     $result
-     * @param Time       $time
-     * @param Pagination $pagination
      */
-    public function __construct(Result $result, Time $time, Pagination $pagination)
+    public function __construct(
+        protected array               $result,
+        readonly protected Time       $time,
+        readonly protected Pagination $pagination)
     {
-        $this->result = $result;
-        $this->time = $time;
-        $this->pagination = $pagination;
     }
 
-    /**
-     * @return Pagination
-     */
     public function getPagination(): Pagination
     {
         return $this->pagination;
     }
 
-    /**
-     * @return Time
-     */
     public function getTime(): Time
     {
         return $this->time;
     }
 
-    /**
-     * @return Result
-     */
-    public function getResult(): Result
+    public function getResult(): array
     {
         return $this->result;
     }

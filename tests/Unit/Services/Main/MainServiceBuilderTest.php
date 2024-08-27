@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Services\Main;
@@ -17,20 +26,18 @@ use Psr\Log\NullLogger;
  *
  * @package Bitrix24\SDK\Tests\Unit\Services\CRM
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Services\Main\MainServiceBuilder::class)]
 class MainServiceBuilderTest extends TestCase
 {
     private MainServiceBuilder $serviceBuilder;
 
-    /**
-     * @covers \Bitrix24\SDK\Services\Main\MainServiceBuilder::main
-     */
     public function testGetMainService(): void
     {
         $this->serviceBuilder->main();
         $this::assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceBuilder = (new ServiceBuilder(
             new NullCore(),

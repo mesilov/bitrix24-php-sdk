@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Deal\Service;
@@ -88,6 +97,55 @@ class BatchTest extends TestCase
             $cnt++;
         }
         self::assertEquals(count($deals), $cnt);
+    }
+
+    /**
+     * @testdox Batch delete deals
+     * @covers  \Bitrix24\SDK\Services\CRM\Deal\Service\Batch::update()
+     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @throws \Exception
+     */
+    public function testBatchUpdate(): void
+    {
+        // add deals
+        $deals = [];
+        for ($i = 1; $i < 60; $i++) {
+            $deals[] = ['TITLE' => 'TITLE-' . $i];
+        }
+        $cnt = 0;
+        $dealId = [];
+        foreach ($this->dealService->batch->add($deals) as $item) {
+            $cnt++;
+            $dealId[] = $item->getId();
+        }
+        self::assertEquals(count($deals), $cnt);
+
+        // read deals and prepare update information
+        $dealsToUpdate = [];
+        $resultDeals = [];
+        foreach ($this->dealService->batch->list([], ['ID' => $dealId], ['ID', 'TITLE', 'OPPORTUNITY']) as $deal) {
+            $dealOpportunity = random_int(100, 10000);
+            $dealsToUpdate[$deal->ID] = [
+                'fields' => [
+                    'OPPORTUNITY' => $dealOpportunity,
+                ],
+                'params' => [],
+            ];
+            $resultDeals[$deal->ID] = $dealOpportunity;
+        }
+
+        // update deals
+        foreach ($this->dealService->batch->update($dealsToUpdate) as $dealUpdateResult) {
+            $this->assertTrue($dealUpdateResult->isSuccess());
+        }
+
+        // list deals
+        $updateResult = [];
+        foreach ($this->dealService->batch->list([], ['ID' => $dealId], ['ID', 'TITLE', 'OPPORTUNITY']) as $deal) {
+            $updateResult[$deal->ID] = $deal->OPPORTUNITY;
+        }
+
+        $this->assertEquals($resultDeals, $updateResult);
     }
 
     public function setUp(): void

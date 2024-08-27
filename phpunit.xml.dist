@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-         backupGlobals="false"
-         colors="true"
-         bootstrap="tests/bootstrap.php"
-         failOnRisky="true"
-         failOnWarning="true">
-    <coverage>
-        <include>
-            <directory>./src</directory>
-        </include>
-    </coverage>
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" backupGlobals="false" colors="true"
+         bootstrap="tests/bootstrap.php" failOnRisky="true" failOnWarning="true"
+         displayDetailsOnTestsThatTriggerWarnings="true">
     <php>
         <ini name="error_reporting" value="-1"/>
     </php>
@@ -21,5 +13,34 @@
         <testsuite name="integration_tests">
             <directory>./tests/Integration</directory>
         </testsuite>
+        <testsuite name="integration_tests_core">
+            <directory>./tests/Integration/Core/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_telephony">
+            <directory>./tests/Integration/Services/Telephony/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_im">
+            <directory>./tests/Integration/Services/IM/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_im_open_lines">
+            <directory>./tests/Integration/Services/IMOpenLines/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_placement">
+            <directory>./tests/Integration/Services/Placement/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_user">
+            <directory>./tests/Integration/Services/User/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_user_consent">
+            <directory>./tests/Integration/Services/UserConsent/</directory>
+        </testsuite>
+        <testsuite name="integration_tests_scope_workflows">
+            <directory>./tests/Integration/Services/Workflows/</directory>
+        </testsuite>
     </testsuites>
+    <source>
+        <include>
+            <directory>./src</directory>
+        </include>
+    </source>
 </phpunit>

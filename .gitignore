@@ -1,9 +1,12 @@
 /.idea*
+/app
 vendor
 composer.phar
 composer.lock
 .phpunit.result.cache
 tools/.env.local
 tools/logs
+tests/ApplicationBridge/auth.json
 examples/logs
+*.log
 .env.local

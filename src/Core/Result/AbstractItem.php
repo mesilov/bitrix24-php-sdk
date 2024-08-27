@@ -1,34 +1,41 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Result;
 
+use ArrayIterator;
 use Bitrix24\SDK\Core\Exceptions\ImmutableResultViolationException;
+use IteratorAggregate;
+use Money\Currencies\ISOCurrencies;
+use Money\Parser\DecimalMoneyParser;
+use Traversable;
 
 /**
  * Class AbstractItem
  *
  * @package Bitrix24\SDK\Core\Result
  */
-abstract class AbstractItem implements \IteratorAggregate
+abstract class AbstractItem implements IteratorAggregate
 {
-    protected array $data;
+    protected DecimalMoneyParser $decimalMoneyParser;
 
-    /**
-     * AbstractItem constructor.
-     *
-     * @param array $data
-     */
-    public function __construct(array $data)
+    public function __construct(protected array $data)
     {
-        $this->data = $data;
+        $this->decimalMoneyParser = new DecimalMoneyParser(new ISOCurrencies());
     }
 
     /**
      * @param int|string $offset
-     *
-     * @return bool
      */
     public function __isset($offset): bool
     {
@@ -47,13 +54,12 @@ abstract class AbstractItem implements \IteratorAggregate
 
     /**
      * @param int|string $offset
-     * @param mixed      $value
      *
      * @return void
      * @throws ImmutableResultViolationException
      *
      */
-    public function __set($offset, $value)
+    public function __set($offset, mixed $value)
     {
         throw new ImmutableResultViolationException(sprintf('Result is immutable, violation at offset %s', $offset));
     }
@@ -71,16 +77,12 @@ abstract class AbstractItem implements \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
-        return new \ArrayIterator($this->data);
+        return new ArrayIterator($this->data);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
+    
     protected function isKeyExists(string $key): bool
     {
         return array_key_exists($key, $this->data);
