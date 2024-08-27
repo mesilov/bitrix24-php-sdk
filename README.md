@@ -345,7 +345,7 @@ in this project.
 
 ## Sponsors
 
-Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)
+[boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)
 
 ## Need custom Bitrix24 application?
 
