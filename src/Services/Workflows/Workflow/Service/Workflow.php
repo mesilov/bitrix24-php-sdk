@@ -1,17 +1,29 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Workflows\Workflow\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\Workflows;
 use Psr\Log\LoggerInterface;
-
+#[ApiServiceMetadata(new Scope(['bizproc']))]
 class Workflow extends AbstractService
 {
     public function __construct(
@@ -32,6 +44,11 @@ class Workflow extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_kill.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.kill',
+        'https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_kill.php',
+        'Deletes a launched workflow'
+    )]
     public function kill(string $workflowId): Workflows\Workflow\Result\WorkflowKillResult
     {
         return new Workflows\Workflow\Result\WorkflowKillResult($this->core->call('bizproc.workflow.kill', [
@@ -45,6 +62,11 @@ class Workflow extends AbstractService
      * @return Workflows\Workflow\Result\WorkflowTerminationResult
      * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_terminate.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.terminate',
+        'https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_terminate.php',
+        'Stops an active workflow.'
+    )]
     public function terminate(string $workflowId, string $message): Workflows\Workflow\Result\WorkflowTerminationResult
     {
         return new Workflows\Workflow\Result\WorkflowTerminationResult($this->core->call('bizproc.workflow.terminate', [
@@ -62,6 +84,11 @@ class Workflow extends AbstractService
      * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_start.php
      *
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.start',
+        'https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_start.php',
+        'Launches a workflow'
+    )]
     public function start(
         Workflows\Common\DocumentType $workflowDocumentType,
         int                           $bizProcTemplateId,
@@ -124,6 +151,11 @@ class Workflow extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_instances.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.workflow.instances',
+        'https://training.bitrix24.com/rest_help/workflows/workflow/bizproc_workflow_instances.php',
+        'returns list of launched workflows'
+    )]
     public function instances(
         array $select = ['ID', 'MODIFIED', 'OWNED_UNTIL', 'MODULE_ID', 'ENTITY', 'DOCUMENT_ID', 'STARTED', 'STARTED_BY', 'TEMPLATE_ID'],
         array $order = ['STARTED' => 'DESC'],

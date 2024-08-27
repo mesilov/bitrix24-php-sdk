@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Workflows\Activity\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -16,7 +28,7 @@ use Bitrix24\SDK\Services\Workflows\Activity\Result\AddedMessageToLogResult;
 use Bitrix24\SDK\Services\Workflows\Activity\Result\UpdateActivityResult;
 use Bitrix24\SDK\Services\Workflows\Common\WorkflowDocumentType;
 use Psr\Log\LoggerInterface;
-
+#[ApiServiceMetadata(new Scope(['bizproc']))]
 class Activity extends AbstractService
 {
     public function __construct(
@@ -35,6 +47,11 @@ class Activity extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_list.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.activity.log',
+        'https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_list.php',
+        'This method records data in the workflow log.'
+    )]
     public function log(string $eventToken, string $message): Workflows\Activity\Result\AddedMessageToLogResult
     {
         return new Workflows\Activity\Result\AddedMessageToLogResult($this->core->call('bizproc.activity.log', [
@@ -50,6 +67,11 @@ class Activity extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_list.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.activity.list',
+        'https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_list.php',
+        'This method returns list of activities, installed by the application.'
+    )]
     public function list(): Workflows\Activity\Result\WorkflowActivitiesResult
     {
         return new Workflows\Activity\Result\WorkflowActivitiesResult($this->core->call('bizproc.activity.list'));
@@ -75,6 +97,11 @@ class Activity extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_add.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.activity.add',
+        'https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_add.php',
+        'Adds new activity to a workflow.'
+    )]
     public function add(
         string                                $code,
         string                                $handlerUrl,
@@ -112,6 +139,11 @@ class Activity extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_delete.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.activity.delete',
+        'https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_delete.php',
+        'This method deletes an activity.'
+    )]
     public function delete(string $activityCode): DeletedItemResult
     {
         return new DeletedItemResult(
@@ -140,6 +172,11 @@ class Activity extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_update.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.activity.update',
+        'https://training.bitrix24.com/rest_help/workflows/app_activities/bizproc_activity_update.php',
+        'This method allows to update activity fields. Method parameters are similar to bizproc.activity.add.'
+    )]
     public function update(
         string                                 $code,
         ?string                                $handlerUrl,

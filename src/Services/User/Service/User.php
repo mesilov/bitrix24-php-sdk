@@ -1,9 +1,21 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\User\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -14,6 +26,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\User\Result\UserResult;
 use Bitrix24\SDK\Services\User\Result\UsersResult;
 
+#[ApiServiceMetadata(new Scope(['user']))]
 class User extends AbstractService
 {
     /**
@@ -22,6 +35,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_fields.php
      */
+    #[ApiEndpointMetadata(
+        'user.fields',
+        'https://training.bitrix24.com/rest_help/users/user_fields.php',
+        'Get user entity fields'
+    )]
     public function fields(): FieldsResult
     {
         return new FieldsResult($this->core->call('user.fields'));
@@ -33,6 +51,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_current.php
      */
+    #[ApiEndpointMetadata(
+        'user.current',
+        'https://training.bitrix24.com/rest_help/users/user_current.php',
+        'Get current user'
+    )]
     public function current(): UserResult
     {
         return new UserResult($this->core->call('user.current'));
@@ -46,6 +69,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_add.php
      */
+    #[ApiEndpointMetadata(
+        'user.add',
+        'https://training.bitrix24.com/rest_help/users/user_add.php',
+        'Invites a user. Available only for users with invitation permissions, usually an administrator. Sends a standard account invitation to the user on success.'
+    )]
     public function add(array $fields, string $messageText = ''): AddedItemResult
     {
         if (!array_key_exists('EXTRANET', $fields)) {
@@ -68,6 +96,11 @@ class User extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'user.get',
+        'https://training.bitrix24.com/rest_help/users/user_get.php',
+        'Get user by id'
+    )]
     public function get(array $order, array $filter, bool $isAdminMode = false): UsersResult
     {
         if ($order === []) {
@@ -88,6 +121,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_update.php
      */
+    #[ApiEndpointMetadata(
+        'user.update',
+        'https://training.bitrix24.com/rest_help/users/user_get.php',
+        'Updates user information. Available only for users with invitation permissions.'
+    )]
     public function update(int $userId, array $fields): UpdatedItemResult
     {
         return new UpdatedItemResult($this->core->call('user.update', array_merge(
@@ -105,6 +143,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/users/user_search.php
      */
+    #[ApiEndpointMetadata(
+        'user.search',
+        'https://training.bitrix24.com/rest_help/users/user_search.php',
+        'This method is used to retrieve list of users with expedited personal data search.'
+    )]
     public function search(array $filterFields): UsersResult
     {
         return new UsersResult($this->core->call('user.search', $filterFields));

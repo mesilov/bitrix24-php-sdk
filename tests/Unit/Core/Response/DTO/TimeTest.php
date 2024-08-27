@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Core\Response\DTO;
@@ -23,14 +32,14 @@ class TimeTest extends TestCase
     {
         $time = Time::initFromResponse($result);
 
-        $this->assertEquals($result['start'], $time->getStart());
-        $this->assertEquals($result['finish'], $time->getFinish());
-        $this->assertEquals($result['duration'], $time->getDuration());
-        $this->assertEquals($result['processing'], $time->getProcessing());
-        $this->assertEquals($result['operating'], $time->getOperating());
-        $this->assertEquals($result['operating_reset_at'], $time->getOperatingResetAt());
-        $this->assertEquals($result['date_start'], $time->getDateStart()->format(\DATE_ATOM));
-        $this->assertEquals($result['date_finish'], $time->getDateFinish()->format(\DATE_ATOM));
+        $this->assertEquals($result['start'], $time->start);
+        $this->assertEquals($result['finish'], $time->finish);
+        $this->assertEquals($result['duration'], $time->duration);
+        $this->assertEquals($result['processing'], $time->processing);
+        $this->assertEquals($result['operating'], $time->operating);
+        $this->assertEquals($result['operating_reset_at'], $time->operatingResetAt);
+        $this->assertEquals($result['date_start'], $time->dateStart->format(\DATE_ATOM));
+        $this->assertEquals($result['date_finish'], $time->dateFinish->format(\DATE_ATOM));
     }
 
     public static function timingsDataProvider(): Generator

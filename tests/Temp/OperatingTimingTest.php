@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Core;
@@ -27,12 +36,12 @@ class OperatingTimingTest extends TestCase
      */
     public function testOperatingTiming(): void
     {
-        // С версии модуля Rest 22.0.0 в облачной версии Битрикс24 во всех ответах rest запросов в массиве time с
-        // дополнительной информацией о времени выполнения запроса добавлен дополнительный ключ operating, который
-        // говорит о времени выполнения запроса к методу конкретным приложением. Данные о времени выполнения запросов к
-        // методу суммируются. При превышении времени выполнения запросов сверх 480 секунд в рамках прошедших 10 минут
-        // данный метод блокируется для приложения. При этом все остальные методы продолжают работать.
-        // Ключ operating_reset_at возвращает timestamp в которое будет высвобождена часть лимита на данный метод.
+        // Since the Rest module version 22.0.0 in the cloud version of Bitrix24 in all rest request responses in the time array with
+        // with additional information about the request execution time, an additional operating key has been added, which
+        // talks about the execution time of a request to a method by a specific application. Query execution time data
+        // the method is summed up. If the query execution time exceeds 480 seconds within the past 10 minutes
+        // this method is blocked for the application. However, all other methods continue to work.
+        // The operating_reset_at key returns the timestamp at which part of the limit for this method will be released.
 
         //example:
         //911 |operating   74.438894271851  |cur_time  2023-04-15 16:56:46 |op_reset_at 1681567606    →   2023-04-15 14:06:46
@@ -46,9 +55,9 @@ class OperatingTimingTest extends TestCase
 //        $contactsToUpdate = $this->getContactsUpdateCommand(15000);
 //
 //
-//        //todo считать количество контактов для обновления и считать количество контактов которые обновили, если не совпало, то падаем с ошибкой
-//
-//        // обновляем контакты в батч-режиме
+// //todo count the number of contacts to update and count the number of contacts that were updated, if it doesn’t match, then we crash with an error
+
+
 //        $cnt = 0;
 //        foreach ($this->contactService->batch->update($contactsToUpdate) as $b24ContactId => $contactUpdateResult) {
 //            $cnt++;
@@ -71,11 +80,9 @@ class OperatingTimingTest extends TestCase
 //            sprintf('updated contacts count %s not equal to expected %s cmd items', $cnt, count($contactsToUpdate))
 //        );
 
-        // шаг 1 - выброс корректного исключения, что мол упали из за блокировки метода
-        // проблемы: - можно потерять часть данных при обновлении, т.к. мы не знаем, какие контакты в клиентском коде обновились, а какие нет или знаем?
-
-// todo уточнение, по возможности возвращать в исключении остаток данных, которые не успели обновиться
-
+        // step 1 - throwing a correct exception, saying that the method failed because the method was blocked
+        // problems: - you can lose some data when updating, because We don’t know which contacts in the client code have been updated and which ones haven’t, or do we know?
+        // todo clarification, if possible, return in an exception the remainder of the data that has not yet been updated
 //[2023-04-15T14:17:57.881428+00:00] integration-test.INFO: getResponseData.responseBody {"responseBody":
 //{"result":
 //{
@@ -110,10 +117,9 @@ class OperatingTimingTest extends TestCase
 //[2023-04-15T14:37:47.371279+00:00] integration-test.DEBUG: handleApiLevelErrors.start [] {"file":"/Users/mesilov/work/msk03-dev/loyalty/bitrix24-php-sdk/src/Core/Response/Response.php","line":152,"class":"Bitrix24\\SDK\\Core\\Response\\Response","function":"handleApiLevelErrors","memory_usage":"36 MB"}
 
 
-        // шаг 2 - сделать отдельные стратегии с логикой для батча и придумать, как может быть
-        // - 2.1 ожидание разблокировки метода без завершения работы батча, т.е. скрипт будет висеть 10 минут, потом попробует продолжить работу, такое можно делать толкьо осознавая последсвия
-        // - 2.2 выброс события \ вызов обработчика за N секунд до блокировки метода, т.е делегируем логику обработки в клиентский код
-
+        // step 2 - make separate strategies with logic for the batch and figure out how it could be
+        // - 2.1 waiting for the method to be unlocked without completing the batch, i.e. the script will hang for 10 minutes, then try to continue working, this can only be done if you are aware of the consequences
+        // - 2.2 event release \ handler call N seconds before the method is blocked, i.e. we delegate the processing logic to the client code
 
     }
 

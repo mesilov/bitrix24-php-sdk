@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Lead\Service;
 
+use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
+use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\AddedItemBatchResult;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
@@ -12,11 +24,7 @@ use Bitrix24\SDK\Services\CRM\Deal\Result\DealItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class Batch
- *
- * @package Bitrix24\SDK\Services\CRM\Lead\Service
- */
+#[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
     protected BatchOperationsInterface $batch;
@@ -130,6 +138,11 @@ class Batch
      * @return Generator<int, DealItemResult>
      * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.lead.list',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_list.php',
+        'Batch list method for leads'
+    )]
     public function list(array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         $this->log->debug(
@@ -193,9 +206,14 @@ class Batch
      *   UTM_TERM?: string,
      *   }> $leads
      *
-     * @return Generator<int, AddedItemBatchResult>|AddedItemBatchResult[]
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @return Generator<int, AddedItemBatchResult>
+     * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.lead.add',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_add.php',
+        'Batch adding leads'
+    )]
     public function add(array $leads): Generator
     {
         $items = [];
@@ -214,9 +232,14 @@ class Batch
      *
      * @param int[] $leadId
      *
-     * @return \Generator|\Bitrix24\SDK\Core\Contracts\DeletedItemResultInterface[]
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
+     * @return Generator<int, DeletedItemBatchResult>
+     * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.lead.delete',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_delete.php',
+        'Batch delete leads'
+    )]
     public function delete(array $leadId): Generator
     {
         foreach ($this->batch->deleteEntityItems('crm.lead.delete', $leadId) as $key => $item) {

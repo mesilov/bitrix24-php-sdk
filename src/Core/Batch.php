@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
@@ -524,7 +533,7 @@ class Batch implements BatchOperationsInterface
                 [
                     'batchCommandItemNumber' => $queryCnt,
                     'nextItem' => $queryResultData->getPagination()->getNextItem(),
-                    'durationTime' => $queryResultData->getTime()->getDuration(),
+                    'durationTime' => $queryResultData->getTime()->duration,
                 ]
             );
 
@@ -691,7 +700,7 @@ class Batch implements BatchOperationsInterface
                 [
                     'batchCommandItemNumber' => $queryCnt,
                     'nextItem' => $queryResultData->getPagination()->getNextItem(),
-                    'durationTime' => $queryResultData->getTime()->getDuration(),
+                    'durationTime' => $queryResultData->getTime()->duration,
                 ]
             );
             // iterate items in batch query result

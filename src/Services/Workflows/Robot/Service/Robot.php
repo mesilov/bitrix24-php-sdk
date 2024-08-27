@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Workflows\Robot\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
@@ -16,7 +28,7 @@ use Bitrix24\SDK\Services\Workflows\Robot\Result\UpdateRobotResult;
 use Bitrix24\SDK\Services\Workflows\Template\Service\Batch;
 use Psr\Log\LoggerInterface;
 
-
+#[ApiServiceMetadata(new Scope(['bizproc']))]
 class Robot extends AbstractService
 {
     public function __construct(
@@ -37,6 +49,11 @@ class Robot extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_add.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.robot.add',
+        'https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_add.php',
+        'Registers new automation rule.'
+    )]
     public function add(
         string $code,
         string $handlerUrl,
@@ -67,6 +84,11 @@ class Robot extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_list.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.robot.list',
+        'https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_list.php',
+        'This method returns list of automation rules, registered by the application.'
+    )]
     public function list(): Workflows\Robot\Result\WorkflowRobotsResult
     {
         return new Workflows\Robot\Result\WorkflowRobotsResult($this->core->call('bizproc.robot.list'));
@@ -80,6 +102,11 @@ class Robot extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_delete.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.robot.delete',
+        'https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_delete.php',
+        'This method deletes registered automation rule.'
+    )]
     public function delete(string $robotCode): DeletedItemResult
     {
         return new DeletedItemResult(
@@ -98,6 +125,11 @@ class Robot extends AbstractService
      * @throws TransportException
      * @see  https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_update.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.robot.update',
+        'https://training.bitrix24.com/rest_help/workflows/app_automation_rules/bizproc_robot_update.php',
+        'updates fields of automation rules'
+    )]
     public function update(
         string  $code,
         ?string $handlerUrl = null,

@@ -1,15 +1,24 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Result;
 
 use Bitrix24\SDK\Services\CRM\Common\Result\AbstractCrmItem;
-use DateTimeInterface;
+use Carbon\CarbonImmutable;
+use Money\Currency;
 
 /**
  * Class DealItemResult
- *
  * @property-read int $ID
  * @property-read string|null $TITLE deal title
  * @property-read string|null $TYPE_ID
@@ -19,16 +28,16 @@ use DateTimeInterface;
  * @property-read bool|null $IS_NEW
  * @property-read bool|null $IS_RECURRING
  * @property-read string|null $PROBABILITY
- * @property-read string|null $CURRENCY_ID
+ * @property-read Currency|null $CURRENCY_ID
  * @property-read string|null $OPPORTUNITY
  * @property-read bool|null $IS_MANUAL_OPPORTUNITY
  * @property-read string|null $TAX_VALUE
  * @property-read int|null $LEAD_ID
  * @property-read int|null $COMPANY_ID
- * @property-read int|null $CONTACT_ID
+ * @property-read int|null $CONTACT_ID deprecated
  * @property-read int|null $QUOTE_ID
- * @property-read DateTimeInterface|null $BEGINDATE
- * @property-read DateTimeInterface|null $CLOSEDATE
+ * @property-read CarbonImmutable|null $BEGINDATE
+ * @property-read CarbonImmutable|null $CLOSEDATE
  * @property-read bool|null $OPENED
  * @property-read bool|null $CLOSED
  * @property-read string|null $COMMENTS

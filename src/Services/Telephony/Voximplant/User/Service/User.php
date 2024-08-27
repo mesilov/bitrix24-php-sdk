@@ -1,28 +1,29 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Telephony\Voximplant\User\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
-use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
-use Bitrix24\SDK\Core\Result\DeletedItemResult;
-use Bitrix24\SDK\Core\Result\EmptyResult;
-use Bitrix24\SDK\Core\Result\UpdatedItemResult;
 use Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult;
 use Bitrix24\SDK\Services\AbstractService;
-use Bitrix24\SDK\Services\Telephony\Common\PbxType;
-use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLineAddedResult;
-use Bitrix24\SDK\Services\Telephony\ExternalLine\Result\ExternalLinesResult;
-use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineAddedResult;
-use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLinesResult;
-use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineStatusItemResult;
-use Bitrix24\SDK\Services\Telephony\Voximplant\Sip\Result\SipLineStatusResult;
 use Bitrix24\SDK\Services\Telephony\Voximplant\User\Result\VoximplantUserSettingsResult;
 use Psr\Log\LoggerInterface;
-
+#[ApiServiceMetadata(new Scope(['telephony']))]
 class User extends AbstractService
 {
     public function __construct(
@@ -43,6 +44,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_user_deactivatePhone.php
      */
+    #[ApiEndpointMetadata(
+        'voximplant.user.deactivatePhone',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_user_deactivatePhone.php',
+        'This method disables an indicator of SIP-phone availability. Method checks the availability of the access permissions to modify users.'
+    )]
     public function deactivatePhone(int $userId): UserInterfaceDialogCallResult
     {
         return new UserInterfaceDialogCallResult($this->core->call('voximplant.user.deactivatePhone', [
@@ -59,6 +65,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_user_activatePhone.php
      */
+    #[ApiEndpointMetadata(
+        'voximplant.user.activatePhone',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_user_activatePhone.php',
+        'This method raises the event of SIP-phone availability for an employee. Method checks the availability of the access permissions to modify users.'
+    )]
     public function activatePhone(int $userId): UserInterfaceDialogCallResult
     {
         return new UserInterfaceDialogCallResult($this->core->call('voximplant.user.activatePhone', [
@@ -76,6 +87,11 @@ class User extends AbstractService
      * @throws TransportException
      * @link https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_user_get.php
      */
+    #[ApiEndpointMetadata(
+        'voximplant.user.get',
+        'https://training.bitrix24.com/rest_help/scope_telephony/voximplant/voximplant_user_get.php',
+        'This method returns user settings.'
+    )]
     public function get(array $userIds): VoximplantUserSettingsResult
     {
         return new VoximplantUserSettingsResult($this->core->call('voximplant.user.get',

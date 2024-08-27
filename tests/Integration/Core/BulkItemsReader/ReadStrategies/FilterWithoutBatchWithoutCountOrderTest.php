@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Core\BulkItemsReader\ReadStrategies;
@@ -8,6 +17,7 @@ use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies\FilterWithoutBatchWithoutCountOrder;
 use Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface;
 use Bitrix24\SDK\Services\ServiceBuilder;
+use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -93,7 +103,7 @@ class FilterWithoutBatchWithoutCountOrderTest extends TestCase
         // add contact
         $this->contactId = $this->serviceBuilder->getCRMScope()->contact()->add(
             [
-                'NAME'   => sprintf('first_%s', time()),
+                'NAME' => sprintf('first_%s', time()),
                 'SECOND' => sprintf('second_%s', time()),
             ]
         )->getId();
@@ -105,11 +115,11 @@ class FilterWithoutBatchWithoutCountOrderTest extends TestCase
         // add deals to bitrix24
         for ($i = 0; $i < self::DEMO_DATA_ARRAY_SIZE_MORE_THAN_ONE_BATCH_PAGE_SIZE; $i++) {
             $rawDeals[] = [
-                'TITLE'                 => sprintf('deal-%s', $i),
+                'TITLE' => sprintf('deal-%s', $i),
                 'IS_MANUAL_OPPORTUNITY' => 'Y',
-                'OPPORTUNITY'           => sprintf('%s.00', random_int(100, 40000)),
-                'CURRENCY_ID'           => 'RUB',
-                'CONTACT_ID'            => $this->contactId,
+                'OPPORTUNITY' => sprintf('%s.00', random_int(100, 40000)),
+                'CURRENCY_ID' => DemoDataGenerator::getCurrency()->getCode(),
+                'CONTACT_ID' => $this->contactId,
             ];
         }
         foreach ($this->serviceBuilder->getCRMScope()->deal()->batch->add($rawDeals) as $addDealResult) {

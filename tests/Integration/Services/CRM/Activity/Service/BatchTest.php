@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Activity\Service;
@@ -8,6 +17,7 @@ use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\CRM\Activity\Service\Activity;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
+use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 
@@ -43,7 +53,7 @@ class BatchTest extends TestCase
                 'COMMUNICATIONS'   => [
                     0 => [
                         'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];
@@ -89,7 +99,7 @@ class BatchTest extends TestCase
                 'COMMUNICATIONS'   => [
                     0 => [
                         'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];
@@ -146,7 +156,7 @@ class BatchTest extends TestCase
                 'COMMUNICATIONS'   => [
                     0 => [
                         'TYPE'  => 'PHONE',
-                        'VALUE' => '+79780194444',
+                        'VALUE' => DemoDataGenerator::getMobilePhone()->getNationalNumber(),
                     ],
                 ],
             ];

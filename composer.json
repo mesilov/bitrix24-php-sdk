@@ -33,11 +33,13 @@
     "darsyn/ip": "^4 || ^5",
     "nesbot/carbon": "^3",
     "moneyphp/money": "^3 || ^4",
+    "mesilov/moneyphp-percentage": "^0.2",
     "symfony/http-client": "^6 || ^7",
     "symfony/console": "^6 || ^7",
     "symfony/dotenv": "^6 || ^7",
     "symfony/filesystem": "^6 || ^7",
     "symfony/mime": "^6 || ^7",
+    "symfony/finder": "^6 || ^7",
     "symfony/http-client-contracts": "^2 || ^3",
     "symfony/http-foundation": "^6 || ^7",
     "symfony/event-dispatcher": "^6 || ^7",
@@ -53,7 +55,8 @@
     "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
     "symfony/debug-bundle": "^6 || ^7",
-    "symfony/stopwatch": "^6 || ^7"
+    "symfony/stopwatch": "^6 || ^7",
+    "typhoon/reflection": "^0.4"
   },
   "autoload": {
     "psr-4": {

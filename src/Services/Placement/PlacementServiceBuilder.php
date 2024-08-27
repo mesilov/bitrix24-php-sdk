@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Placement;
@@ -10,9 +19,6 @@ use Bitrix24\SDK\Services\Placement\Service\UserFieldType;
 
 class PlacementServiceBuilder extends AbstractServiceBuilder
 {
-    /**
-     * @return Placement
-     */
     public function placement(): Placement
     {
         if (!isset($this->serviceCache[__METHOD__])) {
@@ -22,9 +28,6 @@ class PlacementServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    /**
-     * @return \Bitrix24\SDK\Services\Placement\Service\UserFieldType
-     */
     public function userfieldtype(): UserFieldType
     {
         if (!isset($this->serviceCache[__METHOD__])) {

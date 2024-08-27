@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Workflows\Task\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Services\AbstractService;
@@ -17,7 +29,7 @@ use Bitrix24\SDK\Services\Workflows\Task\Result\WorkflowTaskCompleteResult;
 use Carbon\CarbonImmutable;
 use Psr\Log\LoggerInterface;
 use Bitrix24\SDK\Services\Workflows\Task\Result\WorkflowTasksResult;
-
+#[ApiServiceMetadata(new Scope(['bizproc']))]
 class Task extends AbstractService
 {
     public function __construct(
@@ -43,6 +55,11 @@ class Task extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/workflows_tasks/bizproc_task_complete.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.task.complete',
+        'https://training.bitrix24.com/rest_help/workflows/workflows_tasks/bizproc_task_complete.php',
+        'Complete workflow task'
+    )]
     public function complete(int $taskId, WorkflowTaskCompleteStatusType $status, string $comment, ?array $taskFields = null): WorkflowTaskCompleteResult
     {
         return new WorkflowTaskCompleteResult($this->core->call('bizproc.task.complete', [
@@ -108,6 +125,11 @@ class Task extends AbstractService
      * @throws TransportException
      * @see https://training.bitrix24.com/rest_help/workflows/workflows_tasks/bizproc_task_list.php
      */
+    #[ApiEndpointMetadata(
+        'bizproc.task.list',
+        'https://training.bitrix24.com/rest_help/workflows/workflows_tasks/bizproc_task_list.php',
+        'List of workflow tasks'
+    )]
     public function list(
         array $order = ['ID' => 'DESC'],
         array $filter = [],

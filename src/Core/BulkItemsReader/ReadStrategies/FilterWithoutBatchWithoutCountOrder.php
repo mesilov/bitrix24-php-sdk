@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies;
@@ -113,7 +122,7 @@ class FilterWithoutBatchWithoutCountOrder implements BulkItemsReaderInterface
             }
 
             $this->log->debug('FilterWithoutBatchWithoutCountOrder.step', [
-                'duration'         => $resultPage->getResponseData()->getTime()->getDuration(),
+                'duration'         => $resultPage->getResponseData()->getTime()->duration,
                 'currentElementId' => $currentElementId,
                 'lastElementId'    => $lastElementId,
             ]);

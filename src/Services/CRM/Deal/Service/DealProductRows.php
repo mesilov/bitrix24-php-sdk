@@ -1,9 +1,21 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Deal\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\UpdatedItemResult;
@@ -12,11 +24,7 @@ use Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult;
 use Bitrix24\SDK\Services\CRM\Deal\Result\DealResult;
 use Money\Currency;
 
-/**
- * Class DealProductRows
- *
- * @package Bitrix24\SDK\Services\CRM\Deals\Service
- */
+#[ApiServiceMetadata(new Scope(['crm']))]
 class DealProductRows extends AbstractService
 {
     /**
@@ -25,11 +33,15 @@ class DealProductRows extends AbstractService
      * @link https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_get.php
      *
      * @param int $dealId
-     * @param \Money\Currency|null $currency
-     * @return \Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemsResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @param Currency|null $currency
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.productrows.get',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_get.php',
+        'Returns products inside the specified deal.'
+    )]
     public function get(int $dealId, Currency $currency = null): DealProductRowItemsResult
     {
         if ($currency === null) {
@@ -88,6 +100,11 @@ class DealProductRows extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.deal.productrows.set',
+        'https://training.bitrix24.com/rest_help/crm/deals/crm_deal_productrows_set.php',
+        'Creates or updates product entries inside the specified deal.'
+    )]
     public function set(int $dealId, array $productRows): UpdatedItemResult
     {
         return new UpdatedItemResult(
