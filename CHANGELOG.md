@@ -1,5 +1,8 @@
 # bitrix24-php-sdk change log
 
+## 2.0 — 28.08.2024
+* bump sdk version
+
 ## 2.0-beta.3 — 15.08.2024
 
 ### Added
