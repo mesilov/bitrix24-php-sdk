@@ -23,7 +23,7 @@ use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ServiceBuilderFactory
 {
