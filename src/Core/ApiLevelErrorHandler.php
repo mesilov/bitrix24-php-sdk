@@ -1,38 +1,49 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
 
+use Bitrix24\SDK\Core\Exceptions\AuthForbiddenException;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\MethodNotFoundException;
 use Bitrix24\SDK\Core\Exceptions\OperationTimeLimitExceededException;
 use Bitrix24\SDK\Core\Exceptions\QueryLimitExceededException;
+use Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException;
+use Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException;
+use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotAlreadyInstalledException;
+use Bitrix24\SDK\Services\Workflows\Exceptions\ActivityOrRobotValidationFailureException;
+use Bitrix24\SDK\Services\Workflows\Exceptions\WorkflowTaskAlreadyCompletedException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Handle api-level errors and throw related exception
- *
- * Class ApiLevelErrorHandler
- *
- * @package Bitrix24\SDK\Core
  */
 class ApiLevelErrorHandler
 {
-    protected LoggerInterface $logger;
     protected const ERROR_KEY = 'error';
+
     protected const RESULT_KEY = 'result';
+
     protected const RESULT_ERROR_KEY = 'result_error';
+
     protected const ERROR_DESCRIPTION_KEY = 'error_description';
 
     /**
      * ApiLevelErrorHandler constructor.
-     *
-     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(protected LoggerInterface $logger)
     {
-        $this->logger = $logger;
     }
 
     /**
@@ -83,16 +94,46 @@ class ApiLevelErrorHandler
             $batchErrorPrefix = sprintf(' batch command id: %s', $batchCommandId);
         }
 
+        // todo send issues to bitrix24
+        // fix errors without error_code responses
+        if ($errorCode === '' && strtolower($errorDescription) === strtolower('You can delete ONLY templates created by current application')) {
+            $errorCode = 'bizproc_workflow_template_access_denied';
+        }
+
+        if ($errorCode === '' && strtolower($errorDescription) === strtolower('No fields to update.')) {
+            $errorCode = 'bad_request_no_fields_to_update';
+        }
+
+        if ($errorCode === '' && strtolower($errorDescription) === strtolower('User is not found or is not active')) {
+            $errorCode = 'user_not_found_or_is_not_active';
+        }
+
         switch ($errorCode) {
+            case 'error_task_completed':
+                throw new WorkflowTaskAlreadyCompletedException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'bad_request_no_fields_to_update':
+                throw new InvalidArgumentException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'access_denied':
+            case 'bizproc_workflow_template_access_denied':
+                throw new AuthForbiddenException(sprintf('%s - %s', $errorCode, $errorDescription));
             case 'query_limit_exceeded':
                 throw new QueryLimitExceededException(sprintf('query limit exceeded - too many requests %s', $batchErrorPrefix));
             case 'error_method_not_found':
                 throw new MethodNotFoundException(sprintf('api method not found %s %s', $errorDescription, $batchErrorPrefix));
             case 'operation_time_limit':
                 throw new OperationTimeLimitExceededException(sprintf('operation time limit exceeded %s %s', $errorDescription, $batchErrorPrefix));
+            case 'error_activity_already_installed':
+                throw new ActivityOrRobotAlreadyInstalledException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'error_activity_validation_failure':
+                throw new ActivityOrRobotValidationFailureException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'user_not_found_or_is_not_active':
+                throw new UserNotFoundOrIsNotActiveException(sprintf('%s - %s', $errorCode, $errorDescription));
+            case 'wrong_auth_type':
+                throw new WrongAuthTypeException(sprintf('%s - %s', $errorCode, $errorDescription));
             default:
                 throw new BaseException(sprintf('%s - %s %s', $errorCode, $errorDescription, $batchErrorPrefix));
         }
+
         //            switch (strtoupper(trim($apiResponse['error']))) {
 //                case 'EXPIRED_TOKEN':
 //                    throw new Bitrix24TokenIsExpiredException($errorMsg);

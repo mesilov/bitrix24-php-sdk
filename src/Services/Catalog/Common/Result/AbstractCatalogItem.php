@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\Catalog\Common\Result;
@@ -7,23 +16,19 @@ namespace Bitrix24\SDK\Services\Catalog\Common\Result;
 use Bitrix24\SDK\Core\Result\AbstractItem;
 use Bitrix24\SDK\Services\Catalog\Common\ProductType;
 use Bitrix24\SDK\Services\CRM\Userfield\Exceptions\UserfieldNotFoundException;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Money\Currency;
-use Money\Money;
 
 abstract class AbstractCatalogItem extends AbstractItem
 {
     private const CRM_USERFIELD_PREFIX = 'UF_CRM_';
 
-    /**
-     * @var Currency
-     */
     private Currency $currency;
 
     public function __construct(array $data, Currency $currency = null)
     {
         parent::__construct($data);
-        if ($currency !== null) {
+        if ($currency instanceof Currency) {
             $this->currency = $currency;
         }
     }
@@ -31,7 +36,7 @@ abstract class AbstractCatalogItem extends AbstractItem
     /**
      * @param int|string $offset
      *
-     * @return bool|DateTimeImmutable|int|mixed|null
+     * @return bool|CarbonImmutable|int|mixed|null
      */
 
     public function __get($offset)
@@ -46,6 +51,7 @@ abstract class AbstractCatalogItem extends AbstractItem
                 if ($this->data[$offset] !== null) {
                     return $this->data[$offset] === 'Y';
                 }
+
                 return null;
             case 'code':
             case 'detailText':
@@ -66,13 +72,14 @@ abstract class AbstractCatalogItem extends AbstractItem
                 if ($this->data[$offset] !== '' && $this->data[$offset] !== null) {
                     return (int)$this->data[$offset];
                 }
+
                 break;
             case 'dateActiveFrom':
             case 'dateActiveTo':
             case 'dateCreate':
             case 'timestampX':
                 if ($this->data[$offset] !== '') {
-                    return DateTimeImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
+                    return CarbonImmutable::createFromFormat(DATE_ATOM, $this->data[$offset]);
                 }
 
                 return null;
@@ -86,7 +93,6 @@ abstract class AbstractCatalogItem extends AbstractItem
     /**
      * get userfield by field name
      *
-     * @param string $fieldName
      *
      * @return mixed|null
      * @throws UserfieldNotFoundException
@@ -96,6 +102,7 @@ abstract class AbstractCatalogItem extends AbstractItem
         if (!str_starts_with($fieldName, self::CRM_USERFIELD_PREFIX)) {
             $fieldName = self::CRM_USERFIELD_PREFIX . $fieldName;
         }
+
         if (!$this->isKeyExists($fieldName)) {
             throw new UserfieldNotFoundException(sprintf('crm userfield not found by field name %s', $fieldName));
         }

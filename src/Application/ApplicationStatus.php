@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Application;
@@ -10,106 +19,103 @@ use Symfony\Component\HttpFoundation\Request;
 class ApplicationStatus
 {
     private const STATUS_SHORT_FREE = 'F';
+
     private const STATUS_SHORT_DEMO = 'D';
+
     private const STATUS_SHORT_TRIAL = 'T';
+
     private const STATUS_SHORT_PAID = 'P';
+
     private const STATUS_SHORT_LOCAL = 'L';
+
     private const STATUS_SHORT_SUBSCRIPTION = 'S';
-    private string $statusCode;
+
+    private readonly string $statusCode;
 
     /**
-     * @param string $statusShortCode
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(string $statusShortCode)
     {
-        switch ($statusShortCode) {
-            case self::STATUS_SHORT_FREE:
-                $this->statusCode = 'free';
-                break;
-            case self::STATUS_SHORT_DEMO:
-                $this->statusCode = 'demo';
-                break;
-            case self::STATUS_SHORT_TRIAL:
-                $this->statusCode = 'trial';
-                break;
-            case self::STATUS_SHORT_PAID:
-                $this->statusCode = 'paid';
-                break;
-            case self::STATUS_SHORT_LOCAL:
-                $this->statusCode = 'local';
-                break;
-            case self::STATUS_SHORT_SUBSCRIPTION:
-                $this->statusCode = 'subscription';
-                break;
-            default:
-                throw new InvalidArgumentException(
-                    sprintf('unknown application status code %s', $statusShortCode)
-                );
-        }
+        $this->statusCode = match ($statusShortCode) {
+            self::STATUS_SHORT_FREE => 'free',
+            self::STATUS_SHORT_DEMO => 'demo',
+            self::STATUS_SHORT_TRIAL => 'trial',
+            self::STATUS_SHORT_PAID => 'paid',
+            self::STATUS_SHORT_LOCAL => 'local',
+            self::STATUS_SHORT_SUBSCRIPTION => 'subscription',
+            default => throw new InvalidArgumentException(
+                sprintf('unknown application status code %s', $statusShortCode)
+            ),
+        };
     }
 
-    /**
-     * @return bool
-     */
+    public static function free(): self
+    {
+        return new self(self::STATUS_SHORT_FREE);
+    }
+
     public function isFree(): bool
     {
         return 'free' === $this->statusCode;
     }
 
-    /**
-     * @return bool
-     */
     public function isDemo(): bool
     {
         return 'demo' === $this->statusCode;
     }
 
-    /**
-     * @return bool
-     */
+    public static function demo(): self
+    {
+        return new self(self::STATUS_SHORT_DEMO);
+    }
+
     public function isTrial(): bool
     {
         return 'trial' === $this->statusCode;
     }
 
-    /**
-     * @return bool
-     */
+    public static function trial(): self
+    {
+        return new self(self::STATUS_SHORT_TRIAL);
+    }
+
     public function isPaid(): bool
     {
         return 'paid' === $this->statusCode;
     }
 
-    /**
-     * @return bool
-     */
+    public static function paid(): self
+    {
+        return new self(self::STATUS_SHORT_PAID);
+    }
+
     public function isLocal(): bool
     {
         return 'local' === $this->statusCode;
     }
 
-    /**
-     * @return bool
-     */
+    public static function local(): self
+    {
+        return new self(self::STATUS_SHORT_LOCAL);
+    }
+
     public function isSubscription(): bool
     {
         return 'subscription' === $this->statusCode;
     }
 
-    /**
-     * @return string
-     */
+    public static function subscription(): self
+    {
+        return new self(self::STATUS_SHORT_SUBSCRIPTION);
+    }
+
     public function getStatusCode(): string
     {
         return $this->statusCode;
     }
 
     /**
-     * @param Request $request
-     *
-     * @return self
      * @throws InvalidArgumentException
      */
     public static function initFromRequest(Request $request): self
@@ -118,9 +124,6 @@ class ApplicationStatus
     }
 
     /**
-     * @param string $shortStatusCode
-     *
-     * @return self
      * @throws InvalidArgumentException
      */
     public static function initFromString(string $shortStatusCode): self

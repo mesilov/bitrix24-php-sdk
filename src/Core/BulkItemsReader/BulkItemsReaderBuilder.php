@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\BulkItemsReader;
@@ -12,49 +21,29 @@ use Psr\Log\LoggerInterface;
 
 class BulkItemsReaderBuilder
 {
-    protected CoreInterface $core;
-    protected BatchOperationsInterface $batch;
-    protected LoggerInterface $logger;
     protected BulkItemsReaderInterface $readStrategy;
 
-    /**
-     * @param \Bitrix24\SDK\Core\Contracts\CoreInterface            $core
-     * @param \Bitrix24\SDK\Core\Contracts\BatchOperationsInterface $batch
-     * @param \Psr\Log\LoggerInterface                              $logger
-     */
-    public function __construct(CoreInterface $core, BatchOperationsInterface $batch, LoggerInterface $logger)
+    public function __construct(protected CoreInterface $core, protected BatchOperationsInterface $batch, protected LoggerInterface $logger)
     {
-        $this->core = $core;
-        $this->batch = $batch;
-        $this->logger = $logger;
         $this->readStrategy = $this->getOptimalReadStrategy();
     }
 
-    /**
-     * @param \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface $readStrategy
-     *
-     * @return BulkItemsReaderBuilder
-     */
-    public function withReadStrategy(BulkItemsReaderInterface $readStrategy): BulkItemsReaderBuilder
+    
+    public function withReadStrategy(BulkItemsReaderInterface $bulkItemsReader): BulkItemsReaderBuilder
     {
-        $this->readStrategy = $readStrategy;
+        $this->readStrategy = $bulkItemsReader;
 
         return $this;
     }
 
     /**
      * Get optimal read strategy based on integration tests with time and performance benchmarks
-     *
-     * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
      */
     protected function getOptimalReadStrategy(): BulkItemsReaderInterface
     {
         return new FilterWithBatchWithoutCountOrder($this->batch, $this->logger);
     }
 
-    /**
-     * @return \Bitrix24\SDK\Core\Contracts\BulkItemsReaderInterface
-     */
     public function build(): BulkItemsReaderInterface
     {
         return new BulkItemsReader($this->readStrategy, $this->logger);

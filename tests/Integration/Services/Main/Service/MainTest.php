@@ -1,23 +1,36 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\Main\Service;
 
 use Bitrix24\SDK\Core\Credentials\Scope;
+use Bitrix24\SDK\Core\Exceptions\BaseException;
+use Bitrix24\SDK\Core\Exceptions\TransportException;
+use Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException;
 use Bitrix24\SDK\Services\Main\Service\Main;
 use Bitrix24\SDK\Tests\Integration\Fabric;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Main::class)]
 class MainTest extends TestCase
 {
     private Main $mainService;
 
     /**
-     * @covers \Bitrix24\SDK\Services\Main\Service\Main::getServerTime
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function testGetServerTime(): void
     {
@@ -26,22 +39,18 @@ class MainTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\Main\Service\Main::getCurrentUserProfile
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function testGetCurrentUserProfile(): void
     {
-        $profile = $this->mainService->getCurrentUserProfile()->getUserProfile();
-        $this->assertTrue($profile->ADMIN);
+        $userProfileItemResult = $this->mainService->getCurrentUserProfile()->getUserProfile();
+        $this->assertTrue($userProfileItemResult->ADMIN);
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\Main\Service\Main::isCurrentUserHasAdminRights
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function testIsUserIsAdmin(): void
     {
@@ -49,10 +58,8 @@ class MainTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\Main\Service\Main::getMethodAffordability
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function testMethodGetInformationForNonExistsMethod(): void
     {
@@ -61,10 +68,8 @@ class MainTest extends TestCase
     }
 
     /**
-     * @covers \Bitrix24\SDK\Services\Main\Service\Main::getApplicationInfo
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function testApplicationInfo(): void
     {
@@ -72,10 +77,9 @@ class MainTest extends TestCase
     }
 
     /**
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws BaseException
+     * @throws TransportException
+     * @throws UnknownScopeCodeException
      */
     public function testGetAvailableScope(): void
     {
@@ -84,10 +88,9 @@ class MainTest extends TestCase
     }
 
     /**
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws BaseException
+     * @throws TransportException
+     * @throws UnknownScopeCodeException
      */
     public function testGetCurrentScope(): void
     {
@@ -98,18 +101,16 @@ class MainTest extends TestCase
     }
 
     /**
-     * @covers  \Bitrix24\SDK\Services\Main\Service\Main::getAvailableMethods
-     * @testdox test methods list
-     * @return void
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[TestDox('test methods list')]
     public function testGetAvailableMethods(): void
     {
         $this->assertIsArray($this->mainService->getAvailableMethods()->getResponseData()->getResult());
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->mainService = Fabric::getServiceBuilder()->getMainScope()->main();
     }

@@ -2,5 +2,21 @@ parameters:
   level: 5
   paths:
     - src/
+    - tests/Unit/
+    - tests/Integration/Services/Telephony
+    - tests/Integration/Services/User
+    - tests/Integration/Services/UserConsent
+    - tests/Integration/Services/IM
+    - tests/Integration/Services/Catalog
+    - tests/Integration/Services/IMOpenLines
+    - tests/Integration/Services/Main
+    - tests/Integration/Services/Placement
   bootstrapFiles:
     - tests/bootstrap.php
+  parallel:
+    jobSize: 20
+    maximumNumberOfProcesses: 8
+    minimumNumberOfJobsPerProcess: 2
+  editorUrlTitle: '%%relFile%%:%%line%%'
+  editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+  treatPhpDocTypesAsCertain: false

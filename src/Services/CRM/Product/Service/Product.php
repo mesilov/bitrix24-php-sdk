@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Product\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
@@ -16,11 +28,7 @@ use Bitrix24\SDK\Services\CRM\Product\Result\ProductResult;
 use Bitrix24\SDK\Services\CRM\Product\Result\ProductsResult;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class Product
- *
- * @package Bitrix24\SDK\Services\CRM\Product\Service
- */
+#[ApiServiceMetadata(new Scope(['crm']))]
 class Product extends AbstractService
 {
     public Batch $batch;
@@ -71,6 +79,11 @@ class Product extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.product.add',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_add.php',
+        'Add new product'
+    )]
     public function add(array $fields): AddedItemResult
     {
         return new AddedItemResult(
@@ -90,10 +103,15 @@ class Product extends AbstractService
      *
      * @param int $productId
      *
-     * @return \Bitrix24\SDK\Core\Result\DeletedItemResult
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @return DeletedItemResult
+     * @throws BaseException
+     * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.product.delete',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_delete.php',
+        'Delete product by id'
+    )]
     public function delete(int $productId): DeletedItemResult
     {
         return new DeletedItemResult(
@@ -113,10 +131,15 @@ class Product extends AbstractService
      *
      * @param int $id
      *
-     * @return \Bitrix24\SDK\Services\CRM\Product\Result\ProductResult
+     * @return ProductResult
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.product.get',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_get.php',
+        'Returns a product by the product id.'
+    )]
     public function get(int $id): ProductResult
     {
         return new ProductResult($this->core->call('crm.product.get', ['id' => $id]));
@@ -131,6 +154,11 @@ class Product extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.product.fields',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_fields.php',
+        'Returns the description of the product fields, including user fields.'
+    )]
     public function fields(): FieldsResult
     {
         return new FieldsResult($this->core->call('crm.product.fields'));
@@ -150,6 +178,11 @@ class Product extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.product.list',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_list.php',
+        'Get list of product items.'
+    )]
     public function list(array $order, array $filter, array $select, int $startItem = 0): ProductsResult
     {
         return new ProductsResult(
@@ -199,6 +232,11 @@ class Product extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.product.update',
+        'https://training.bitrix24.com/rest_help/crm/products/crm_product_update.php',
+        'Updates the specified (existing) product.'
+    )]
     public function update(int $id, array $fields): UpdatedItemResult
     {
         return new UpdatedItemResult(
@@ -240,8 +278,8 @@ class Product extends AbstractService
      *   } $filter
      *
      * @return int
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function countByFilter(array $filter = []): int
     {

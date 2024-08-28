@@ -1,10 +1,23 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Activity\Service;
 
+use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
@@ -16,11 +29,7 @@ use Bitrix24\SDK\Services\CRM\Activity\Result\ActivitiesResult;
 use Bitrix24\SDK\Services\CRM\Activity\Result\ActivityResult;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class Activity
- *
- * @package Bitrix24\SDK\Services\CRM\Activity\Service
- */
+#[ApiServiceMetadata(new Scope(['crm']))]
 class Activity extends AbstractService
 {
     public Batch $batch;
@@ -28,8 +37,8 @@ class Activity extends AbstractService
     /**
      * Contact constructor.
      *
-     * @param Batch           $batch
-     * @param CoreInterface   $core
+     * @param Batch $batch
+     * @param CoreInterface $core
      * @param LoggerInterface $log
      */
     public function __construct(Batch $batch, CoreInterface $core, LoggerInterface $log)
@@ -46,8 +55,8 @@ class Activity extends AbstractService
      * @param array{
      *   ID?: int,
      *   OWNER_ID?: int,
-     *   OWNER_TYPE_ID?: string,
-     *   TYPE_ID?: string,
+     *   OWNER_TYPE_ID?: int,
+     *   TYPE_ID?: int,
      *   PROVIDER_ID?: string,
      *   PROVIDER_TYPE_ID?: string,
      *   PROVIDER_GROUP_ID?: string,
@@ -93,6 +102,11 @@ class Activity extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.activity.add',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_add.php',
+        'Creates and adds a new activity.'
+    )]
     public function add(array $fields): AddedItemResult
     {
         return new AddedItemResult(
@@ -116,6 +130,11 @@ class Activity extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.activity.delete',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_delete.php',
+        'Deletes the specified activity and all the associated objects.'
+    )]
     public function delete(int $itemId): DeletedItemResult
     {
         return new DeletedItemResult(
@@ -137,6 +156,11 @@ class Activity extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.activity.fields',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_fields.php',
+        'Returns the description of activity fields'
+    )]
     public function fields(): FieldsResult
     {
         return new FieldsResult($this->core->call('crm.activity.fields'));
@@ -153,6 +177,11 @@ class Activity extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.activity.get',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_get.php',
+        'Returns activity by the specified activity ID'
+    )]
     public function get(int $entityId): ActivityResult
     {
         return new ActivityResult(
@@ -214,7 +243,7 @@ class Activity extends AbstractService
      *   COMMUNICATIONS?: string,
      *   FILES?: string,
      *   WEBDAV_ELEMENTS?: string,
-     *   }          $order
+     *   } $order
      *
      * @param array{
      *   ID?: int,
@@ -260,25 +289,30 @@ class Activity extends AbstractService
      *   COMMUNICATIONS?: string,
      *   FILES?: string,
      *   WEBDAV_ELEMENTS?: string,
-     *   }          $filter
+     *   } $filter
      *
      * @param array $select = ['ID','OWNER_ID','OWNER_TYPE_ID','TYPE_ID','PROVIDER_ID','PROVIDER_TYPE_ID','PROVIDER_GROUP_ID','ASSOCIATED_ENTITY_ID','SUBJECT','START_TIME','END_TIME','DEADLINE','COMPLETED','STATUS','RESPONSIBLE_ID','PRIORITY','NOTIFY_TYPE','NOTIFY_VALUE','DESCRIPTION','DESCRIPTION_TYPE','DIRECTION','LOCATION','CREATED','AUTHOR_ID','LAST_UPDATED','EDITOR_ID','SETTINGS','ORIGIN_ID','ORIGINATOR_ID','RESULT_STATUS','RESULT_STREAM','RESULT_SOURCE_ID','PROVIDER_PARAMS','PROVIDER_DATA','RESULT_MARK','RESULT_VALUE','RESULT_SUM','RESULT_CURRENCY_ID','AUTOCOMPLETE_RULE','BINDINGS','COMMUNICATIONS','FILES','WEBDAV_ELEMENTS','COMMUNICATIONS']
-     * @param int   $start
+     * @param int $start
      *
      * @return ActivitiesResult
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.activity.list',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_list.php',
+        'Returns a list of activity selected by the filter specified as the parameter. See the example for the filter notation.'
+    )]
     public function list(array $order, array $filter, array $select, int $start): ActivitiesResult
     {
         return new ActivitiesResult(
             $this->core->call(
                 'crm.activity.list',
                 [
-                    'order'  => $order,
+                    'order' => $order,
                     'filter' => $filter,
                     'select' => $select,
-                    'start'  => $start,
+                    'start' => $start,
                 ]
             )
         );
@@ -334,19 +368,24 @@ class Activity extends AbstractService
      *   COMMUNICATIONS?: string,
      *   FILES?: string,
      *   WEBDAV_ELEMENTS?: string,
-     *   }        $fields
+     *   } $fields
      *
      * @return UpdatedItemResult
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.activity.update',
+        'https://training.bitrix24.com/rest_help/crm/rest_activity/crm_activity_update.php',
+        'Updates the specified (existing) activity.'
+    )]
     public function update(int $itemId, array $fields): UpdatedItemResult
     {
         return new UpdatedItemResult(
             $this->core->call(
                 'crm.activity.update',
                 [
-                    'id'     => $itemId,
+                    'id' => $itemId,
                     'fields' => $fields,
                 ]
             )
@@ -403,8 +442,8 @@ class Activity extends AbstractService
      *   } $filter
      *
      * @return int
-     * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
-     * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
+     * @throws BaseException
+     * @throws TransportException
      */
     public function countByFilter(array $filter = []): int
     {

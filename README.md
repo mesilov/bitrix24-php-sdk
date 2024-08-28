@@ -7,13 +7,13 @@ A powerful PHP library for the Bitrix24 REST API
 
 ## Build status
 
-| CI\CD [status](https://github.com/mesilov/bitrix24-php-sdk/actions) on `master`                                                                                                                         | 
+| CI\CD [status](https://github.com/mesilov/bitrix24-php-sdk/actions) on `master`                                                                                                                       | 
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 | [![phpstan check](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpstan.yml)                    | 
 | [![unit-tests status](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/phpunit.yml)                | 
 | [![integration-tests status](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/integration.yml/badge.svg)](https://github.com/mesilov/bitrix24-php-sdk/actions/workflows/integration.yml) | 
 
-Integration tests run in GitHub actions with real Bitrix24 portal 
+Integration tests run in GitHub actions with real Bitrix24 portal
 
 ## BITRIX24-PHP-SDK ✨FEATURES✨
 
@@ -23,8 +23,9 @@ Support both auth modes:
 - [x] work with incoming webhooks for simple integration projects for current portal
 
 Domain core events:
-  - [x] Access Token expired
-  - [x] Bitrix24 portal domain url changed
+
+- [x] Access Token expired
+- [x] Bitrix24 portal domain url changed
 
 API - level features
 
@@ -34,18 +35,11 @@ API - level features
 
 Performance improvements 🚀
 
-- Batch queries implemented with [PHP Generators](https://www.php.net/manual/en/language.generators.overview.php) – constant low memory and
-  low CPI usage
-    - [x] batch read data from bitrix24
-    - [x] batch write data to bitrix24
-    - [ ] write and read in one batch package
-    - [ ] composite batch queries to many entities (work in progress)
-- [ ] read without count flag
-
-Low-level tools to devs:
-- [ ] Rate-limit strategy
-- [ ] Retry strategy for safe methods
-
+- [x] Batch queries implemented with [PHP Generators](https://www.php.net/manual/en/language.generators.overview.php) –
+  constant low memory and low CPI usage:
+- [x] batch read data from bitrix24
+- [x] batch write data to bitrix24
+- [x] read without count flag
 
 ## Development principles
 
@@ -67,6 +61,7 @@ Low-level tools to devs:
 - Reliable:
     - test coverage: unit, integration, contract
     - typical examples typical for different modes of operation and they are optimized for memory \ performance
+
 ## Architecture
 
 ### Abstraction layers
@@ -83,9 +78,11 @@ Low-level tools to devs:
     output: b24 response dto
     process: b24 entities, operate with immutable objects  
 ```
-## Sponsors
 
-Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)
+## Documentation
+
+- [Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
+- [Internal documentation](docs/EN/documentation.md) for bitrix24-php-sdk
 
 ## Requirements
 
@@ -98,40 +95,206 @@ Help bitrix24-php-sdk by [boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24
 Add `"mesilov/bitrix24-php-sdk": "2.x"` to `composer.json` of your application. Or clone repo to your project.
 
 ## Examples
+
 ### Work with webhook
+
+1. Go to `/examples/webhook` folder
+2. Open console and install dependencies
+
+```shell
+composer install
+```
+
+3. Open Bitrix24 portal: Developer resources → Other → Inbound webhook
+4. Open example file and insert webhook url into `$webhookUrl`
+
+<details>
+  <summary>see example.php file</summary>
+
 ```php
 declare(strict_types=1);
 
 use Bitrix24\SDK\Services\ServiceBuilderFactory;
-use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Processor\MemoryUsageProcessor;
 
-require_once  'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 $webhookUrl = 'INSERT_HERE_YOUR_WEBHOOK_URL';
 
 $log = new Logger('bitrix24-php-sdk');
-$b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
+$log->pushHandler(new StreamHandler('bitrix24-php-sdk.log'));
+$log->pushProcessor(new MemoryUsageProcessor(true, true));
 
-// init bitrix24-php-sdk service
+// create service builder factory
+$b24ServiceFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
+// init bitrix24-php-sdk service from webhook
 $b24Service = $b24ServiceFactory->initFromWebhook($webhookUrl);
 
 // work with interested scope
 var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());
-var_dump($b24Service->getCRMScope()->lead()->list([],[],['ID','TITLE'])->getLeads()[0]->TITLE);
+// get deals list and address to first element
+var_dump($b24Service->getCRMScope()->lead()->list([], [], ['ID', 'TITLE'])->getLeads()[0]->TITLE);
 ```
+
+</details>
+
+5. Call php file in shell
+
+```shell
+php -f example.php
+```
+
+### Work with local application
+
+1. Go to `/examples/local-application` folder
+2. Open console and install dependencies
+
+```shell
+composer install
+```
+
+3. Start local development server
+
+```shell
+sudo php -S 127.0.0.1:80
+```
+
+4. Expose local server to public via [ngrok](https://ngrok.com/) and remember temporally public url –
+   `https://****.ngrok-free.app`
+
+```shell
+ngrok http 127.0.0.1
+```
+
+5. Check public url from ngrok and see `x-powered-by` header with **200** status-code.
+
+```shell
+curl https://****.ngrok-free.app -I
+HTTP/2 200 
+content-type: text/html; charset=UTF-8
+date: Mon, 26 Aug 2024 19:09:24 GMT
+host: ****.ngrok-free.app
+x-powered-by: PHP/8.3.8
+```
+
+6. Open Bitrix24 portal: Developer resources → Other → Local application and create new local application:
+   - `type`: server
+   - `handler path`: `https://****.ngrok-free.app/index.php`
+   - `Initial installation path`: `https://****.ngrok-free.app/install.php`
+   - `Menu item text`: `Test local app`
+   - `scope`: `crm`
+7. Save application parameters in `index.php` file: 
+   - `Application ID (client_id)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID` 
+   - `Application key (client_secret)` — `BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET` 
+   - `Assing permitions (scope)` — `BITRIX24_PHP_SDK_APPLICATION_SCOPE`
+<details>
+  <summary>see index.php file</summary>
+
+```php
+declare(strict_types=1);
+
+use Bitrix24\SDK\Core\Credentials\AuthToken;
+use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
+use Bitrix24\SDK\Services\ServiceBuilderFactory;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Processor\MemoryUsageProcessor;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
+
+require_once 'vendor/autoload.php';
+?>
+    <pre>
+    Application is worked, auth tokens from bitrix24:
+    <?= print_r($_REQUEST, true) ?>
+</pre>
+<?php
+$request = Request::createFromGlobals();
+
+$log = new Logger('bitrix24-php-sdk');
+$log->pushHandler(new StreamHandler('bitrix24-php-sdk.log'));
+$log->pushProcessor(new MemoryUsageProcessor(true, true));
+
+$b24ServiceBuilderFactory = new ServiceBuilderFactory(new EventDispatcher(), $log);
+$appProfile = ApplicationProfile::initFromArray([
+    'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => 'INSERT_HERE_YOUR_DATA',
+    'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => 'INSERT_HERE_YOUR_DATA',
+    'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => 'INSERT_HERE_YOUR_DATA'
+]);
+$b24Service = $b24ServiceBuilderFactory->initFromRequest($appProfile, AuthToken::initFromPlacementRequest($request), $request->get('DOMAIN'));
+
+var_dump($b24Service->getMainScope()->main()->getCurrentUserProfile()->getUserProfile());
+// get deals list and address to first element
+var_dump($b24Service->getCRMScope()->lead()->list([], [], ['ID', 'TITLE'])->getLeads()[0]->TITLE);
+```
+
+</details>
+8. Save local application in Bitrix24 tab and press «OPEN APPLICATION» button.    
+
+
+### Create application for Bitrix24 marketplace
+
+if you want to create application you can use production-ready contracts in namespace
+`Bitrix24\SDK\Application\Contracts`:
+
+- `Bitrix24Accounts` — Store auth tokens and
+  provides [methods](src/Application/Contracts/Bitrix24Accounts/Docs/Bitrix24Accounts.md) for work with Bitrix24
+  account.
+- `ApplicationInstallations` — Store information
+  about [application installation](src/Application/Contracts/ApplicationInstallations/Docs/ApplicationInstallations.md),
+  linked with Bitrix24 Account with auth
+  tokens. Optional can store links to:
+    - Client contact person: client person who responsible for application usage
+    - Bitrix24 Partner contact person: partner contact person who supports client and configure application
+    - Bitrix24 Partner: partner who supports client portal
+- `ContactPersons` – Store information [about person](src/Application/Contracts/ContactPersons/Docs/ContactPersons.md)
+  who installed application.
+- `Bitrix24Partners` – Store information
+  about [Bitrix24 Partner](src/Application/Contracts/Bitrix24Partners/Docs/Bitrix24Partners.md) who supports client
+  portal and install or configure application.
+
+Steps:
+
+1. Create own entity of this bounded contexts.
+2. Implement all methods in contract interfaces.
+3. Test own implementation behavior with contract-tests `tests/Unit/Application/Contracts/*` – examples.
 
 ## Tests
 
 Tests locate in folder `tests` and we have two test types.
 In folder tests create file `.env.local` and fill environment variables from `.env`.
 
+### PHP Static Analysis Tool – phpstan
+
+Call in command line
+
+```shell
+make lint-phpstan
+```
+
+### PHP Static Analysis Tool – rector
+
+Call in command line for validate
+
+```shell
+make lint-rector
+```
+
+Call in command line for fix codebase
+
+```shell
+make lint-rector-fix
+```
+
 ### Unit tests
 
 **Fast**, in-memory tests without a network I\O For run unit tests you must call in command line
 
 ```shell
-composer phpunit-run-unit-test
+make test-unit
 ```
 
 ### Integration tests
@@ -142,12 +305,12 @@ composer phpunit-run-unit-test
 
 For run integration test you must:
 
-1. Create [new Bitrix24 portal](https://www.bitrix24.ru/create.php?p=255670) for development tests
-2. Go to left menu, click «Sitemap»
-3. Find menu item «Developer resources»
-4. Click on menu item «Other»
-5. Click on menu item «Inbound webhook»
-6. Assign all permisions with webhook and click «save» button
+1. Create new Bitrix24 portal for development tests.
+2. Go to left menu, click «Sitemap».
+3. Find menu item «Developer resources».
+4. Click on menu item «Other».
+5. Click on menu item «Inbound webhook».
+6. Assign all permisions with webhook and click «save» button.
 7. Create file `/tests/.env.local` with same settings, see comments in `/tests/.env` file.
 
 ```yaml
@@ -159,15 +322,10 @@ INTEGRATION_TEST_LOG_LEVEL=500
 8. call in command line
 
 ```shell
-composer composer phpunit-run-integration-tests
-```
-
-#### PHP Static Analysis Tool – phpstan
-
-Call in command line
-
-```shell
- composer phpstan-analyse
+make test-integration-core
+make test-integration-scope-telephony
+make test-integration-scope-workflows
+make test-integration-scope-user
 ```
 
 ## Submitting bugs and feature requests
@@ -182,16 +340,13 @@ bitrix24-php-sdk is licensed under the MIT License - see the `MIT-LICENSE.txt` f
 
 Maksim Mesilov - mesilov.maxim@gmail.com
 
-See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/graphs/contributors) which participated in this project.
+See also the list of [contributors](https://github.com/mesilov/bitrix24-php-sdk/graphs/contributors) which participated
+in this project.
+
+## Sponsors
+
+[boosty.to/bitrix24-php-sdk](https://boosty.to/bitrix24-php-sdk)
 
 ## Need custom Bitrix24 application?
 
-mesilov.maxim@gmail.com for private consultations or dedicated support
-
-## Documentation
-
-[Bitrix24 API documentation - Russian](http://dev.1c-bitrix.ru/rest_help/)
-
-[Bitrix24 API documentation - English](https://training.bitrix24.com/rest_help/)
-
-[Register new Bitrix24 account](https://www.bitrix24.ru/create.php?p=255670)
+Email to mesilov.maxim@gmail.com for private consultations or dedicated support.

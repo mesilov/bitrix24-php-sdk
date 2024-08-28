@@ -17,34 +17,46 @@
     }
   ],
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   },
   "require": {
     "php": "8.2.* || 8.3.*",
     "ext-json": "*",
-    "ext-bcmath": "*",
     "ext-curl": "*",
     "ext-intl": "*",
     "psr/log": "^2 || ^3",
-    "fig/http-message-util": "1.1.*",
-    "ramsey/uuid": "^3 ||^4",
+    "fig/http-message-util": "^1",
+    "giggsey/libphonenumber-for-php": "^8",
+    "darsyn/ip": "^4 || ^5",
+    "nesbot/carbon": "^3",
     "moneyphp/money": "^3 || ^4",
+    "mesilov/moneyphp-percentage": "^0.2",
     "symfony/http-client": "^6 || ^7",
+    "symfony/console": "^6 || ^7",
+    "symfony/dotenv": "^6 || ^7",
+    "symfony/filesystem": "^6 || ^7",
+    "symfony/mime": "^6 || ^7",
+    "symfony/finder": "^6 || ^7",
     "symfony/http-client-contracts": "^2 || ^3",
     "symfony/http-foundation": "^6 || ^7",
     "symfony/event-dispatcher": "^6 || ^7",
     "symfony/uid": "^6 || ^7"
   },
   "require-dev": {
-    "monolog/monolog": "3.5.*",
-    "phpstan/phpstan": "1.10.*",
-    "phpunit/phpunit": "11.0.*",
-    "symfony/console": "7.0.*",
-    "symfony/dotenv": "7.0.*",
-    "symfony/debug-bundle": "7.0.*",
-    "symfony/stopwatch": "7.0.*",
+    "fakerphp/faker": "^1",
+    "monolog/monolog": "^3",
+    "nunomaduro/phpinsights": "^2",
+    "phpstan/phpstan": "1.11.7",
+    "phpunit/phpunit": "^10 || ^11",
+    "psalm/phar": "^5",
+    "rector/rector": "^1",
     "roave/security-advisories": "dev-master",
-    "fakerphp/faker": "1.23.*"
+    "symfony/debug-bundle": "^6 || ^7",
+    "symfony/stopwatch": "^6 || ^7",
+    "typhoon/reflection": "^0.4"
   },
   "autoload": {
     "psr-4": {

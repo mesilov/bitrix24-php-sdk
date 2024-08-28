@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Stubs;
@@ -20,10 +29,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 class NullCore implements CoreInterface
 {
     /**
-     * @param string $apiMethod
-     * @param array $parameters
      *
-     * @return Response
      * @throws \Exception
      */
     public function call(string $apiMethod, array $parameters = []): Response

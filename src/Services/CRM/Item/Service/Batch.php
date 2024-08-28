@@ -1,16 +1,29 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Item\Service;
 
+use Bitrix24\SDK\Attributes\ApiBatchMethodMetadata;
+use Bitrix24\SDK\Attributes\ApiBatchServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\BatchOperationsInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Result\DeletedItemBatchResult;
 use Bitrix24\SDK\Services\CRM\Item\Result\ItemItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 
+#[ApiBatchServiceMetadata(new Scope(['crm']))]
 class Batch
 {
     protected BatchOperationsInterface $batch;
@@ -28,6 +41,11 @@ class Batch
      * @return Generator<int, ItemItemResult>
      * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.item.list',
+        'https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_list.php',
+        'Method returns array with SPA items with entityTypeId.'
+    )]
     public function list(int $entityTypeId, array $order, array $filter, array $select, ?int $limit = null): Generator
     {
         $this->log->debug(
@@ -48,10 +66,14 @@ class Batch
     /**
      * Batch adding crm items
      *
-     * @return Generator<int, ItemItemResult>|ItemItemResult[]
-     *
+     * @return Generator<int, ItemItemResult>
      * @throws BaseException
      */
+    #[ApiBatchMethodMetadata(
+        'crm.item.add',
+        'https://training.bitrix24.com/rest_help/crm/dynamic/methodscrmitem/crm_item_add.php',
+        'Method creates new SPA item with entityTypeId.'
+    )]
     public function add(int $entityTypeId, array $items): Generator
     {
         $rawItems = [];

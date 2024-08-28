@@ -1,4 +1,4 @@
-Copyright 2022 Maxim Mesilov
+Copyright 2024 Maksim Mesilov
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

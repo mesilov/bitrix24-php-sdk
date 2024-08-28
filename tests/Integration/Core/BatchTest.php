@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Core;
@@ -7,6 +16,7 @@ namespace Bitrix24\SDK\Tests\Integration\Core;
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Services\ServiceBuilder;
+use Bitrix24\SDK\Tests\Builders\DemoDataGenerator;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -46,7 +56,7 @@ class BatchTest extends TestCase
                 'TITLE'                 => sprintf('deal-%s', $i),
                 'IS_MANUAL_OPPORTUNITY' => 'Y',
                 'OPPORTUNITY'           => sprintf('%s.00', random_int(100, 40000)),
-                'CURRENCY_ID'           => 'RUB',
+                'CURRENCY_ID'           => DemoDataGenerator::getCurrency()->getCode(),
                 'CONTACT_ID'            => $contactId,
             ];
         }
@@ -136,7 +146,7 @@ class BatchTest extends TestCase
                 'TITLE'                 => sprintf('deal-%s', $i),
                 'IS_MANUAL_OPPORTUNITY' => 'Y',
                 'OPPORTUNITY'           => sprintf('%s.00', random_int(100, 40000)),
-                'CURRENCY_ID'           => 'RUB',
+                'CURRENCY_ID'           => DemoDataGenerator::getCurrency()->getCode(),
                 'CONTACT_ID'            => $contactId,
             ];
         }
@@ -213,7 +223,7 @@ class BatchTest extends TestCase
                 'TITLE'                 => sprintf('deal-%s', $i),
                 'IS_MANUAL_OPPORTUNITY' => 'Y',
                 'OPPORTUNITY'           => sprintf('%s.00', random_int(100, 40000)),
-                'CURRENCY_ID'           => 'RUB',
+                'CURRENCY_ID'           => DemoDataGenerator::getCurrency()->getCode(),
                 'CONTACT_ID'            => $contactId,
             ];
         }

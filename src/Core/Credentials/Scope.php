@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Credentials;
@@ -12,9 +21,14 @@ class Scope
      * @var string[]
      */
     protected array $availableScope = [
+        'ai_admin',
+        'appform',
+        'baas',
         'bizproc',
         'biconnector',
         'calendar',
+        'calendarmobile',
+        'catalogmobile',
         'call',
         'cashbox',
         'catalog',
@@ -32,6 +46,8 @@ class Scope
         'im',
         'imbot',
         'imopenlines',
+        'im.import',
+        'imconnector',
         'intranet',
         'landing',
         'landing_cloud',
@@ -40,6 +56,7 @@ class Scope
         'mailservice',
         'messageservice',
         'mobile',
+        'notifications',
         'pay_system',
         'placement',
         'pull',
@@ -54,6 +71,7 @@ class Scope
         'task',
         'tasks',
         'tasks_extended',
+        'tasksmobile',
         'telephony',
         'timeman',
         'user',
@@ -64,22 +82,18 @@ class Scope
         'userfieldconfig',
     ];
 
-    /**
-     * @var array
-     */
     protected array $currentScope = [];
 
     /**
      * Scope constructor.
      *
-     * @param array $scope
      *
      * @throws UnknownScopeCodeException
      */
     public function __construct(array $scope = [])
     {
-        $scope = array_unique(array_map('strtolower', $scope));
-
+        $scope = array_unique(array_map(strtolower(...), $scope));
+        sort($scope);
         if (count($scope) === 1 && $scope[0] === '') {
             $scope = [];
         } else {
@@ -93,16 +107,18 @@ class Scope
         $this->currentScope = $scope;
     }
 
-    /**
-     * @return array
-     */
+    public function equal(self $scope): bool
+    {
+        return $this->currentScope === $scope->getScopeCodes();
+    }
+
     public function getScopeCodes(): array
     {
         return $this->currentScope;
     }
 
     /**
-     * @throws \Bitrix24\SDK\Core\Exceptions\UnknownScopeCodeException
+     * @throws UnknownScopeCodeException
      */
     public static function initFromString(string $scope): self
     {

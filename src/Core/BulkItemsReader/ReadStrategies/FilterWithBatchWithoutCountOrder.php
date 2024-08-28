@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\BulkItemsReader\ReadStrategies;
@@ -11,27 +20,12 @@ use Psr\Log\LoggerInterface;
 
 class FilterWithBatchWithoutCountOrder implements BulkItemsReaderInterface
 {
-    private BatchOperationsInterface $batch;
-    private LoggerInterface $log;
-
-    /**
-     * @param \Bitrix24\SDK\Core\Contracts\BatchOperationsInterface $batch
-     * @param \Psr\Log\LoggerInterface                              $log
-     */
-    public function __construct(BatchOperationsInterface $batch, LoggerInterface $log)
+    public function __construct(private readonly BatchOperationsInterface $batch, private readonly LoggerInterface $log)
     {
-        $this->batch = $batch;
-        $this->log = $log;
     }
 
     /**
-     * @param string   $apiMethod
-     * @param array    $order
-     * @param array    $filter
-     * @param array    $select
-     * @param int|null $limit
      *
-     * @return \Generator
      * @throws \Bitrix24\SDK\Core\Exceptions\BaseException
      * @throws \Bitrix24\SDK\Core\Exceptions\TransportException
      */

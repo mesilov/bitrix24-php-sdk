@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Unit\Application;
@@ -9,16 +18,14 @@ use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(\Bitrix24\SDK\Application\ApplicationStatus::class)]
 class ApplicationStatusTest extends TestCase
 {
     /**
-     * @param string $shortCode
-     * @param string $longCode
      *
-     * @return void
-     * @dataProvider statusDataProvider
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusDataProvider')]
     public function testGetStatusCode(string $shortCode, string $longCode): void
     {
         $this->assertEquals(
@@ -27,9 +34,6 @@ class ApplicationStatusTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testInvalidStatusCode(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -37,18 +41,43 @@ class ApplicationStatusTest extends TestCase
     }
 
     /**
-     * @return void
      * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
-     * @covers \Bitrix24\SDK\Application\ApplicationStatus::initFromString
      */
     public function testInitFromString(): void
     {
         $this->assertTrue(ApplicationStatus::initFromString('F')->isFree());
     }
 
-    /**
-     * @return \Generator
-     */
+    public function testFree(): void
+    {
+        $this->assertTrue(ApplicationStatus::free()->isFree());
+    }
+
+    public function testDemo(): void
+    {
+        $this->assertTrue(ApplicationStatus::demo()->isDemo());
+    }
+
+    public function testTrial(): void
+    {
+        $this->assertTrue(ApplicationStatus::trial()->isTrial());
+    }
+
+    public function testPaid(): void
+    {
+        $this->assertTrue(ApplicationStatus::paid()->isPaid());
+    }
+
+    public function testLocal(): void
+    {
+        $this->assertTrue(ApplicationStatus::local()->isLocal());
+    }
+
+    public function testSubscription(): void
+    {
+        $this->assertTrue(ApplicationStatus::subscription()->isSubscription());
+    }
+
     public static function statusDataProvider(): Generator
     {
         yield 'free' => [

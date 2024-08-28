@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core\Result;
@@ -13,21 +22,13 @@ use Bitrix24\SDK\Core\Response\Response;
  */
 abstract class AbstractResult
 {
-    protected Response $coreResponse;
-
     /**
      * AbstractResult constructor.
-     *
-     * @param Response $coreResponse
      */
-    public function __construct(Response $coreResponse)
+    public function __construct(protected Response $coreResponse)
     {
-        $this->coreResponse = $coreResponse;
     }
 
-    /**
-     * @return Response
-     */
     public function getCoreResponse(): Response
     {
         return $this->coreResponse;

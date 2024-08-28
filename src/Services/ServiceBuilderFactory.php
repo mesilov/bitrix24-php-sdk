@@ -1,19 +1,29 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services;
 
-use Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface;
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface;
 use Bitrix24\SDK\Core\Batch;
 use Bitrix24\SDK\Core\BulkItemsReader\BulkItemsReaderBuilder;
 use Bitrix24\SDK\Core\CoreBuilder;
-use Bitrix24\SDK\Core\Credentials\AccessToken;
+use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
 use Bitrix24\SDK\Core\Credentials\Credentials;
 use Bitrix24\SDK\Core\Credentials\WebhookUrl;
+use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ServiceBuilderFactory
 {
@@ -21,8 +31,8 @@ class ServiceBuilderFactory
     private LoggerInterface $log;
 
     /**
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     * @param \Psr\Log\LoggerInterface                                    $log
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param LoggerInterface $log
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, LoggerInterface $log)
     {
@@ -33,23 +43,17 @@ class ServiceBuilderFactory
     /**
      * Init service builder from application account
      *
-     * @param ApplicationProfile       $applicationProfile
+     * @param ApplicationProfile $applicationProfile
      * @param Bitrix24AccountInterface $bitrix24Account
      *
-     * @return \Bitrix24\SDK\Services\ServiceBuilder
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @return ServiceBuilder
+     * @throws InvalidArgumentException
      */
     public function initFromAccount(ApplicationProfile $applicationProfile, Bitrix24AccountInterface $bitrix24Account): ServiceBuilder
     {
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
-                AccessToken::initFromArray(
-                    [
-                        'access_token'  => $bitrix24Account->getAccessToken(),
-                        'refresh_token' => $bitrix24Account->getRefreshToken(),
-                        'expires'       => $bitrix24Account->getExpires(),
-                    ]
-                ),
+                $bitrix24Account->getAuthToken(),
                 $applicationProfile,
                 $bitrix24Account->getDomainUrl()
             )
@@ -59,18 +63,19 @@ class ServiceBuilderFactory
     /**
      * Init service builder from request
      *
-     * @param \Bitrix24\SDK\Core\Credentials\ApplicationProfile $applicationProfile
-     * @param \Bitrix24\SDK\Core\Credentials\AccessToken        $accessToken
-     * @param string                                            $bitrix24DomainUrl
+     * @param ApplicationProfile $applicationProfile
+     * @param AuthToken $accessToken
+     * @param string $bitrix24DomainUrl
      *
-     * @return \Bitrix24\SDK\Services\ServiceBuilder
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @return ServiceBuilder
+     * @throws InvalidArgumentException
      */
     public function initFromRequest(
         ApplicationProfile $applicationProfile,
-        AccessToken $accessToken,
-        string $bitrix24DomainUrl
-    ): ServiceBuilder {
+        AuthToken          $accessToken,
+        string             $bitrix24DomainUrl
+    ): ServiceBuilder
+    {
         return $this->getServiceBuilder(
             Credentials::createFromOAuth(
                 $accessToken,
@@ -85,8 +90,8 @@ class ServiceBuilderFactory
      *
      * @param string $webhookUrl
      *
-     * @return \Bitrix24\SDK\Services\ServiceBuilder
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @return ServiceBuilder
+     * @throws InvalidArgumentException
      */
     public function initFromWebhook(string $webhookUrl): ServiceBuilder
     {
@@ -94,10 +99,10 @@ class ServiceBuilderFactory
     }
 
     /**
-     * @param \Bitrix24\SDK\Core\Credentials\Credentials $credentials
+     * @param Credentials $credentials
      *
-     * @return \Bitrix24\SDK\Services\ServiceBuilder
-     * @throws \Bitrix24\SDK\Core\Exceptions\InvalidArgumentException
+     * @return ServiceBuilder
+     * @throws InvalidArgumentException
      */
     private function getServiceBuilder(Credentials $credentials): ServiceBuilder
     {

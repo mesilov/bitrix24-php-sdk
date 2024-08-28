@@ -1,8 +1,20 @@
 #!/usr/bin/env php
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+use Bitrix24\SDK\Attributes\Services\AttributesParser;
+use Bitrix24\SDK\Services\ServiceBuilderFactory;
 use Bitrix24\SDK\Tools\Commands\CopyPropertyValues;
 use Bitrix24\SDK\Tools\Commands\GenerateContactsCommand;
+use Bitrix24\SDK\Infrastructure\Console\Commands;
 use Bitrix24\SDK\Tools\Commands\PerformanceBenchmarks\ListCommand;
 use Bitrix24\SDK\Tools\Commands\ShowFieldsDescriptionCommand;
 use Monolog\Handler\StreamHandler;
@@ -12,6 +24,8 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Typhoon\Reflection\TyphoonReflector;
 
 if (!in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
     echo 'Warning: The console should be invoked via the CLI version of PHP, not the ' . PHP_SAPI . ' SAPI' . PHP_EOL;
@@ -55,4 +69,10 @@ $application->add(new GenerateContactsCommand($log));
 $application->add(new ListCommand($log));
 $application->add(new ShowFieldsDescriptionCommand($log));
 $application->add(new CopyPropertyValues($log));
+$application->add(new Commands\GenerateCoverageDocumentationCommand(
+    new AttributesParser(TyphoonReflector::build(), new Symfony\Component\Filesystem\Filesystem()),
+    new ServiceBuilderFactory(new EventDispatcher(), $log),
+    new Symfony\Component\Finder\Finder(),
+    new Symfony\Component\Filesystem\Filesystem(),
+    $log));
 $application->run($input);

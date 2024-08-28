@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Core;
@@ -25,12 +34,18 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class CoreBuilder
 {
-    private ?ApiClientInterface $apiClient;
+    private ?ApiClientInterface $apiClient = null;
+
     private HttpClientInterface $httpClient;
+
     private EventDispatcherInterface $eventDispatcher;
+
     private LoggerInterface $logger;
-    private ?Credentials $credentials;
-    private ApiLevelErrorHandler $apiLevelErrorHandler;
+
+    private ?Credentials $credentials = null;
+
+    private readonly ApiLevelErrorHandler $apiLevelErrorHandler;
+
     private RequestIdGeneratorInterface $requestIdGenerator;
 
     /**
@@ -46,8 +61,6 @@ class CoreBuilder
                 'timeout'      => 120,
             ]
         );
-        $this->credentials = null;
-        $this->apiClient = null;
         $this->apiLevelErrorHandler = new ApiLevelErrorHandler($this->logger);
         $this->requestIdGenerator = new DefaultRequestIdGenerator();
     }
@@ -58,8 +71,6 @@ class CoreBuilder
     }
 
     /**
-     * @param Credentials $credentials
-     *
      * @return $this
      */
     public function withCredentials(Credentials $credentials): self
@@ -102,11 +113,11 @@ class CoreBuilder
      */
     public function build(): CoreInterface
     {
-        if ($this->credentials === null) {
+        if (!$this->credentials instanceof \Bitrix24\SDK\Core\Credentials\Credentials) {
             throw new InvalidArgumentException('you must set credentials before call method build');
         }
 
-        if ($this->apiClient === null) {
+        if (!$this->apiClient instanceof \Bitrix24\SDK\Core\Contracts\ApiClientInterface) {
             $this->apiClient = new ApiClient(
                 $this->credentials,
                 $this->httpClient,

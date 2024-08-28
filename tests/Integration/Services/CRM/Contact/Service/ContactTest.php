@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Tests\Integration\Services\CRM\Contact\Service;
@@ -10,7 +19,9 @@ use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\EmailValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\InstantMessengerValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\PhoneValueType;
 use Bitrix24\SDK\Services\CRM\Common\Result\SystemFields\Types\WebsiteValueType;
+use Bitrix24\SDK\Services\CRM\Contact\Result\ContactItemResult;
 use Bitrix24\SDK\Services\CRM\Contact\Service\Contact;
+use Bitrix24\SDK\Tests\CustomAssertions\CustomBitrix24Assertions;
 use Bitrix24\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Bitrix24\SDK\Core;
@@ -23,8 +34,10 @@ use Faker;
  */
 class ContactTest extends TestCase
 {
-    protected Contact $contactService;
-    protected Faker\Generator $faker;
+    use CustomBitrix24Assertions;
+
+    private Contact $contactService;
+    private Faker\Generator $faker;
 
     /**
      * @throws BaseException
@@ -54,6 +67,12 @@ class ContactTest extends TestCase
     public function testFields(): void
     {
         self::assertIsArray($this->contactService->fields()->getFieldsDescription());
+    }
+
+    public function testAllSystemFieldsAnnotated(): void
+    {
+        $propListFromApi = (new Core\Fields\FieldsFilter())->filterSystemFields(array_keys($this->contactService->fields()->getFieldsDescription()));
+        $this->assertBitrix24AllResultItemFieldsAnnotated($propListFromApi, ContactItemResult::class);
     }
 
     /**
@@ -203,7 +222,7 @@ class ContactTest extends TestCase
                     'WEB' => [
                         [
                             'VALUE' => $url,
-                            'VALUE_TYPE' => WebsiteValueType::work,
+                            'VALUE_TYPE' => WebsiteValueType::work->name,
                         ]
                     ],
                 ])->getId())->contact()->WEB[0]->VALUE);

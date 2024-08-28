@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * This file is part of the bitrix24-php-sdk package.
+ *
+ * © Maksim Mesilov <mesilov.maxim@gmail.com>
+ *
+ * For the full copyright and license information, please view the MIT-LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Bitrix24\SDK\Services\CRM\Lead\Service;
 
+use Bitrix24\SDK\Attributes\ApiEndpointMetadata;
+use Bitrix24\SDK\Attributes\ApiServiceMetadata;
 use Bitrix24\SDK\Core\Contracts\CoreInterface;
+use Bitrix24\SDK\Core\Credentials\Scope;
 use Bitrix24\SDK\Core\Exceptions\BaseException;
 use Bitrix24\SDK\Core\Exceptions\TransportException;
 use Bitrix24\SDK\Core\Result\AddedItemResult;
@@ -15,7 +27,7 @@ use Bitrix24\SDK\Services\AbstractService;
 use Bitrix24\SDK\Services\CRM\Lead\Result\LeadResult;
 use Bitrix24\SDK\Services\CRM\Lead\Result\LeadsResult;
 use Psr\Log\LoggerInterface;
-
+#[ApiServiceMetadata(new Scope(['crm']))]
 class Lead extends AbstractService
 {
     public Batch $batch;
@@ -104,6 +116,11 @@ class Lead extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.lead.add',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_add.php',
+        'Method adds new lead'
+    )]
     public function add(array $fields, array $params = []): AddedItemResult
     {
         return new AddedItemResult(
@@ -128,6 +145,11 @@ class Lead extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.lead.delete',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_delete.php',
+        'Deletes the specified lead and all the associated objects.'
+    )]
     public function delete(int $id): DeletedItemResult
     {
         return new DeletedItemResult(
@@ -149,6 +171,11 @@ class Lead extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.lead.fields',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_fields.php',
+        'Returns the description of the lead fields, including user fields.'
+    )]
     public function fields(): FieldsResult
     {
         return new FieldsResult($this->core->call('crm.lead.fields'));
@@ -165,6 +192,11 @@ class Lead extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.lead.get',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_get.php',
+        'Returns a lead by the lead ID.'
+    )]
     public function get(int $id): LeadResult
     {
         return new LeadResult($this->core->call('crm.lead.get', ['id' => $id]));
@@ -184,6 +216,11 @@ class Lead extends AbstractService
      * @throws TransportException
      * @return LeadsResult
      */
+    #[ApiEndpointMetadata(
+        'crm.lead.list',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_list.php',
+        'Get list of lead items.'
+    )]
     public function list(array $order, array $filter, array $select, int $startItem = 0): LeadsResult
     {
         return new LeadsResult(
@@ -271,6 +308,11 @@ class Lead extends AbstractService
      * @throws BaseException
      * @throws TransportException
      */
+    #[ApiEndpointMetadata(
+        'crm.lead.update',
+        'https://training.bitrix24.com/rest_help/crm/leads/crm_lead_update.php',
+        'Updates the specified (existing) lead.'
+    )]
     public function update(int $id, array $fields, array $params = []): UpdatedItemResult
     {
         return new UpdatedItemResult(

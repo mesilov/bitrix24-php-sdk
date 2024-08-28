@@ -1,18 +1,187 @@
 # bitrix24-php-sdk change log
 
-## 2.0-beta.2 — 1.04.2024
+## 2.0 — 28.08.2024
+* bump sdk version
+
+## 2.0-beta.3 — 15.08.2024
 
 ### Added
+
+* add dependencies
+    * `symfony/console` version `^6 || ^7`
+    * `symfony/dotenv` version `^6 || ^7`
+    * `symfony/filesystem` version `^6 || ^7`
+    * `symfony/mime` version `^6 || ^7`
+    * `nesbot/carbon` version `3.3.*`
+    * `mesilov/moneyphp-percentage` version `0.2.*`
+* add scope `bizproc` and [services](https://github.com/mesilov/bitrix24-php-sdk/issues/376) for work with workflows:
+    * `Activity` – service for work with application activities:
+        * `add` – adds new activity to a workflow
+        * `delete` – delete an activity
+        * `list` – returns list of activities, installed by the application
+        * `log` – records data in the workflow log
+        * `update` – update activity fields
+    * `Robot` – service for work with application automation rules (robots):
+        * `add` – registers new automation rule
+        * `delete` – deletes registered automation rule
+        * `list` – returns list of automation rules, registered by the application
+        * `update` – updates fields of automation rules
+    * `Event` – service for work with return parameters¨
+        * `send` – Returns the output parameters to the activity
+    * `Providers` — deprecated methods, not implemented
+    * `Workflow` — service for work with workflow instances
+        * `instances` – returns list of launched workflows
+        * `kill` – delete a launched workflow
+        * `start` – launches a workflow
+        * `terminate` – stops an active workflow
+    * `Template` — service for work with workflow templates
+        * `add` – add a workflow template
+        * `delete` – delete workflow template
+        * `list` – returns list of workflow templates
+        * `update` – update workflow template
+    * `Tasks` — service for work with workflow tasks
+        * `complete` – Complete workflow task
+        * `list` – List of workflow tasks
+    * add `WorkflowActivityDocumentType`
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromWorkflowRequest`
+* add method `Bitrix24\SDK\Core\Credentials\AccessToken::initFromEventRequest`
+* add `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder` for work with base64 encoding
+* add `Bitrix24\SDK\Core\Exceptions\FileNotFoundException` if file not found
+* add `Bitrix24\SDK\Core\Exceptions\MethodConfirmWaitingException` if api call waiting for confirm
+* add `Bitrix24\SDK\Core\Exceptions\UserNotFoundOrIsNotActiveException` exception if user not found, or it is not active
+* add `Bitrix24\SDK\Core\Result\UserInterfaceDialogCallResult` result of call UI
+* add `Bitrix24\SDK\Core\Result\EmptyResult` empty result
+* add `IncomingRobotRequest` wrapper for data from crm-robot request
+* add `IncomingWorkflowRequest` wrapper for data from biz proc activity request
+* add `Bitrix24\SDK\Core\Credentials::isWebhookContext` - for check is current context init from webhook
+* add method `Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest::getEventId` - for get event id
+* add method `Bitrix24\SDK\Application\Requests\Events\AbstractEventRequest::getAuth` - get event auth token
+* add method `Bitrix24\SDK\Application\Requests\Events\EventAuthItem` - event auth token
+* add method `Bitrix24\SDK\Application\Requests\Events\EventInterface` - for event fabrics
+* add method `Bitrix24\SDK\Infrastructure\Filesystem\Base64Encoder::encodeCallRecord(string $filename): string` - for
+  work with call records
+* add class `Bitrix24\SDK\Services\Main\Service\EventManager` - improve DX for work with events lifecycle bind or unbind
+* add method `Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata` - improve DX for work with install events
+* add enum `Bitrix24\SDK\Services\CRM\Common\Result\DiscountType`
+* add exception `Bitrix24\SDK\Core\Exceptions\WrongAuthTypeException` – if you use wrong auth type.
+* add class fields filter `Bitrix24\SDK\Core\Fields\FieldsFilter` for fields filtration in result array.
+* improve DX – add [Rector](https://github.com/rectorphp/rector) for improve code quality and speed up releases cycle
+* improve DX – add attributes for generate documentation and calculate methods coverage.
+  * command for generate documentation
+```shell
+     php bin/console b24:util:generate-coverage-documentation 
+```
+* improve DX – add [internal documentation](/docs/EN/documentation.md).
+
 ### Changed
-* updated [dependencies versions](https://github.com/mesilov/bitrix24-php-sdk/issues/373):
-  * require
-    * `psr/log` `1.4.0` → `3.0.*`
-    * `moneyphp/money` `4.3.*` → `4.5.*`
-  * require-dev
-    * `monolog/monolog` `2.9.*` → `3.5.*`
-    * `phpunit/phpunit` `10.5.*` → `11.0.*`
+
+* ❗️ migrate from `ramsey/uuid` to `symfony/uid`
+* ❗️ migrate from  `DateTimeImmutable` to `CarbonImmutable` from [carbon](https://github.com/briannesbitt/carbon)
+* ❗️ refactor `Bitrix24\SDK\Application\Contracts`:
+
+* ❗️ update scope `telephony`, scope fully rewritten
+    * `ExternalCall` – work with external call:
+        * `getCallRecordUploadUrl` – get url for upload call record file
+        * `attachCallRecordInBase64` – attach call record encoded in base64
+        * `register` – registers a call in Bitrix24
+        * `searchCrmEntities` – retrieve information about a client from CRM by a telephone number via single request
+        * `finishForUserPhoneInner` – completes the call, registers it in the statistics and hides the call ID screen
+          from the user
+        * `finishForUserId` – completes the call, registers it in the statistics and hides the call ID screen from the
+          user
+        * `show` – displays a call ID screen to the user
+        * `hide` – hides call information window
+    * `Call` – work with call:
+        * `attachTranscription` – method adds a call transcript
+    * `ExternalLine` – work with external line:
+        * `add` – method adds an external line
+        * `delete` – method delete external line
+        * `get` – method gets external lines list
+    * `Voximplant` – work with voximplant namespace:
+        * `Sip` – work with sip lines:
+            * `get` - get sip lines list
+            * `add` - add new sip line
+            * `delete` - delete sip line
+            * `status` - pbx sip line registration status
+            * `update` - update sip line settings
+            * `getConnectorStatus` - returns the current status of the SIP Connector.
+        * `User` - work with voximplant sip user mapped on bitrix24 user
+            * `deactivatePhone` - method disables an indicator of SIP-phone availability
+            * `activatePhone` - method raises the event of SIP-phone availability for an employee
+            * `get` - method returns user settings
+        * `Voices` - work with voximplant tts voices
+            * `get` - method returns all voximplant voices
+        * `Line` - work with voximplant sip lines
+            * `outgoingSipSet` - method sets the selected SIP line as an outgoing line by default.
+            * `get` - returns list of all of the available outgoing lines
+            * `outgoingGet` - returns the currently selected line as an outgoing line by default.
+            * `outgoingSet` - sets the selected line as an outgoing line by default.
+            * `InfoCall` - work with voximplant info call functional
+                * `startWithText` - method performs the call to the specified number with automatic voiceover of
+                  specified
+                  text
+                * `startWithSound` - method makes a call to the specified number with playback of .mp3 format file by
+                  URL.
+            * `Url` - work with links for browsing telephony scope pages
+                * `get` - returns a set of links for browsing telephony scope pages.
+    * add events with payload and `TelephonyEventsFabric`:
+        * `OnExternalCallBackStart` - It is called when a visitor fills out a CRM form for callback. Your application
+          shall be selected in the form settings as the line that to be used for a callback.
+        * `OnExternalCallStart` - The event handler is called whenever a user clicks a phone number in CRM object to
+          initiate an outbound call.
+        * `OnVoximplantCallEnd` - The event is raised when conversation ends (history entry).
+        * `OnVoximplantCallInit` - The event is raised when a call is being initialized (regarding the entry or start of
+          an outbound call).
+        * `OnVoximplantCallStart` - The event is raised when a conversation starts (operator responds to an inbound
+          call; call recipient responds to an outbound call).
+    * add `TranscriptMessage` – data structure for transcript message item
+    * add `TranscriptMessageSide` – enum for describe side of diarization
+    * add `CallType` – call types enum
+    * add `CrmEntityType` – crm entity type enum
+    * add `PbxType` – pbx type enum
+    * add `SipRegistrationStatus` – pbx sip line registration status
+* ❗️ update scope `im`, add service `Notify`:
+  * `fromSystem` - Sending system notification
+  * `fromPersonal` - Sending personal notification
+  * `delete` – Deleting notification
+  * `markAsRead` - Cancels notification for read messages.
+  * `markMessagesAsRead` – "Read" the list of notifications, excluding CONFIRM notification type.
+  * `markMessagesAsUnread` – "Unread" the list of notifications, excluding CONFIRM notification type.
+  * `confirm` – Interaction with notification buttons
+  * `answer` – Response to notification, supporting quick reply
+* change signature `Bitrix24\SDK\Core\Credentials\AccessToken::getRefreshToken()?string;` - add nullable option for
+  event tokens
+* change signature `Bitrix24\SDK\Core\Commands\Command::getName():?string` renamed to `getId():string`
+* add fields and change return types in `Bitrix24\SDK\Services\CRM\Deal\Result\DealProductRowItemResult`
+* change typehints in `Bitrix24\SDK\Services\CRM\Activity\Service\Activity::add`
+
+### Deleted
+
+* remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\Auth`
+* remove class `Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\Auth`
+* remove method `Bitrix24\SDK\Core\Response\Response::__destruct`
+* remove interface `Bitrix24\SDK\Services\Telephony\Common\StatusSipCodeInterface`
+* remove class `Bitrix24\SDK\Services\Telephony\Common\StatusSipRegistrations`
+* remove class `Bitrix24\SDK\Services\Telephony\Common\TypeAtc`
+
 ### Bugfix
-### etc
+
+* fix [typehint for Bitrix24 User entity with field ID](https://github.com/mesilov/bitrix24-php-sdk/issues/382)
+* fix [default arguments for Bitrix24 User get method](https://github.com/mesilov/bitrix24-php-sdk/issues/381)
+* fix [limit argument not worked in batch list and read model](https://github.com/mesilov/bitrix24-php-sdk/issues/389)
+
+## 2.0-beta.2 — 1.04.2024
+
+### Changed
+
+* updated [dependencies versions](https://github.com/mesilov/bitrix24-php-sdk/issues/373):
+    * require
+        * `psr/log` `1.4.0` → `3.0.*`
+        * `moneyphp/money` `4.3.*` → `4.5.*`
+    * require-dev
+        * `monolog/monolog` `2.9.*` → `3.5.*`
+        * `phpunit/phpunit` `10.5.*` → `11.0.*`
+* added enum `DealSemanticStage` for deal field `STAGE_SEMANTIC_ID`
 
 ## 2.0-beta.1 — 18.02.2024
 
@@ -38,13 +207,13 @@
 * add [crm item support](https://github.com/mesilov/bitrix24-php-sdk/issues/330)
 * add enum `DealStageSemanticId`
 * add Duplicate search support for `Bitrix24\SDK\Services\CRM\Duplicates\Service\Duplicate`
-* add `x-request-id` [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/354) 
+* add `x-request-id` [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/354)
 * add CRM multifields support [header support](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
     * `Email`
     * `Phone`
     * `Website`
     * `IM`
-* add [Catalog](https://github.com/mesilov/bitrix24-php-sdk/issues/364) scope services support 
+* add [Catalog](https://github.com/mesilov/bitrix24-php-sdk/issues/364) scope services support
 
 ### Changed
 
@@ -59,7 +228,7 @@
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnExternalCallStart\OnExternalCallStart`
     * from `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd`
       to `Bitrix24\SDK\Services\Telephony\Requests\Events\OnVoximplantCallEnd\OnVoximplantCallEnd`
-*  ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface`:
+* ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountInterface`:
     * method `getContactPerson` renamed to `getContactPersonId`
     * added method `getApplicationVersion`
     * added method `updateApplicationVersion`
@@ -69,7 +238,7 @@
     * added method `markAsDeactivated`
     * added method `getBitrix24UserId`
     * removed method `markAccountAsDeleted`
-    * changed method `markAsActive` 
+    * changed method `markAsActive`
 * ❗Changes in `Bitrix24\SDK\Application\Contracts\Bitrix24Account\Bitrix24AccountRepositoryInterface`:
     * method `saveAccount` renamed to `save`
     * method `deleteAccount` renamed to `delete`
@@ -85,7 +254,8 @@
 * fix [typehint at ContactItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/320)
 * fix [return types in DealCategoryItemResult](https://github.com/mesilov/bitrix24-php-sdk/issues/322)
 * fix [add auth node in telephony voximplant events requests](https://github.com/mesilov/bitrix24-php-sdk/issues/331)
-* fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
+*
+fix [add helper metods isError for registerCallResult fortelephony](https://github.com/mesilov/bitrix24-php-sdk/issues/335)
 * fix [add return type for crm multifields phone, email, im](https://github.com/mesilov/bitrix24-php-sdk/issues/338)
 * fix errors in `ShowFieldsDescriptionCommand` metadata reader CLI command
 * fix errors for `ApplicationProfile` with empty scope
@@ -158,9 +328,15 @@
   are [consistent](https://github.com/mesilov/bitrix24-php-sdk/issues/303): `createFromWebhook`, `createFromOAuth`
   , `createFromPlacementRequest`
 *
-❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
+
+❗️deleted [unused class](https://github.com/mesilov/bitrix24-php-sdk/issues/303)
+`Bitrix24\SDK\Core\Response\DTO\ResponseDataCollection`
+
 *
-❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `Bitrix24\SDK\Core\Response\DTO\Result`
+
+❗️deleted [redundant class](https://github.com/mesilov/bitrix24-php-sdk/issues/303)
+`Bitrix24\SDK\Core\Response\DTO\Result`
+
 * ❗️deleted [method](https://github.com/mesilov/bitrix24-php-sdk/issues/303) `CoreBuilder::withWebhookUrl`, use
   method `CoreBuilder::withCredentials`
 
